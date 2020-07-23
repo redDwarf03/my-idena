@@ -1,0 +1,169 @@
+// To parse this JSON data, do
+//
+//     final dnaIdentityResponse = dnaIdentityResponseFromJson(jsonString);
+
+import 'dart:convert';
+
+DnaIdentityResponse dnaIdentityResponseFromJson(String str) => DnaIdentityResponse.fromJson(json.decode(str));
+
+String dnaIdentityResponseToJson(DnaIdentityResponse data) => json.encode(data.toJson());
+
+class DnaIdentityResponse {
+    DnaIdentityResponse({
+        this.jsonrpc,
+        this.id,
+        this.result,
+    });
+
+    String jsonrpc;
+    int id;
+    Result result;
+
+    factory DnaIdentityResponse.fromJson(Map<String, dynamic> json) => DnaIdentityResponse(
+        jsonrpc: json["jsonrpc"],
+        id: json["id"],
+        result: Result.fromJson(json["result"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "jsonrpc": jsonrpc,
+        "id": id,
+        "result": result.toJson(),
+    };
+}
+
+class Result {
+    Result({
+        this.address,
+        this.profileHash,
+        this.stake,
+        this.invites,
+        this.age,
+        this.state,
+        this.pubkey,
+        this.requiredFlips,
+        this.availableFlips,
+        this.flipKeyWordPairs,
+        this.madeFlips,
+        this.totalQualifiedFlips,
+        this.totalShortFlipPoints,
+        this.flips,
+        this.online,
+        this.generation,
+        this.code,
+        this.invitees,
+        this.penalty,
+        this.lastValidationFlags,
+    });
+
+    String address;
+    String profileHash;
+    String stake;
+    int invites;
+    int age;
+    String state;
+    String pubkey;
+    int requiredFlips;
+    int availableFlips;
+    List<FlipKeyWordPair> flipKeyWordPairs;
+    int madeFlips;
+    int totalQualifiedFlips;
+    int totalShortFlipPoints;
+    List<String> flips;
+    bool online;
+    int generation;
+    String code;
+    List<Invitee> invitees;
+    String penalty;
+    dynamic lastValidationFlags;
+
+    factory Result.fromJson(Map<String, dynamic> json) => Result(
+        address: json["address"],
+        profileHash: json["profileHash"],
+        stake: json["stake"],
+        invites: json["invites"],
+        age: json["age"],
+        state: json["state"],
+        pubkey: json["pubkey"],
+        requiredFlips: json["requiredFlips"],
+        availableFlips: json["availableFlips"],
+        flipKeyWordPairs: List<FlipKeyWordPair>.from(json["flipKeyWordPairs"].map((x) => FlipKeyWordPair.fromJson(x))),
+        madeFlips: json["madeFlips"],
+        totalQualifiedFlips: json["totalQualifiedFlips"],
+        totalShortFlipPoints: json["totalShortFlipPoints"],
+        flips: List<String>.from(json["flips"].map((x) => x)),
+        online: json["online"],
+        generation: json["generation"],
+        code: json["code"],
+        invitees: List<Invitee>.from(json["invitees"].map((x) => Invitee.fromJson(x))),
+        penalty: json["penalty"],
+        lastValidationFlags: json["lastValidationFlags"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "address": address,
+        "profileHash": profileHash,
+        "stake": stake,
+        "invites": invites,
+        "age": age,
+        "state": state,
+        "pubkey": pubkey,
+        "requiredFlips": requiredFlips,
+        "availableFlips": availableFlips,
+        "flipKeyWordPairs": List<dynamic>.from(flipKeyWordPairs.map((x) => x.toJson())),
+        "madeFlips": madeFlips,
+        "totalQualifiedFlips": totalQualifiedFlips,
+        "totalShortFlipPoints": totalShortFlipPoints,
+        "flips": List<dynamic>.from(flips.map((x) => x)),
+        "online": online,
+        "generation": generation,
+        "code": code,
+        "invitees": List<dynamic>.from(invitees.map((x) => x.toJson())),
+        "penalty": penalty,
+        "lastValidationFlags": lastValidationFlags,
+    };
+}
+
+class FlipKeyWordPair {
+    FlipKeyWordPair({
+        this.words,
+        this.used,
+        this.id,
+    });
+
+    List<int> words;
+    bool used;
+    int id;
+
+    factory FlipKeyWordPair.fromJson(Map<String, dynamic> json) => FlipKeyWordPair(
+        words: List<int>.from(json["words"].map((x) => x)),
+        used: json["used"],
+        id: json["id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "words": List<dynamic>.from(words.map((x) => x)),
+        "used": used,
+        "id": id,
+    };
+}
+
+class Invitee {
+    Invitee({
+        this.txHash,
+        this.address,
+    });
+
+    String txHash;
+    String address;
+
+    factory Invitee.fromJson(Map<String, dynamic> json) => Invitee(
+        txHash: json["TxHash"],
+        address: json["Address"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "TxHash": txHash,
+        "Address": address,
+    };
+}

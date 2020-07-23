@@ -1,0 +1,11 @@
+***** - ecran param ip + key api
+***** - enreg param ip + key api
+- i18n dans les écrans
+- maquettes sessions validation
+- branchement sessions validation
+- crop image flips
+- branchement flips création
+- notification arrêt noeud
+- attente on/off minage
+- mise en place github
+- simplifier les écrans UI
