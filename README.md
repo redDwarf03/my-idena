@@ -16,3 +16,20 @@ and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 - i8n => 90%
 - Short validation session => mockup + some RPC call...
 
+## Screenshot
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-home-screenshot?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-create-flip-1-screenshot.png?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-create-flip-2-screenshot.png?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-create-flip-3-screenshot.png?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-param-screenshot.png?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-shortSession-screenshot.png?raw=true)
+
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-about-screenshot.png?raw=true)
+
+
