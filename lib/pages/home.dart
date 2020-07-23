@@ -64,11 +64,11 @@ class _HomeState extends State<Home> {
         } else {
           _timer.cancel();
 
-              Navigator.of(context).push(
+              /*Navigator.of(context).push(
                 new MaterialPageRoute(
                   builder: (BuildContext context) =>
                       new ValidationSession(dnaAll: dnaAll),
-                ),);
+                ),);*/
         }
       });
     });
