@@ -16,6 +16,10 @@ and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 - i8n => 90%
 - Short validation session => mockup + some RPC call...
 
+## Help
+
+Consider supporting my-idena by donating to 0x72563cb949bd0167acfff47b5865fe30e1960e70
+
 ## Screenshots
 
 ![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-home-screenshot.png?raw=true)
