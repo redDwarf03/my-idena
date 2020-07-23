@@ -16,7 +16,7 @@ and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 - i8n => 90%
 - Short validation session => mockup + some RPC call...
 
-## Screenshot
+## Screenshots
 
 ![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-home-screenshot?raw=true)
 
