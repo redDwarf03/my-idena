@@ -7,5 +7,5 @@
 - branchement flips création
 - notification arrêt noeud
 - attente on/off minage
-- mise en place github
+***** - mise en place github
 - simplifier les écrans UI
