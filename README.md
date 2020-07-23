@@ -18,7 +18,7 @@ and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 
 ## Screenshots
 
-![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-home-screenshot?raw=true)
+![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-home-screenshot.png?raw=true)
 
 ![](https://github.com/redDwarf03/my-idena/blob/master/assets/my-idena-create-flip-1-screenshot.png?raw=true)
 
