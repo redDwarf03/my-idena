@@ -1,5 +1,6 @@
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/constants/containerMyIdena.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _FlipMixState extends State<FlipMix> {
                       ),
                       color: Colors.white,
                       child: Text(
-                        'SUBMIT',
+                        AppLocalizations.of(context).translate("Submit"),
                         style: TextStyle(
                           color: Colors.grey,
                           letterSpacing: 1.5,

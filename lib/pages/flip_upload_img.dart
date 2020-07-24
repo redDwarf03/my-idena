@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/constants/containerMyIdena.dart';
 import 'package:my_idena/pages/flip_mix.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -192,7 +193,7 @@ class _FlipUploadImgState extends State<FlipUploadImg> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'my Idena',
+                    AppLocalizations.of(context).translate("my Idena"),
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'OpenSans',
@@ -334,7 +335,7 @@ class _FlipUploadImgState extends State<FlipUploadImg> {
                           ),
                           color: Colors.white,
                           child: Text(
-                            'BACK',
+                            AppLocalizations.of(context).translate("Previous step"),
                             style: TextStyle(
                               color: Colors.grey,
                               letterSpacing: 1.5,
@@ -357,7 +358,7 @@ class _FlipUploadImgState extends State<FlipUploadImg> {
                           ),
                           color: Colors.white,
                           child: Text(
-                            'NEXT',
+                            AppLocalizations.of(context).translate("Next step"),
                             style: TextStyle(
                               color: Colors.grey,
                               letterSpacing: 1.5,

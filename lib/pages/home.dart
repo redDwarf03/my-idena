@@ -424,8 +424,8 @@ class _HomeState extends State<Home> {
                                 child: Row(
                                   children: <Widget>[
                                     (_counter > 0)
-                                        ? Text(
-                                            "Idena validation will start soon : $_counter",
+                                        ? Text(AppLocalizations.of(context)
+                                                .translate("Idena validation will start soon :") + " $_counter",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'OpenSans',
@@ -462,7 +462,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               Text(
                   AppLocalizations.of(context)
-                      .translate("Désactiver le statut de mineur"),
+                      .translate("Deactivate mining status"),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -473,7 +473,7 @@ class _HomeState extends State<Home> {
               ),
               Text(
                   AppLocalizations.of(context).translate(
-                      "Soumettez votre demande pour désactiver votre statut de mineur."),
+                      "Submit the form to deactivate your mining status."),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -482,7 +482,7 @@ class _HomeState extends State<Home> {
               SizedBox(height: 20.0),
               Text(
                   AppLocalizations.of(context)
-                      .translate("Vous pourrez le réactiver ultérieurement."),
+                      .translate("You can activate it again afterwards."),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -535,7 +535,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               Text(
                   AppLocalizations.of(context)
-                      .translate("Activer le statut de mineur"),
+                      .translate("Activate mining status"),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -546,7 +546,7 @@ class _HomeState extends State<Home> {
               ),
               Text(
                   AppLocalizations.of(context).translate(
-                      "Soumettez votre demande pour commencer à miner. Votre node doit être en ligne sauf si vous désactivez votre statut de mineur. Des pénalités pourront vous être infligées dans le cas où vous seriez hors ligne plus d'une heure."),
+                      "Submit the form to start mining. Your node has to be online\n                unless you deactivate your status. Otherwise penalties might be\n                charged after being offline more than 1 hour."),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',
@@ -555,7 +555,7 @@ class _HomeState extends State<Home> {
               SizedBox(height: 20.0),
               Text(
                   AppLocalizations.of(context).translate(
-                      "Vous pouvez désactiver votre statut en ligne à tout moment."),
+                      "You can deactivate your online status at any time."),
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'OpenSans',

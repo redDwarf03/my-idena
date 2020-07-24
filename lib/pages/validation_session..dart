@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:my_idena/beans/rpc/dna_flipShortHashesRequest.dart';
 import 'package:my_idena/beans/rpc/dna_flipShortHashesResponse.dart';
+import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/beans/test/flip_example_1..dart';
 import 'package:my_idena/beans/test/flip_example_2.dart';
@@ -37,17 +38,18 @@ class _ValidationSessionState extends State<ValidationSession> {
   int bottomSelectedIndex = 0;
   List base64String = new List(4);
   List base64StringList = new List(5);
- 
+
   @override
   void initState() {
     super.initState();
 
-base64StringList[0] = new FlipExample1().base64String;
-base64StringList[1] = new FlipExample2().base64String;
-base64StringList[2] = new FlipExample3().base64String;
-base64StringList[3] = new FlipExample4().base64String;
-base64StringList[4] = new FlipExample5().base64String;
+    //Future<GetFlipRawResponse> getFlipRawResponse = httpService.getFlipRaw("bafkreibes2fqhsbfnmg4fgh3ltozoxc3rbxpifonkmd7x6vmmvmfmteu4q");
 
+    base64StringList[0] = new FlipExample1().base64String;
+    base64StringList[1] = new FlipExample2().base64String;
+    base64StringList[2] = new FlipExample3().base64String;
+    base64StringList[3] = new FlipExample4().base64String;
+    base64StringList[4] = new FlipExample5().base64String;
 
     for (int i = 0; i < selectionFlipList.length; i++) {
       selectionFlipList[i] = 0;

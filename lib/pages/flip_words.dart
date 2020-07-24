@@ -71,7 +71,7 @@ class _FlipWordsState extends State<FlipWords> {
                       child: ListView(
                         children: <Widget>[
                           Text(
-                            "Think up a story",
+                            AppLocalizations.of(context).translate("Think up a story"),
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'OpenSans',
@@ -80,7 +80,7 @@ class _FlipWordsState extends State<FlipWords> {
                           ),
                           SizedBox(height: 10.0),
                           Text(
-                            "Think up a short story about someone/something related to the two key words below according to the template \"Before — Something happens — After\"",
+                            AppLocalizations.of(context).translate("Think up a short story about someone/something related to the two key words below according to the template"),
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'OpenSans',
@@ -241,7 +241,7 @@ class _FlipWordsState extends State<FlipWords> {
                                         color: Colors.grey,
                                       ),
                                       Text(
-                                        'Change words (#' +
+                                          AppLocalizations.of(context).translate("Change words") + " (#" +
                                             (flipKeyWordPairsNumber + 1).toString() +
                                             ")",
                                         style: TextStyle(
@@ -277,7 +277,7 @@ class _FlipWordsState extends State<FlipWords> {
                               ),
                               color: Colors.white,
                               child: Text(
-                                'NEXT ',
+                                AppLocalizations.of(context).translate("Next step"),
                                 style: TextStyle(
                                   color: Colors.grey,
                                   letterSpacing: 1.5,

@@ -173,7 +173,7 @@ class _ParamRPCState extends State<ParamRPC> {
                         ),
                         color: Colors.white,
                         child:
-                            Text(AppLocalizations.of(context).translate("SAVE"),
+                            Text(AppLocalizations.of(context).translate("Save"),
                                 style: TextStyle(
                                   color: Colors.grey,
                                   letterSpacing: 1.5,
