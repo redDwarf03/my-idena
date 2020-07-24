@@ -49,11 +49,11 @@ class _HomeState extends State<Home> {
     _startTimerValidationSession();
   }
 
-  int _counter = 10;
+  int _counter = 0;
   Timer _timer;
 
   void _startTimerValidationSession() {
-    _counter = 10;
+    _counter = 0;
     if (_timer != null) {
       _timer.cancel();
     }

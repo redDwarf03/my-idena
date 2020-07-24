@@ -16,6 +16,8 @@ import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
 import 'package:my_idena/beans/rpc/dna_getEpoch_request.dart';
 import 'package:my_idena/beans/rpc/dna_getEpoch_response.dart';
+import 'package:my_idena/beans/rpc/dna_getFlipRaw_request.dart';
+import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
 import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
@@ -265,7 +267,7 @@ class HttpService {
 
       flipShortHashesResponse = FlipShortHashesResponse.fromJson(mapExemple);
       // TODO : simulate
-      /*flipShortHashesRequest =
+      /* flipShortHashesRequest =
           FlipShortHashesRequest.fromJson(map);
       request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
       HttpClientResponse response = await request.close();
@@ -278,5 +280,40 @@ class HttpService {
       print("erreur: " + e.toString());
     } finally {}
     return flipShortHashesResponse;
+  }
+
+  Future<GetFlipRawResponse> getFlipRaw(String hash) async {
+      GetFlipRawResponse getFlipRawResponse;
+
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      // get Flip Raw
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetFlipRaw = {
+        'method': GetFlipRawRequest.METHOD_NAME,
+        'params': [hash],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      GetFlipRawRequest getFlipRawRequest =
+          GetFlipRawRequest.fromJson(mapGetFlipRaw);
+      request.add(utf8.encode(json.encode(getFlipRawRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        getFlipRawResponse =
+            getFlipRawResponseFromJson(reply);
+      }
+    } catch (e) {
+      print("erreur: " + e.toString());
+    } finally {}
+    return getFlipRawResponse;
   }
 }
