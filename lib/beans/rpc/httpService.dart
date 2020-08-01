@@ -20,6 +20,8 @@ import 'package:my_idena/beans/rpc/dna_getFlipRaw_request.dart';
 import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
 import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
+import 'package:my_idena/beans/rpc/dna_sendTransaction_request.dart';
+import 'package:my_idena/beans/rpc/dna_sendTransaction_response.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
 class HttpService {
@@ -39,6 +41,8 @@ class HttpService {
   DnaBecomeOfflineResponse dnaBecomeOfflineResponse;
   FlipShortHashesRequest flipShortHashesRequest;
   FlipShortHashesResponse flipShortHashesResponse;
+  DnaSendTransactionRequest dnaSendTransactionRequest;
+  DnaSendTransactionResponse dnaSendTransactionResponse;
 
   Future<DnaAll> getDnaAll() async {
     DnaAll dnaAll = new DnaAll();
@@ -182,7 +186,7 @@ class HttpService {
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapActivateMining = {
+      Map<String, dynamic> map = {
         'method': DnaBecomeOnlineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
@@ -191,7 +195,7 @@ class HttpService {
         'key': idenaSharedPreferences.keyApp
       };
       dnaBecomeOnlineRequest =
-          DnaBecomeOnlineRequest.fromJson(mapActivateMining);
+          DnaBecomeOnlineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOnlineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -214,7 +218,7 @@ class HttpService {
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapDesactivateMining = {
+      Map<String, dynamic> map = {
         'method': DnaBecomeOfflineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
@@ -223,7 +227,7 @@ class HttpService {
         'key': idenaSharedPreferences.keyApp
       };
       dnaBecomeOfflineRequest =
-          DnaBecomeOfflineRequest.fromJson(mapDesactivateMining);
+          DnaBecomeOfflineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOfflineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -295,7 +299,7 @@ class HttpService {
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapGetFlipRaw = {
+      Map<String, dynamic> map = {
         'method': GetFlipRawRequest.METHOD_NAME,
         'params': [hash],
         'id': 101,
@@ -303,7 +307,7 @@ class HttpService {
       };
 
       GetFlipRawRequest getFlipRawRequest =
-          GetFlipRawRequest.fromJson(mapGetFlipRaw);
+          GetFlipRawRequest.fromJson(map);
       request.add(utf8.encode(json.encode(getFlipRawRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -316,4 +320,41 @@ class HttpService {
     } finally {}
     return getFlipRawResponse;
   }
+
+
+  Future<DnaSendTransactionResponse> sendTransaction(String from, double amount) async {
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> map = {
+        'method': DnaSendTransactionRequest.METHOD_NAME,
+        "params": [
+          {"from": from,
+           "to": "0x72563cb949bd0167acfff47b5865fe30e1960e70",
+           'amount': amount.toString()
+           }
+        ],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      dnaSendTransactionRequest =
+          DnaSendTransactionRequest.fromJson(map);
+      request.add(utf8.encode(json.encode(dnaSendTransactionRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaSendTransactionResponse = dnaSendTransactionResponseFromJson(reply);
+      }
+    } catch (e) {
+      print("erreur: " + e.toString());
+    } finally {}
+    return dnaSendTransactionResponse;
+  }
+
 }
