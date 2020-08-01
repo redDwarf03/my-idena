@@ -69,7 +69,7 @@ class Result {
     int madeFlips;
     int totalQualifiedFlips;
     int totalShortFlipPoints;
-    List<String> flips;
+    dynamic flips;
     bool online;
     int generation;
     String code;
@@ -91,7 +91,7 @@ class Result {
         madeFlips: json["madeFlips"],
         totalQualifiedFlips: json["totalQualifiedFlips"],
         totalShortFlipPoints: json["totalShortFlipPoints"],
-        flips: List<String>.from(json["flips"].map((x) => x)),
+        flips: json["flips"],
         online: json["online"],
         generation: json["generation"],
         code: json["code"],
@@ -114,7 +114,7 @@ class Result {
         "madeFlips": madeFlips,
         "totalQualifiedFlips": totalQualifiedFlips,
         "totalShortFlipPoints": totalShortFlipPoints,
-        "flips": List<dynamic>.from(flips.map((x) => x)),
+        "flips": flips,
         "online": online,
         "generation": generation,
         "code": code,
