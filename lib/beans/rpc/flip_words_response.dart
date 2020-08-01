@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final flipGetResponse = flipGetResponseFromJson(jsonString);
+//     final flipWordsResponse = flipWordsResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-FlipGetResponse flipGetResponseFromJson(String str) => FlipGetResponse.fromJson(json.decode(str));
+FlipWordsResponse flipWordsResponseFromJson(String str) => FlipWordsResponse.fromJson(json.decode(str));
 
-String flipGetResponseToJson(FlipGetResponse data) => json.encode(data.toJson());
+String flipWordsResponseToJson(FlipWordsResponse data) => json.encode(data.toJson());
 
-class FlipGetResponse {
-    FlipGetResponse({
+class FlipWordsResponse {
+    FlipWordsResponse({
         this.jsonrpc,
         this.id,
         this.result,
@@ -19,7 +19,7 @@ class FlipGetResponse {
     int id;
     Result result;
 
-    factory FlipGetResponse.fromJson(Map<String, dynamic> json) => FlipGetResponse(
+    factory FlipWordsResponse.fromJson(Map<String, dynamic> json) => FlipWordsResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
         result: Result.fromJson(json["result"]),
@@ -34,20 +34,16 @@ class FlipGetResponse {
 
 class Result {
     Result({
-        this.hex,
-        this.privateHex,
+        this.words,
     });
 
-    String hex;
-    String privateHex;
+    List<int> words;
 
     factory Result.fromJson(Map<String, dynamic> json) => Result(
-        hex: json["hex"],
-        privateHex: json["privateHex"],
+        words: List<int>.from(json["words"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
-        "hex": hex,
-        "privateHex": privateHex,
+        "words": List<dynamic>.from(words.map((x) => x)),
     };
 }
