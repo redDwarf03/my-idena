@@ -22,6 +22,8 @@ import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
 import 'package:my_idena/beans/rpc/dna_sendTransaction_request.dart';
 import 'package:my_idena/beans/rpc/dna_sendTransaction_response.dart';
+import 'package:my_idena/beans/rpc/flip_get_request.dart';
+import 'package:my_idena/beans/rpc/flip_get_response.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
 class HttpService {
@@ -194,8 +196,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaBecomeOnlineRequest =
-          DnaBecomeOnlineRequest.fromJson(map);
+      dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOnlineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -226,8 +227,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaBecomeOfflineRequest =
-          DnaBecomeOfflineRequest.fromJson(map);
+      dnaBecomeOfflineRequest = DnaBecomeOfflineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOfflineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -259,13 +259,64 @@ class HttpService {
 
       Map<String, dynamic> mapExemple = {
         "jsonrpc": "2.0",
-        "id": 101,
+        "id": 19,
         "result": [
-          {"hash": "1", "ready": true},
-          {"hash": "2", "ready": false},
-          {"hash": "3", "ready": false},
-          {"hash": "4", "ready": true, "extra": true},
-          {"hash": "5", "ready": false, "extra": true}
+          {
+            "hash":
+                "bafkreial55rw3dirdlrivcjsnnxaswfrloxuk4pbfssxbwhheqbo44crra",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreiasdvce4g2wlmkia5bmj27snlsa44imfeu2e5whg3r6rea57avmwa",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreiaxmbxoy3rystvl4hcfd46uvbxxqy4op7ivvixhqtf5fvk4vjijpq",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreidipdlvqzvguqpimwi5g72bu4kknrxczitsu2mrrod3ctazfynqem",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreiel3bwd35dq64zflh2oxxzh256kl57n2d4n5ezkl3eso7quollm5m",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreiawut3pf2vabvd46hapzvw3eu3kqobbbrryuknfl6hioyvk7winqi",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreif5z2aixv33ejz7uri4yqh22bmjehctbyhveveamvkiuoyirh6xp4",
+            "ready": true,
+            "extra": true,
+            "available": true
+          },
+          {
+            "hash":
+                "bafkreifscg22jobbbbkkfsv2on3tvqlkrujfkvtgnw7lxiimp6pbbj33n4",
+            "ready": true,
+            "extra": true,
+            "available": true
+          }
         ]
       };
 
@@ -280,6 +331,28 @@ class HttpService {
 
        flipShortHashesResponse = flipShortHashesResponseFromJson(reply);
       }*/
+      FlipGetResponse flipGetResponse;
+      for (int i = 0; i < flipShortHashesResponse.result.length; i++) {
+        // get Flip
+        HttpClientRequest request2 =
+            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+        request.headers.set('content-type', 'application/json');
+
+        Map<String, dynamic> map2 = {
+          'method': FlipGetRequest.METHOD_NAME,
+          'params': [flipShortHashesResponse.result[i].hash],
+          'id': 101,
+          'key': idenaSharedPreferences.keyApp
+        };
+
+        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(map2);
+        request2.add(utf8.encode(json.encode(flipGetRequest.toJson())));
+        HttpClientResponse response2 = await request2.close();
+        if (response2.statusCode == 200) {
+          String reply2 = await response2.transform(utf8.decoder).join();
+          flipGetResponse = flipGetResponseFromJson(reply2);
+        }
+      }
     } catch (e) {
       print("erreur: " + e.toString());
     } finally {}
@@ -287,7 +360,7 @@ class HttpService {
   }
 
   Future<GetFlipRawResponse> getFlipRaw(String hash) async {
-      GetFlipRawResponse getFlipRawResponse;
+    GetFlipRawResponse getFlipRawResponse;
 
     try {
       HttpClient httpClient = new HttpClient();
@@ -306,14 +379,12 @@ class HttpService {
         'key': idenaSharedPreferences.keyApp
       };
 
-      GetFlipRawRequest getFlipRawRequest =
-          GetFlipRawRequest.fromJson(map);
+      GetFlipRawRequest getFlipRawRequest = GetFlipRawRequest.fromJson(map);
       request.add(utf8.encode(json.encode(getFlipRawRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
-        getFlipRawResponse =
-            getFlipRawResponseFromJson(reply);
+        getFlipRawResponse = getFlipRawResponseFromJson(reply);
       }
     } catch (e) {
       print("erreur: " + e.toString());
@@ -321,8 +392,8 @@ class HttpService {
     return getFlipRawResponse;
   }
 
-
-  Future<DnaSendTransactionResponse> sendTransaction(String from, double amount) async {
+  Future<DnaSendTransactionResponse> sendTransaction(
+      String from, double amount) async {
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -335,16 +406,16 @@ class HttpService {
       Map<String, dynamic> map = {
         'method': DnaSendTransactionRequest.METHOD_NAME,
         "params": [
-          {"from": from,
-           "to": "0x72563cb949bd0167acfff47b5865fe30e1960e70",
-           'amount': amount.toString()
-           }
+          {
+            "from": from,
+            "to": "0x72563cb949bd0167acfff47b5865fe30e1960e70",
+            'amount': amount.toString()
+          }
         ],
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaSendTransactionRequest =
-          DnaSendTransactionRequest.fromJson(map);
+      dnaSendTransactionRequest = DnaSendTransactionRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaSendTransactionRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -356,5 +427,4 @@ class HttpService {
     } finally {}
     return dnaSendTransactionResponse;
   }
-
 }

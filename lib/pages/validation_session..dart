@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:my_idena/beans/rpc/dna_flipShortHashesRequest.dart';
 import 'package:my_idena/beans/rpc/dna_flipShortHashesResponse.dart';
 import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
+import 'package:my_idena/beans/rpc/flip_get_response.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/beans/test/flip_example_1..dart';
 import 'package:my_idena/beans/test/flip_example_2.dart';
@@ -11,7 +13,8 @@ import 'package:my_idena/beans/test/flip_example_4.dart';
 import 'package:my_idena/beans/test/flip_example_5.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
-
+import 'package:ethereum_util/src/rlp.dart' as Rlp;
+import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
@@ -39,9 +42,42 @@ class _ValidationSessionState extends State<ValidationSession> {
   List base64String = new List(4);
   List base64StringList = new List(5);
 
+  /* RLP Part start */
+  List<dynamic> images = new List(2);
+
+  Uint8List _image;
+  Uint8List _image2;
+  var __image;
+
+  /*
+  Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          image: new DecorationImage(
+              fit: BoxFit.cover, image: MemoryImage(_image, scale: 0.5)),
+        ),),
+   */
+  /* RLP Part end */
+
+
   @override
   void initState() {
     super.initState();
+
+    /* RPL Part start */
+    Future<FlipShortHashesResponse> flipShortHashesResponse = httpService.getFlipShortHashes();
+
+    var orders;
+    var toto = [];
+    var encoded = "";
+    Decoded decoded = Rlp.decode(Uint8List.fromList(toBuffer(encoded)), true);
+    images = decoded.data[0];
+    _image = images[0];
+    _image2 = images[1];
+
+    /* RPL Part end */
+
 
     //Future<GetFlipRawResponse> getFlipRawResponse = httpService.getFlipRaw("bafkreibes2fqhsbfnmg4fgh3ltozoxc3rbxpifonkmd7x6vmmvmfmteu4q");
 
