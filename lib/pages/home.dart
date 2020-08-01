@@ -211,7 +211,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           Text(
                                             AppLocalizations.of(context)
-                                                    .translate("State :") +
+                                                    .translate("State :") + " " +
                                                 dnaAll.dnaIdentityResponse
                                                     .result.state,
                                             style: TextStyle(
@@ -222,7 +222,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           Text(
                                             AppLocalizations.of(context)
-                                                    .translate("Age :") +
+                                                    .translate("Age :") + " " +
                                                 dnaAll.dnaIdentityResponse
                                                     .result.age
                                                     .toString() +
