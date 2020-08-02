@@ -33,5 +33,8 @@
   "Previous step": "上一步",
   "Next step": "下一步",
   "Enter your amount": "Enter your amount",
-  "Send a donation": "Send a donation"
+  "Send a donation": "Send a donation",
+  "Simulation mode": "Simulation mode",
+  "Simulation mode enables functions normally available only during validation sessions.": "Simulation mode enables functions normally available only during validation sessions."
+
 }

@@ -1,10 +1,11 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena/pages/about.dart';
 import 'package:my_idena/pages/flip_words.dart';
 import 'package:my_idena/pages/home.dart';
 import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavigationBarMyIdena extends StatefulWidget {
   final int indexInit;
@@ -17,9 +18,34 @@ class BottomNavigationBarMyIdena extends StatefulWidget {
 
 class _BottomNavigationBarMyIdenaState
     extends State<BottomNavigationBarMyIdena> {
+
+  SharedPreferences sharedPreferences;
+  String simulationMode;
+
+  void getSimulationMode() async
+  {
+    simulationMode = "";
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(()
+    {
+        if(sharedPreferences.getBool("simulation_mode"))
+        {
+            simulationMode = "Sim";
+        }
+    });
+    
+  }
+
+    @override
+  void initState() {
+    super.initState();
+
+    getSimulationMode();    
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ConvexAppBar(
+    return ConvexAppBar.badge({3: simulationMode},
       backgroundColor: Colors.grey[800],
       items: [
         TabItem(

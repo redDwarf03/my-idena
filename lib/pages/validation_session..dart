@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:my_idena/beans/rpc/dna_flipShortHashesRequest.dart';
-import 'package:my_idena/beans/rpc/dna_flipShortHashesResponse.dart';
 import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
 import 'package:my_idena/beans/rpc/flip_get_response.dart';
+import 'package:my_idena/beans/rpc/flip_shortHashes_request.dart';
+import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/beans/test/flip_example_1..dart';
 import 'package:my_idena/beans/test/flip_example_2.dart';
 import 'package:my_idena/beans/test/flip_example_3.dart';
 import 'package:my_idena/beans/test/flip_example_4.dart';
 import 'package:my_idena/beans/test/flip_example_5.dart';
+import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
@@ -65,8 +66,16 @@ class _ValidationSessionState extends State<ValidationSession> {
   void initState() {
     super.initState();
 
+    List<ValidationSessionInfoFlips> listSessionValidationFlip = new List(2);
+    String typeSession = "shortSession";
+  
+    ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo(typeSession: typeSession, listSessionValidationFlip: listSessionValidationFlip);
+    
+
     /* RPL Part start */
     Future<FlipShortHashesResponse> flipShortHashesResponse = httpService.getFlipShortHashes();
+    
+    
 
     var orders;
     var toto = [];
