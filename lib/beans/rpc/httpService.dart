@@ -8,8 +8,6 @@ import 'package:my_idena/beans/rpc/dna_becomeOffline_response.dart';
 import 'package:my_idena/beans/rpc/dna_becomeOnline_request.dart';
 import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_request.dart';
 import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/beans/rpc/dna_flipShortHashesRequest.dart';
-import 'package:my_idena/beans/rpc/dna_flipShortHashesResponse.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
@@ -24,6 +22,8 @@ import 'package:my_idena/beans/rpc/dna_sendTransaction_request.dart';
 import 'package:my_idena/beans/rpc/dna_sendTransaction_response.dart';
 import 'package:my_idena/beans/rpc/flip_get_request.dart';
 import 'package:my_idena/beans/rpc/flip_get_response.dart';
+import 'package:my_idena/beans/rpc/flip_shortHashes_request.dart';
+import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
 class HttpService {

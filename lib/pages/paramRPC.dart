@@ -23,8 +23,8 @@ class ParamRPC extends StatefulWidget {
 class _ParamRPCState extends State<ParamRPC> {
   final _keyForm = GlobalKey<FormState>();
 
-  String apiUrl = '';
-  String keyApp = '';
+  String apiUrl;
+  String keyApp;
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +150,61 @@ class _ParamRPCState extends State<ParamRPC> {
                 right: 20,
                 child: ListView(
                   children: <Widget>[
+                    FutureBuilder<IdenaSharedPreferences>(
+                        future:
+                            SharedPreferencesHelper.getIdenaSharedPreferences(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<IdenaSharedPreferences> snapshot) {
+                          return Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: kBoxDecorationStyle,
+                            height: 60.0,
+                            child: SwitchListTile(
+                              title: Text(
+                                AppLocalizations.of(context)
+                                    .translate("Simulation mode"),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'OpenSans',
+                                ),
+                              ),
+                              value: snapshot.data.simulationMode,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  SharedPreferencesHelper
+                                      .setIdenaSharedPreferencesSimulationMode(
+                                          value);
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/paramRPC');
+                                });
+                              },
+                              activeTrackColor: Colors.green[100],
+                              activeColor: Colors.green[300],
+                              secondary: const Icon(
+                                Icons.build,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        }),
+                          Text(
+                            AppLocalizations.of(context).translate("Simulation mode enables functions normally available only during validation sessions."),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'OpenSans',
+                              fontSize: 14.0,
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 400,
+                bottom: 0,
+                left: 20,
+                right: 20,
+                child: ListView(
+                  children: <Widget>[
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 25.0),
                       width: double.infinity,
@@ -160,7 +215,8 @@ class _ParamRPCState extends State<ParamRPC> {
                             try {
                               await SharedPreferencesHelper
                                   .setIdenaSharedPreferences(
-                                      IdenaSharedPreferences(apiUrl, keyApp));
+                                      IdenaSharedPreferences(
+                                          apiUrl, keyApp, null));
                               Navigator.of(context).pushNamed('/home');
                             } catch (e) {
                               print(e.toString());
