@@ -28,11 +28,26 @@ class SharedPreferencesHelper {
     try {
       if(idenaSharedPreferences.apiUrl != null)
       {
+        if(idenaSharedPreferences.apiUrl != '')
+        {
           prefs.setString(_kApiUrl, idenaSharedPreferences.apiUrl);
+
+        }
+        else
+        {
+          prefs.setString(_kApiUrl, prefs.getString(_kApiUrl));
+        }
       }
       if(idenaSharedPreferences.keyApp != null)
       {
+        if(idenaSharedPreferences.keyApp != '')
+        {
           prefs.setString(_kKeyApp, idenaSharedPreferences.keyApp);
+        }
+        else
+        {
+          prefs.setString(_kKeyApp, prefs.getString(_kKeyApp));
+        }
       }
       if(idenaSharedPreferences.simulationMode != null)
       {
@@ -50,6 +65,14 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       prefs.setBool(_kSimulationMode, simulationMode);
+      if(prefs.getString(_kKeyApp) != null)
+      {
+        prefs.setString(_kKeyApp, prefs.getString(_kKeyApp));
+      }
+      if(prefs.getString(_kApiUrl) != null)
+      {
+          prefs.setString(_kApiUrl, prefs.getString(_kApiUrl));
+      }
       return true;
     } catch (e) {
       print(e);

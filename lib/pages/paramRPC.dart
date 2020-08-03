@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
@@ -65,35 +66,42 @@ class _ParamRPCState extends State<ParamRPC> {
                             SharedPreferencesHelper.getIdenaSharedPreferences(),
                         builder: (BuildContext context,
                             AsyncSnapshot<IdenaSharedPreferences> snapshot) {
-                          return Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            height: 60.0,
-                            child: TextFormField(
-                              controller: initialValue(snapshot.data.apiUrl),
-                              validator: (val) => val.isEmpty
-                                  ? AppLocalizations.of(context)
-                                      .translate("Enter your API url")
-                                  : null,
-                              onChanged: (val) => apiUrl = val,
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'OpenSans',
-                              ),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(top: 14.0),
-                                prefixIcon: Icon(
-                                  Icons.blur_on,
+                          if (snapshot.hasData == false) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              height: 60.0,
+                              child: TextFormField(
+                                controller: initialValue(
+                                    snapshot.data.apiUrl == null
+                                        ? ''
+                                        : snapshot.data.apiUrl),
+                                validator: (val) => val.isEmpty
+                                    ? AppLocalizations.of(context)
+                                        .translate("Enter your API url")
+                                    : null,
+                                onChanged: (val) => apiUrl = val,
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'OpenSans',
                                 ),
-                                hintText: AppLocalizations.of(context)
-                                    .translate("Enter your API url"),
-                                hintStyle: kHintTextStyle,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(top: 14.0),
+                                  prefixIcon: Icon(
+                                    Icons.blur_on,
+                                    color: Colors.white,
+                                  ),
+                                  hintText: AppLocalizations.of(context)
+                                      .translate("Enter your API url"),
+                                  hintStyle: kHintTextStyle,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         }),
                   ],
                 ),
@@ -110,35 +118,42 @@ class _ParamRPCState extends State<ParamRPC> {
                             SharedPreferencesHelper.getIdenaSharedPreferences(),
                         builder: (BuildContext context,
                             AsyncSnapshot<IdenaSharedPreferences> snapshot) {
-                          return Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            height: 60.0,
-                            child: TextFormField(
-                              controller: initialValue(snapshot.data.keyApp),
-                              validator: (val) => val.isEmpty
-                                  ? AppLocalizations.of(context)
-                                      .translate("Enter your key app")
-                                  : null,
-                              onChanged: (val) => keyApp = val,
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'OpenSans',
-                              ),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(top: 14.0),
-                                prefixIcon: Icon(
-                                  Icons.vpn_key,
+                          if (snapshot.hasData == false) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              height: 60.0,
+                              child: TextFormField(
+                                controller: initialValue(
+                                    snapshot.data.keyApp == null
+                                        ? ''
+                                        : snapshot.data.keyApp),
+                                validator: (val) => val.isEmpty
+                                    ? AppLocalizations.of(context)
+                                        .translate("Enter your key app")
+                                    : null,
+                                onChanged: (val) => keyApp = val,
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'OpenSans',
                                 ),
-                                hintText: AppLocalizations.of(context)
-                                    .translate("Enter your key app"),
-                                hintStyle: kHintTextStyle,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(top: 14.0),
+                                  prefixIcon: Icon(
+                                    Icons.vpn_key,
+                                    color: Colors.white,
+                                  ),
+                                  hintText: AppLocalizations.of(context)
+                                      .translate("Enter your key app"),
+                                  hintStyle: kHintTextStyle,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         }),
                   ],
                 ),
@@ -155,46 +170,53 @@ class _ParamRPCState extends State<ParamRPC> {
                             SharedPreferencesHelper.getIdenaSharedPreferences(),
                         builder: (BuildContext context,
                             AsyncSnapshot<IdenaSharedPreferences> snapshot) {
-                          return Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            height: 60.0,
-                            child: SwitchListTile(
-                              title: Text(
-                                AppLocalizations.of(context)
-                                    .translate("Simulation mode"),
-                                style: TextStyle(
+                          if (snapshot.hasData == false) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              height: 60.0,
+                              child: SwitchListTile(
+                                title: Text(
+                                  AppLocalizations.of(context)
+                                      .translate("Simulation mode"),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                ),
+                                value: snapshot.data.simulationMode == null
+                                    ? ''
+                                    : snapshot.data.simulationMode,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    SharedPreferencesHelper
+                                        .setIdenaSharedPreferencesSimulationMode(
+                                            value);
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/paramRPC');
+                                  });
+                                },
+                                activeTrackColor: Colors.green[100],
+                                activeColor: Colors.green[300],
+                                secondary: const Icon(
+                                  Icons.build,
                                   color: Colors.white,
-                                  fontFamily: 'OpenSans',
                                 ),
                               ),
-                              value: snapshot.data.simulationMode,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  SharedPreferencesHelper
-                                      .setIdenaSharedPreferencesSimulationMode(
-                                          value);
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/paramRPC');
-                                });
-                              },
-                              activeTrackColor: Colors.green[100],
-                              activeColor: Colors.green[300],
-                              secondary: const Icon(
-                                Icons.build,
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
+                            );
+                          }
                         }),
-                          Text(
-                            AppLocalizations.of(context).translate("Simulation mode enables functions normally available only during validation sessions."),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                              fontSize: 14.0,
-                            ),
-                          ),
+                    Text(
+                      AppLocalizations.of(context).translate(
+                          "Simulation mode enables functions normally available only during validation sessions."),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontSize: 14.0,
+                      ),
+                    ),
                   ],
                 ),
               ),
