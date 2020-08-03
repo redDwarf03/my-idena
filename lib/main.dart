@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_idena/pages/about.dart';
 import 'package:my_idena/pages/home.dart';
 import 'package:my_idena/pages/flip_words.dart';
+import 'package:my_idena/pages/test_ui.dart';
 import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/pages/paramRPC.dart';
 import 'package:my_idena/utils/app_localizations.dart';
