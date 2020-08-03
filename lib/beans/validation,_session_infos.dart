@@ -14,6 +14,7 @@ import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ValidationSessionInfoFlips {
     ValidationSessionInfoFlips({
@@ -44,12 +45,23 @@ class ValidationSessionInfo {
 
 }
 
+  bool simulationMode;
+    
+  getSimulationMode() async
+  {
+    SharedPreferences sharedPreferences;
+    simulationMode = true;
+    sharedPreferences = await SharedPreferences.getInstance();
+    simulationMode = sharedPreferences.getBool("simulation_mode");
+  }
 
-  Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession, bool simulation) async {
+  Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession) async {
 
     ValidationSessionInfo validationSessionInfo;
     validationSessionInfo.typeSession = typeSession;
     String method;
+    getSimulationMode();
+    
     switch(typeSession)
     {
       case EpochPeriod.ShortSession: {method = FlipShortHashesRequest.METHOD_NAME; } break;
