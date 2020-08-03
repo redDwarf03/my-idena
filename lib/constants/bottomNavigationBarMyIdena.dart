@@ -17,57 +17,67 @@ class BottomNavigationBarMyIdena extends StatefulWidget {
 
 class _BottomNavigationBarMyIdenaState
     extends State<BottomNavigationBarMyIdena> {
-
   SharedPreferences sharedPreferences;
   String simulationMode;
 
-  void getSimulationMode() async
-  {
+  void getSimulationMode() async {
     simulationMode = "";
     sharedPreferences = await SharedPreferences.getInstance();
-    setState(()
-    {
-        if(sharedPreferences.getBool("simulation_mode"))
-        {
-
-            simulationMode = "Sim";
-        }
+    setState(() {
+      if (sharedPreferences.getBool("simulation_mode")) {
+        simulationMode = AppLocalizations.of(context).translate("Sim");
+      }
     });
-    
   }
 
-    @override
+  @override
   void initState() {
     super.initState();
 
-    getSimulationMode();    
+    getSimulationMode();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ConvexAppBar.badge({3: simulationMode},
+    return ConvexAppBar.badge(
+      {3: simulationMode},
       backgroundColor: Colors.white,
       activeColor: Colors.black,
       color: Colors.black,
       items: [
         TabItem(
-          icon: Icon(Icons.home, color: Colors.orange,),
+          icon: Icon(
+            Icons.home,
+            color: Colors.orange,
+          ),
           title: AppLocalizations.of(context).translate("Home"),
         ),
         TabItem(
-          icon: Icon(Icons.burst_mode, color: Colors.orange,),
+          icon: Icon(
+            Icons.burst_mode,
+            color: Colors.orange,
+          ),
           title: AppLocalizations.of(context).translate("Flips"),
         ),
         TabItem(
-          icon: Icon(Icons.av_timer, color: Colors.orange,),
+          icon: Icon(
+            Icons.av_timer,
+            color: Colors.orange,
+          ),
           title: AppLocalizations.of(context).translate("Validation"),
         ),
         TabItem(
-          icon: Icon(Icons.settings_system_daydream, color: Colors.orange,),
+          icon: Icon(
+            Icons.settings_system_daydream,
+            color: Colors.orange,
+          ),
           title: AppLocalizations.of(context).translate("Param"),
         ),
         TabItem(
-          icon: Icon(Icons.contacts, color: Colors.orange,),
+          icon: Icon(
+            Icons.contacts,
+            color: Colors.orange,
+          ),
           title: AppLocalizations.of(context).translate("About"),
         ),
       ],
@@ -91,7 +101,8 @@ class _BottomNavigationBarMyIdenaState
                 new MaterialPageRoute(
                   builder: (BuildContext context) =>
                       new ValidationSession(dnaAll: dnaAll),
-                ),);
+                ),
+              );
               break;
             case 3:
               Navigator.of(context).pushReplacementNamed('/paramRPC');
