@@ -4,7 +4,6 @@ import 'package:my_idena/pages/flip_words.dart';
 import 'package:my_idena/pages/home.dart';
 import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNavigationBarMyIdena extends StatefulWidget {
@@ -30,6 +29,7 @@ class _BottomNavigationBarMyIdenaState
     {
         if(sharedPreferences.getBool("simulation_mode"))
         {
+
             simulationMode = "Sim";
         }
     });
@@ -46,26 +46,28 @@ class _BottomNavigationBarMyIdenaState
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar.badge({3: simulationMode},
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Colors.white,
+      activeColor: Colors.black,
+      color: Colors.black,
       items: [
         TabItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home, color: Colors.orange,),
           title: AppLocalizations.of(context).translate("Home"),
         ),
         TabItem(
-          icon: Icon(Icons.burst_mode),
+          icon: Icon(Icons.burst_mode, color: Colors.orange,),
           title: AppLocalizations.of(context).translate("Flips"),
         ),
         TabItem(
-          icon: Icon(Icons.av_timer),
+          icon: Icon(Icons.av_timer, color: Colors.orange,),
           title: AppLocalizations.of(context).translate("Validation"),
         ),
         TabItem(
-          icon: Icon(Icons.settings_system_daydream),
+          icon: Icon(Icons.settings_system_daydream, color: Colors.orange,),
           title: AppLocalizations.of(context).translate("Param"),
         ),
         TabItem(
-          icon: Icon(Icons.contacts),
+          icon: Icon(Icons.contacts, color: Colors.orange,),
           title: AppLocalizations.of(context).translate("About"),
         ),
       ],
