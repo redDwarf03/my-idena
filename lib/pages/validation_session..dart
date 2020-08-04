@@ -67,16 +67,14 @@ class _ValidationSessionState extends State<ValidationSession> {
     super.initState();
 
     List<ValidationSessionInfoFlips> listSessionValidationFlip = new List(2);
-    String typeSession = "shortSession";
-  
-    ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo(typeSession: typeSession, listSessionValidationFlip: listSessionValidationFlip);
     
+    Future<ValidationSessionInfo> validationSessionInfo = getValidationSessionInfo(EpochPeriod.ShortSession);
 
     /* RPL Part start */
     Future<FlipShortHashesResponse> flipShortHashesResponse = httpService.getFlipShortHashes();
     
     
-
+/*
     var orders;
     var toto = [];
     var encoded = "";
@@ -84,7 +82,7 @@ class _ValidationSessionState extends State<ValidationSession> {
     images = decoded.data[0];
     _image = images[0];
     _image2 = images[1];
-
+*/
     /* RPL Part end */
 
 

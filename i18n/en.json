@@ -1,7 +1,7 @@
 {
   "my Idena": "my Idena",
-  "State :": "State :",
-  "Age :": "Age :",
+  "State": "State",
+  "Age": "Age",
   "Mining": "Mining",
   "Deactivate mining status": "Deactivate mining status" ,
   "Submit the form to deactivate your mining status.": "Submit the form to deactivate your mining status.",
@@ -11,7 +11,7 @@
   "Cancel": "Cancel",
   "Submit": "Submit",
   "You can deactivate your online status at any time.": "You can deactivate your online status at any time.",
-  "Submit the form to start mining. Your node has to be online\n                unless you deactivate your status. Otherwise penalties might be\n                charged after being offline more than 1 hour.": "Submit the form to start mining. Your node has to be online\n                unless you deactivate your status. Otherwise penalties might be\n                charged after being offline more than 1 hour.",
+  "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.": "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.",
   "Activate mining status": "Activate mining status",
   "Next validation": "Next validation",
   "Epoch": "Epoch",
@@ -36,6 +36,7 @@
   "Send a donation": "Send a donation",
   "Simulation mode": "Simulation mode",
   "Simulation mode enables functions normally available only during validation sessions.": "Simulation mode enables functions normally available only during validation sessions.",
-  "Sim": "Sim"
+  "Sim": "Sim",
+  "Address": "Address"
 
 }
