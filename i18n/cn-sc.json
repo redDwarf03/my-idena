@@ -1,7 +1,7 @@
 {
   "my Idena": "我的Idena",
-  "State :": "状态 :",
-  "Age :": "年资 :",
+  "State": "状态",
+  "Age": "年资",
   "Mining": "挖矿中",
   "Deactivate mining status": "取消挖矿状态" ,
   "Submit the form to deactivate your mining status.": "提交请求取消挖矿状态。",
@@ -11,7 +11,7 @@
   "Cancel": "取消",
   "Submit": "提交",
   "You can deactivate your online status at any time.": "你可以在任何时间停止挖矿。",
-  "Submit the form to start mining. Your node has to be online\n unless you deactivate your status. Otherwise penalties might be\n charged after being offline more than 1 hour.": "提交请求并开始挖矿. 你的节点必须保持在线\n 直至你取消挖矿。否则将会带来惩罚\n 离线超过1小时将会被惩罚。",
+  "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.": "提交请求并开始挖矿. 你的节点必须保持在线 直至你取消挖矿。否则将会带来惩罚 离线超过1小时将会被惩罚。",
   "Activate mining status": "激活挖矿状态",
   "Next validation": "下一次验证",
   "Epoch": "期间",
@@ -36,5 +36,7 @@
   "Send a donation": "Send a donation",
   "Simulation mode": "Simulation mode",
   "Simulation mode enables functions normally available only during validation sessions.": "Simulation mode enables functions normally available only during validation sessions.",
-  "Sim": "Sim"
+  "Sim": "Sim",
+  "Address": "Address"
+
 }

@@ -635,6 +635,7 @@ class HomePageContent extends StatelessWidget {
                   ),
                 ],
               ),
+              // TODO. Dynamic
               Image.network(
                 'https://robohash.org/0x72563cb949bd0167acfff47b5865fe30e1960e70',
                 width: 50,
