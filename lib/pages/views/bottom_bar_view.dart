@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/utils/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../myIdena_app/tabIcon_data.dart';
 
@@ -21,6 +23,23 @@ class _BottomBarViewState extends State<BottomBarView>
     with TickerProviderStateMixin {
   AnimationController animationController;
 
+  SharedPreferences sharedPreferences;
+  String simulationMode;
+  Color backGroundBottom = MyIdenaAppTheme.white;
+
+  void getSimulationMode() async {
+    simulationMode = "";
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      if (sharedPreferences.getBool("simulation_mode")) {
+        simulationMode = AppLocalizations.of(context).translate("Sim");
+        backGroundBottom = MyIdenaAppTheme.nearlyBlack;
+
+      }
+    });
+  }
+
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -28,6 +47,8 @@ class _BottomBarViewState extends State<BottomBarView>
       duration: const Duration(milliseconds: 1000),
     );
     animationController.forward();
+    getSimulationMode();
+
     super.initState();
   }
 
@@ -42,7 +63,7 @@ class _BottomBarViewState extends State<BottomBarView>
             return Transform(
               transform: Matrix4.translationValues(0.0, 0.0, 0.0),
               child: PhysicalShape(
-                color: MyIdenaAppTheme.white,
+                color: backGroundBottom,
                 elevation: 16.0,
                 clipper: TabClipper(
                     radius: Tween<double>(begin: 0.0, end: 1.0)

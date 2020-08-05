@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
-import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
@@ -185,40 +184,40 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                   } catch (e) {
                                                     print(e.toString());
                                                   }
-                                                                                                      showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (context) =>
-                                                                SimpleDialog(
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Column(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Text(
-                                                                            AppLocalizations.of(context).translate("Parameters have been saved"),
-                                                                            style: TextStyle(
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontWeight: FontWeight.w500,
-                                                                                fontSize: 16,
-                                                                                letterSpacing: -0.1,
-                                                                                color: MyIdenaAppTheme.darkText),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ));
-                                                    setState(() {
-                                                    });
+                                                  showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (context) =>
+                                                              SimpleDialog(
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Column(
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Text(
+                                                                          AppLocalizations.of(context)
+                                                                              .translate("Parameters have been saved"),
+                                                                          style: TextStyle(
+                                                                              fontFamily: MyIdenaAppTheme.fontName,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 16,
+                                                                              letterSpacing: -0.1,
+                                                                              color: MyIdenaAppTheme.darkText),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ));
+                                                  setState(() {});
                                                 }
                                               },
                                               padding: EdgeInsets.all(15.0),
@@ -237,6 +236,115 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                     fontWeight: FontWeight.bold,
                                                     fontFamily: 'OpenSans',
                                                   )),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 24,
+                                                right: 24,
+                                                top: 8,
+                                                bottom: 8),
+                                            child: Container(
+                                              height: 2,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    MyIdenaAppTheme.background,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4.0)),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            AppLocalizations.of(context).translate(
+                                                "Simulation mode enables functions normally available only during validation sessions."),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  MyIdenaAppTheme.fontName,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              letterSpacing: -0.2,
+                                              color: MyIdenaAppTheme.darkText,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 4),
+                                            child: Container(
+                                              height: 4,
+                                              width: 70,
+                                              decoration: BoxDecoration(
+                                                color: HexColor('#000000')
+                                                    .withOpacity(0.2),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4.0)),
+                                              ),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: 70,
+                                                    height: 4,
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                          colors: [
+                                                            HexColor('#000000')
+                                                                .withOpacity(
+                                                                    0.1),
+                                                            HexColor('#000000'),
+                                                          ]),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  4.0)),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 6),
+                                            child: SwitchListTile(
+                                              title: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        "Simulation mode"),
+                                                style: TextStyle(
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16,
+                                                    letterSpacing: -0.1,
+                                                    color: MyIdenaAppTheme
+                                                        .darkText),
+                                              ),
+                                              value: snapshot.data
+                                                          .simulationMode ==
+                                                      null
+                                                  ? ''
+                                                  : snapshot
+                                                      .data.simulationMode,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  SharedPreferencesHelper
+                                                      .setIdenaSharedPreferencesSimulationMode(
+                                                          value);
+                                                });
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            Home()));
+                                              },
+                                              activeTrackColor:
+                                                  Colors.green[100],
+                                              activeColor: Colors.green[300],
+                                              secondary: const Icon(
+                                                Icons.build,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ],
