@@ -6,6 +6,8 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
+bool firstState = true;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
