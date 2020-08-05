@@ -12,7 +12,6 @@ import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
-import 'package:my_idena/constants/containerMyIdena.dart';
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
@@ -88,7 +87,6 @@ class _HomeState extends State<Home> {
                 return SafeArea(
                   child: Stack(
                     children: <Widget>[
-                      ContainerMyIdena(),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +118,6 @@ class _HomeState extends State<Home> {
                 return SafeArea(
                   child: Stack(
                     children: <Widget>[
-                      ContainerMyIdena(),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

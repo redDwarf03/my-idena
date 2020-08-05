@@ -1,5 +1,4 @@
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
-import 'package:my_idena/constants/containerMyIdena.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +33,6 @@ class _FlipMixState extends State<FlipMix> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            ContainerMyIdena(),
             Positioned(
               top: 20,
               bottom: 0,
