@@ -19,7 +19,6 @@ import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
-import 'package:my_idena/constants/containerMyIdena.dart';
 import 'package:my_idena/utils/util_timer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -181,7 +180,6 @@ class _ValidationSessionState extends State<ValidationSession> {
                 return SafeArea(
                   child: Stack(
                     children: <Widget>[
-                      ContainerMyIdena(),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
