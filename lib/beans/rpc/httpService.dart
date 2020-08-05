@@ -394,6 +394,9 @@ class HttpService {
 
   Future<DnaSendTransactionResponse> sendTransaction(
       String from, double amount) async {
+    if (amount <= 0) {
+      return null;
+    }
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =

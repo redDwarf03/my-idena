@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/main.dart';
@@ -23,6 +24,21 @@ class _DonationViewState extends State<DonationView> {
   final _keyFormDonation = GlobalKey<FormState>();
   final number = TextEditingController();
   String amount = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    number.value = new TextEditingValue(text: "");
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    number.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +151,10 @@ class _DonationViewState extends State<DonationView> {
                                                   const EdgeInsets.only(top: 6),
                                               child: TextFormField(
                                                 controller: number,
+                                                inputFormatters: [
+                                                  WhitelistingTextInputFormatter
+                                                      .digitsOnly
+                                                ],
                                                 validator: (val) => val.isEmpty
                                                     ? AppLocalizations.of(
                                                             context)
@@ -208,7 +228,9 @@ class _DonationViewState extends State<DonationView> {
                                                               .dnaIdentityResponse
                                                               .result
                                                               .address,
-                                                          double.parse(amount));
+                                                          double.tryParse(
+                                                                  amount) ??
+                                                              0);
                                                     } catch (e) {
                                                       print(e.toString());
                                                     }
@@ -231,7 +253,7 @@ class _DonationViewState extends State<DonationView> {
                                                                         children: <
                                                                             Widget>[
                                                                           Text(
-                                                                            "Thank you !!!! :)",
+                                                                            AppLocalizations.of(context).translate("Thank you !!! :)"),
                                                                             style: TextStyle(
                                                                                 fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontWeight: FontWeight.w500,
@@ -245,7 +267,9 @@ class _DonationViewState extends State<DonationView> {
                                                                   ],
                                                                 ));
                                                     setState(() {
-                                                      amount = "0";
+                                                      number.value =
+                                                          new TextEditingValue(
+                                                              text: "");
                                                     });
                                                   }
                                                 },
