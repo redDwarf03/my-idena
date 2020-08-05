@@ -33,14 +33,6 @@ class _DonationViewState extends State<DonationView> {
   }
 
   @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    number.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.animationController,
@@ -51,7 +43,7 @@ class _DonationViewState extends State<DonationView> {
               if (snapshot.hasData) {
                 dnaAll = snapshot.data;
                 if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-                  return Text("Go to param");
+                  return Text("");
                 } else {
                   return FadeTransition(
                     opacity: widget.animation,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/donation_view.dart';
 import 'package:my_idena/pages/views/empty_view.dart';
+import 'package:my_idena/pages/views/paramRPC_view.dart';
 import 'package:my_idena/pages/views/portofolio_view.dart';
 import 'package:my_idena/pages/views/profile_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
+    addAllListData(context);
 
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
@@ -55,11 +56,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  void addAllListData() {
-    const int count = 6;
+  void addAllListData(BuildContext context) {
+    const int count = 8;
     listViews.add(
       TitleView(
-        titleTxt: 'Portofolio',
+        titleTxt: "Portofolio",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -80,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     listViews.add(
       TitleView(
-        titleTxt: 'Profile',
+        titleTxt: "Profile",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -101,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     listViews.add(
       TitleView(
-        titleTxt: 'Donation',
+        titleTxt: "Donation",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -116,6 +117,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             parent: widget.animationController,
             curve:
                 Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: "Parameters",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      ParamRPCView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 7, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );

@@ -29,7 +29,7 @@ class PortofolioView extends StatelessWidget {
               if (snapshot.hasData) {
                 dnaAll = snapshot.data;
                 if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-                  return Text("Go to param");
+                  return Text("");
                 } else {
                   return FadeTransition(
                     opacity: animation,

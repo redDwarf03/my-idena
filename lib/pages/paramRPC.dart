@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
-import 'package:my_idena/constants/containerMyIdena.dart';
 import 'package:my_idena/constants/constants.dart';
 
 // TODO: Bug dans la console à corriger
@@ -37,23 +35,6 @@ class _ParamRPCState extends State<ParamRPC> {
           key: _keyForm,
           child: Stack(
             children: <Widget>[
-              ContainerMyIdena(),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      AppLocalizations.of(context).translate("my Idena"),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               Positioned(
                 top: 100,
                 bottom: 0,
@@ -245,7 +226,7 @@ class _ParamRPCState extends State<ParamRPC> {
                             }
                           }
                         },
-                        padding: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(5.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -253,9 +234,9 @@ class _ParamRPCState extends State<ParamRPC> {
                         child:
                             Text(AppLocalizations.of(context).translate("Save"),
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                   letterSpacing: 1.5,
-                                  fontSize: 18.0,
+                                  fontSize: 12.0,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'OpenSans',
                                 )),

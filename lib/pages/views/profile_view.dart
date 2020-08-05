@@ -21,9 +21,7 @@ class ProfileView extends StatefulWidget {
   _ProfileViewState createState() => _ProfileViewState();
 }
 
-
 class _ProfileViewState extends State<ProfileView> {
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -34,14 +32,15 @@ class _ProfileViewState extends State<ProfileView> {
             builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
               if (snapshot.hasData) {
                 dnaAll = snapshot.data;
-                if(firstState)
-                {
-                  miningSwitchValue = dnaAll.dnaIdentityResponse.result.online;
-                  firstState = false;
-                }
                 if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-                  return Text("Go to param");
+                  return Text("");
                 } else {
+                  if (firstState) {
+                    miningSwitchValue =
+                        dnaAll.dnaIdentityResponse.result.online;
+                    firstState = false;
+                  }
+
                   return FadeTransition(
                     opacity: widget.animation,
                     child: new Transform(

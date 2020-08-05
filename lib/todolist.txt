@@ -8,3 +8,4 @@
 - attente on/off minage
 - enlever print
 - vérifier tous les translates
+- enlever les OpenSans
