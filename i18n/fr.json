@@ -38,6 +38,11 @@
   "Simulation mode enables functions normally available only during validation sessions.": "Le mode simulation permet d'activer des fonctions normalement disponibles que lors des sessions de validation.",
   "Sim": "Sim",
   "Address": "Address",
-  "Thank you !!! :)": "Merci !!! :)"
+  "Thank you !!! :)": "Merci !!! :)",
+  "Parameters": "Paramètres",
+  "Donation": "Donation",
+  "Profile": "Profil",
+  "Portofolio": "Portefeuille",
+  "Parameters have been saved": "Les paramètres ont été sauvegardés"
 
   }
