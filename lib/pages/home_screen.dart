@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void addAllListData() {
-    const int count = 9;
+    const int count = 6;
     listViews.add(
       TitleView(
         titleTxt: 'Portofolio',

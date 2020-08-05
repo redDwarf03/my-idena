@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'views/bottom_bar_view.dart';
+import 'package:my_idena/main.dart';
 import '../myIdena_app/myIdena_app_theme.dart';
 import 'home_screen.dart';
 
@@ -78,6 +79,7 @@ class _HomeState extends State<Home>
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
+            firstState = true;
             if (index == 0 || index == 2) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
