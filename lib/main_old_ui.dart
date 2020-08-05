@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_idena/pages/about.dart';
 import 'package:my_idena/pages/home.dart';
 import 'package:my_idena/pages/flip_words.dart';
 import 'package:my_idena/pages/validation_session..dart';
@@ -34,7 +33,6 @@ class MyApp extends StatelessWidget {
           '/flipWords': (BuildContext context) => new FlipWords(),
           '/validationSession': (BuildContext context) => new ValidationSession(),
           '/paramRPC': (BuildContext context) => new ParamRPC(),
-          '/about': (BuildContext context) => new About(),
         },
     );
      
