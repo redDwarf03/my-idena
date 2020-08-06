@@ -22,7 +22,7 @@ import 'package:my_idena/utils/util_timer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ValidationSession extends StatefulWidget {
-  final DnaAll dnaAll;
+  DnaAll dnaAll;
 
   ValidationSession({Key key, this.dnaAll}) : super(key: key);
 

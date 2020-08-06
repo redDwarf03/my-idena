@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
-import 'package:my_idena/pages/validation_session_screen.dart';
+import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'views/bottom_bar_view.dart';
 import 'package:my_idena/main.dart';
 import '../myIdena_app/myIdena_app_theme.dart';
-import 'home_screen.dart';
+import 'screens/home_screen.dart';
 
 class Home extends StatefulWidget {
+
   @override
   _HomeState createState() => _HomeState();
 }

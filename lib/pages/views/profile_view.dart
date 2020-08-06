@@ -6,7 +6,6 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
-DnaAll dnaAll;
 HttpService httpService = HttpService();
 bool miningSwitchValue;
 

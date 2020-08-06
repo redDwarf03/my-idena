@@ -2,11 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 bool firstState = true;
+DnaAll dnaAll;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
