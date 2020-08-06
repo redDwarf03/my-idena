@@ -8,13 +8,7 @@ In the first launch, go to "Param" menu
 Tape "http://10.0.2.2:9119" to connect to your local node 
 and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 
-## In progress
-
-- Display idena informations => ok
-- Mining on/off => ok
-- Connection to the node with parameters in local => ok
-- i8n => 90%
-- Short validation session => mockup + some RPC call...
+## Work in progress
 
 ## Help
 
