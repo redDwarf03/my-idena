@@ -7,6 +7,7 @@ import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/main.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,10 +40,7 @@ class _ValidationListViewState extends State<ValidationListView>
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
-  List flipList = new List(5);
-  List base64String = new List(4);
-  List base64StringList = new List(5);
-  List selectionFlipList = new List(5);
+  List selectionFlipList = new List(7);
   int bottomSelectedIndex = 0;
 
   SharedPreferences sharedPreferences;
@@ -159,7 +157,6 @@ class _ValidationListViewState extends State<ValidationListView>
                         animation: animation,
                         animationController: animationController,
                         bottomSelectedIndex: index,
-                        flipList: flipList,
                       );
                     },
                   ),
@@ -203,7 +200,6 @@ class ValidationView extends StatefulWidget {
   final List selectionFlipList;
   final AnimationController animationController;
   final Animation<dynamic> animation;
-  final List flipList;
   final int bottomSelectedIndex;
 
   const ValidationView(
@@ -211,7 +207,6 @@ class ValidationView extends StatefulWidget {
       this.selectionFlipList,
       this.animationController,
       this.animation,
-      this.flipList,
       this.bottomSelectedIndex})
       : super(key: key);
   @override
@@ -225,7 +220,7 @@ class _ValidationViewState extends State<ValidationView> {
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FutureBuilder(
-            future: getValidationSessionInfo(EpochPeriod.ShortSession),
+            future: getValidationSessionInfo(EpochPeriod.ShortSession, validationSessionInfo),
             builder: (BuildContext context,
                 AsyncSnapshot<ValidationSessionInfo> snapshot) {
               if (snapshot.hasData) {
@@ -238,6 +233,7 @@ class _ValidationViewState extends State<ValidationView> {
                   } else {
                     List<ValidationSessionInfoFlips> listSessionValidationFlip =
                         validationSessionInfo.listSessionValidationFlip;
+                        shortSessionCharged = true;
                     return FadeTransition(
                       opacity: widget.animation,
                       child: Transform(
@@ -245,146 +241,7 @@ class _ValidationViewState extends State<ValidationView> {
                             100 * (1.0 - widget.animation.value), 0.0, 0.0),
                         child: SizedBox(
                           width: 400,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                decoration: widget.selectionFlipList[
-                                            widget.bottomSelectedIndex] ==
-                                        1
-                                    ? new BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        border: new Border.all(
-                                            color: Colors.green, width: 5))
-                                    : new BoxDecoration(
-                                        border: new Border.all(
-                                            color: Color.fromRGBO(
-                                                255, 255, 255, 0),
-                                            width: 5)),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      widget.selectionFlipList[
-                                          widget.bottomSelectedIndex] = 1;
-                                    });
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image1),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image2),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image3),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image4),
-                                              width: 145)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 30,
-                                    child: Text(
-                                      (widget.bottomSelectedIndex + 1)
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontFamily: MyIdenaAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20,
-                                          letterSpacing: -0.1,
-                                          color: MyIdenaAppTheme.darkText),
-                                    ),
-                                    foregroundColor: Colors.red,
-                                  )
-                                ],
-                              )),
-                              Container(
-                                decoration: widget.selectionFlipList[
-                                            widget.bottomSelectedIndex] ==
-                                        2
-                                    ? new BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        border: new Border.all(
-                                            color: Colors.green, width: 5))
-                                    : new BoxDecoration(
-                                        border: new Border.all(
-                                            color: Color.fromRGBO(
-                                                255, 255, 255, 0),
-                                            width: 5)),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      widget.selectionFlipList[
-                                          widget.bottomSelectedIndex] = 2;
-                                    });
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image1),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image2),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image3),
-                                              width: 145)),
-                                      Image(
-                                          image: ResizeImage(
-                                              MemoryImage(
-                                                  listSessionValidationFlip[widget
-                                                          .bottomSelectedIndex]
-                                                      .image4),
-                                              width: 145)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: displayFlips(listSessionValidationFlip),
                         ),
                       ),
                     );
@@ -395,6 +252,129 @@ class _ValidationViewState extends State<ValidationView> {
               }
             });
       },
+    );
+  }
+
+  Widget displayFlips (
+      List<ValidationSessionInfoFlips> listSessionValidationFlip) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          decoration: widget.selectionFlipList[widget.bottomSelectedIndex] == 1
+              ? new BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: new Border.all(color: Colors.green, width: 5))
+              : new BoxDecoration(
+                  border: new Border.all(
+                      color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                widget.selectionFlipList[widget.bottomSelectedIndex] = 1;
+              });
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages1[0]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages1[1]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages1[2]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages1[3]),
+                        width: 145)),
+              ],
+            ),
+          ),
+        ),
+        Container(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 30,
+              child: Text(
+                (widget.bottomSelectedIndex + 1).toString() +
+                    "/" +
+                    listSessionValidationFlip.length.toString(),
+                style: TextStyle(
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    letterSpacing: -0.1,
+                    color: MyIdenaAppTheme.darkText),
+              ),
+              foregroundColor: Colors.red,
+            )
+          ],
+        )),
+        Container(
+          decoration: widget.selectionFlipList[widget.bottomSelectedIndex] == 2
+              ? new BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: new Border.all(color: Colors.green, width: 5))
+              : new BoxDecoration(
+                  border: new Border.all(
+                      color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                widget.selectionFlipList[widget.bottomSelectedIndex] = 2;
+              });
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages2[0]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages2[1]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages2[2]),
+                        width: 145)),
+                Image(
+                    image: ResizeImage(
+                        MemoryImage(listSessionValidationFlip[
+                                widget.bottomSelectedIndex]
+                            .listImages2[3]),
+                        width: 145)),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
