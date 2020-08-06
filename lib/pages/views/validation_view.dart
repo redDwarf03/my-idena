@@ -1,24 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:image/image.dart' as ImageFct;
-                                    
 
 import 'package:flutter/material.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
 import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
-import 'package:my_idena/beans/test/flip_example_1..dart';
-import 'package:my_idena/beans/test/flip_example_2.dart';
-import 'package:my_idena/beans/test/flip_example_3.dart';
-import 'package:my_idena/beans/test/flip_example_4.dart';
-import 'package:my_idena/beans/test/flip_example_5.dart';
 import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 
-
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/utils/util_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 DnaGetBalanceResponse dnaGetBalanceResponse;
@@ -42,6 +32,12 @@ class ValidationListView extends StatefulWidget {
 class _ValidationListViewState extends State<ValidationListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
+  AnimationController controllerChrono;
+
+  String get timerString {
+    Duration duration = controllerChrono.duration * controllerChrono.value;
+    return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
 
   List flipList = new List(5);
   List base64String = new List(4);
@@ -69,75 +65,36 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    /* RPL Part start */
-    //Future<FlipShortHashesResponse> flipShortHashesResponse =
-    //    httpService.getFlipShortHashes();
-
-/*
-    var orders;
-    var toto = [];
-    var encoded = "";
-    Decoded decoded = Rlp.decode(Uint8List.fromList(toBuffer(encoded)), true);
-    images = decoded.data[0];
-    _image = images[0];
-    _image2 = images[1];
-*/
-    /* RPL Part end */
-
-    //Future<GetFlipRawResponse> getFlipRawResponse = httpService.getFlipRaw("bafkreibes2fqhsbfnmg4fgh3ltozoxc3rbxpifonkmd7x6vmmvmfmteu4q");
-
-    base64StringList[0] = new FlipExample1().base64String;
-    base64StringList[1] = new FlipExample2().base64String;
-    base64StringList[2] = new FlipExample3().base64String;
-    base64StringList[3] = new FlipExample4().base64String;
-    base64StringList[4] = new FlipExample5().base64String;
-
     // Init choice
     for (int i = 0; i < selectionFlipList.length; i++) {
       selectionFlipList[i] = 0;
     }
 
-    for (int i = 0; i < flipList.length; i++) {}
-
-    /* for (int i = 0; i < flipList.length; i++) {
-      List imageFlipList = new List(4);
-
-      imageFlipList[0] = Image.memory(
-        base64Decode(base64StringList[i][0]),
-        height: 100,
-      );
-      imageFlipList[1] = Image.memory(
-        base64Decode(base64StringList[i][1]),
-        height: 100,
-      );
-      imageFlipList[2] = Image.memory(
-        base64Decode(base64StringList[i][2]),
-        height: 100,
-      );
-      imageFlipList[3] = Image.memory(
-        base64Decode(base64StringList[i][3]),
-        height: 100,
-      );
-
-      flipList[i] = imageFlipList;
-    }*/
-
     getSimulationMode();
     if (simulationMode) {
       dnaAll.dnaGetEpochResponse.result.currentPeriod =
           EpochPeriod.ShortSession;
-      /*_startTimerCurrentPeriod(
-          dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);*/
+      controllerChrono = AnimationController(
+          vsync: this,
+          duration: Duration(
+              seconds: dnaAll
+                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
     } else {
       if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
           EpochPeriod.ShortSession) {
-        /*_startTimerCurrentPeriod(
-            dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);*/
+        controllerChrono = AnimationController(
+            vsync: this,
+            duration: Duration(
+                seconds: dnaAll
+                    .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
       } else {
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
-          /*_startTimerCurrentPeriod(
-              dnaAll.dnaCeremonyIntervalsResponse.result.longSessionDuration);*/
+          controllerChrono = AnimationController(
+              vsync: this,
+              duration: Duration(
+                  seconds: dnaAll.dnaCeremonyIntervalsResponse.result
+                      .longSessionDuration));
         }
       }
     }
@@ -151,29 +108,8 @@ class _ValidationListViewState extends State<ValidationListView>
   @override
   void dispose() {
     animationController.dispose();
-    if (_timer != null) {
-      _timer.cancel();
-    }
+    controllerChrono.dispose();
     super.dispose();
-  }
-
-  int _counter = 10;
-  Timer _timer;
-
-  void _startTimerCurrentPeriod(int duration) {
-    _counter = duration;
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_counter > 0) {
-          _counter--;
-        } else {
-          _timer.cancel();
-        }
-      });
-    });
   }
 
   PageController pageController = PageController(
@@ -230,29 +166,35 @@ class _ValidationListViewState extends State<ValidationListView>
                 ),
               ),
             ),
-            Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  (_counter > 0)
-                      ? Text(
-                          constructTime(_counter),
-                          style: TextStyle(
-                            fontFamily: MyIdenaAppTheme.fontName,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            letterSpacing: -0.1,
-                            color: Colors.red,
-                          ),
-                        )
-                      : Text("")
-                ],
-              ),
-            ),
+            Container(width: double.infinity, child: getChrono()),
           ],
         );
       },
+    );
+  }
+
+  Widget getChrono() {
+    controllerChrono.reverse(
+        from: controllerChrono.value == 0.0 ? 1.0 : controllerChrono.value);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        AnimatedBuilder(
+            animation: controllerChrono,
+            builder: (BuildContext context, Widget child) {
+              return Text(
+                timerString,
+                style: TextStyle(
+                  fontFamily: MyIdenaAppTheme.fontName,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  letterSpacing: -0.1,
+                  color: Colors.red,
+                ),
+              );
+            }),
+      ],
     );
   }
 }
@@ -329,22 +271,36 @@ class _ValidationViewState extends State<ValidationView> {
                                     });
                                   },
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image1),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image2),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image3),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image4),
+                                              width: 145)),
                                     ],
                                   ),
                                 ),
@@ -393,21 +349,36 @@ class _ValidationViewState extends State<ValidationView> {
                                     });
                                   },
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
-                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
-                                              widget.bottomSelectedIndex]
-                                          .image), width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image1),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image2),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image3),
+                                              width: 145)),
+                                      Image(
+                                          image: ResizeImage(
+                                              MemoryImage(
+                                                  listSessionValidationFlip[widget
+                                                          .bottomSelectedIndex]
+                                                      .image4),
+                                              width: 145)),
                                     ],
                                   ),
                                 ),

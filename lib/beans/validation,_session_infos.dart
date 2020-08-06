@@ -19,14 +19,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
-      this.image,
+      this.image1,
+      this.image2,
+      this.image3,
+      this.image4,
       this.ready,
       this.extra,
       this.available,
       this.listWords});
 
   String hash;
-  Uint8List image;
+  Uint8List image1;
+  Uint8List image2;
+  Uint8List image3;
+  Uint8List image4;
   bool ready;
   bool extra;
   bool available;
@@ -204,13 +210,24 @@ FlipShortHashesResponse flipShortHashesResponse;
       }
 
       List<dynamic> images = new List(2);
-      Uint8List imageUint8;
-      Uint8List _image2;
-      Decoded decoded = Rlp.decode(
+      Uint8List imageUint8_1;
+      Uint8List imageUint8_2;
+      Uint8List imageUint8_3;
+      Uint8List imageUint8_4;
+      Decoded decodedHex = Rlp.decode(
           Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-      images = decoded.data[0];
-      imageUint8 = images[0];
-      validationSessionInfoFlips.image = imageUint8;
+      images = decodedHex.data[0];
+      imageUint8_1 = images[0];
+      imageUint8_2 = images[1];
+      Decoded decodedPrivateHex = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)), true);
+      images = decodedPrivateHex.data[0];
+      imageUint8_3 = images[0];
+      imageUint8_4 = images[1];
+      validationSessionInfoFlips.image1 = imageUint8_1;
+      validationSessionInfoFlips.image2 = imageUint8_2;
+      validationSessionInfoFlips.image3 = imageUint8_3;
+      validationSessionInfoFlips.image4 = imageUint8_4;
 
       // get Words
       if (simulationMode) {
