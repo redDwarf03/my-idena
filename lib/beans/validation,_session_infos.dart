@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +27,10 @@ class ValidationSessionInfoFlips {
       this.ready,
       this.extra,
       this.available,
-      this.listWords});
+      this.listWords,
+      this.listImages1,
+      this.listImages2,
+      this.listOk});
 
   String hash;
   Uint8List image1;
@@ -37,6 +41,9 @@ class ValidationSessionInfoFlips {
   bool extra;
   bool available;
   List<int> listWords;
+  List<Uint8List> listImages1;
+  List<Uint8List> listImages2;
+  int listOk;
 }
 
 class ValidationSessionInfo {
@@ -57,8 +64,12 @@ Future<bool> getSimulationMode() async {
   return simulationMode;
 }
 
-Future<ValidationSessionInfo> getValidationSessionInfo(
-    String typeSession) async {
+Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
+    ValidationSessionInfo validationSessionInfoInput) async {
+  if (validationSessionInfoInput != null) {
+    return validationSessionInfoInput;
+  }
+
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
   validationSessionInfo.typeSession = typeSession;
   String method;
@@ -79,8 +90,8 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
       return validationSessionInfo;
   }
 
-FlipShortHashesRequest flipShortHashesRequest;
-FlipShortHashesResponse flipShortHashesResponse;
+  FlipShortHashesRequest flipShortHashesRequest;
+  FlipShortHashesResponse flipShortHashesResponse;
 
   try {
     HttpClient httpClient = new HttpClient();
@@ -169,7 +180,8 @@ FlipShortHashesResponse flipShortHashesResponse;
 
     FlipGetResponse flipGetResponse;
     FlipWordsResponse flipWordsResponse;
-    List<ValidationSessionInfoFlips> listSessionValidationFlip = new List(flipShortHashesResponse.result.length);
+    List<ValidationSessionInfoFlips> listSessionValidationFlip =
+        new List(flipShortHashesResponse.result.length);
 
     // TODO : distinguer Short/long
     for (int i = 0; i < flipShortHashesResponse.result.length; i++) {
@@ -220,7 +232,8 @@ FlipShortHashesResponse flipShortHashesResponse;
       imageUint8_1 = images[0];
       imageUint8_2 = images[1];
       Decoded decodedPrivateHex = Rlp.decode(
-          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)), true);
+          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+          true);
       images = decodedPrivateHex.data[0];
       imageUint8_3 = images[0];
       imageUint8_4 = images[1];
@@ -228,6 +241,28 @@ FlipShortHashesResponse flipShortHashesResponse;
       validationSessionInfoFlips.image2 = imageUint8_2;
       validationSessionInfoFlips.image3 = imageUint8_3;
       validationSessionInfoFlips.image4 = imageUint8_4;
+
+      validationSessionInfoFlips.listImages1 = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImages1[0] = imageUint8_1;
+      validationSessionInfoFlips.listImages1[1] = imageUint8_2;
+      validationSessionInfoFlips.listImages1[2] = imageUint8_3;
+      validationSessionInfoFlips.listImages1[3] = imageUint8_4;
+
+      validationSessionInfoFlips.listImages2 = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImages2[0] = imageUint8_1;
+      validationSessionInfoFlips.listImages2[1] = imageUint8_2;
+      validationSessionInfoFlips.listImages2[2] = imageUint8_3;
+      validationSessionInfoFlips.listImages2[3] = imageUint8_4;
+
+      // Shuffle
+      int randomNumber = new Random().nextInt(1);
+      if (randomNumber == 1) {
+        validationSessionInfoFlips.listImages1.shuffle();
+        validationSessionInfoFlips.listOk = 1;
+      } else {
+        validationSessionInfoFlips.listImages2.shuffle();
+        validationSessionInfoFlips.listOk = 2;
+      }
 
       // get Words
       if (simulationMode) {
@@ -275,7 +310,7 @@ FlipShortHashesResponse flipShortHashesResponse;
 Future<String> loadAssets(String fileName) async {
   try {
     return await rootBundle.loadString('lib/beans/test/' + fileName + '.json');
-      } catch (e) {
+  } catch (e) {
     print("erreur loadAssets: " + e.toString());
   } finally {}
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_idena/pages/flip_mix.dart';
+import 'package:my_idena/pages/archives/flip_mix.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
 import 'package:image_picker/image_picker.dart';

@@ -30,7 +30,7 @@ class _BottomBarViewState extends State<BottomBarView>
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       if (sharedPreferences.getBool("simulation_mode")) {
-        backGroundBottom = MyIdenaAppTheme.nearlyBlue;
+        backGroundBottom = Colors.grey[300];
       }
     });
   }

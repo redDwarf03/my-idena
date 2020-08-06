@@ -8,6 +8,8 @@ import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 bool firstState = true;
+bool shortSessionCharged = false;
+bool longSessionCharged = false;
 DnaAll dnaAll;
 
 void main() async {
