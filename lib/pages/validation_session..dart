@@ -18,7 +18,6 @@ import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
-import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/utils/util_timer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -169,7 +168,6 @@ class _ValidationSessionState extends State<ValidationSession> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      bottomNavigationBar: BottomNavigationBarMyIdena(indexInit: 2),
       body: FutureBuilder(
           future: httpService.getFlipShortHashes(),
           builder: (BuildContext context,

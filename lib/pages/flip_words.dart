@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
-import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/pages/flip_upload_img.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_flip.dart';
@@ -36,7 +35,6 @@ class _FlipWordsState extends State<FlipWords> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      bottomNavigationBar: BottomNavigationBarMyIdena(indexInit: 1),
       body: FutureBuilder(
           future: dictWordsLoad.getDictWords(),
           builder: (BuildContext context, AsyncSnapshot<DictWords> snapshot) {

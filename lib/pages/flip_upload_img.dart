@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/pages/flip_mix.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
@@ -182,7 +181,6 @@ class _FlipUploadImgState extends State<FlipUploadImg> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      bottomNavigationBar: BottomNavigationBarMyIdena(indexInit: 1),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
