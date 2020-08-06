@@ -6,8 +6,8 @@ import 'dart:math' as math;
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/main.dart';
 
-DnaAll dnaAll;
 DnaGetBalanceResponse dnaGetBalanceResponse;
 HttpService httpService = HttpService();
 

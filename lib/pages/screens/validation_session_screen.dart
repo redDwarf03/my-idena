@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/views/donation_view.dart';
-import 'package:my_idena/pages/views/paramRPC_view.dart';
-import 'package:my_idena/pages/views/portofolio_view.dart';
-import 'package:my_idena/pages/views/profile_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
+import 'package:my_idena/pages/views/validation_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
@@ -67,6 +64,18 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
         animationController: widget.animationController,
       ),
     );
+
+    listViews.add(
+      ValidationListView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval((1 / count) * 3, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
+      ),
+    );
+
 
   }
 
