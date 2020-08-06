@@ -14,7 +14,6 @@ import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
 import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
-import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:intl/intl.dart';
 
