@@ -12,7 +12,6 @@ import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/beans/rpc/flip_words_request.dart';
 import 'package:my_idena/beans/rpc/flip_words_response.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/pages/validation_session..dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
@@ -74,6 +73,9 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
     default:
       return validationSessionInfo;
   }
+
+FlipShortHashesRequest flipShortHashesRequest;
+FlipShortHashesResponse flipShortHashesResponse;
 
   try {
     HttpClient httpClient = new HttpClient();
