@@ -12,7 +12,6 @@ import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
 import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
-import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/beans/rpc/dna_identity_request.dart';
 import 'package:my_idena/beans/rpc/dna_identity_response.dart';
 import 'package:my_idena/pages/validation_session..dart';
@@ -77,7 +76,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      bottomNavigationBar: BottomNavigationBarMyIdena(indexInit: 0),
       body: FutureBuilder(
           future: httpService.getDnaAll(),
           builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {

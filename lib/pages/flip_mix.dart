@@ -1,4 +1,3 @@
-import 'package:my_idena/constants/bottomNavigationBarMyIdena.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_img.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,7 +28,6 @@ class _FlipMixState extends State<FlipMix> {
   Widget build(BuildContext context) {
     OrderPreview preview = OrderPreview(orderNotifier: orderNotifier);
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBarMyIdena(indexInit: 1),
       body: SafeArea(
         child: Stack(
           children: <Widget>[

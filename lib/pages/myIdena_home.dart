@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
+import 'package:my_idena/pages/validation_session_screen.dart';
 import 'views/bottom_bar_view.dart';
 import 'package:my_idena/main.dart';
 import '../myIdena_app/myIdena_app_theme.dart';
@@ -80,7 +81,7 @@ class _HomeState extends State<Home>
           addClick: () {},
           changeIndex: (int index) {
             firstState = true;
-            if (index == 0 || index == 2) {
+            if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -90,14 +91,14 @@ class _HomeState extends State<Home>
                       HomeScreen(animationController: animationController);
                 });
               });
-            } else if (index == 1 || index == 3) {
+            } else if (index == 1) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
                 setState(() {
                   tabBody =
-                      HomeScreen(animationController: animationController);
+                      ValidationSessionScreen(animationController: animationController);
                 });
               });
             }
