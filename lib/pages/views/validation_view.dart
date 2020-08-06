@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:image/image.dart' as ImageFct;
+                                    
 
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
 import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/beans/rpc/httpService.dart';
@@ -14,15 +15,15 @@ import 'package:my_idena/beans/test/flip_example_5.dart';
 import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
-import 'dart:math' as math;
+
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 DnaGetBalanceResponse dnaGetBalanceResponse;
 HttpService httpService = HttpService();
+ValidationSessionInfo validationSessionInfo;
 
 FlipShortHashesResponse flipShortHashesResponse;
 
@@ -68,14 +69,9 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    List<ValidationSessionInfoFlips> listSessionValidationFlip = new List(2);
-
-    Future<ValidationSessionInfo> validationSessionInfo =
-        getValidationSessionInfo(EpochPeriod.ShortSession);
-
     /* RPL Part start */
-    Future<FlipShortHashesResponse> flipShortHashesResponse =
-        httpService.getFlipShortHashes();
+    //Future<FlipShortHashesResponse> flipShortHashesResponse =
+    //    httpService.getFlipShortHashes();
 
 /*
     var orders;
@@ -96,11 +92,14 @@ class _ValidationListViewState extends State<ValidationListView>
     base64StringList[3] = new FlipExample4().base64String;
     base64StringList[4] = new FlipExample5().base64String;
 
+    // Init choice
     for (int i = 0; i < selectionFlipList.length; i++) {
       selectionFlipList[i] = 0;
     }
 
-    for (int i = 0; i < flipList.length; i++) {
+    for (int i = 0; i < flipList.length; i++) {}
+
+    /* for (int i = 0; i < flipList.length; i++) {
       List imageFlipList = new List(4);
 
       imageFlipList[0] = Image.memory(
@@ -121,24 +120,24 @@ class _ValidationListViewState extends State<ValidationListView>
       );
 
       flipList[i] = imageFlipList;
-    }
+    }*/
 
     getSimulationMode();
     if (simulationMode) {
       dnaAll.dnaGetEpochResponse.result.currentPeriod =
           EpochPeriod.ShortSession;
-      _startTimerCurrentPeriod(
-          dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);
+      /*_startTimerCurrentPeriod(
+          dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);*/
     } else {
       if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
           EpochPeriod.ShortSession) {
-        _startTimerCurrentPeriod(
-            dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);
+        /*_startTimerCurrentPeriod(
+            dnaAll.dnaCeremonyIntervalsResponse.result.shortSessionDuration);*/
       } else {
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
-          _startTimerCurrentPeriod(
-              dnaAll.dnaCeremonyIntervalsResponse.result.longSessionDuration);
+          /*_startTimerCurrentPeriod(
+              dnaAll.dnaCeremonyIntervalsResponse.result.longSessionDuration);*/
         }
       }
     }
@@ -152,8 +151,9 @@ class _ValidationListViewState extends State<ValidationListView>
   @override
   void dispose() {
     animationController.dispose();
-    _timer.cancel();
-
+    if (_timer != null) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
@@ -191,84 +191,67 @@ class _ValidationListViewState extends State<ValidationListView>
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController,
       builder: (BuildContext context, Widget child) {
+        return Column(
+          children: <Widget>[
+            FadeTransition(
+              opacity: widget.mainScreenAnimation,
+              child: Transform(
+                transform: Matrix4.translationValues(
+                    0.0, 30 * (1.0 - widget.mainScreenAnimation.value), 0.0),
+                child: Container(
+                  height: 450,
+                  width: 1000,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(
+                        top: 0, bottom: 0, right: 16, left: 16),
+                    itemCount: selectionFlipList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      final int count = selectionFlipList.length > 10
+                          ? 20
+                          : selectionFlipList.length;
+                      final Animation<double> animation =
+                          Tween<double>(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                  parent: animationController,
+                                  curve: Interval((1 / count) * index, 1.0,
+                                      curve: Curves.fastOutSlowIn)));
+                      animationController.forward();
 
-
-
-
-                  return Column(
-                    children: <Widget>[
-
-
-                      FadeTransition(
-                        opacity: widget.mainScreenAnimation,
-                        child: Transform(
-                          transform: Matrix4.translationValues(
-                              0.0,
-                              30 * (1.0 - widget.mainScreenAnimation.value),
-                              0.0),
-                          child: Container(
-                            height: 450,
-                            width: 1000,
-                            child: ListView.builder(
-                              padding: const EdgeInsets.only(
-                                  top: 0, bottom: 0, right: 16, left: 16),
-                              itemCount: selectionFlipList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                final int count = selectionFlipList.length > 10
-                                    ? 20
-                                    : selectionFlipList.length;
-                                final Animation<double> animation =
-                                    Tween<double>(begin: 0.0, end: 1.0).animate(
-                                        CurvedAnimation(
-                                            parent: animationController,
-                                            curve: Interval(
-                                                (1 / count) * index, 1.0,
-                                                curve: Curves.fastOutSlowIn)));
-                                animationController.forward();
-
-                                return ValidationView(
-                                  selectionFlipList: selectionFlipList,
-                                  animation: animation,
-                                  animationController: animationController,
-                                  bottomSelectedIndex: index,
-                                  flipList: flipList,
-                                );
-                              },
-                            ),
+                      return ValidationView(
+                        selectionFlipList: selectionFlipList,
+                        animation: animation,
+                        animationController: animationController,
+                        bottomSelectedIndex: index,
+                        flipList: flipList,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  (_counter > 0)
+                      ? Text(
+                          constructTime(_counter),
+                          style: TextStyle(
+                            fontFamily: MyIdenaAppTheme.fontName,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            letterSpacing: -0.1,
+                            color: Colors.red,
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: Row(
-                          children: <Widget>[
-                            (_counter > 0)
-                                ? Text(
-                                    dnaAll.dnaGetEpochResponse.result
-                                            .currentPeriod +
-                                        " : " +
-                                        constructTime(_counter),
-                                    style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: -0.1,
-                                      color: MyIdenaAppTheme.darkText,
-                                    ),
-                                  )
-                                : Text("")
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-
-
-
-
-
-
+                        )
+                      : Text("")
+                ],
+              ),
+            ),
+          ],
+        );
       },
     );
   }
@@ -299,83 +282,147 @@ class _ValidationViewState extends State<ValidationView> {
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
-        return FadeTransition(
-          opacity: widget.animation,
-          child: Transform(
-            transform: Matrix4.translationValues(
-                100 * (1.0 - widget.animation.value), 0.0, 0.0),
-            child: SizedBox(
-              width: 400,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    decoration:
-                        widget.selectionFlipList[widget.bottomSelectedIndex] ==
-                                1
-                            ? new BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: new Border.all(
-                                    color: Colors.green, width: 5))
-                            : new BoxDecoration(
-                                border: new Border.all(
-                                    color: Color.fromRGBO(255, 255, 255, 0),
-                                    width: 5)),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.selectionFlipList[widget.bottomSelectedIndex] =
-                              1;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          widget.flipList[widget.bottomSelectedIndex][0],
-                          widget.flipList[widget.bottomSelectedIndex][1],
-                          widget.flipList[widget.bottomSelectedIndex][2],
-                          widget.flipList[widget.bottomSelectedIndex][3],
-                        ],
+        return FutureBuilder(
+            future: getValidationSessionInfo(EpochPeriod.ShortSession),
+            builder: (BuildContext context,
+                AsyncSnapshot<ValidationSessionInfo> snapshot) {
+              if (snapshot.hasData) {
+                validationSessionInfo = snapshot.data;
+                if (validationSessionInfo == null) {
+                  return Text("");
+                } else {
+                  if (validationSessionInfo.listSessionValidationFlip == null) {
+                    return Text("");
+                  } else {
+                    List<ValidationSessionInfoFlips> listSessionValidationFlip =
+                        validationSessionInfo.listSessionValidationFlip;
+                    return FadeTransition(
+                      opacity: widget.animation,
+                      child: Transform(
+                        transform: Matrix4.translationValues(
+                            100 * (1.0 - widget.animation.value), 0.0, 0.0),
+                        child: SizedBox(
+                          width: 400,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                decoration: widget.selectionFlipList[
+                                            widget.bottomSelectedIndex] ==
+                                        1
+                                    ? new BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        border: new Border.all(
+                                            color: Colors.green, width: 5))
+                                    : new BoxDecoration(
+                                        border: new Border.all(
+                                            color: Color.fromRGBO(
+                                                255, 255, 255, 0),
+                                            width: 5)),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      widget.selectionFlipList[
+                                          widget.bottomSelectedIndex] = 1;
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 30,
+                                    child: Text(
+                                      (widget.bottomSelectedIndex + 1)
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 20,
+                                          letterSpacing: -0.1,
+                                          color: MyIdenaAppTheme.darkText),
+                                    ),
+                                    foregroundColor: Colors.red,
+                                  )
+                                ],
+                              )),
+                              Container(
+                                decoration: widget.selectionFlipList[
+                                            widget.bottomSelectedIndex] ==
+                                        2
+                                    ? new BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        border: new Border.all(
+                                            color: Colors.green, width: 5))
+                                    : new BoxDecoration(
+                                        border: new Border.all(
+                                            color: Color.fromRGBO(
+                                                255, 255, 255, 0),
+                                            width: 5)),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      widget.selectionFlipList[
+                                          widget.bottomSelectedIndex] = 2;
+                                    });
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                          Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[
+                                              widget.bottomSelectedIndex]
+                                          .image), width: 145)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    decoration:
-                        widget.selectionFlipList[widget.bottomSelectedIndex] ==
-                                2
-                            ? new BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: new Border.all(
-                                    color: Colors.green, width: 5))
-                            : new BoxDecoration(
-                                border: new Border.all(
-                                    color: Color.fromRGBO(255, 255, 255, 0),
-                                    width: 5)),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.selectionFlipList[widget.bottomSelectedIndex] =
-                              2;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          widget.flipList[widget.bottomSelectedIndex][1],
-                          widget.flipList[widget.bottomSelectedIndex][3],
-                          widget.flipList[widget.bottomSelectedIndex][0],
-                          widget.flipList[widget.bottomSelectedIndex][2],
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+                    );
+                  }
+                }
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            });
       },
     );
   }

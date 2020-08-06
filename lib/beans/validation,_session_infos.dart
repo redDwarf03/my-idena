@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:my_idena/beans/rpc/flip_get_request.dart';
 import 'package:my_idena/beans/rpc/flip_get_response.dart';

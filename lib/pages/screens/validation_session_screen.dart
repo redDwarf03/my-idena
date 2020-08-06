@@ -56,7 +56,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
     const int count = 8;
     listViews.add(
       TitleView(
-        titleTxt: "Short session",
+        titleTxt: "Select meaningful story: left or right",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
