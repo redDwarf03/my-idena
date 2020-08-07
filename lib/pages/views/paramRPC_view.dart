@@ -134,6 +134,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                   : null,
                                               onChanged: (val) => keyApp = val,
                                               keyboardType: TextInputType.text,
+                                              obscureText: true,
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontFamily: 'OpenSans',
