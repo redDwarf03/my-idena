@@ -9,3 +9,4 @@
 - enlever print
 - vérifier tous les translates
 - enlever les OpenSans
+- intégrer les fct dans UtilIdentity
