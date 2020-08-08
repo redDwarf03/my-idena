@@ -4,6 +4,23 @@ import 'package:my_idena/utils/identityStatus.dart' as IdentityStatus;
 
 class UtilIdentity {
 
+bool isCeremonyCandidate(DnaAll dnaAll)
+{
+    if (dnaAll.dnaIdentityResponse == null) {
+      return false;
+    }
+    var identityStatus1 = [
+      IdentityStatus.Candidate,
+      IdentityStatus.Newbie,
+      IdentityStatus.Verified,
+      IdentityStatus.Human,
+      IdentityStatus.Suspended,
+      IdentityStatus.Zombie,
+    ];
+    return (dnaAll.dnaIdentityResponse.result.madeFlips >= dnaAll.dnaIdentityResponse.result.requiredFlips && identityStatus1
+                .contains(dnaAll.dnaIdentityResponse.result.state));
+}
+
   bool canValidate(DnaAll dnaAll) {
     if (dnaAll.dnaIdentityResponse == null) {
       return false;
