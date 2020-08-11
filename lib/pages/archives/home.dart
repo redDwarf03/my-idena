@@ -693,7 +693,7 @@ class InfoCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    value.toString() + " DNA",
+                    value.toString() + " iDNA",
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'OpenSans',

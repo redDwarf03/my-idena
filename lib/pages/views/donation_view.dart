@@ -187,7 +187,7 @@ class _DonationViewState extends State<DonationView> {
                                                       .translate(
                                                           "Enter your amount"),
                                                   suffix: Text(
-                                                    "DNA    ",
+                                                    "iDNA    ",
                                                     style: TextStyle(
                                                       fontFamily:
                                                           MyIdenaAppTheme
