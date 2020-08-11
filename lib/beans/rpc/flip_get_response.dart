@@ -36,18 +36,22 @@ class Result {
     Result({
         this.hex,
         this.privateHex,
+        this.publicHex,
     });
 
     String hex;
     String privateHex;
+    String publicHex;
 
     factory Result.fromJson(Map<String, dynamic> json) => Result(
         hex: json["hex"],
         privateHex: json["privateHex"],
+        publicHex: json["publicHex"],
     );
 
     Map<String, dynamic> toJson() => {
         "hex": hex,
         "privateHex": privateHex,
+        "publicHex": publicHex,
     };
 }
