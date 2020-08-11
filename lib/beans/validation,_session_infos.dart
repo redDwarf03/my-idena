@@ -322,26 +322,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       // orders: orders.map(order => order.map(([idx = 0]) => idx)),
       // hex: '',
 
-
-      /*Decoded decoded = Rlp.decode(
-          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
-          true);
-      images = decoded.data[0];
-
-
-      Decoded decodedPrivateHex = Rlp.decode(
-          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
-          true);
-      images = decodedPrivateHex.data[0];
-      imageUint8_2 = images[0];
-      imageUint8_3 = images[1];
-
-      Decoded decodedHex = Rlp.decode(
-          Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-      images = decodedHex.data[0];
-      imageUint8_4 = images[0];
-      imageUint8_1 = images[1];*/
-
       String order1 = orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
       String order2 = orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
       String order3 = orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
@@ -364,16 +344,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       validationSessionInfoFlips.listImages2[int.tryParse(order2) ?? 0] = imageUint8_2;
       validationSessionInfoFlips.listImages2[int.tryParse(order3) ?? 0] = imageUint8_3;
       validationSessionInfoFlips.listImages2[int.tryParse(order4) ?? 0] = imageUint8_4;
-
-      // Shuffle
-/*      int randomNumber = new Random().nextInt(1);
-      if (randomNumber == 1) {
-        validationSessionInfoFlips.listImages1.shuffle();
-        validationSessionInfoFlips.listOk = 1;
-      } else {
-        validationSessionInfoFlips.listImages2.shuffle();
-        validationSessionInfoFlips.listOk = 2;
-      }*/
 
       // get Words
       /*if (simulationMode) {
@@ -412,7 +382,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
     validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
   } catch (e) {
-    print("erreur: " + e.toString());
+    print("error: " + e.toString());
   } finally {}
 
   return validationSessionInfo;
@@ -422,6 +392,6 @@ Future<String> loadAssets(String fileName) async {
   try {
     return await rootBundle.loadString('lib/beans/test/' + fileName + '.json');
   } catch (e) {
-    print("erreur loadAssets: " + e.toString());
+    print("error loadAssets: " + e.toString());
   } finally {}
 }
