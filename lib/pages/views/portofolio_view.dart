@@ -152,7 +152,7 @@ class PortofolioView extends StatelessWidget {
                                                                     left: 4,
                                                                     bottom: 3),
                                                             child: Text(
-                                                              'DNA',
+                                                              'iDNA',
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
