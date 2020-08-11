@@ -20,10 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
-      this.image1,
-      this.image2,
-      this.image3,
-      this.image4,
       this.ready,
       this.extra,
       this.available,
@@ -33,10 +29,6 @@ class ValidationSessionInfoFlips {
       this.listOk});
 
   String hash;
-  Uint8List image1;
-  Uint8List image2;
-  Uint8List image3;
-  Uint8List image4;
   bool ready;
   bool extra;
   bool available;
@@ -100,7 +92,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
     // Short or long Hashes
     if (simulationMode) {
-      Map<String, dynamic> mapExemple = {
+      /*Map<String, dynamic> mapExemple = {
         "jsonrpc": "2.0",
         "id": 19,
         "result": [
@@ -149,6 +141,62 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           {
             "hash":
                 "bafkreihs62lgfparrtutsrzup55vpgxx7o7nocakwmcxhojf3fzuen5vqy",
+            "ready": true,
+            "extra": true,
+            "available": true
+          },
+        ]
+      };*/
+
+      Map<String, dynamic> mapExemple = {
+        "jsonrpc": "2.0",
+        "id": 19,
+        "result": [
+          {
+            "hash":
+                "1",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "2",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "3",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "4",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "5",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "6",
+            "ready": true,
+            "extra": false,
+            "available": true
+          },
+          {
+            "hash":
+                "7",
             "ready": true,
             "extra": true,
             "available": true
@@ -221,51 +269,114 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         }
       }
 
-      List<dynamic> images = new List(2);
       Uint8List imageUint8_1;
       Uint8List imageUint8_2;
       Uint8List imageUint8_3;
       Uint8List imageUint8_4;
-      Decoded decodedHex = Rlp.decode(
+
+      Decoded images2;
+      List orders = new List(2);
+      if (flipGetResponse.result.privateHex != null && flipGetResponse.result.privateHex != '0x') {
+          // ;[images] = decode(publicHex || hex)
+            if(flipGetResponse.result.publicHex == null)
+            {
+              flipGetResponse.result.publicHex = "";
+            }
+            if(flipGetResponse.result.hex == null)
+            {
+              flipGetResponse.result.hex = "";
+            }
+            if(flipGetResponse.result.privateHex == null)
+            {
+              flipGetResponse.result.privateHex = "";
+            }
+          images2 = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex + flipGetResponse.result.hex)), true);
+          
+          // let privateImages
+          // ;[privateImages, orders] = decode(privateHex)
+          Decoded privateImages;
+          privateImages = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)), true);
+          
+          // images = images.concat(privateImages)
+          imageUint8_1 = images2.data[0][0];
+          imageUint8_2 = images2.data[0][1];
+          imageUint8_3 = privateImages.data[0][0];
+          imageUint8_4 = privateImages.data[0][1];
+          orders = privateImages.data[1];
+      }
+      else
+      {
+        // ;[images, orders] = decode(hex)
+          var images3;
+          images3 = Rlp.decode(
           Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-      images = decodedHex.data[0];
-      imageUint8_1 = images[0];
-      imageUint8_2 = images[1];
+      }
+
+      // hash,
+      // decoded: true,
+      // images: images.map(buffer =>
+      //  URL.createObjectURL(new Blob([buffer], {type: 'image/png'}))
+      //),
+      // orders: orders.map(order => order.map(([idx = 0]) => idx)),
+      // hex: '',
+
+
+      /*Decoded decoded = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+          true);
+      images = decoded.data[0];
+
+
       Decoded decodedPrivateHex = Rlp.decode(
           Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
           true);
       images = decodedPrivateHex.data[0];
-      imageUint8_3 = images[0];
-      imageUint8_4 = images[1];
-      validationSessionInfoFlips.image1 = imageUint8_1;
-      validationSessionInfoFlips.image2 = imageUint8_2;
-      validationSessionInfoFlips.image3 = imageUint8_3;
-      validationSessionInfoFlips.image4 = imageUint8_4;
+      imageUint8_2 = images[0];
+      imageUint8_3 = images[1];
 
+      Decoded decodedHex = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+      images = decodedHex.data[0];
+      imageUint8_4 = images[0];
+      imageUint8_1 = images[1];*/
+
+      String order1 = orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
+      String order2 = orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
+      String order3 = orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
+      String order4 = orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
+      print("flip 1: " + order1 + ', ' + order2 + ', '+ order3 + ', ' + order4);
       validationSessionInfoFlips.listImages1 = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImages1[0] = imageUint8_1;
-      validationSessionInfoFlips.listImages1[1] = imageUint8_2;
-      validationSessionInfoFlips.listImages1[2] = imageUint8_3;
-      validationSessionInfoFlips.listImages1[3] = imageUint8_4;
+      validationSessionInfoFlips.listImages1[int.tryParse(order1) ?? 0] = imageUint8_1;
+      validationSessionInfoFlips.listImages1[int.tryParse(order2) ?? 0] = imageUint8_2;
+      validationSessionInfoFlips.listImages1[int.tryParse(order3) ?? 0] = imageUint8_3;
+      validationSessionInfoFlips.listImages1[int.tryParse(order4) ?? 0] = imageUint8_4;
 
+      // TODO .. dirty
+      order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
+      order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
+      order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
+      order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
+      print("flip 2: " + order1 + ', ' + order2 + ', '+ order3 + ', ' + order4);
       validationSessionInfoFlips.listImages2 = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImages2[0] = imageUint8_1;
-      validationSessionInfoFlips.listImages2[1] = imageUint8_2;
-      validationSessionInfoFlips.listImages2[2] = imageUint8_3;
-      validationSessionInfoFlips.listImages2[3] = imageUint8_4;
+      validationSessionInfoFlips.listImages2[int.tryParse(order1) ?? 0] = imageUint8_1;
+      validationSessionInfoFlips.listImages2[int.tryParse(order2) ?? 0] = imageUint8_2;
+      validationSessionInfoFlips.listImages2[int.tryParse(order3) ?? 0] = imageUint8_3;
+      validationSessionInfoFlips.listImages2[int.tryParse(order4) ?? 0] = imageUint8_4;
 
       // Shuffle
-      int randomNumber = new Random().nextInt(1);
+/*      int randomNumber = new Random().nextInt(1);
       if (randomNumber == 1) {
         validationSessionInfoFlips.listImages1.shuffle();
         validationSessionInfoFlips.listOk = 1;
       } else {
         validationSessionInfoFlips.listImages2.shuffle();
         validationSessionInfoFlips.listOk = 2;
-      }
+      }*/
 
       // get Words
-      if (simulationMode) {
+      /*if (simulationMode) {
         String data =
             await loadAssets(flipShortHashesResponse.result[i].hash + "_words");
         flipWordsResponse = flipWordsResponseFromJson(data);
@@ -295,7 +406,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         listWords[j] = flipWordsResponse.result.words[j];
       }
       validationSessionInfoFlips.listWords = listWords;
-
+    */
       listSessionValidationFlip[i] = validationSessionInfoFlips;
     }
 
