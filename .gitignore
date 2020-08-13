@@ -47,3 +47,4 @@ app.*.map.json
 
 # archive
 lib/pages/archives/*.dart
+/todolist.txt

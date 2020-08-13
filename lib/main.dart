@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
         textTheme: MyIdenaAppTheme.textTheme,
         platform: TargetPlatform.iOS,
       ),

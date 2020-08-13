@@ -40,7 +40,7 @@ class _ValidationListViewState extends State<ValidationListView>
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
-  List selectionFlipList = new List(7);
+  List selectionFlipList = new List();
   int bottomSelectedIndex = 0;
 
   SharedPreferences sharedPreferences;
@@ -63,44 +63,36 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    // Init choice
-    for (int i = 0; i < selectionFlipList.length; i++) {
-      selectionFlipList[i] = 0;
-    }
-
     getSimulationMode();
     if (simulationMode) {
-      dnaAll.dnaGetEpochResponse.result.currentPeriod =
-          EpochPeriod.ShortSession;
+      // TODO: Short by default
+      dnaAll.dnaGetEpochResponse.result.currentPeriod = EpochPeriod.LongSession;
+    }
+
+    // Init choice
+    int nbFlips;
+    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+        EpochPeriod.ShortSession) {
+      nbFlips = 7;
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
               seconds: dnaAll
                   .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
-    } else {
-      if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-          EpochPeriod.ShortSession) {
-        controllerChrono = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds: dnaAll
-                    .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
-      } else {
-        if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-            EpochPeriod.LongSession) {
-          controllerChrono = AnimationController(
-              vsync: this,
-              duration: Duration(
-                  seconds: dnaAll.dnaCeremonyIntervalsResponse.result
-                      .longSessionDuration));
-        }
-      }
     }
-  }
+    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+        EpochPeriod.LongSession) {
+      nbFlips = 14;
+      controllerChrono = AnimationController(
+          vsync: this,
+          duration: Duration(
+              seconds: dnaAll
+                  .dnaCeremonyIntervalsResponse.result.longSessionDuration));
+    }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+    for (int i = 0; i < nbFlips; i++) {
+      selectionFlipList.add(0);
+    }
   }
 
   @override
@@ -141,8 +133,8 @@ class _ValidationListViewState extends State<ValidationListView>
                     itemCount: selectionFlipList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      final int count = selectionFlipList.length > 10
-                          ? 20
+                      final int count = selectionFlipList.length > 25
+                          ? 30
                           : selectionFlipList.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -220,7 +212,10 @@ class _ValidationViewState extends State<ValidationView> {
       animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FutureBuilder(
-            future: getValidationSessionInfo(EpochPeriod.ShortSession, validationSessionInfo),
+            // TODO: Short/Long
+            future: getValidationSessionInfo(
+                dnaAll.dnaGetEpochResponse.result.currentPeriod,
+                validationSessionInfo),
             builder: (BuildContext context,
                 AsyncSnapshot<ValidationSessionInfo> snapshot) {
               if (snapshot.hasData) {
@@ -233,7 +228,7 @@ class _ValidationViewState extends State<ValidationView> {
                   } else {
                     List<ValidationSessionInfoFlips> listSessionValidationFlip =
                         validationSessionInfo.listSessionValidationFlip;
-                        shortSessionCharged = true;
+                    shortSessionCharged = true;
                     return FadeTransition(
                       opacity: widget.animation,
                       child: Transform(
@@ -255,7 +250,7 @@ class _ValidationViewState extends State<ValidationView> {
     );
   }
 
-  Widget displayFlips (
+  Widget displayFlips(
       List<ValidationSessionInfoFlips> listSessionValidationFlip) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -283,25 +278,33 @@ class _ValidationViewState extends State<ValidationView> {
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesLeft[0]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesLeft[1]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesLeft[2]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesLeft[3]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
               ],
             ),
           ),
@@ -351,25 +354,33 @@ class _ValidationViewState extends State<ValidationView> {
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesRight[0]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesRight[1]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesRight[2]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
                             .listImagesRight[3]),
-                        height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                        height:
+                            ((MediaQuery.of(context).size.height - 350) ~/ 4)
+                                .toInt())),
               ],
             ),
           ),

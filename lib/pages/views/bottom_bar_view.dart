@@ -97,6 +97,9 @@ class _BottomBarViewState extends State<BottomBarView>
                                   }),
                             ),
                             Expanded(
+                              child: Container(width: 100),
+                            ),
+                            Expanded(
                               child: TabIcons(
                                   tabIconData: widget.tabIconsList[2],
                                   removeAllSelect: () {
