@@ -44,3 +44,6 @@ app.*.map.json
 
 # Keystore
 /android/key.properties
+
+# archive
+lib/pages/archives/*.dart
