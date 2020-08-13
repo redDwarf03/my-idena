@@ -24,8 +24,8 @@ class ValidationSessionInfoFlips {
       this.extra,
       this.available,
       this.listWords,
-      this.listImages1,
-      this.listImages2,
+      this.listImagesLeft,
+      this.listImagesRight,
       this.listOk});
 
   String hash;
@@ -33,8 +33,8 @@ class ValidationSessionInfoFlips {
   bool extra;
   bool available;
   List<int> listWords;
-  List<Uint8List> listImages1;
-  List<Uint8List> listImages2;
+  List<Uint8List> listImagesLeft;
+  List<Uint8List> listImagesRight;
   int listOk;
 }
 
@@ -92,7 +92,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
     // Short or long Hashes
     if (simulationMode) {
-      /*Map<String, dynamic> mapExemple = {
+      Map<String, dynamic> mapExemple = {
         "jsonrpc": "2.0",
         "id": 19,
         "result": [
@@ -146,9 +146,9 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
             "available": true
           },
         ]
-      };*/
+      };
 
-      Map<String, dynamic> mapExemple = {
+      /*Map<String, dynamic> mapExemple = {
         "jsonrpc": "2.0",
         "id": 19,
         "result": [
@@ -202,7 +202,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
             "available": true
           },
         ]
-      };
+      };*/
 
       flipShortHashesResponse = FlipShortHashesResponse.fromJson(mapExemple);
     } else {
@@ -276,6 +276,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
       Decoded images;
       Decoded privateImages;
+      List listImages = new List(4);
       List orders = new List(2);
     if (flipGetResponse.result.privateHex != null &&
         flipGetResponse.result.privateHex != '0x') {
@@ -302,6 +303,10 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       imageUint8_2 = images.data[0][1];
       imageUint8_3 = privateImages.data[0][0];
       imageUint8_4 = privateImages.data[0][1];
+      listImages[0] = imageUint8_1;
+      listImages[1] = imageUint8_2;
+      listImages[2] = imageUint8_3;
+      listImages[3] = imageUint8_4;
       orders = privateImages.data[1];
     } else {
       // TODO: implement this case
@@ -324,11 +329,11 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       String order3 = orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
       String order4 = orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
       print(i.toString() + " - flip 1: " + order1 + ', ' + order2 + ', '+ order3 + ', ' + order4);
-      validationSessionInfoFlips.listImages1 = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImages1[int.tryParse(order1) ?? 0] = imageUint8_1;
-      validationSessionInfoFlips.listImages1[int.tryParse(order2) ?? 0] = imageUint8_2;
-      validationSessionInfoFlips.listImages1[int.tryParse(order3) ?? 0] = imageUint8_3;
-      validationSessionInfoFlips.listImages1[int.tryParse(order4) ?? 0] = imageUint8_4;
+      validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImagesLeft[0] = listImages[int.tryParse(order1) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[1] = listImages[int.tryParse(order2) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[2] = listImages[int.tryParse(order3) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[3] = listImages[int.tryParse(order4) ?? 0];
 
       // TODO .. dirty
       order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
@@ -336,11 +341,11 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
       order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
       print(i.toString() + " - flip 2: " + order1 + ', ' + order2 + ', '+ order3 + ', ' + order4);
-      validationSessionInfoFlips.listImages2 = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImages2[int.tryParse(order1) ?? 0] = imageUint8_1;
-      validationSessionInfoFlips.listImages2[int.tryParse(order2) ?? 0] = imageUint8_2;
-      validationSessionInfoFlips.listImages2[int.tryParse(order3) ?? 0] = imageUint8_3;
-      validationSessionInfoFlips.listImages2[int.tryParse(order4) ?? 0] = imageUint8_4;
+      validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImagesRight[0] = listImages[int.tryParse(order1) ?? 0];
+      validationSessionInfoFlips.listImagesRight[1] = listImages[int.tryParse(order2) ?? 0];
+      validationSessionInfoFlips.listImagesRight[2] = listImages[int.tryParse(order3) ?? 0];
+      validationSessionInfoFlips.listImagesRight[3] = listImages[int.tryParse(order4) ?? 0];
 
       // get Words
       /*if (simulationMode) {

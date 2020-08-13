@@ -282,25 +282,25 @@ class _ValidationViewState extends State<ValidationView> {
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages1[0]),
+                            .listImagesLeft[0]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages1[1]),
+                            .listImagesLeft[1]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages1[2]),
+                            .listImagesLeft[2]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages1[3]),
+                            .listImagesLeft[3]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
               ],
             ),
@@ -350,25 +350,25 @@ class _ValidationViewState extends State<ValidationView> {
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages2[0]),
+                            .listImagesRight[0]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages2[1]),
+                            .listImagesRight[1]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages2[2]),
+                            .listImagesRight[2]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
                 Image(
                     image: ResizeImage(
                         MemoryImage(listSessionValidationFlip[
                                 widget.bottomSelectedIndex]
-                            .listImages2[3]),
+                            .listImagesRight[3]),
                         height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
               ],
             ),

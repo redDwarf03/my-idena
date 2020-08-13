@@ -29,12 +29,13 @@ class _BottomBarViewState extends State<BottomBarView>
   void getSimulationMode() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      if (sharedPreferences.getBool("simulation_mode")) {
-        backGroundBottom = Colors.grey[300];
-      }
+      try {
+        if (sharedPreferences.getBool("simulation_mode")) {
+          backGroundBottom = Colors.grey[300];
+        }
+      } catch (e) {}
     });
   }
-
 
   @override
   void initState() {
@@ -160,8 +161,8 @@ class _BottomBarViewState extends State<BottomBarView>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: MyIdenaAppTheme.nearlyBlack
-                                  .withOpacity(0.4),
+                              color:
+                                  MyIdenaAppTheme.nearlyBlack.withOpacity(0.4),
                               offset: const Offset(8.0, 16.0),
                               blurRadius: 16.0),
                         ],
@@ -256,16 +257,15 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
               alignment: AlignmentDirectional.center,
               children: <Widget>[
                 ScaleTransition(
-                  alignment: Alignment.center,
-                  scale: Tween<double>(begin: 0.88, end: 1.0).animate(
-                      CurvedAnimation(
-                          parent: widget.tabIconData.animationController,
-                          curve:
-                              Interval(0.1, 1.0, curve: Curves.fastOutSlowIn))),
-                  child: widget.tabIconData.isSelected
-                      ? widget.tabIconData.selectedIcon
-                      : widget.tabIconData.icon
-                ),
+                    alignment: Alignment.center,
+                    scale: Tween<double>(begin: 0.88, end: 1.0).animate(
+                        CurvedAnimation(
+                            parent: widget.tabIconData.animationController,
+                            curve: Interval(0.1, 1.0,
+                                curve: Curves.fastOutSlowIn))),
+                    child: widget.tabIconData.isSelected
+                        ? widget.tabIconData.selectedIcon
+                        : widget.tabIconData.icon),
                 Positioned(
                   top: 4,
                   left: 6,
