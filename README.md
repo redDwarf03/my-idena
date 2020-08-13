@@ -4,8 +4,10 @@ Idena iOS and Android app based on Flutter framework .
 
 ## Configuration
 
-In the first launch, go to "Param" menu
-Tape "http://10.0.2.2:9119" to connect to your local node 
+Execute idena-go.exe with --rpcaddr {ip_address} --rpcport {port_number}
+
+In the first launch, go to "Home" page "Parameters" section
+Tape "http://{ip_address}:{port_number}" to connect to your node
 and tape the api.key (cf %appdata%\Idena\node\datadir\api.key)
 
 ## Work in progress
