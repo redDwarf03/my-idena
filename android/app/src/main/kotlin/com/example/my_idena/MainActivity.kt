@@ -1,4 +1,4 @@
-package com.example.my_idena
+package com.reddwarf.my_idena
 
 import io.flutter.embedding.android.FlutterActivity
 
