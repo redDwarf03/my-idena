@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
-import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
-import 'package:my_idena/beans/rpc/httpService.dart';
-import 'dart:math' as math;
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/utils/app_localizations.dart';
 
 class EmptyView extends StatelessWidget {
   final AnimationController animationController;

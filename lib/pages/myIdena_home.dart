@@ -6,6 +6,7 @@ import 'views/bottom_bar_view.dart';
 import 'package:my_idena/main.dart';
 import '../myIdena_app/myIdena_app_theme.dart';
 import 'screens/home_screen.dart';
+import 'screens/about_screen.dart';
 
 class Home extends StatefulWidget {
 
@@ -101,6 +102,16 @@ class _HomeState extends State<Home>
                 setState(() {
                   tabBody =
                       ValidationSessionScreen(animationController: animationController);
+                });
+              });
+            } else if (index == 3) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      AboutScreen(animationController: animationController);
                 });
               });
             }
