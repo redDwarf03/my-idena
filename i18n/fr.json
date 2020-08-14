@@ -47,7 +47,12 @@
   "Thanks for help": "Merci pour votre aide",
   "Thanks list": "Andrew, Rioda, Mahmoud, Bus, JaymenChou, Gutalean",
   "Github url": "https://github.com/redDwarf03/my-idena/",
-  "Github": "Github"
+  "Github": "Github",
+  "Start checking keywords": "Démarrer la qualification des mots clés",
+  "Your answers are not yet submitted": "Vos réponses ne sont pas encore envoyées",
+  "Please qualify the keywords relevance and submit the answers.": "Veuillez qualifier la pertinence des mots clés et envoyez les réponses.",
+  "The flips with relevant keywords will be penalized": "Les flips avec des mots clés non pertinents seront pénalisés",
+  "Ok, I understand": "Ok, je comprends"
 
 
   }
