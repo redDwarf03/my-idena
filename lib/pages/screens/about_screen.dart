@@ -57,7 +57,7 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 2;
+    const int count = 4;
     listViews.add(
       TitleView(
         titleTxt: "About",
@@ -78,6 +78,28 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
         animationController: widget.animationController,
       ),
     );
+
+    listViews.add(
+      TitleView(
+        titleTxt: "Donation",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      DonationView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
   }
 
   Future<bool> getData() async {
