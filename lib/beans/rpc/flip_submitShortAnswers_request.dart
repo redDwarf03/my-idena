@@ -17,7 +17,7 @@ class FlipSubmitShortAnswersRequest {
     });
 
     String method;
-    List<Param> params;
+    List<ParamShortAnswer> params;
     int id;
     String key;
 
@@ -25,7 +25,7 @@ class FlipSubmitShortAnswersRequest {
 
     factory FlipSubmitShortAnswersRequest.fromJson(Map<String, dynamic> json) => FlipSubmitShortAnswersRequest(
         method: json["method"],
-        params: List<Param>.from(json["params"].map((x) => Param.fromJson(x))),
+        params: List<ParamShortAnswer>.from(json["params"].map((x) => ParamShortAnswer.fromJson(x))),
         id: json["id"],
         key: json["key"],
     );
@@ -38,19 +38,19 @@ class FlipSubmitShortAnswersRequest {
     };
 }
 
-class Param {
-    Param({
+class ParamShortAnswer {
+    ParamShortAnswer({
         this.answers,
         this.nonce,
         this.epoch,
     });
 
-    List<Answer> answers;
+    List<ShortAnswer> answers;
     int nonce;
     int epoch;
 
-    factory Param.fromJson(Map<String, dynamic> json) => Param(
-        answers: List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
+    factory ParamShortAnswer.fromJson(Map<String, dynamic> json) => ParamShortAnswer(
+        answers: List<ShortAnswer>.from(json["answers"].map((x) => ShortAnswer.fromJson(x))),
         nonce: json["nonce"],
         epoch: json["epoch"],
     );
@@ -62,8 +62,8 @@ class Param {
     };
 }
 
-class Answer {
-    Answer({
+class ShortAnswer {
+    ShortAnswer({
         this.hash,
         this.answer,
         this.easy,
@@ -73,7 +73,7 @@ class Answer {
     int answer;
     bool easy;
 
-    factory Answer.fromJson(Map<String, dynamic> json) => Answer(
+    factory ShortAnswer.fromJson(Map<String, dynamic> json) => ShortAnswer(
         hash: json["hash"],
         answer: json["answer"],
         easy: json["easy"],

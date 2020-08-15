@@ -10,6 +10,10 @@ import 'package:my_idena/beans/rpc/flip_longHashes_request.dart';
 import 'package:my_idena/beans/rpc/flip_longHashes_response.dart';
 import 'package:my_idena/beans/rpc/flip_shortHashes_request.dart';
 import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
+import 'package:my_idena/beans/rpc/flip_submitLongAnswers_request.dart';
+import 'package:my_idena/beans/rpc/flip_submitLongAnswers_response.dart';
+import 'package:my_idena/beans/rpc/flip_submitShortAnswers_request.dart';
+import 'package:my_idena/beans/rpc/flip_submitShortAnswers_response.dart';
 import 'package:my_idena/beans/rpc/flip_words_request.dart';
 import 'package:my_idena/beans/rpc/flip_words_response.dart';
 import 'package:my_idena/beans/test/flip_examples.dart';
@@ -346,3 +350,95 @@ Future<String> loadAssets(String fileName) async {
     print("error loadAssets: " + e.toString());
   } finally {}
 }
+
+  Future<FlipSubmitShortAnswersResponse> submitShortAnswers(List selectionFlipList, ValidationSessionInfo validationSessionInfo) async {
+    FlipSubmitShortAnswersRequest flipSubmitShortAnswersRequest = new FlipSubmitShortAnswersRequest();
+    FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
+
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      ParamShortAnswer answers = new ParamShortAnswer();
+      List<ShortAnswer> listAnswers = new List();
+      for(int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++)
+      {
+        ShortAnswer answer = new ShortAnswer(answer: selectionFlipList[i], easy: false, hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+        listAnswers.add(answer);
+      }
+      
+      answers.epoch = 0;
+      answers.nonce = 0;
+      answers.answers = listAnswers;
+
+      List<ParamShortAnswer> params = new List();
+      params.add(answers);
+      flipSubmitShortAnswersRequest.method = FlipSubmitShortAnswersRequest.METHOD_NAME;
+      flipSubmitShortAnswersRequest.params = params;
+      flipSubmitShortAnswersRequest.id = 101;
+      flipSubmitShortAnswersRequest.key = idenaSharedPreferences.keyApp; 
+
+      request.add(
+          utf8.encode(json.encode(flipSubmitShortAnswersRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        flipSubmitShortAnswersResponse =
+            flipSubmitShortAnswersResponseFromJson(reply);
+      }
+    } catch (e) {
+      print("erreur: " + e.toString());
+    } finally {}
+    return flipSubmitShortAnswersResponse;
+  }
+
+  Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList, ValidationSessionInfo validationSessionInfo) async {
+    FlipSubmitLongAnswersRequest flipSubmitLongAnswersRequest = new FlipSubmitLongAnswersRequest();
+    FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponse;
+
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      ParamLongAnswer answers = new ParamLongAnswer();
+      List<LongAnswer> listAnswers = new List();
+      for(int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++)
+      {
+        LongAnswer answer = new LongAnswer(answer: selectionFlipList[i], easy: false, hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+        listAnswers.add(answer);
+      }
+      
+      answers.epoch = 0;
+      answers.nonce = 0;
+      answers.answers = listAnswers;
+
+      List<ParamLongAnswer> params = new List();
+      params.add(answers);
+      flipSubmitLongAnswersRequest.method = FlipSubmitShortAnswersRequest.METHOD_NAME;
+      flipSubmitLongAnswersRequest.params = params;
+      flipSubmitLongAnswersRequest.id = 101;
+      flipSubmitLongAnswersRequest.key = idenaSharedPreferences.keyApp; 
+
+      request.add(
+          utf8.encode(json.encode(flipSubmitLongAnswersRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        flipSubmitLongAnswersResponse =
+            flipSubmitLongAnswersResponseFromJson(reply);
+      }
+    } catch (e) {
+      print("erreur: " + e.toString());
+    } finally {}
+    return flipSubmitLongAnswersResponse;
+  }
