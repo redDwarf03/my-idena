@@ -549,6 +549,7 @@ class _ValidationListViewState extends State<ValidationListView>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Icon(Icons.access_time, color: Colors.red),
         AnimatedBuilder(
             animation: controllerChrono,
             builder: (BuildContext context, Widget child) {
