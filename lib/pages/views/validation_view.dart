@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -9,8 +10,8 @@ import 'package:my_idena/beans/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/utils/answer_type.dart' as AnswerType;
 import 'package:my_idena/main.dart';
-
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -101,7 +102,7 @@ class _ValidationListViewState extends State<ValidationListView>
     }
 
     for (int i = 0; i < nbFlips; i++) {
-      selectionFlipList.add(0);
+      selectionFlipList.add(AnswerType.NONE);
     }
   }
 
@@ -197,7 +198,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                 Container(
                                                   decoration: selectionFlipList[
                                                               index] ==
-                                                          1
+                                                          AnswerType.LEFT
                                                       ? new BoxDecoration(
                                                           color: Colors.green,
                                                           borderRadius:
@@ -210,21 +211,20 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                   Colors.green,
                                                               width: 5))
                                                       : new BoxDecoration(
-                                                          border:
-                                                              new Border
-                                                                      .all(
-                                                                  color: Color
-                                                                      .fromRGBO(
-                                                                          255,
-                                                                          255,
-                                                                          255,
-                                                                          0),
-                                                                  width: 5)),
+                                                          border: new Border
+                                                                  .all(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      255,
+                                                                      255,
+                                                                      255,
+                                                                      0),
+                                                              width: 5)),
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       setState(() {
                                                         selectionFlipList[
-                                                            index] = 1;
+                                                            index] = AnswerType.LEFT;
                                                       });
                                                     },
                                                     child: Column(
@@ -286,9 +286,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                     CircleAvatar(
                                                       radius: 30,
                                                       child: Text(
-                                                        (index +
-                                                                    1)
-                                                                .toString() +
+                                                        (index + 1).toString() +
                                                             "/" +
                                                             listSessionValidationFlip
                                                                 .length
@@ -313,7 +311,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                 Container(
                                                   decoration: selectionFlipList[
                                                               index] ==
-                                                          2
+                                                          AnswerType.RIGHT
                                                       ? new BoxDecoration(
                                                           color: Colors.green,
                                                           borderRadius:
@@ -326,21 +324,20 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                   Colors.green,
                                                               width: 5))
                                                       : new BoxDecoration(
-                                                          border:
-                                                              new Border
-                                                                      .all(
-                                                                  color: Color
-                                                                      .fromRGBO(
-                                                                          255,
-                                                                          255,
-                                                                          255,
-                                                                          0),
-                                                                  width: 5)),
+                                                          border: new Border
+                                                                  .all(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      255,
+                                                                      255,
+                                                                      255,
+                                                                      0),
+                                                              width: 5)),
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       setState(() {
                                                         selectionFlipList[
-                                                            index] = 2;
+                                                            index] = AnswerType.RIGHT;
                                                       });
                                                     },
                                                     child: Column(
@@ -424,7 +421,7 @@ class _ValidationListViewState extends State<ValidationListView>
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
       for (int i = 0; i < selectionFlipList.length; i++) {
-        if (selectionFlipList[i] == 0) {
+        if (selectionFlipList[i] == AnswerType.NONE) {
           return SizedBox();
         }
       }
@@ -483,7 +480,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                 RaisedButton(
                                   elevation: 5.0,
                                   onPressed: () {
-                                    // TODO
+                                    submitLongAnswers(selectionFlipList, validationSessionInfo);
                                   },
                                   padding: EdgeInsets.all(5.0),
                                   shape: RoundedRectangleBorder(

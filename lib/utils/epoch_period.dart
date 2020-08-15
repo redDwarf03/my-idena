@@ -1,4 +1,4 @@
-library EpochPeriod;
+library epoch_period;
 
 const String FlipLottery = "FlipLottery";
 const String ShortSession = "ShortSession";
