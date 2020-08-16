@@ -127,9 +127,7 @@ class AboutView extends StatelessWidget {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
-                                                child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate("Thanks list"),
+                                                child: Text("Cryptomatrix, Andrew, Rioda, Mahmoud, Bus, JaymenChou, Gutalean, Tony",
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontFamily: MyIdenaAppTheme
