@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/about_view.dart';
 import 'package:my_idena/pages/views/donation_view.dart';
-import 'package:my_idena/pages/views/paramRPC_view.dart';
-import 'package:my_idena/pages/views/portofolio_view.dart';
-import 'package:my_idena/pages/views/profile_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
