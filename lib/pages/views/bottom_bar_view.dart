@@ -87,7 +87,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                     widget.changeIndex(0);
                                   }),
                             ),
-                            Expanded(
+                            /*Expanded(
                               child: TabIcons(
                                   tabIconData: widget.tabIconsList[1],
                                   removeAllSelect: () {
@@ -95,11 +95,11 @@ class _BottomBarViewState extends State<BottomBarView>
                                         widget.tabIconsList[1]);
                                     widget.changeIndex(1);
                                   }),
-                            ),
+                            ),*/
                             Expanded(
                               child: Container(width: 100),
                             ),
-                            Expanded(
+                            /*Expanded(
                               child: TabIcons(
                                   tabIconData: widget.tabIconsList[2],
                                   removeAllSelect: () {
@@ -107,7 +107,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                         widget.tabIconsList[2]);
                                     widget.changeIndex(2);
                                   }),
-                            ),
+                            ),*/
                             Expanded(
                               child: TabIcons(
                                   tabIconData: widget.tabIconsList[3],
