@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 
 class TitleView extends StatelessWidget {
   final String titleTxt;
@@ -7,10 +8,7 @@ class TitleView extends StatelessWidget {
   final Animation animation;
 
   const TitleView(
-      {Key key,
-      this.titleTxt: "",
-      this.animationController,
-      this.animation})
+      {Key key, this.titleTxt: "", this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -30,7 +28,7 @@ class TitleView extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        titleTxt,
+                        AppLocalizations.of(context).translate(titleTxt),
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontFamily: MyIdenaAppTheme.fontName,
