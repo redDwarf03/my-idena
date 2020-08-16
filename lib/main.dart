@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/screens/on_boarding.dart';
+import 'package:my_idena/pages/screens/on_boarding_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 
