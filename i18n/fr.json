@@ -59,7 +59,8 @@
   "Welcome to qualification session": "Bienvenue dans la session de qualification",
   "Okay, let’s start": "Ok, c'est parti",
   "Your answers for the validation session have been submitted successfully!": "Les réponses de la session de validation ont été envoyées avec succès!",
-  "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer.": "Maintenant, veuillez résoudre un ensemble de flips pour vérifier sa qualité. Un flip est qualifié si au moins 2/3 des participants donne la même réponse"
+  "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer.": "Maintenant, veuillez résoudre un ensemble de flips pour vérifier sa qualité. Un flip est qualifié si au moins 2/3 des participants donne la même réponse",
+  "Your current status doesn't allow you to mine.": "Votre statut actuel ne vous permet pas de miner."
 
 
 
