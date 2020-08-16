@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       alignment: Alignment.bottomCenter,
     ),
           decoration: pageDecorationDisclaimer,
-          footer: Text("{20200816 Tests Campaign}",
+          footer: Text(campaign,
               style: TextStyle(fontSize: 14.0, color: Colors.red)),
         ),
         PageViewModel(
@@ -59,7 +60,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             alignment: Alignment.bottomCenter,
           ),
           decoration: pageDecoration,
-          footer: Text("{20200816 Tests Campaign}",
+          footer: Text(campaign,
               style: TextStyle(fontSize: 14.0, color: Colors.red)),
         ),
         PageViewModel(
@@ -72,7 +73,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             alignment: Alignment.bottomCenter,
           ),
           decoration: pageDecoration,
-          footer: Text("{20200816 Tests Campaign}",
+          footer: Text(campaign,
               style: TextStyle(fontSize: 14.0, color: Colors.red)),
         ),
       ],

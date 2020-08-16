@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/about_view.dart';
 import 'package:my_idena/pages/views/donation_view.dart';
@@ -210,7 +211,7 @@ class _AboutScreenState extends State<AboutScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "{20200816 Tests Campaign}",
+                                  campaign,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: 12,

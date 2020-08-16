@@ -301,7 +301,7 @@ class PortofolioView extends StatelessWidget {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 16),
+                                      padding: const EdgeInsets.all(0),
                                       child: Center(
                                         child: Stack(
                                           overflow: Overflow.visible,
@@ -310,16 +310,16 @@ class PortofolioView extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
-                                                width: 100,
-                                                height: 100,
+                                                width: 110,
+                                                height: 110,
                                                 decoration: BoxDecoration(
                                                   color: MyIdenaAppTheme.white,
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                    Radius.circular(100.0),
+                                                    Radius.circular(110.0),
                                                   ),
                                                   border: new Border.all(
-                                                      width: 4,
+                                                      width: 2,
                                                       color: MyIdenaAppTheme
                                                           .dark_grey
                                                           .withOpacity(0.2)),
@@ -330,6 +330,11 @@ class PortofolioView extends StatelessWidget {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: <Widget>[
+                                                    Image.network(
+                                                      'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}',
+                                                      width: 50,
+                                                      height: 50,
+                                                    ),
                                                     Text(
                                                       '${((double.parse(dnaAll.dnaGetBalanceResponse.result.balance) + double.parse(dnaAll.dnaGetBalanceResponse.result.stake)) * animation.value).toInt()}',
                                                       textAlign:
