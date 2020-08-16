@@ -61,7 +61,9 @@ dependencies:
   characters: ^1.0.0
   
   flutter_launcher_icons: ^0.7.5 
-  
+
+  introduction_screen: ^1.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
