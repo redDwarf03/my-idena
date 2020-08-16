@@ -5,6 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
+import 'package:my_idena/pages/screens/on_boarding.dart';
+import 'package:my_idena/pages/views/about_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 bool firstState = true;
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         textTheme: MyIdenaAppTheme.textTheme,
         platform: TargetPlatform.iOS,
       ),
-      home: Home(),
+      home: OnBoardingScreen(),
     );
   }
 }
