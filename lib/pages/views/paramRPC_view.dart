@@ -90,7 +90,8 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                               keyboardType: TextInputType.text,
                                               style: TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'OpenSans',
+                                                fontFamily: MyIdenaAppTheme
+                                                              .fontName,
                                               ),
                                               decoration: InputDecoration(
                                                 focusedBorder:
@@ -137,7 +138,8 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                               obscureText: true,
                                               style: TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: 'OpenSans',
+                                                fontFamily: MyIdenaAppTheme
+                                                              .fontName,
                                               ),
                                               decoration: InputDecoration(
                                                 focusedBorder:
@@ -235,7 +237,8 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                     letterSpacing: 1.5,
                                                     fontSize: 12.0,
                                                     fontWeight: FontWeight.bold,
-                                                    fontFamily: 'OpenSans',
+                                                    fontFamily: MyIdenaAppTheme
+                                                              .fontName,
                                                   )),
                                             ),
                                           ),
