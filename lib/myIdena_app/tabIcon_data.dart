@@ -45,8 +45,8 @@ class TabIconData {
       index: 2,
       isSelected: false,
       animationController: null,
-      icon: Icon(Icons.av_timer, size: 40, color: Colors.black,),
-      selectedIcon: Icon(Icons.av_timer, size: 40, color: Colors.green[300],)
+      icon: Icon(Icons.tune, size: 40, color: Colors.black,),
+      selectedIcon: Icon(Icons.tune, size: 40, color: Colors.green[300],)
     ),
     TabIconData(
       imagePath: 'assets/images/tab_4.png',
@@ -54,8 +54,8 @@ class TabIconData {
       index: 3,
       isSelected: false,
       animationController: null,
-      icon: Icon(Icons.contacts, size: 40, color: Colors.black,),
-      selectedIcon: Icon(Icons.contacts, size: 40, color: Colors.green[300],)
+      icon: Icon(Icons.error_outline, size: 40, color: Colors.black,),
+      selectedIcon: Icon(Icons.error_outline, size: 40, color: Colors.green[300],)
     ),
   ];
 }
