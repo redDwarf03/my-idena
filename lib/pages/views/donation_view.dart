@@ -158,7 +158,8 @@ class _DonationViewState extends State<DonationView> {
                                                     TextInputType.number,
                                                 style: TextStyle(
                                                   color: Colors.black,
-                                                  fontFamily: 'OpenSans',
+                                                  fontFamily: MyIdenaAppTheme
+                                                              .fontName,
                                                 ),
                                                 decoration: InputDecoration(
                                                   focusedBorder:
@@ -281,7 +282,8 @@ class _DonationViewState extends State<DonationView> {
                                                       fontSize: 12.0,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontFamily: 'OpenSans',
+                                                      fontFamily: MyIdenaAppTheme
+                                                              .fontName,
                                                     )),
                                               ),
                                             ),

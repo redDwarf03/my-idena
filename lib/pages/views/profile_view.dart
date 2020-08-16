@@ -59,7 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("Deactivate mining status"),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 20.0,
                                                                               )),
                                                                           SizedBox(
@@ -70,7 +70,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("Submit the form to deactivate your mining status."),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 15.0,
                                                                               )),
                                                                           SizedBox(
@@ -79,7 +79,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("You can activate it again afterwards."),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 15.0,
                                                                               )),
                                                                           SizedBox(
@@ -142,7 +142,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("Activate mining status"),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 20.0,
                                                                               )),
                                                                           SizedBox(
@@ -153,7 +153,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour."),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 15.0,
                                                                               )),
                                                                           SizedBox(
@@ -162,7 +162,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                               AppLocalizations.of(context).translate("You can deactivate your online status at any time."),
                                                                               style: TextStyle(
                                                                                 color: Colors.black,
-                                                                                fontFamily: 'OpenSans',
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
                                                                                 fontSize: 15.0,
                                                                               )),
                                                                           new Row(

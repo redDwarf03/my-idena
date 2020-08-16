@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
-  fontFamily: 'OpenSans',
+  fontFamily: MyIdenaAppTheme.fontName,
 );
 
 final kLabelStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
+  fontFamily: MyIdenaAppTheme.fontName,
 );
 
 final kBoxDecorationStyle = BoxDecoration(
