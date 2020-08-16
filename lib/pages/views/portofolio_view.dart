@@ -128,7 +128,7 @@ class PortofolioView extends StatelessWidget {
                                                                     left: 4,
                                                                     bottom: 3),
                                                             child: Text(
-                                                              '${(double.parse(dnaAll.dnaGetBalanceResponse.result.balance) * animation.value).toInt()}',
+                                                              '${(double.parse(dnaAll.dnaGetBalanceResponse.result.balance) * animation.value).toDouble().toStringAsFixed(4)}',
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
@@ -244,7 +244,7 @@ class PortofolioView extends StatelessWidget {
                                                                     left: 4,
                                                                     bottom: 3),
                                                             child: Text(
-                                                              '${(double.parse(dnaAll.dnaGetBalanceResponse.result.stake) * animation.value).toInt()}',
+                                                              '${(double.parse(dnaAll.dnaGetBalanceResponse.result.stake) * animation.value).toDouble().toStringAsFixed(4)}',
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
