@@ -48,3 +48,4 @@ app.*.map.json
 # archive
 lib/pages/archives/*.dart
 /todolist.txt
+lib/todolist.txt
