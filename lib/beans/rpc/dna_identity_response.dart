@@ -90,8 +90,10 @@ class Result {
         pubkey: json["pubkey"],
         requiredFlips: json["requiredFlips"],
         availableFlips: json["availableFlips"],
-        flipKeyWordPairs: List<FlipKeyWordPair>.from(
-            json["flipKeyWordPairs"].map((x) => FlipKeyWordPair.fromJson(x))),
+        flipKeyWordPairs: json["flipKeyWordPairs"] == null
+            ? null
+            : List<FlipKeyWordPair>.from(json["flipKeyWordPairs"]
+                .map((x) => FlipKeyWordPair.fromJson(x))),
         madeFlips: json["madeFlips"],
         totalQualifiedFlips: json["totalQualifiedFlips"],
         totalShortFlipPoints: json["totalShortFlipPoints"],
