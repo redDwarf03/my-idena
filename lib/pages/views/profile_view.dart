@@ -172,7 +172,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                                   child: Text(
                                                                                     AppLocalizations.of(context).translate("Cancel"),
                                                                                   ),
-                                                                                  color: Colors.grey[300],
+                                                                                  color: Colors.grey[200],
                                                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                                                                                   onPressed: () {
                                                                                     setState(() {
@@ -253,7 +253,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                                                   child: Text(
                                                                                     AppLocalizations.of(context).translate("Cancel"),
                                                                                   ),
-                                                                                  color: Colors.grey[300],
+                                                                                  color: Colors.grey[200],
                                                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                                                                                   onPressed: () {
                                                                                     setState(() {
