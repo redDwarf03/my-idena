@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:my_idena/main.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/beans/rpc/dna_becomOnline_response.dart';
 import 'package:my_idena/beans/rpc/dna_becomeOffline_request.dart';
@@ -162,7 +162,7 @@ class HttpService {
         }
       }
     } catch (e) {
-      print("erreur : " + e.toString());
+      logger.e(e.toString());
     } finally {}
 
     dnaAll.dnaGetCoinbaseAddrRequest = dnaGetCoinbaseAddrRequest;
@@ -204,7 +204,7 @@ class HttpService {
         dnaBecomeOnlineResponse = dnaBecomeOnlineResponseFromJson(reply);
       }
     } catch (e) {
-      print("erreur: " + e.toString());
+      logger.e(e.toString());
     } finally {}
     return dnaBecomeOnlineResponse;
   }
@@ -235,7 +235,7 @@ class HttpService {
         dnaBecomeOfflineResponse = dnaBecomeOfflineResponseFromJson(reply);
       }
     } catch (e) {
-      print("erreur: " + e.toString());
+      logger.e(e.toString());
     } finally {}
     return dnaBecomeOfflineResponse;
   }
@@ -354,7 +354,7 @@ class HttpService {
         }
       }
     } catch (e) {
-      print("erreur: " + e.toString());
+      logger.e(e.toString());
     } finally {}
     return flipShortHashesResponse;
   }
@@ -387,7 +387,7 @@ class HttpService {
         getFlipRawResponse = getFlipRawResponseFromJson(reply);
       }
     } catch (e) {
-      print("erreur: " + e.toString());
+      logger.e(e.toString());
     } finally {}
     return getFlipRawResponse;
   }
@@ -426,7 +426,7 @@ class HttpService {
         dnaSendTransactionResponse = dnaSendTransactionResponseFromJson(reply);
       }
     } catch (e) {
-      print("erreur: " + e.toString());
+      logger.e(e.toString());
     } finally {}
     return dnaSendTransactionResponse;
   }
