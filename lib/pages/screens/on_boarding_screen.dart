@@ -52,7 +52,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         PageViewModel(
           title: "Configuration",
           body:
-              "To configure the application, you must:\n\n- Execute idena-go.exe with --rpcaddr {ip_address} --rpcport {port_number}\n- In the first launch, go to \"Home\" page, \"Parameters\" section\n- Type \"http://{ip_address}:{port_number}\" to connect to your node\n- Type the api.key (cf %appdata%\\Idena\\node\\datadir\\api.key)",
+              "To configure the application, you must:\n\n- Execute idena-go.exe with --rpcaddr {ip_address} --rpcport {port_number}\n- In the first launch, go to \"Parameters\" page.\n- Type \"http://{ip_address}:{port_number}\" to connect to your node\n- Type the api.key (cf %appdata%\\Idena\\node\\datadir\\api.key)",
           image: Align(
             child:
                 Image.asset('assets/images/parameters-node.png', width: 345.0),
