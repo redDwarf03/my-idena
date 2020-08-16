@@ -22,216 +22,205 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-
-
   Widget displayMiningSwitch() {
-    if (new UtilIdentity().canMine(dnaAll)){
-  return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            Switch(
-                                              value: miningSwitchValue,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  if (miningSwitchValue) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (context) =>
-                                                                SimpleDialog(
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Column(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("Deactivate mining status"),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 20.0,
-                                                                              )),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                20,
-                                                                          ),
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("Submit the form to deactivate your mining status."),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 15.0,
-                                                                              )),
-                                                                          SizedBox(
-                                                                              height: 20.0),
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("You can activate it again afterwards."),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 15.0,
-                                                                              )),
-                                                                          SizedBox(
-                                                                              height: 10.0),
-                                                                          new Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceEvenly,
-                                                                            children: <Widget>[
-                                                                              FlatButton(
-                                                                                  child: Text(
-                                                                                    AppLocalizations.of(context).translate("Submit"),
-                                                                                  ),
-                                                                                  color: Colors.grey[200],
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                  onPressed: () {
-                                                                                    httpService.becomeOffline();
-                                                                                    miningSwitchValue = !miningSwitchValue;
-                                                                                    setState(() {
-                                                                                      Navigator.pop(context);
-                                                                                    });
-                                                                                  }),
-                                                                              FlatButton(
-                                                                                  child: Text(
-                                                                                    AppLocalizations.of(context).translate("Cancel"),
-                                                                                  ),
-                                                                                  color: Colors.grey[200],
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                  onPressed: () {
-                                                                                    setState(() {
-                                                                                      Navigator.pop(context);
-                                                                                    });
-                                                                                  })
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ));
-                                                  } else {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (context) =>
-                                                                SimpleDialog(
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Column(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("Activate mining status"),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 20.0,
-                                                                              )),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                20,
-                                                                          ),
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour."),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 15.0,
-                                                                              )),
-                                                                          SizedBox(
-                                                                              height: 20.0),
-                                                                          Text(
-                                                                              AppLocalizations.of(context).translate("You can deactivate your online status at any time."),
-                                                                              style: TextStyle(
-                                                                                color: Colors.black,
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontSize: 15.0,
-                                                                              )),
-                                                                          new Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceEvenly,
-                                                                            children: <Widget>[
-                                                                              FlatButton(
-                                                                                  child: Text(
-                                                                                    AppLocalizations.of(context).translate("Submit"),
-                                                                                  ),
-                                                                                  color: Colors.grey[200],
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                  onPressed: () {
-                                                                                    setState(() {
-                                                                                      httpService.becomeOnline();
-                                                                                      miningSwitchValue = !miningSwitchValue;
-                                                                                      Navigator.pop(context);
-                                                                                    });
-                                                                                  }),
-                                                                              FlatButton(
-                                                                                  child: Text(
-                                                                                    AppLocalizations.of(context).translate("Cancel"),
-                                                                                  ),
-                                                                                  color: Colors.grey[200],
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                                                                  onPressed: () {
-                                                                                    setState(() {
-                                                                                      Navigator.pop(context);
-                                                                                    });
-                                                                                  })
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ));
-                                                  }
-                                                });
-                                              },
-                                              activeTrackColor:
-                                                  Colors.green[100],
-                                              activeColor: Colors.green[300],
+    if (new UtilIdentity().canMine(dnaAll)) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Switch(
+            value: miningSwitchValue,
+            onChanged: (value) {
+              setState(() {
+                if (miningSwitchValue) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => SimpleDialog(
+                            contentPadding: EdgeInsets.zero,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "Deactivate mining status"),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 20.0,
+                                        )),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "Submit the form to deactivate your mining status."),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 15.0,
+                                        )),
+                                    SizedBox(height: 20.0),
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "You can activate it again afterwards."),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 15.0,
+                                        )),
+                                    SizedBox(height: 10.0),
+                                    new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        FlatButton(
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate("Submit"),
                                             ),
-                                          ],
-                                        )
-;
-    
-      
-
-    
+                                            color: Colors.grey[200],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
+                                            onPressed: () {
+                                              httpService.becomeOffline();
+                                              miningSwitchValue =
+                                                  !miningSwitchValue;
+                                              setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            }),
+                                        FlatButton(
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate("Cancel"),
+                                            ),
+                                            color: Colors.grey[200],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
+                                            onPressed: () {
+                                              setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            })
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => SimpleDialog(
+                            contentPadding: EdgeInsets.zero,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "Activate mining status"),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 20.0,
+                                        )),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour."),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 15.0,
+                                        )),
+                                    SizedBox(height: 20.0),
+                                    Text(
+                                        AppLocalizations.of(context).translate(
+                                            "You can deactivate your online status at any time."),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 15.0,
+                                        )),
+                                    new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        FlatButton(
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate("Submit"),
+                                            ),
+                                            color: Colors.grey[200],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
+                                            onPressed: () {
+                                              setState(() {
+                                                httpService.becomeOnline();
+                                                miningSwitchValue =
+                                                    !miningSwitchValue;
+                                                Navigator.pop(context);
+                                              });
+                                            }),
+                                        FlatButton(
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate("Cancel"),
+                                            ),
+                                            color: Colors.grey[200],
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0)),
+                                            onPressed: () {
+                                              setState(() {
+                                                Navigator.pop(context);
+                                              });
+                                            })
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                }
+              });
+            },
+            activeTrackColor: Colors.green[100],
+            activeColor: Colors.green[300],
+          ),
+        ],
+      );
     } else {
-      return Row( mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            
-                                            Text(AppLocalizations.of(context).translate("Your current status doesn't allow you to mine."), style: TextStyle(
-                                                fontFamily:
-                                                    MyIdenaAppTheme.fontName,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 13,
-                                                color: MyIdenaAppTheme.grey
-                                                    .withOpacity(0.5),
-                                              ),)
-                                          
-                                          
-                                          ]);
+      return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              AppLocalizations.of(context)
+                  .translate("Your current status doesn't allow you to mine."),
+              style: TextStyle(
+                fontFamily: MyIdenaAppTheme.fontName,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                color: MyIdenaAppTheme.grey.withOpacity(0.5),
+              ),
+            )
+          ]);
     }
   }
 
@@ -738,8 +727,8 @@ class _ProfileViewState extends State<ProfileView> {
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
                                                 child: Text(
-                                                  dnaAll.dnaIdentityResponse
-                                                      .result.state,
+                                                  new UtilIdentity().mapToFriendlyStatus(dnaAll.dnaIdentityResponse
+                                                      .result.state),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: MyIdenaAppTheme
