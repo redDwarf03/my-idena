@@ -64,6 +64,8 @@ dependencies:
 
   introduction_screen: ^1.0.9
 
+  logger: ^0.9.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

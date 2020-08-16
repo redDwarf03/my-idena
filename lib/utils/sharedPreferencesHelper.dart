@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_idena/main.dart';
 
 class IdenaSharedPreferences {
   String apiUrl;
@@ -55,7 +56,7 @@ class SharedPreferencesHelper {
       }
       return true;
     } catch (e) {
-      print(e);
+      logger.e(e.toString());
       return false;
     }
   }
@@ -75,7 +76,7 @@ class SharedPreferencesHelper {
       }
       return true;
     } catch (e) {
-      print(e);
+      logger.e(e.toString());
       return false;
     }
   }

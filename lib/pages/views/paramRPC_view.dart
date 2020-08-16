@@ -183,7 +183,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                                 keyApp,
                                                                 null));
                                                   } catch (e) {
-                                                    print(e.toString());
+                                                    logger.e(e.toString());
                                                   }
                                                   showDialog(
                                                       context: context,

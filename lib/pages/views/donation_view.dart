@@ -223,7 +223,7 @@ class _DonationViewState extends State<DonationView> {
                                                                   amount) ??
                                                               0);
                                                     } catch (e) {
-                                                      print(e.toString());
+                                                      logger.e(e.toString());
                                                     }
                                                     showDialog(
                                                         context: context,

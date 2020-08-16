@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/beans/rpc/flip_get_request.dart';
 import 'package:my_idena/beans/rpc/flip_get_response.dart';
 import 'package:my_idena/beans/rpc/flip_longHashes_request.dart';
@@ -259,7 +260,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
       String order4 =
           orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
-      print(i.toString() +
+      logger.d(i.toString() +
           " - flip 1: " +
           order1 +
           ', ' +
@@ -283,7 +284,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
       order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
       order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
-      print(i.toString() +
+      logger.d(i.toString() +
           " - flip 2: " +
           order1 +
           ', ' +
@@ -337,7 +338,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
     validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
   } catch (e) {
-    print("error: " + e.toString());
+    logger.e(e.toString());
   } finally {}
 
   return validationSessionInfo;
@@ -347,7 +348,7 @@ Future<String> loadAssets(String fileName) async {
   try {
     return await rootBundle.loadString('lib/beans/test/' + fileName + '.json');
   } catch (e) {
-    print("error loadAssets: " + e.toString());
+    logger.e(e.toString());
   } finally {}
 }
 
@@ -399,7 +400,7 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
           flipSubmitShortAnswersResponseFromJson(reply);
     }
   } catch (e) {
-    print("erreur: " + e.toString());
+    logger.e(e.toString());
   } finally {}
   return flipSubmitShortAnswersResponse;
 }
@@ -454,7 +455,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
           flipSubmitLongAnswersResponseFromJson(reply);
     }
   } catch (e) {
-    print("erreur: " + e.toString());
+    logger.e(e.toString());
   } finally {}
   return flipSubmitLongAnswersResponse;
 }
