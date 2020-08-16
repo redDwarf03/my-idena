@@ -40,7 +40,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         PageViewModel(
           title: "my Idena mobile app",
           body:
-              "Welcome to the my Idena app!\n\nThis application is an application currently under development.\nYou use it at your own risk. In any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\nIn case of bugs, please notify them on the project's Github page (see \"About\" page).\nThe Idena core team is not participating in the development of this application",
+              "Welcome to \"my Idena\" !\n\nThis application is an application currently under development.\nYou use it at your own risk. In any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\nIn case of bugs, please notify them on the project's Github page (see \"About\" page).\nThe Idena core team is not participating in the development of this application",
           image: Align(
       child: Image.asset('assets/images/icon.png', width: 250.0),
       alignment: Alignment.bottomCenter,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
+import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -11,14 +12,13 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 DnaGetBalanceResponse dnaGetBalanceResponse;
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
-bool launchLongSession;
+int nbFlips;
 
 FlipShortHashesResponse flipShortHashesResponse;
 
@@ -69,22 +69,14 @@ class _ValidationListViewState extends State<ValidationListView>
 
     getSimulationMode();
 
-    launchLongSession = true;
     if (simulationMode) {
-      if (launchLongSession == true) {
-        dnaAll.dnaGetEpochResponse.result.currentPeriod =
-            EpochPeriod.LongSession;
-      } else {
-        dnaAll.dnaGetEpochResponse.result.currentPeriod =
-            EpochPeriod.ShortSession;
-      }
+      dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
     }
 
     // Init choice
-    int nbFlips;
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.ShortSession) {
-      nbFlips = 7;
+      nbFlips = 5;
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
@@ -93,7 +85,7 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
-      nbFlips = 14;
+      nbFlips = 18;
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
@@ -181,7 +173,6 @@ class _ValidationListViewState extends State<ValidationListView>
                                           listSessionValidationFlip =
                                           validationSessionInfo
                                               .listSessionValidationFlip;
-                                      shortSessionCharged = true;
                                       return FadeTransition(
                                         opacity: animation,
                                         child: Transform(
@@ -207,24 +198,26 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                       10.0),
                                                           border: new Border
                                                                   .all(
-                                                              color:
-                                                                  Colors.green,
+                                                              color: Colors
+                                                                  .green,
                                                               width: 5))
                                                       : new BoxDecoration(
-                                                          border: new Border
-                                                                  .all(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      0),
-                                                              width: 5)),
+                                                          border:
+                                                              new Border
+                                                                      .all(
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          255,
+                                                                          255,
+                                                                          255,
+                                                                          0),
+                                                                  width: 5)),
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       setState(() {
                                                         selectionFlipList[
-                                                            index] = AnswerType.LEFT;
+                                                                index] =
+                                                            AnswerType.LEFT;
                                                       });
                                                     },
                                                     child: Column(
@@ -288,9 +281,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                       child: Text(
                                                         (index + 1).toString() +
                                                             "/" +
-                                                            listSessionValidationFlip
-                                                                .length
-                                                                .toString(),
+                                                            nbFlips.toString(),
                                                         style: TextStyle(
                                                             fontFamily:
                                                                 MyIdenaAppTheme
@@ -337,7 +328,8 @@ class _ValidationListViewState extends State<ValidationListView>
                                                     onTap: () {
                                                       setState(() {
                                                         selectionFlipList[
-                                                            index] = AnswerType.RIGHT;
+                                                                index] =
+                                                            AnswerType.RIGHT;
                                                       });
                                                     },
                                                     child: Column(
@@ -411,6 +403,7 @@ class _ValidationListViewState extends State<ValidationListView>
             SizedBox(height: 10),
             Container(child: getChrono()),
             Container(child: getStartCheckingKeywordsButton()),
+            Container(child: validationShortSessionButton()),
           ],
         );
       },
@@ -480,7 +473,22 @@ class _ValidationListViewState extends State<ValidationListView>
                                 RaisedButton(
                                   elevation: 5.0,
                                   onPressed: () {
-                                    submitLongAnswers(selectionFlipList, validationSessionInfo);
+                                    submitLongAnswers(selectionFlipList,
+                                        validationSessionInfo);
+                                    // TODO
+                   
+
+                                    typeLaunchSession =
+                                        EpochPeriod.ShortSession;
+                                    Navigator.push<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                          builder: (BuildContext context) =>
+                                              HomeScreen(
+                                                  animationController:
+                                                      animationController),
+                                          fullscreenDialog: true),
+                                    );
                                   },
                                   padding: EdgeInsets.all(5.0),
                                   shape: RoundedRectangleBorder(
@@ -519,6 +527,53 @@ class _ValidationListViewState extends State<ValidationListView>
                   fontWeight: FontWeight.bold,
                   fontFamily: 'OpenSans',
                 )),
+          ),
+        ],
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget validationShortSessionButton() {
+    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+        EpochPeriod.ShortSession) {
+      for (int i = 0; i < selectionFlipList.length; i++) {
+        if (selectionFlipList[i] == AnswerType.NONE) {
+          return SizedBox();
+        }
+      }
+
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          RaisedButton(
+            elevation: 5.0,
+            onPressed: () {
+              typeLaunchSession = EpochPeriod.LongSession;
+              validationSessionInfo = null;
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => ValidationSessionScreen(
+                        animationController: animationController),
+                    fullscreenDialog: true),
+              );
+            },
+            padding: EdgeInsets.all(5.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.white,
+            child:
+                Text(AppLocalizations.of(context).translate("Submit answers"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      letterSpacing: 1.5,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'OpenSans',
+                    )),
           ),
         ],
       );
