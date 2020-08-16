@@ -16,7 +16,8 @@ class AboutScreen extends StatefulWidget {
   _AboutScreenState createState() => _AboutScreenState();
 }
 
-class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin {
+class _AboutScreenState extends State<AboutScreen>
+    with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
   List<Widget> listViews = <Widget>[];
@@ -99,7 +100,6 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
         animationController: widget.animationController,
       ),
     );
-
   }
 
   Future<bool> getData() async {
@@ -205,6 +205,19 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                                     fontSize: 22 + 6 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
                                     color: MyIdenaAppTheme.darkerText,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "{20200816 Tests Campaign}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.red,
                                   ),
                                 ),
                               ),
