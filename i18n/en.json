@@ -54,6 +54,12 @@
   "Ok, I understand": "Ok, I understand",
   "Score": "Score",
   "Required flips": "Required flips",
-  "Made flips": "Made flips"
+  "Made flips": "Made flips",
+  "Submit answers": "Submit answers",
+  "Welcome to qualification session": "Welcome to qualification session",
+  "Okay, let’s start": "Okay, let’s start",
+  "Your answers for the validation session have been submitted successfully!": "Your answers for the validation session have been submitted successfully!",
+  "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer.": "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer."
+
 
 }
