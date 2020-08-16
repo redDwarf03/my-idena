@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/paramRPC_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
@@ -188,7 +189,7 @@ class _ParametersScreenState extends State<ParametersScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "{20200816 Tests Campaign}",
+                                  campaign,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: 12,
