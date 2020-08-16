@@ -5,6 +5,7 @@ import 'package:my_idena/beans/rpc/httpService.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_identity.dart';
 
 HttpService httpService = HttpService();
 bool miningSwitchValue;
@@ -21,79 +22,11 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (BuildContext context, Widget child) {
-        return FutureBuilder(
-            future: httpService.getDnaAll(),
-            builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-              if (snapshot.hasData) {
-                dnaAll = snapshot.data;
-                if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-                  return Text("");
-                } else {
-                  if (firstState) {
-                    miningSwitchValue =
-                        dnaAll.dnaIdentityResponse.result.online;
-                    firstState = false;
-                  }
 
-                  return FadeTransition(
-                    opacity: widget.animation,
-                    child: new Transform(
-                      transform: new Matrix4.translationValues(
-                          0.0, 30 * (1.0 - widget.animation.value), 0.0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, top: 16, bottom: 18),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: MyIdenaAppTheme.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.0),
-                                bottomLeft: Radius.circular(8.0),
-                                bottomRight: Radius.circular(8.0),
-                                topRight: Radius.circular(68.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: MyIdenaAppTheme.grey.withOpacity(0.2),
-                                  offset: Offset(1.1, 1.1),
-                                  blurRadius: 10.0),
-                            ],
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 16, left: 16, right: 24),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 4, bottom: 8, top: 16),
-                                      child: Text(
-                                        'Mining',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily:
-                                                MyIdenaAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            letterSpacing: -0.1,
-                                            color: MyIdenaAppTheme.darkText),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Row(
+
+  Widget displayMiningSwitch() {
+    if (new UtilIdentity().canMine(dnaAll)){
+  return Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
@@ -275,7 +208,106 @@ class _ProfileViewState extends State<ProfileView> {
                                               activeColor: Colors.green[300],
                                             ),
                                           ],
-                                        ),
+                                        )
+;
+    
+      
+
+    
+    } else {
+      return Row( mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            
+                                            Text(AppLocalizations.of(context).translate("Your current status doesn't allow you to mine."), style: TextStyle(
+                                                fontFamily:
+                                                    MyIdenaAppTheme.fontName,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13,
+                                                color: MyIdenaAppTheme.grey
+                                                    .withOpacity(0.5),
+                                              ),)
+                                          
+                                          
+                                          ]);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: widget.animationController,
+      builder: (BuildContext context, Widget child) {
+        return FutureBuilder(
+            future: httpService.getDnaAll(),
+            builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+              if (snapshot.hasData) {
+                dnaAll = snapshot.data;
+                if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
+                  return Text("");
+                } else {
+                  if (firstState) {
+                    miningSwitchValue =
+                        dnaAll.dnaIdentityResponse.result.online;
+                    firstState = false;
+                  }
+
+                  return FadeTransition(
+                    opacity: widget.animation,
+                    child: new Transform(
+                      transform: new Matrix4.translationValues(
+                          0.0, 30 * (1.0 - widget.animation.value), 0.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, top: 16, bottom: 18),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: MyIdenaAppTheme.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8.0),
+                                bottomLeft: Radius.circular(8.0),
+                                bottomRight: Radius.circular(8.0),
+                                topRight: Radius.circular(68.0)),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: MyIdenaAppTheme.grey.withOpacity(0.2),
+                                  offset: Offset(1.1, 1.1),
+                                  blurRadius: 10.0),
+                            ],
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 16, left: 16, right: 24),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 4, bottom: 8, top: 16),
+                                      child: Text(
+                                        'Mining',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily:
+                                                MyIdenaAppTheme.fontName,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            letterSpacing: -0.1,
+                                            color: MyIdenaAppTheme.darkText),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        displayMiningSwitch(),
                                         Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
