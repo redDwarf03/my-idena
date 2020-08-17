@@ -1,12 +1,5 @@
-***** - ecran param ip + key api
-***** - enreg param ip + key api
-- maquettes sessions validation
-- branchement sessions validation
 - crop image flips
 - branchement flips création
 - notification arrêt noeud
 - attente on/off minage
-- enlever print
-- vérifier tous les translates
-- enlever les OpenSans
-- intégrer les fct dans UtilIdentity
+- enlever les petites images par icones

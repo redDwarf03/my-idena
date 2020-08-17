@@ -4,7 +4,7 @@ Idena iOS and Android app based on Flutter framework .
 
 ## Configuration
 ##### for a Windows PC:
-* execute **idena-go.exe** with ``--rpcaddr {ip_address} --rpcport {port_number}``
+* execute **idena-go.exe** with ``--rpcaddr {ip_address} --rpcport {port_number}`` (don't run the windows client application)
 * in the first launch, go to "Parameters" page
 * type ``http://{ip_address}:{port_number}`` to connect to your node
 * type the api.key (cf ``%appdata%\Idena\node\datadir\api.key``)

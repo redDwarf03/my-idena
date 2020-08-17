@@ -53,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         PageViewModel(
           title: "Configuration",
           body:
-              "To configure the application, you must:\n\n\nFor a Windows PC:\n* execute 'idena-go.exe' with '--rpcaddr {ip_address} --rpcport {port_number}'\n* in the first launch, go to 'Parameters' page\n* type 'http://{ip_address}:{port_number}' to connect to your node\n* type the api.key (cf '%appdata%\Idena\node\datadir\api.key')\n\nFor a remote server and Android phone:\n\n* install Termux or equivalent on your Android phone\n* install ssh 'pkg install openssh -y'\n* setup tunnel connection using ssh 'ssh -L 9999:localhost:9009 YOUR_VPS_IP'\n* open 'my_idena', go to 'Parameters' page and type 'http://localhost:9999' and your api key in the following file './datadir/api.key'\n",
+              "To configure the application, you must:\n\n\nFor a Windows PC:\n* execute 'idena-go.exe' with '--rpcaddr {ip_address} --rpcport {port_number}' (don't run the windows client application)\n* in the first launch, go to 'Parameters' page\n* type 'http://{ip_address}:{port_number}' to connect to your node\n* type the api.key (cf '%appdata%\Idena\node\datadir\api.key')\n\nFor a remote server and Android phone:\n\n* install Termux or equivalent on your Android phone\n* install ssh 'pkg install openssh -y'\n* setup tunnel connection using ssh 'ssh -L 9999:localhost:9009 YOUR_VPS_IP'\n* open 'my_idena', go to 'Parameters' page and type 'http://localhost:9999' and your api key in the following file './datadir/api.key'\n",
           image: Align(
             child:
                 Image.asset('assets/images/parameters-node.png', width: 345.0),
