@@ -43,9 +43,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           body:
               "Welcome to \"my Idena\" !\n\nThis application is an application currently under development.\nYou use it at your own risk. In any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\nIn case of bugs, please notify them on the project's Github page (see \"About\" page).\nThe Idena core team is not participating in the development of this application",
           image: Align(
-      child: Image.asset('assets/images/icon.png', width: 250.0),
-      alignment: Alignment.bottomCenter,
-    ),
+            child: Image.asset('assets/images/icon.png', width: 250.0),
+            alignment: Alignment.bottomCenter,
+          ),
           decoration: pageDecorationDisclaimer,
           footer: Text(campaign,
               style: TextStyle(fontSize: 14.0, color: Colors.red)),
@@ -53,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         PageViewModel(
           title: "Configuration",
           body:
-              "To configure the application, you must:\n\n- Execute idena-go.exe with --rpcaddr {ip_address} --rpcport {port_number}\n- In the first launch, go to \"Parameters\" page.\n- Type \"http://{ip_address}:{port_number}\" to connect to your node\n- Type the api.key (cf %appdata%\\Idena\\node\\datadir\\api.key)",
+              "To configure the application, you must:\n\n\nFor a Windows PC:\n* execute 'idena-go.exe' with '--rpcaddr {ip_address} --rpcport {port_number}'\n* in the first launch, go to 'Parameters' page\n* type 'http://{ip_address}:{port_number}' to connect to your node\n* type the api.key (cf '%appdata%\Idena\node\datadir\api.key')\n\nFor a remote server and Android phone:\n\n* install Termux or equivalent on your Android phone\n* install ssh 'pkg install openssh -y'\n* setup tunnel connection using ssh 'ssh -L 9999:localhost:9009 YOUR_VPS_IP'\n* open 'my_idena', go to 'Parameters' page and type 'http://localhost:9999' and your api key in the following file './datadir/api.key'\n",
           image: Align(
             child:
                 Image.asset('assets/images/parameters-node.png', width: 345.0),
@@ -68,8 +68,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           body:
               "- UI & UX\n- Display your informations\n- Activate/Desactivate mining\nDonations... if you want but it would be appreciated :)\n-Simulation mode : unused",
           image: Align(
-            child:
-                Image.asset('assets/images/functionnalities-review.png', width: 342.0),
+            child: Image.asset('assets/images/functionnalities-review.png',
+                width: 342.0),
             alignment: Alignment.bottomCenter,
           ),
           decoration: pageDecoration,
