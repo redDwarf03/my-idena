@@ -1,14 +1,26 @@
-language: dart
-dist: xenial
-addons:
-  apt:
-    packages:
-      - lib32stdc++6
-install:
-  - git clone https://github.com/flutter/flutter.git -b stable
-  - ./flutter/bin/flutter doctor
-script:
-  - ./flutter/bin/flutter test
-cache:
-  directories:
-    - $HOME/.pub-cache
+jobs:
+  include:
+  - os: linux
+    name: Android
+    language: android
+    android: 
+      components:
+      - tools
+      - platform-tools
+      - build-tools-28.0.3
+      - android-29
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - lib32stdc++6
+          - fonts-droid
+    before_install:
+      - yes | sdkmanager "platforms;android-29"
+    install:
+      - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
+      - git clone https://github.com/flutter/flutter.git -b stable
+      - ./flutter/bin/flutter doctor
+    script:
+      - ./deploy/bin/flutter build apk --split-per-abi
