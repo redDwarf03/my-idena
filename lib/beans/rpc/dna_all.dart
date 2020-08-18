@@ -1,3 +1,5 @@
+import 'package:my_idena/beans/rpc/bcn_transactions_request.dart';
+import 'package:my_idena/beans/rpc/bcn_transactions_response.dart';
 import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_request.dart';
 import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_response.dart';
 import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
@@ -21,6 +23,8 @@ class DnaAll {
         this.dnaGetEpochResponse,
         this.dnaCeremonyIntervalsRequest,
         this.dnaCeremonyIntervalsResponse,
+        this.bcnTransactionsRequest,
+        this.bcnTransactionsResponse,
     });
 
   DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
@@ -33,5 +37,6 @@ class DnaAll {
   DnaGetEpochResponse dnaGetEpochResponse;
   DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
   DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
-
+  BcnTransactionsRequest bcnTransactionsRequest;
+  BcnTransactionsResponse bcnTransactionsResponse;
 }

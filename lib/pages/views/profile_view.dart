@@ -318,7 +318,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                       const EdgeInsets.only(
                                                           left: 4.0),
                                                   child: Text(
-                                                    new DateFormat.yMd()
+                                                    new DateFormat.yMd(Intl.defaultLocale)
                                                         .add_jm()
                                                         .format(dnaAll
                                                             .dnaGetEpochResponse

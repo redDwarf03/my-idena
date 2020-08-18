@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:my_idena/beans/rpc/bcn_transactions_request.dart';
+import 'package:my_idena/beans/rpc/bcn_transactions_response.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/beans/rpc/dna_becomOnline_response.dart';
@@ -45,6 +47,8 @@ class HttpService {
   FlipShortHashesResponse flipShortHashesResponse;
   DnaSendTransactionRequest dnaSendTransactionRequest;
   DnaSendTransactionResponse dnaSendTransactionResponse;
+  BcnTransactionsRequest bcnTransactionsRequest;
+  BcnTransactionsResponse bcnTransactionsResponse;
 
   Future<DnaAll> getDnaAll() async {
     DnaAll dnaAll = new DnaAll();
@@ -430,4 +434,42 @@ class HttpService {
     } finally {}
     return dnaSendTransactionResponse;
   }
+
+
+  Future<BcnTransactionsResponse> getTransactions(String address, int count) async {
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> map = {
+        'method': BcnTransactionsRequest.METHOD_NAME,
+        "params": [
+          {
+            "address": address,
+            "count" : count
+          }
+            ],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      bcnTransactionsRequest =
+          BcnTransactionsRequest.fromJson(map);
+      request.add(utf8.encode(json.encode(bcnTransactionsRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+
+       bcnTransactionsResponse = bcnTransactionsResponseFromJson(reply);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+    return bcnTransactionsResponse;
+  }
+
 }
