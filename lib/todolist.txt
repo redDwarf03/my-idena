@@ -2,5 +2,5 @@
 - branchement flips création
 - notification arrêt noeud
 - attente on/off minage
-- enlever les petites images par icones
 - vérifier que le tel est à l'heure
+- format date

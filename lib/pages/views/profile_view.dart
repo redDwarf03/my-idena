@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena/beans/rpc/dna_all.dart';
@@ -442,10 +443,11 @@ class _ProfileViewState extends State<ProfileView> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 6),
-                                            child: Text(
+                                            child: AutoSizeText(
                                               dnaAll.dnaIdentityResponse.result
                                                   .address,
                                               textAlign: TextAlign.center,
+                                              maxLines: 1,
                                               style: TextStyle(
                                                 fontFamily:
                                                     MyIdenaAppTheme.fontName,
@@ -494,7 +496,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               fontFamily:
                                                   MyIdenaAppTheme.fontName,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               letterSpacing: -0.2,
                                               color: MyIdenaAppTheme.darkText,
                                             ),
@@ -504,7 +506,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                 const EdgeInsets.only(top: 4),
                                             child: Container(
                                               height: 4,
-                                              width: 100,
+                                              width: 90,
                                               decoration: BoxDecoration(
                                                 color: HexColor('#000000')
                                                     .withOpacity(0.2),
@@ -514,7 +516,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
-                                                    width: 100,
+                                                    width: 90,
                                                     height: 4,
                                                     decoration: BoxDecoration(
                                                       gradient: LinearGradient(
@@ -576,7 +578,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   fontFamily:
                                                       MyIdenaAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   letterSpacing: -0.2,
                                                   color:
                                                       MyIdenaAppTheme.darkText,
@@ -587,7 +589,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                     top: 4),
                                                 child: Container(
                                                   height: 4,
-                                                  width: 100,
+                                                  width: 90,
                                                   decoration: BoxDecoration(
                                                     color: HexColor('#000000')
                                                         .withOpacity(0.2),
@@ -599,7 +601,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 100,
+                                                        width: 90,
                                                         height: 4,
                                                         decoration:
                                                             BoxDecoration(
@@ -675,7 +677,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   fontFamily:
                                                       MyIdenaAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   letterSpacing: -0.2,
                                                   color:
                                                       MyIdenaAppTheme.darkText,
@@ -686,7 +688,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                     right: 0, top: 4),
                                                 child: Container(
                                                   height: 4,
-                                                  width: 100,
+                                                  width: 90,
                                                   decoration: BoxDecoration(
                                                     color: HexColor('#000000')
                                                         .withOpacity(0.2),
@@ -698,7 +700,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 100,
+                                                        width: 90,
                                                         height: 4,
                                                         decoration:
                                                             BoxDecoration(
@@ -768,7 +770,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               fontFamily:
                                                   MyIdenaAppTheme.fontName,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               letterSpacing: -0.2,
                                               color: MyIdenaAppTheme.darkText,
                                             ),
@@ -778,7 +780,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                 const EdgeInsets.only(top: 4),
                                             child: Container(
                                               height: 4,
-                                              width: 100,
+                                              width: 90,
                                               decoration: BoxDecoration(
                                                 color: HexColor('#000000')
                                                     .withOpacity(0.2),
@@ -788,7 +790,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               child: Row(
                                                 children: <Widget>[
                                                   Container(
-                                                    width: 100,
+                                                    width: 90,
                                                     height: 4,
                                                     decoration: BoxDecoration(
                                                       gradient: LinearGradient(
@@ -857,7 +859,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   fontFamily:
                                                       MyIdenaAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   letterSpacing: -0.2,
                                                   color:
                                                       MyIdenaAppTheme.darkText,
@@ -868,7 +870,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                     top: 4),
                                                 child: Container(
                                                   height: 4,
-                                                  width: 100,
+                                                  width: 90,
                                                   decoration: BoxDecoration(
                                                     color: HexColor('#000000')
                                                         .withOpacity(0.2),
@@ -880,7 +882,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 100,
+                                                        width: 90,
                                                         height: 4,
                                                         decoration:
                                                             BoxDecoration(
@@ -948,7 +950,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   fontFamily:
                                                       MyIdenaAppTheme.fontName,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   letterSpacing: -0.2,
                                                   color:
                                                       MyIdenaAppTheme.darkText,
@@ -959,7 +961,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                     right: 0, top: 4),
                                                 child: Container(
                                                   height: 4,
-                                                  width: 100,
+                                                  width: 90,
                                                   decoration: BoxDecoration(
                                                     color: HexColor('#000000')
                                                         .withOpacity(0.2),
@@ -971,7 +973,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 100,
+                                                        width: 90,
                                                         height: 4,
                                                         decoration:
                                                             BoxDecoration(

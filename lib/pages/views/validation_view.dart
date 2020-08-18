@@ -122,14 +122,13 @@ class _ValidationListViewState extends State<ValidationListView>
       builder: (BuildContext context, Widget child) {
         return Column(
           children: <Widget>[
-            SizedBox(height: 30),
             FadeTransition(
               opacity: widget.mainScreenAnimation,
               child: Transform(
                 transform: Matrix4.translationValues(
                     0.0, 30 * (1.0 - widget.mainScreenAnimation.value), 0.0),
                 child: Container(
-                  height: 350,
+                  height: MediaQuery.of(context).size.height - 300,
                   width: 1000,
                   child: ListView.builder(
                     padding: const EdgeInsets.only(
@@ -151,7 +150,6 @@ class _ValidationListViewState extends State<ValidationListView>
                         animation: animationController,
                         builder: (BuildContext context, Widget child) {
                           return FutureBuilder(
-                              // TODO: Short/Long
                               future: getValidationSessionInfo(
                                   dnaAll
                                       .dnaGetEpochResponse.result.currentPeriod,
@@ -187,6 +185,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                   MainAxisAlignment.center,
                                               children: <Widget>[
                                                 Container(
+                                                  height: ((MediaQuery.of(context).size.height - 340)).toDouble(),
                                                   decoration: selectionFlipList[
                                                               index] ==
                                                           AnswerType.LEFT
@@ -300,6 +299,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                   ],
                                                 )),
                                                 Container(
+                                                  height: ((MediaQuery.of(context).size.height - 340)).toDouble(),
                                                   decoration: selectionFlipList[
                                                               index] ==
                                                           AnswerType.RIGHT
@@ -400,7 +400,6 @@ class _ValidationListViewState extends State<ValidationListView>
                 ),
               ),
             ),
-            SizedBox(height: 10),
             Container(child: getChrono()),
             Container(child: getStartCheckingKeywordsButton()),
             Container(child: validationShortSessionButton()),

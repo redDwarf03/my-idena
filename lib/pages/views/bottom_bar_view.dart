@@ -151,7 +151,6 @@ class _BottomBarViewState extends State<BottomBarView>
                             parent: animationController,
                             curve: Curves.fastOutSlowIn)),
                     child: Container(
-                      // alignment: Alignment.center,s
                       decoration: BoxDecoration(
                         color: MyIdenaAppTheme.nearlyDarkBlue,
                         gradient: LinearGradient(

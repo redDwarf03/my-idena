@@ -63,7 +63,7 @@ class _TransactionsViewState extends State<TransactionsView> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 16, left: 16, right: 16),
+                                    top: 40, left: 0, right: 0),
                                 child: Row(
                                   children: <Widget>[
                                     Expanded(
