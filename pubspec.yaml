@@ -65,6 +65,8 @@ dependencies:
   introduction_screen: ^1.0.9
 
   logger: ^0.9.2
+
+  auto_size_text: ^2.1.0
   
 dev_dependencies:
   flutter_test:
@@ -92,6 +94,9 @@ flutter:
     - assets/images/
     - i18n/fr.json
     - i18n/en.json 
+    - i18n/cn-sc.json
+    - i18n/cn-tc.json
+    - i18n/ru.json
     - lib/utils/words.json
     - lib/beans/test/
     
