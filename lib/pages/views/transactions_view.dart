@@ -25,107 +25,100 @@ class _TransactionsViewState extends State<TransactionsView> {
   int nbTransactions = 30;
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (BuildContext context, Widget child) {
-        return FutureBuilder(
-            future: httpService.getDnaAll(),
-            builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-              if (snapshot.hasData) {
-                dnaAll = snapshot.data;
-                if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-                  return Text("");
-                } else {
-                  return FadeTransition(
-                    opacity: widget.animation,
-                    child: new Transform(
-                      transform: new Matrix4.translationValues(
-                          0.0, 30 * (1.0 - widget.animation.value), 0.0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, top: 16, bottom: 18),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: MyIdenaAppTheme.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.0),
-                                bottomLeft: Radius.circular(8.0),
-                                bottomRight: Radius.circular(8.0),
-                                topRight: Radius.circular(68.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: MyIdenaAppTheme.grey.withOpacity(0.2),
-                                  offset: Offset(1.1, 1.1),
-                                  blurRadius: 10.0),
-                            ],
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 40, left: 0, right: 0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8, right: 8, top: 4),
-                                        child: Column(
-                                          children: <Widget>[
-                                            FutureBuilder(
-                                              future:
-                                                  httpService.getTransactions(
-                                                      dnaAll.dnaIdentityResponse
-                                                          .result.address,
-                                                      nbTransactions),
-                                              builder: (context, snapshot) {
-                                                if (!snapshot.hasData)
-                                                  return Container();
-                                                BcnTransactionsResponse
-                                                    bcnTransactionsResponse =
-                                                    snapshot.data;
-                                                List<Transaction> transactions =
-                                                    bcnTransactionsResponse
-                                                        .result.transactions;
-                                                return new Container(
-                                                  height: 400,
-                                                  child: ListView.builder(
-                                                      physics:
-                                                          BouncingScrollPhysics(),
-                                                      itemCount:
-                                                          transactions.length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        Transaction
-                                                            transaction =
-                                                            transactions[index];
-                                                        return getTransactionDisplay(
-                                                            transaction);
-                                                      }),
-                                                );
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
+    return FutureBuilder(
+        future: httpService.getDnaAll(),
+        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+          if (snapshot.hasData) {
+            dnaAll = snapshot.data;
+            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
+              return Text("");
+            } else {
+              return FadeTransition(
+                opacity: widget.animation,
+                child: new Transform(
+                  transform: new Matrix4.translationValues(
+                      0.0, 30 * (1.0 - widget.animation.value), 0.0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 24, top: 16, bottom: 18),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: MyIdenaAppTheme.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0),
+                            topRight: Radius.circular(68.0)),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: MyIdenaAppTheme.grey.withOpacity(0.2),
+                              offset: Offset(1.1, 1.1),
+                              blurRadius: 10.0),
+                        ],
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 40, left: 0, right: 0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 4),
+                                    child: Column(
+                                      children: <Widget>[
+                                        FutureBuilder(
+                                          future: httpService.getTransactions(
+                                              dnaAll.dnaIdentityResponse.result
+                                                  .address,
+                                              nbTransactions),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData)
+                                              return Container();
+                                            BcnTransactionsResponse
+                                                bcnTransactionsResponse =
+                                                snapshot.data;
+                                            List<Transaction> transactions =
+                                                bcnTransactionsResponse
+                                                    .result.transactions;
+                                            return new Container(
+                                              height: 400,
+                                              child: ListView.builder(
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  itemCount:
+                                                      transactions.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    Transaction transaction =
+                                                        transactions[index];
+                                                    return getTransactionDisplay(
+                                                        transaction);
+                                                  }),
+                                            );
+                                          },
+                                        )
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  );
-                }
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            });
-      },
-    );
+                  ),
+                ),
+              );
+            }
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   Widget getImageTo(Transaction transaction) {
