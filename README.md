@@ -2,6 +2,8 @@
 
 Idena iOS and Android app based on Flutter framework .
 
+[![Build Status](https://travis-ci.com/https://travis-ci.com/redDwarf03/my-idena.svg?branch=master)](https://travis-ci.com/github/redDwarf03/my-idena)
+
 ## Configuration
 ##### for a Windows PC:
 * execute **idena-go.exe** with ``--rpcaddr {ip_address} --rpcport {port_number}`` (don't run the windows client application)
