@@ -76,6 +76,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           footer: Text(campaign,
               style: TextStyle(fontSize: 14.0, color: Colors.red)),
         ),
+        PageViewModel(
+          title: "Features since the last version",
+          body:
+              "20200817\n\n- Validation session (Short + Long without evaluation of flips). That's a simulation mode to check UI/UX !\n- Performances improvement\n- Display recent transactions\n- Display in low resolution ()",
+          image: Align(
+            child: Image.asset('assets/images/icon.png', width: 250.0),
+            alignment: Alignment.bottomCenter,
+          ),
+          decoration: pageDecoration,
+          footer: Text(campaign,
+              style: TextStyle(fontSize: 14.0, color: Colors.red)),
+        ),
       ],
       onDone: () => _onIntroEnd(context),
       //onSkip: () => _onIntroEnd(context), // You can override onSkip callback

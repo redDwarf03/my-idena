@@ -13,7 +13,7 @@ bool firstState = true;
 DnaAll dnaAll;
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
-String campaign = "{v20200818.1}";
+String campaign = "{v20200819.1}";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
