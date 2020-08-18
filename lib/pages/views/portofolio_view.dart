@@ -115,18 +115,13 @@ class PortofolioView extends StatelessWidget {
                                                             CrossAxisAlignment
                                                                 .end,
                                                         children: <Widget>[
-                                                          SizedBox(
-                                                            width: 28,
-                                                            height: 28,
-                                                            child: Image.asset(
-                                                                "assets/images/eaten.png"),
-                                                          ),
+                                                          Icon(Icons.credit_card, size: 20, color: Colors.blue[300].withOpacity(0.5),),
                                                           Padding(
                                                             padding:
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 4,
-                                                                    bottom: 3),
+                                                                    bottom: 1),
                                                             child: Text(
                                                               '${(double.parse(dnaAll.dnaGetBalanceResponse.result.balance) * animation.value).toDouble().toStringAsFixed(4)}',
                                                               textAlign:
@@ -150,7 +145,7 @@ class PortofolioView extends StatelessWidget {
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 4,
-                                                                    bottom: 3),
+                                                                    bottom: 2),
                                                             child: Text(
                                                               'iDNA',
                                                               textAlign:
@@ -231,18 +226,13 @@ class PortofolioView extends StatelessWidget {
                                                             CrossAxisAlignment
                                                                 .end,
                                                         children: <Widget>[
-                                                          SizedBox(
-                                                            width: 28,
-                                                            height: 28,
-                                                            child: Image.asset(
-                                                                "assets/images/burned.png"),
-                                                          ),
+                                                          Icon(Icons.https, size: 20, color: Colors.red[300].withOpacity(0.5),),
                                                           Padding(
                                                             padding:
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 4,
-                                                                    bottom: 3),
+                                                                    bottom: 1),
                                                             child: Text(
                                                               '${(double.parse(dnaAll.dnaGetBalanceResponse.result.stake) * animation.value).toDouble().toStringAsFixed(4)}',
                                                               textAlign:
@@ -266,7 +256,7 @@ class PortofolioView extends StatelessWidget {
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 8,
-                                                                    bottom: 3),
+                                                                    bottom: 2),
                                                             child: Text(
                                                               'iDNA',
                                                               textAlign:
