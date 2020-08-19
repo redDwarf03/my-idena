@@ -68,6 +68,8 @@ dependencies:
 
   auto_size_text: ^2.1.0
   
+  uni_links: ^0.4.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -98,7 +100,7 @@ flutter:
     - i18n/cn-tc.json
     - i18n/ru.json
     - lib/utils/words.json
-    - lib/beans/test/
+    - test/examples/
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
