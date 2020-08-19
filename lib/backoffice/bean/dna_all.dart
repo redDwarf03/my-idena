@@ -1,15 +1,16 @@
-import 'package:my_idena/beans/rpc/bcn_transactions_request.dart';
-import 'package:my_idena/beans/rpc/bcn_transactions_response.dart';
-import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_request.dart';
-import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
-import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
-import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
-import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
-import 'package:my_idena/beans/rpc/dna_getEpoch_request.dart';
-import 'package:my_idena/beans/rpc/dna_getEpoch_response.dart';
-import 'package:my_idena/beans/rpc/dna_identity_request.dart';
-import 'package:my_idena/beans/rpc/dna_identity_response.dart';
+
+import 'package:my_idena/backoffice/bean/bcn_transactions_request.dart';
+import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_request.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getBalance_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getBalance_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getCoinbaseAddr_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getCoinbaseAddr_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getEpoch_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getEpoch_response.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_request.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 
 class DnaAll {
     DnaAll({

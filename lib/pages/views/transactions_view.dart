@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_idena/beans/rpc/bcn_transactions_response.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
-import 'package:my_idena/beans/rpc/httpService.dart';
+import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/main.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';

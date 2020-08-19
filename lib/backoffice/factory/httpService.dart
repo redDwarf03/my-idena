@@ -1,31 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:my_idena/beans/rpc/bcn_transactions_request.dart';
-import 'package:my_idena/beans/rpc/bcn_transactions_response.dart';
+import 'package:my_idena/backoffice/bean/bcn_transactions_request.dart';
+import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/backoffice/bean/dna_becomOnline_response.dart';
+import 'package:my_idena/backoffice/bean/dna_becomeOffline_request.dart';
+import 'package:my_idena/backoffice/bean/dna_becomeOffline_response.dart';
+import 'package:my_idena/backoffice/bean/dna_becomeOnline_request.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_request.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getBalance_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getBalance_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getCoinbaseAddr_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getCoinbaseAddr_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getEpoch_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getEpoch_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getFlipRaw_request.dart';
+import 'package:my_idena/backoffice/bean/dna_getFlipRaw_response.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_request.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
+import 'package:my_idena/backoffice/bean/dna_sendTransaction_request.dart';
+import 'package:my_idena/backoffice/bean/dna_sendTransaction_response.dart';
 import 'package:my_idena/main.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
-import 'package:my_idena/beans/rpc/dna_becomOnline_response.dart';
-import 'package:my_idena/beans/rpc/dna_becomeOffline_request.dart';
-import 'package:my_idena/beans/rpc/dna_becomeOffline_response.dart';
-import 'package:my_idena/beans/rpc/dna_becomeOnline_request.dart';
-import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_request.dart';
-import 'package:my_idena/beans/rpc/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/beans/rpc/dna_getBalance_request.dart';
-import 'package:my_idena/beans/rpc/dna_getBalance_response.dart';
-import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_request.dart';
-import 'package:my_idena/beans/rpc/dna_getCoinbaseAddr_response.dart';
-import 'package:my_idena/beans/rpc/dna_getEpoch_request.dart';
-import 'package:my_idena/beans/rpc/dna_getEpoch_response.dart';
-import 'package:my_idena/beans/rpc/dna_getFlipRaw_request.dart';
-import 'package:my_idena/beans/rpc/dna_getFlipRaw_response.dart';
-import 'package:my_idena/beans/rpc/dna_identity_request.dart';
-import 'package:my_idena/beans/rpc/dna_identity_response.dart';
-import 'package:my_idena/beans/rpc/dna_sendTransaction_request.dart';
-import 'package:my_idena/beans/rpc/dna_sendTransaction_response.dart';
-import 'package:my_idena/beans/rpc/flip_get_request.dart';
-import 'package:my_idena/beans/rpc/flip_get_response.dart';
-import 'package:my_idena/beans/rpc/flip_shortHashes_request.dart';
-import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
 class HttpService {
@@ -43,8 +39,6 @@ class HttpService {
   DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
   DnaBecomeOfflineRequest dnaBecomeOfflineRequest;
   DnaBecomeOfflineResponse dnaBecomeOfflineResponse;
-  FlipShortHashesRequest flipShortHashesRequest;
-  FlipShortHashesResponse flipShortHashesResponse;
   DnaSendTransactionRequest dnaSendTransactionRequest;
   DnaSendTransactionResponse dnaSendTransactionResponse;
   BcnTransactionsRequest bcnTransactionsRequest;
@@ -83,26 +77,6 @@ class HttpService {
         dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponseFromJson(reply);
       }
 
-      // get Balance
-      HttpClientRequest request3 =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request3.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> mapGetBalance = {
-        'method': DnaGetBalanceRequest.METHOD_NAME,
-        'params': [dnaGetCoinbaseAddrResponse.result],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
-
-      dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapGetBalance);
-      request3.add(utf8.encode(json.encode(dnaGetBalanceRequest.toJson())));
-      response = await request3.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        dnaGetBalanceResponse = dnaGetBalanceResponseFromJson(reply);
-      }
-
       // get Identity
       HttpClientRequest request2 =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -121,6 +95,26 @@ class HttpService {
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
+
+      // get Balance
+      HttpClientRequest request3 =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request3.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetBalance = {
+        'method': DnaGetBalanceRequest.METHOD_NAME,
+        'params': [dnaIdentityResponse.result.address],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapGetBalance);
+      request3.add(utf8.encode(json.encode(dnaGetBalanceRequest.toJson())));
+      response = await request3.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaGetBalanceResponse = dnaGetBalanceResponseFromJson(reply);
+      }
 
         // get Epoch
         HttpClientRequest request4 =
@@ -244,125 +238,6 @@ class HttpService {
     return dnaBecomeOfflineResponse;
   }
 
-  Future<FlipShortHashesResponse> getFlipShortHashes() async {
-    try {
-      HttpClient httpClient = new HttpClient();
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
-      HttpClientRequest request =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> map = {
-        'method': FlipShortHashesRequest.METHOD_NAME,
-        "params": [],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
-
-      Map<String, dynamic> mapExemple = {
-        "jsonrpc": "2.0",
-        "id": 19,
-        "result": [
-          {
-            "hash":
-                "bafkreial55rw3dirdlrivcjsnnxaswfrloxuk4pbfssxbwhheqbo44crra",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreiasdvce4g2wlmkia5bmj27snlsa44imfeu2e5whg3r6rea57avmwa",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreiaxmbxoy3rystvl4hcfd46uvbxxqy4op7ivvixhqtf5fvk4vjijpq",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreidipdlvqzvguqpimwi5g72bu4kknrxczitsu2mrrod3ctazfynqem",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreiel3bwd35dq64zflh2oxxzh256kl57n2d4n5ezkl3eso7quollm5m",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreiawut3pf2vabvd46hapzvw3eu3kqobbbrryuknfl6hioyvk7winqi",
-            "ready": true,
-            "extra": false,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreif5z2aixv33ejz7uri4yqh22bmjehctbyhveveamvkiuoyirh6xp4",
-            "ready": true,
-            "extra": true,
-            "available": true
-          },
-          {
-            "hash":
-                "bafkreifscg22jobbbbkkfsv2on3tvqlkrujfkvtgnw7lxiimp6pbbj33n4",
-            "ready": true,
-            "extra": true,
-            "available": true
-          }
-        ]
-      };
-
-      flipShortHashesResponse = FlipShortHashesResponse.fromJson(mapExemple);
-      // TODO : simulate
-      /* flipShortHashesRequest =
-          FlipShortHashesRequest.fromJson(map);
-      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-      HttpClientResponse response = await request.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-
-       flipShortHashesResponse = flipShortHashesResponseFromJson(reply);
-      }*/
-      FlipGetResponse flipGetResponse;
-      for (int i = 0; i < flipShortHashesResponse.result.length; i++) {
-        // get Flip
-        HttpClientRequest request2 =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        request.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> map2 = {
-          'method': FlipGetRequest.METHOD_NAME,
-          'params': [flipShortHashesResponse.result[i].hash],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-
-        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(map2);
-        request2.add(utf8.encode(json.encode(flipGetRequest.toJson())));
-        HttpClientResponse response2 = await request2.close();
-        if (response2.statusCode == 200) {
-          String reply2 = await response2.transform(utf8.decoder).join();
-          flipGetResponse = flipGetResponseFromJson(reply2);
-        }
-      }
-    } catch (e) {
-      logger.e(e.toString());
-    } finally {}
-    return flipShortHashesResponse;
-  }
-
   Future<GetFlipRawResponse> getFlipRaw(String hash) async {
     GetFlipRawResponse getFlipRawResponse;
 
@@ -435,8 +310,8 @@ class HttpService {
     return dnaSendTransactionResponse;
   }
 
-
-  Future<BcnTransactionsResponse> getTransactions(String address, int count) async {
+  Future<BcnTransactionsResponse> getTransactions(
+      String address, int count) async {
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -449,27 +324,22 @@ class HttpService {
       Map<String, dynamic> map = {
         'method': BcnTransactionsRequest.METHOD_NAME,
         "params": [
-          {
-            "address": address,
-            "count" : count
-          }
-            ],
+          {"address": address, "count": count}
+        ],
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      bcnTransactionsRequest =
-          BcnTransactionsRequest.fromJson(map);
+      bcnTransactionsRequest = BcnTransactionsRequest.fromJson(map);
       request.add(utf8.encode(json.encode(bcnTransactionsRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
 
-       bcnTransactionsResponse = bcnTransactionsResponseFromJson(reply);
+        bcnTransactionsResponse = bcnTransactionsResponseFromJson(reply);
       }
     } catch (e) {
       logger.e(e.toString());
     } finally {}
     return bcnTransactionsResponse;
   }
-
 }

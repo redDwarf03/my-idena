@@ -2,8 +2,8 @@ import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/rpc/httpService.dart';
-import 'package:my_idena/beans/validation,_session_infos.dart';
+import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;

@@ -4,20 +4,19 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
+import 'package:my_idena/backoffice/bean/flip_get_request.dart';
+import 'package:my_idena/backoffice/bean/flip_get_response.dart';
+import 'package:my_idena/backoffice/bean/flip_longHashes_request.dart';
+import 'package:my_idena/backoffice/bean/flip_longHashes_response.dart';
+import 'package:my_idena/backoffice/bean/flip_shortHashes_request.dart';
+import 'package:my_idena/backoffice/bean/flip_shortHashes_response.dart';
+import 'package:my_idena/backoffice/bean/flip_submitLongAnswers_request.dart';
+import 'package:my_idena/backoffice/bean/flip_submitLongAnswers_response.dart';
+import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_request.dart';
+import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
+import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/main.dart';
-import 'package:my_idena/beans/rpc/flip_get_request.dart';
-import 'package:my_idena/beans/rpc/flip_get_response.dart';
-import 'package:my_idena/beans/rpc/flip_longHashes_request.dart';
-import 'package:my_idena/beans/rpc/flip_longHashes_response.dart';
-import 'package:my_idena/beans/rpc/flip_shortHashes_request.dart';
-import 'package:my_idena/beans/rpc/flip_shortHashes_response.dart';
-import 'package:my_idena/beans/rpc/flip_submitLongAnswers_request.dart';
-import 'package:my_idena/beans/rpc/flip_submitLongAnswers_response.dart';
-import 'package:my_idena/beans/rpc/flip_submitShortAnswers_request.dart';
-import 'package:my_idena/beans/rpc/flip_submitShortAnswers_response.dart';
-import 'package:my_idena/beans/rpc/flip_words_request.dart';
-import 'package:my_idena/beans/rpc/flip_words_response.dart';
-import 'package:my_idena/beans/test/flip_examples.dart';
+import 'file:///C:/SSe/app/my_idena/test/examples/flip_examples.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
@@ -260,15 +259,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
       String order4 =
           orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
-      logger.d(i.toString() +
-          " - flip 1: " +
-          order1 +
-          ', ' +
-          order2 +
-          ', ' +
-          order3 +
-          ', ' +
-          order4);
       validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
       validationSessionInfoFlips.listImagesLeft[0] =
           listImages[int.tryParse(order1) ?? 0];
@@ -284,15 +274,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
       order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
       order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
-      logger.d(i.toString() +
-          " - flip 2: " +
-          order1 +
-          ', ' +
-          order2 +
-          ', ' +
-          order3 +
-          ', ' +
-          order4);
       validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
       validationSessionInfoFlips.listImagesRight[0] =
           listImages[int.tryParse(order1) ?? 0];
