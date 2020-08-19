@@ -211,7 +211,7 @@ class _ProfileViewState extends State<ProfileView> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Text(
+            AutoSizeText(
               AppLocalizations.of(context)
                   .translate("Your current status doesn't allow you to mine."),
               style: TextStyle(
@@ -220,6 +220,7 @@ class _ProfileViewState extends State<ProfileView> {
                 fontSize: 13,
                 color: MyIdenaAppTheme.grey.withOpacity(0.5),
               ),
+            maxLines: 1,
             )
           ]);
     }
