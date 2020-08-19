@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
+import 'package:my_idena/backoffice/bean/flip_examples.dart';
 import 'package:my_idena/backoffice/bean/flip_get_request.dart';
 import 'package:my_idena/backoffice/bean/flip_get_response.dart';
 import 'package:my_idena/backoffice/bean/flip_longHashes_request.dart';
@@ -16,13 +17,11 @@ import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_request.dart';
 import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/main.dart';
-import 'file:///C:/SSe/app/my_idena/test/examples/flip_examples.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:shared_preferences/shared_preferences.dart';
-
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
