@@ -1,4 +1,5 @@
-import 'package:my_idena/beans/rpc/dna_all.dart';
+
+import 'package:my_idena/backoffice/bean/dna_all.dart';
 
 const int NB_MAX_FLIPKEYWORDPAIRS = 9;
 

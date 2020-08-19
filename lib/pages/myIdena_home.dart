@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/rpc/dna_all.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
