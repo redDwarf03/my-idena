@@ -3,7 +3,7 @@
 Idena iOS and Android app based on Flutter framework .
 
 [![Build Status](https://travis-ci.com/redDwarf03/my-idena.svg?branch=master)](https://travis-ci.com/redDwarf03/my-idena)
-[![Github Releases (by Release)](https://img.shields.io/github/downloads/redDwarf03/StrapDown.js/v1.0.0/total.svg)](https://GitHub.com/redDwarf03/StrapDown.js/releases/)
+[![Github Releases (by Release)](https://img.shields.io/github/downloads/redDwarf03/StrapDown.js/20200819.1/total.svg)](https://GitHub.com/redDwarf03/StrapDown.js/releases/)
 
 ## Configuration
 ##### for a Windows PC:
