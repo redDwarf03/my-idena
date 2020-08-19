@@ -16,6 +16,7 @@ DnaAll dnaAll;
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
 String campaign = "{v20200819.1}";
+bool checkFlipsQualityProcess = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

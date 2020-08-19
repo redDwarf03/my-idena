@@ -15,6 +15,7 @@ import 'package:my_idena/backoffice/bean/flip_submitLongAnswers_request.dart';
 import 'package:my_idena/backoffice/bean/flip_submitLongAnswers_response.dart';
 import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_request.dart';
 import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
+import 'package:my_idena/backoffice/bean/flip_words_request.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
@@ -22,6 +23,7 @@ import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:shared_preferences/shared_preferences.dart';
+
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
@@ -284,10 +286,22 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           listImages[int.tryParse(order4) ?? 0];
 
       // get Words
-      /*if (simulationMode) {
-        String data =
-            await loadAssets(flipShortHashesResponse.result[i].hash + "_words");
-        flipWordsResponse = flipWordsResponseFromJson(data);
+      if (simulationMode) {
+        try {
+          String data = await loadAssets(
+              flipShortHashesResponse.result[i].hash + "_words");
+          flipWordsResponse = flipWordsResponseFromJson(data);
+        } catch (e) {
+          Map<String, dynamic> mapWords = {
+            "jsonrpc": "2.0",
+            "id": 51,
+            "result": {
+              "words": [0, 0]
+            }
+          };
+          flipWordsResponse =
+              FlipWordsResponse.fromJson(mapWords);
+        }
       } else {
         HttpClientRequest requestWords =
             await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -312,7 +326,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         listWords[j] = flipWordsResponse.result.words[j];
       }
       validationSessionInfoFlips.listWords = listWords;
-    */
+
       listSessionValidationFlip[i] = validationSessionInfoFlips;
     }
 
