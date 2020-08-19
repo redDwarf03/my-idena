@@ -1,10 +1,10 @@
-import 'package:my_idena/pages/screens/home_screen.dart';
-import 'package:my_idena/pages/screens/validation_session_screen.dart';
-
+import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
 import 'package:my_idena/main.dart';
+import 'package:my_idena/pages/screens/home_screen.dart';
+import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
@@ -451,19 +451,15 @@ class _ValidationListViewState extends State<ValidationListView>
                                   onPressed: () {
                                     submitLongAnswers(selectionFlipList,
                                         validationSessionInfo);
-                                    // TODO
 
                                     typeLaunchSession =
                                         EpochPeriod.ShortSession;
+                                    validationSessionInfo = null;
                                     Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                          builder: (BuildContext context) =>
-                                              HomeScreen(
-                                                  animationController:
-                                                      animationController),
-                                          fullscreenDialog: false),
-                                    );
+                                        context,
+                                        MaterialPageRoute<dynamic>(
+                                            builder: (BuildContext context) =>
+                                                Home()));
                                   },
                                   padding: EdgeInsets.all(5.0),
                                   shape: RoundedRectangleBorder(
@@ -525,15 +521,15 @@ class _ValidationListViewState extends State<ValidationListView>
           RaisedButton(
             elevation: 5.0,
             onPressed: () {
+              submitShortAnswers(selectionFlipList, validationSessionInfo);
               typeLaunchSession = EpochPeriod.LongSession;
               validationSessionInfo = null;
               Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) => ValidationSessionScreen(
                         animationController: animationController),
-                    fullscreenDialog: false),
-              );
+                  ));
             },
             padding: EdgeInsets.all(5.0),
             shape: RoundedRectangleBorder(
@@ -558,18 +554,34 @@ class _ValidationListViewState extends State<ValidationListView>
   }
 
   Widget getChrono() {
-    /*controllerChrono.addStatusListener((status) {
+    controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.ShortSession) {
-          launchLongSession = true;
-          setState(() {
-          ValidationSessionScreen(animationController: animationController);
-            
-          });
+          submitShortAnswers(selectionFlipList, validationSessionInfo);
+          typeLaunchSession = EpochPeriod.LongSession;
+          validationSessionInfo = null;
+          Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => ValidationSessionScreen(
+                    animationController: animationController),
+              ));
+        }
+        if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+            EpochPeriod.LongSession) {
+          submitLongAnswers(selectionFlipList, validationSessionInfo);
+          typeLaunchSession = EpochPeriod.ShortSession;
+          validationSessionInfo = null;
+          Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) =>
+                    HomeScreen(animationController: animationController),
+              ));
         }
       }
-    });*/
+    });
     controllerChrono.reverse(
         from: controllerChrono.value == 0.0 ? 1.0 : controllerChrono.value);
 
