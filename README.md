@@ -22,4 +22,4 @@ Idena iOS and Android app based on Flutter framework .
 
 ## Help
 
-Consider supporting my-idena by donating to **0x72563cb949bd0167acfff47b5865fe30e1960e70**
+Consider supporting my-idena by donating to **0xf429e36d68be10428d730784391589572ee0f72b**
