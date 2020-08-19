@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:my_idena/pages/screens/on_boarding_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:logger/logger.dart';
+import 'package:uni_links/uni_links.dart';
 
 bool firstState = true;
 DnaAll dnaAll;
@@ -23,7 +25,12 @@ void main() async {
   ]).then((_) => runApp(MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -54,8 +61,23 @@ class MyApp extends StatelessWidget {
         textTheme: MyIdenaAppTheme.textTheme,
         platform: TargetPlatform.iOS,
       ),
-      home: OnBoardingScreen(),
-    );
+          home: StreamBuilder(
+            stream: getLinksStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                // our app started by configured links
+                var uri = Uri.parse(snapshot.data);
+                var list = uri.queryParametersAll.entries
+                    .toList(); // we retrieve all query parameters , tzd://genius-team.com?product_id=1
+
+                return Text(list.map((f) => f.toString()).join('-'));
+                // we just print all //parameters but you can now do whatever you want, for example open //product details page.
+              } else {
+                // our app started normally
+                return OnBoardingScreen();
+              }
+            },
+          )    );
   }
 }
 
