@@ -327,7 +327,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
 Future<String> loadAssets(String fileName) async {
   try {
-    return await rootBundle.loadString('lib/beans/test/' + fileName + '.json');
+    return await rootBundle.loadString('test/examples/' + fileName + '.json');
   } catch (e) {
     logger.e(e.toString());
   } finally {}
@@ -335,6 +335,9 @@ Future<String> loadAssets(String fileName) async {
 
 Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     List selectionFlipList, ValidationSessionInfo validationSessionInfo) async {
+  if (validationSessionInfo == null) {
+    return null;
+  }
   FlipSubmitShortAnswersRequest flipSubmitShortAnswersRequest =
       new FlipSubmitShortAnswersRequest();
   FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
@@ -350,9 +353,7 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
     ParamShortAnswer answers = new ParamShortAnswer();
     List<ShortAnswer> listAnswers = new List();
-    for (int i = 0;
-        i < validationSessionInfo.listSessionValidationFlip.length;
-        i++) {
+    for (int i = 0; i < selectionFlipList.length; i++) {
       ShortAnswer answer = new ShortAnswer(
           answer: selectionFlipList[i],
           easy: false,
@@ -377,6 +378,7 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
+      print(reply);
       flipSubmitShortAnswersResponse =
           flipSubmitShortAnswersResponseFromJson(reply);
     }
@@ -388,6 +390,9 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
 Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
     List selectionFlipList, ValidationSessionInfo validationSessionInfo) async {
+  if (validationSessionInfo == null) {
+    return null;
+  }
   FlipSubmitLongAnswersRequest flipSubmitLongAnswersRequest =
       new FlipSubmitLongAnswersRequest();
   FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponse;
@@ -403,9 +408,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
 
     ParamLongAnswer answers = new ParamLongAnswer();
     List<LongAnswer> listAnswers = new List();
-    for (int i = 0;
-        i < validationSessionInfo.listSessionValidationFlip.length;
-        i++) {
+    for (int i = 0; i < selectionFlipList.length; i++) {
       if (selectionFlipList[i] != null) {
         LongAnswer answer = new LongAnswer(
             answer: selectionFlipList[i],
@@ -432,6 +435,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
+      print(reply);
       flipSubmitLongAnswersResponse =
           flipSubmitLongAnswersResponseFromJson(reply);
     }

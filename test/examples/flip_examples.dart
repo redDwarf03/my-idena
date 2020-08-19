@@ -370,14 +370,14 @@ class FlipExamples {
             },
             {
               "hash":
-                  "bafkreigxok3c63h437dhs4eutvlpt2a6zcpyq5bdcpf4twnacbmoook3sq",
+                  "2",
               "ready": true,
               "extra": false,
               "available": true
             },
             {
               "hash":
-                  "bafkreig3baxejs6cr6htjjzs4xilgsmr3hhsfdbb3oop55sxscpgomimhe",
+                  "1",
               "ready": true,
               "extra": false,
               "available": true
