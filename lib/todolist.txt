@@ -4,4 +4,3 @@
 - attente on/off minage
 - vérifier que le tel est à l'heure
 - format date
-- perf : voir dnaall

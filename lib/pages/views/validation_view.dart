@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 int nbFlips;
+List selectionFlipList = new List();
+int controllerChronoValue;
 
 class ValidationListView extends StatefulWidget {
   const ValidationListView(
@@ -37,7 +39,6 @@ class _ValidationListViewState extends State<ValidationListView>
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
-  List selectionFlipList = new List();
   int index = 0;
 
   SharedPreferences sharedPreferences;
@@ -70,6 +71,7 @@ class _ValidationListViewState extends State<ValidationListView>
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.ShortSession) {
       nbFlips = 5;
+      checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
@@ -79,15 +81,24 @@ class _ValidationListViewState extends State<ValidationListView>
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
       nbFlips = 18;
-      controllerChrono = AnimationController(
-          vsync: this,
-          duration: Duration(
-              seconds: dnaAll
-                  .dnaCeremonyIntervalsResponse.result.longSessionDuration));
+      if (checkFlipsQualityProcess == false) {
+        controllerChrono = AnimationController(
+            vsync: this,
+            duration: Duration(
+                seconds: dnaAll
+                    .dnaCeremonyIntervalsResponse.result.longSessionDuration));
+      } else {
+        controllerChrono = AnimationController(
+            vsync: this,
+            duration: Duration(seconds: controllerChronoValue));
+      }
     }
 
-    for (int i = 0; i < nbFlips; i++) {
-      selectionFlipList.add(AnswerType.NONE);
+    if (checkFlipsQualityProcess == false) {
+      selectionFlipList = new List();
+      for (int i = 0; i < nbFlips; i++) {
+        selectionFlipList.add(AnswerType.NONE);
+      }
     }
   }
 
@@ -372,9 +383,11 @@ class _ValidationListViewState extends State<ValidationListView>
                                       }),
                                 )),
                           ),
+                          Container(child: checkFlipsQuality()),
                           Container(child: getChrono()),
                           Container(child: getStartCheckingKeywordsButton()),
                           Container(child: validationShortSessionButton()),
+                          Container(child: validationLongSessionButton()),
                         ],
                       );
                     });
@@ -386,9 +399,20 @@ class _ValidationListViewState extends State<ValidationListView>
         });
   }
 
+  Widget checkFlipsQuality() {
+    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+            EpochPeriod.LongSession &&
+        checkFlipsQualityProcess) {
+      return Text("Flips Quality Process... soon...");
+    } else {
+      return SizedBox();
+    }
+  }
+
   Widget getStartCheckingKeywordsButton() {
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-        EpochPeriod.LongSession) {
+            EpochPeriod.LongSession &&
+        checkFlipsQualityProcess == false) {
       for (int i = 0; i < selectionFlipList.length; i++) {
         if (selectionFlipList[i] == AnswerType.NONE) {
           return SizedBox();
@@ -449,17 +473,17 @@ class _ValidationListViewState extends State<ValidationListView>
                                 RaisedButton(
                                   elevation: 5.0,
                                   onPressed: () {
-                                    submitLongAnswers(selectionFlipList,
-                                        validationSessionInfo);
-
-                                    typeLaunchSession =
-                                        EpochPeriod.ShortSession;
-                                    validationSessionInfo = null;
+                                    checkFlipsQualityProcess = true;
+                                    Duration durationChrono = controllerChrono.duration * controllerChrono.value;
+                                    controllerChronoValue = durationChrono.inSeconds;
                                     Navigator.push<dynamic>(
                                         context,
                                         MaterialPageRoute<dynamic>(
-                                            builder: (BuildContext context) =>
-                                                Home()));
+                                          builder: (BuildContext context) =>
+                                              ValidationSessionScreen(
+                                                  animationController:
+                                                      animationController),
+                                        ));
                                   },
                                   padding: EdgeInsets.all(5.0),
                                   shape: RoundedRectangleBorder(
@@ -521,9 +545,10 @@ class _ValidationListViewState extends State<ValidationListView>
           RaisedButton(
             elevation: 5.0,
             onPressed: () {
-              submitShortAnswers(selectionFlipList, validationSessionInfo);
+              //submitShortAnswers(selectionFlipList, validationSessionInfo);
               typeLaunchSession = EpochPeriod.LongSession;
               validationSessionInfo = null;
+              checkFlipsQualityProcess = false;
               Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
@@ -553,14 +578,110 @@ class _ValidationListViewState extends State<ValidationListView>
     }
   }
 
+  Widget validationLongSessionButton() {
+    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+            EpochPeriod.LongSession &&
+        checkFlipsQualityProcess) {
+      for (int i = 0; i < selectionFlipList.length; i++) {
+        if (selectionFlipList[i] == AnswerType.NONE) {
+          return SizedBox();
+        }
+      }
+
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          RaisedButton(
+            elevation: 5.0,
+            onPressed: () {
+              checkFlipsQualityProcess = false;
+              //submitLongAnswers(selectionFlipList, validationSessionInfo);
+              typeLaunchSession = EpochPeriod.ShortSession;
+              validationSessionInfo = null;
+              showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                        contentPadding: EdgeInsets.zero,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  AppLocalizations.of(context).translate(
+                                      "Your answers for the validation session have been submitted successfully!"),
+                                  style: TextStyle(
+                                      fontFamily: MyIdenaAppTheme.fontName,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      letterSpacing: -0.1,
+                                      color: MyIdenaAppTheme.darkText),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                RaisedButton(
+                                  elevation: 5.0,
+                                  onPressed: () {
+                                    Navigator.push<dynamic>(
+                                        context,
+                                        MaterialPageRoute<dynamic>(
+                                            builder: (BuildContext context) =>
+                                                Home()));
+                                  },
+                                  padding: EdgeInsets.all(5.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  color: Colors.white,
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Go to home"),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        letterSpacing: 1.5,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: MyIdenaAppTheme.fontName,
+                                      )),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ));
+            },
+            padding: EdgeInsets.all(5.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.white,
+            child:
+                Text(AppLocalizations.of(context).translate("Submit answers"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      letterSpacing: 1.5,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                    )),
+          ),
+        ],
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
   Widget getChrono() {
     controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.ShortSession) {
-          submitShortAnswers(selectionFlipList, validationSessionInfo);
+          //submitShortAnswers(selectionFlipList, validationSessionInfo);
           typeLaunchSession = EpochPeriod.LongSession;
           validationSessionInfo = null;
+          checkFlipsQualityProcess = false;
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
@@ -570,9 +691,10 @@ class _ValidationListViewState extends State<ValidationListView>
         }
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
-          submitLongAnswers(selectionFlipList, validationSessionInfo);
+          //submitLongAnswers(selectionFlipList, validationSessionInfo);
           typeLaunchSession = EpochPeriod.ShortSession;
           validationSessionInfo = null;
+          checkFlipsQualityProcess = false;
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
