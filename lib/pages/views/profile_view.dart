@@ -220,7 +220,7 @@ class _ProfileViewState extends State<ProfileView> {
                 fontSize: 13,
                 color: MyIdenaAppTheme.grey.withOpacity(0.5),
               ),
-            maxLines: 1,
+              maxLines: 1,
             )
           ]);
     }
@@ -281,7 +281,8 @@ class _ProfileViewState extends State<ProfileView> {
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 8, top: 16),
                                         child: Text(
-                                          'Mining',
+                                          AppLocalizations.of(context)
+                                              .translate("Mining"),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily:
