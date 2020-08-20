@@ -26,9 +26,11 @@ Consider supporting my-idena by donating to **0xf429e36d68be10428d73078439158957
 ## Tested with
 |OS   |Model   | Resolution  |
 | :------------ | :------------ | ------------: |
+| Android 5 (Lollipop)| Nexus 5 | 1080x1920 |
 | Android 6.0.1 (Marshmallow) | Samsung Galaxy Note 4 | 1440x2560  |
 | Android 7 (Nougat) | Nexus 4 |  786x1280 |
 | Android 8.1 (Oréo) | Huawei P20 Pro |  1080x2240 |
 | Android 9 (Pie) | Pixel 2 | 1080x1920 |
 | Android 10 | Galaxy A40 | 1080x2340 |
+| Android 10+ | Pixel XL | 1440x2560 |
 
