@@ -486,7 +486,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 16),
+                                      left: 10, right: 10, top: 8, bottom: 16),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
@@ -779,7 +779,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 16),
+                                      left: 10, right: 10, top: 8, bottom: 16),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
