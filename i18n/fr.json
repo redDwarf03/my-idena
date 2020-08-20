@@ -86,7 +86,10 @@
   "Sent": "Envoyé",
   "Fees: ": "Frais: ",
   "Go to home": "Retourner à l'accueil",
-  "Check flips quality": "Vérification de la qualité des flips"
+  "Check flips quality": "Vérification de la qualité des flips",
+  "Are both keywords relevant to the flip ?": "Les mots clés sont-ils pertinents pour le flip ?",
+  "Both relevant": "Pertinent",
+  "Irrelevant": "Pas pertinent"
 
 
   }

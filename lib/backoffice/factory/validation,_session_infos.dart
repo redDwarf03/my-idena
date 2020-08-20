@@ -19,6 +19,7 @@ import 'package:my_idena/backoffice/bean/flip_words_request.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
@@ -369,7 +370,6 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     for (int i = 0; i < selectionFlipList.length; i++) {
       ShortAnswer answer = new ShortAnswer(
           answer: selectionFlipList[i],
-          easy: false,
           hash: validationSessionInfo.listSessionValidationFlip[i].hash);
       listAnswers.add(answer);
     }
@@ -402,14 +402,14 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 }
 
 Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
-    List selectionFlipList, ValidationSessionInfo validationSessionInfo) async {
+    List selectionFlipList, List relevantFlipList, ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
   }
   FlipSubmitLongAnswersRequest flipSubmitLongAnswersRequest =
       new FlipSubmitLongAnswersRequest();
   FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponse;
-
+  bool wrongWordsBool;
   try {
     HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
@@ -423,9 +423,14 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
     List<LongAnswer> listAnswers = new List();
     for (int i = 0; i < selectionFlipList.length; i++) {
       if (selectionFlipList[i] != null) {
+        wrongWordsBool = true;
+        if(relevantFlipList[i] != null && relevantFlipList[i] == RelevantType.IRRELEVANT)
+        {
+          wrongWordsBool = false;
+        }
         LongAnswer answer = new LongAnswer(
             answer: selectionFlipList[i],
-            easy: false,
+            wrongWords: wrongWordsBool,
             hash: validationSessionInfo.listSessionValidationFlip[i].hash);
         listAnswers.add(answer);
       }

@@ -8,6 +8,7 @@ import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
+import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,7 @@ HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 int nbFlips;
 List selectionFlipList = new List();
+List relevantFlipList = new List();
 int controllerChronoValue;
 
 class ValidationListView extends StatefulWidget {
@@ -89,8 +91,7 @@ class _ValidationListViewState extends State<ValidationListView>
                     .dnaCeremonyIntervalsResponse.result.longSessionDuration));
       } else {
         controllerChrono = AnimationController(
-            vsync: this,
-            duration: Duration(seconds: controllerChronoValue));
+            vsync: this, duration: Duration(seconds: controllerChronoValue));
       }
     }
 
@@ -98,6 +99,10 @@ class _ValidationListViewState extends State<ValidationListView>
       selectionFlipList = new List();
       for (int i = 0; i < nbFlips; i++) {
         selectionFlipList.add(AnswerType.NONE);
+      }
+    } else {
+      for (int i = 0; i < nbFlips; i++) {
+        relevantFlipList.add(RelevantType.RELEVANT);
       }
     }
   }
@@ -131,264 +136,257 @@ class _ValidationListViewState extends State<ValidationListView>
                 return AnimatedBuilder(
                     animation: widget.mainScreenAnimationController,
                     builder: (BuildContext context, Widget child) {
-                      return Column(
-                        children: <Widget>[
-                          FadeTransition(
-                            opacity: widget.mainScreenAnimation,
-                            child: Transform(
-                                transform: Matrix4.translationValues(
-                                    0.0,
-                                    30 *
-                                        (1.0 -
-                                            widget.mainScreenAnimation.value),
-                                    0.0),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height - 300,
-                                  width: 1000,
-                                  child: ListView.builder(
-                                      padding: const EdgeInsets.only(
-                                          top: 0,
-                                          bottom: 0,
-                                          right: 16,
-                                          left: 16),
-                                      itemCount: selectionFlipList.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final int count =
-                                            selectionFlipList.length > 25
-                                                ? 30
-                                                : selectionFlipList.length;
-                                        final Animation<double> animation =
-                                            Tween<double>(begin: 0.0, end: 1.0)
-                                                .animate(CurvedAnimation(
-                                                    parent: animationController,
-                                                    curve: Interval(
-                                                        (1 / count) * index,
-                                                        1.0,
-                                                        curve: Curves
-                                                            .fastOutSlowIn)));
-                                        animationController.forward();
-                                        return AnimatedBuilder(
-                                            animation: animationController,
-                                            builder: (BuildContext context,
-                                                Widget child) {
-                                              return FadeTransition(
-                                                  opacity: animation,
-                                                  child: Transform(
-                                                    transform: Matrix4
-                                                        .translationValues(
-                                                            100 *
-                                                                (1.0 -
-                                                                    animation
-                                                                        .value),
-                                                            0.0,
-                                                            0.0),
-                                                    child: SizedBox(
-                                                      width: 400,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            height: ((MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height -
-                                                                    340))
-                                                                .toDouble(),
-                                                            decoration: selectionFlipList[
-                                                                        index] ==
-                                                                    AnswerType
-                                                                        .LEFT
-                                                                ? new BoxDecoration(
-                                                                    color: Colors
-                                                                        .green,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10.0),
-                                                                    border: new Border.all(
-                                                                        color: Colors
-                                                                            .green,
-                                                                        width:
-                                                                            5))
-                                                                : new BoxDecoration(
-                                                                    border: new Border.all(
-                                                                        color: Color.fromRGBO(
-                                                                            255,
-                                                                            255,
-                                                                            255,
-                                                                            0),
-                                                                        width:
-                                                                            5)),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  selectionFlipList[
-                                                                          index] =
-                                                                      AnswerType
-                                                                          .LEFT;
-                                                                });
-                                                              },
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesLeft[
-                                                                              0]),
+                      return Container(
+                        child: Row(
+                          children: [
+                            getThumbnails(),
+                            Column(
+                              children: <Widget>[
+                                FadeTransition(
+                                  opacity: widget.mainScreenAnimation,
+                                  child: Transform(
+                                      transform: Matrix4.translationValues(
+                                          0.0,
+                                          30 *
+                                              (1.0 -
+                                                  widget.mainScreenAnimation
+                                                      .value),
+                                          0.0),
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height -
+                                                300,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                30,
+                                        child: ListView.builder(
+                                            padding: const EdgeInsets.only(
+                                                top: 0,
+                                                bottom: 0,
+                                                right: 16,
+                                                left: 16),
+                                            itemCount: selectionFlipList.length,
+                                            physics: BouncingScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final int count =
+                                                  selectionFlipList.length > 25
+                                                      ? 30
+                                                      : selectionFlipList
+                                                          .length;
+                                              final Animation<
+                                                  double> animation = Tween<
+                                                          double>(
+                                                      begin: 0.0, end: 1.0)
+                                                  .animate(CurvedAnimation(
+                                                      parent:
+                                                          animationController,
+                                                      curve: Interval(
+                                                          (1 / count) * index,
+                                                          1.0,
+                                                          curve: Curves
+                                                              .fastOutSlowIn)));
+                                              animationController.forward();
+                                              return AnimatedBuilder(
+                                                  animation:
+                                                      animationController,
+                                                  builder:
+                                                      (BuildContext context,
+                                                          Widget child) {
+                                                    return FadeTransition(
+                                                        opacity: animation,
+                                                        child: Transform(
+                                                          transform: Matrix4
+                                                              .translationValues(
+                                                                  100 *
+                                                                      (1.0 -
+                                                                          animation
+                                                                              .value),
+                                                                  0.0,
+                                                                  0.0),
+                                                          child: SizedBox(
+                                                            width: 400,
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Container(
+                                                                      height: ((MediaQuery.of(context).size.height -
+                                                                              340))
+                                                                          .toDouble(),
+                                                                      decoration: selectionFlipList[index] ==
+                                                                              AnswerType
+                                                                                  .LEFT
+                                                                          ? new BoxDecoration(
+                                                                              color: Colors.green,
+                                                                              borderRadius: BorderRadius.circular(10.0),
+                                                                              border: new Border.all(color: Colors.green, width: 5))
+                                                                          : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+                                                                      child:
+                                                                          GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            selectionFlipList[index] =
+                                                                                AnswerType.LEFT;
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                        child:
+                                                                            Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        CircleAvatar(
+                                                                          radius:
+                                                                              30,
+                                                                          child:
+                                                                              Text(
+                                                                            (index + 1).toString() +
+                                                                                "/" +
+                                                                                nbFlips.toString(),
+                                                                            style: TextStyle(
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
+                                                                                fontWeight: FontWeight.w500,
+                                                                                fontSize: 20,
+                                                                                letterSpacing: -0.1,
+                                                                                color: MyIdenaAppTheme.darkText),
+                                                                          ),
+                                                                          foregroundColor:
+                                                                              Colors.red,
+                                                                        )
+                                                                      ],
+                                                                    )),
+                                                                    Container(
+                                                                      height: ((MediaQuery.of(context).size.height -
+                                                                              340))
+                                                                          .toDouble(),
+                                                                      decoration: selectionFlipList[index] ==
+                                                                              AnswerType
+                                                                                  .RIGHT
+                                                                          ? new BoxDecoration(
+                                                                              color: Colors.green,
+                                                                              borderRadius: BorderRadius.circular(10.0),
+                                                                              border: new Border.all(color: Colors.green, width: 5))
+                                                                          : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+                                                                      child:
+                                                                          GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            selectionFlipList[index] =
+                                                                                AnswerType.RIGHT;
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                            Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                getWords(
+                                                                    listSessionValidationFlip[index]
+                                                                            .listWords[
+                                                                        0],
+                                                                    listSessionValidationFlip[
+                                                                            index]
+                                                                        .listWords[1],
+                                                                    index),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 5,
+                                                                      bottom:
+                                                                          15),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 4,
+                                                                    width: 300,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: HexColor(
+                                                                              '#000000')
+                                                                          .withOpacity(
+                                                                              0.2),
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(4.0)),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Container(
+                                                                          width:
+                                                                              300,
                                                                           height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesLeft[
-                                                                              1]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesLeft[
-                                                                              2]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesLeft[
-                                                                              3]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                ],
-                                                              ),
+                                                                              4,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            gradient:
+                                                                                LinearGradient(colors: [
+                                                                              HexColor('#000000').withOpacity(0.1),
+                                                                              HexColor('#000000'),
+                                                                            ]),
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(4.0)),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
-                                                          Container(
-                                                              child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              CircleAvatar(
-                                                                radius: 30,
-                                                                child: Text(
-                                                                  (index + 1)
-                                                                          .toString() +
-                                                                      "/" +
-                                                                      nbFlips
-                                                                          .toString(),
-                                                                  style: TextStyle(
-                                                                      fontFamily: MyIdenaAppTheme
-                                                                          .fontName,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontSize:
-                                                                          20,
-                                                                      letterSpacing:
-                                                                          -0.1,
-                                                                      color: MyIdenaAppTheme
-                                                                          .darkText),
-                                                                ),
-                                                                foregroundColor:
-                                                                    Colors.red,
-                                                              )
-                                                            ],
-                                                          )),
-                                                          Container(
-                                                            height: ((MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height -
-                                                                    340))
-                                                                .toDouble(),
-                                                            decoration: selectionFlipList[
-                                                                        index] ==
-                                                                    AnswerType
-                                                                        .RIGHT
-                                                                ? new BoxDecoration(
-                                                                    color: Colors
-                                                                        .green,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10.0),
-                                                                    border: new Border.all(
-                                                                        color: Colors
-                                                                            .green,
-                                                                        width:
-                                                                            5))
-                                                                : new BoxDecoration(
-                                                                    border: new Border.all(
-                                                                        color: Color.fromRGBO(
-                                                                            255,
-                                                                            255,
-                                                                            255,
-                                                                            0),
-                                                                        width:
-                                                                            5)),
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  selectionFlipList[
-                                                                          index] =
-                                                                      AnswerType
-                                                                          .RIGHT;
-                                                                });
-                                                              },
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesRight[
-                                                                              0]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesRight[
-                                                                              1]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesRight[
-                                                                              2]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                  Image(
-                                                                      image: ResizeImage(
-                                                                          MemoryImage(listSessionValidationFlip[index].listImagesRight[
-                                                                              3]),
-                                                                          height:
-                                                                              ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ));
-                                            });
-                                      }),
-                                )),
-                          ),
-                          Container(child: checkFlipsQuality()),
-                          Container(child: getChrono()),
-                          Container(child: getStartCheckingKeywordsButton()),
-                          Container(child: validationShortSessionButton()),
-                          Container(child: validationLongSessionButton()),
-                        ],
+                                                        ));
+                                                  });
+                                            }),
+                                      )),
+                                ),
+                                Container(child: getChrono()),
+                                Container(
+                                    child: getStartCheckingKeywordsButton()),
+                                Container(
+                                    child: validationShortSessionButton()),
+                                Container(child: validationLongSessionButton()),
+                              ],
+                            )
+                          ],
+                        ),
                       );
                     });
               }
@@ -399,14 +397,143 @@ class _ValidationListViewState extends State<ValidationListView>
         });
   }
 
-  Widget checkFlipsQuality() {
+  Widget getWords(int word1, int word2, int index) {
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession &&
         checkFlipsQualityProcess) {
-      return Text("Flips Quality Process... soon...");
+      return Padding(
+        padding: const EdgeInsets.only(left: 0, right: 0, top: 15, bottom: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate(
+                          "Are both keywords relevant to the flip ?"),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          "Glasses",
+                          style: TextStyle(
+                              fontFamily: MyIdenaAppTheme.fontName,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              letterSpacing: -0.1,
+                              color: MyIdenaAppTheme.darkText),
+                        ),
+                        Text(": "),
+                        Text("eyeglasses, spectacles"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Bang",
+                          style: TextStyle(
+                              fontFamily: MyIdenaAppTheme.fontName,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              letterSpacing: -0.1,
+                              color: MyIdenaAppTheme.darkText),
+                        ),
+                        Text(": "),
+                        Text("clap, eruption, blast, bam"),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RaisedButton(
+                            elevation: 5.0,
+                            onPressed: () {
+                              relevantFlipList[index] = RelevantType.RELEVANT;
+                            },
+                            padding: EdgeInsets.all(5.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate("Both relevant"),
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  letterSpacing: 1.5,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                )),
+                          ),
+                          SizedBox(
+                            width: 30,
+                            height: 1,
+                          ),
+                          RaisedButton(
+                            elevation: 5.0,
+                            onPressed: () {
+                              relevantFlipList[index] = RelevantType.IRRELEVANT;
+                            },
+                            padding: EdgeInsets.all(5.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate("Irrelevant"),
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  letterSpacing: 1.5,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      );
     } else {
       return SizedBox();
     }
+  }
+
+  Widget getThumbnails() {
+    return Column(
+      children: [
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_off, color: Colors.red),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on, color: Colors.blue),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_on),
+        Icon(Icons.blur_off, color: Colors.red),
+      ],
+    );
   }
 
   Widget getStartCheckingKeywordsButton() {
@@ -474,8 +601,11 @@ class _ValidationListViewState extends State<ValidationListView>
                                   elevation: 5.0,
                                   onPressed: () {
                                     checkFlipsQualityProcess = true;
-                                    Duration durationChrono = controllerChrono.duration * controllerChrono.value;
-                                    controllerChronoValue = durationChrono.inSeconds;
+                                    Duration durationChrono =
+                                        controllerChrono.duration *
+                                            controllerChrono.value;
+                                    controllerChronoValue =
+                                        durationChrono.inSeconds;
                                     Navigator.push<dynamic>(
                                         context,
                                         MaterialPageRoute<dynamic>(
@@ -595,7 +725,7 @@ class _ValidationListViewState extends State<ValidationListView>
             elevation: 5.0,
             onPressed: () {
               checkFlipsQualityProcess = false;
-              //submitLongAnswers(selectionFlipList, validationSessionInfo);
+              //submitLongAnswers(selectionFlipList, relevantFlipList, validationSessionInfo);
               typeLaunchSession = EpochPeriod.ShortSession;
               validationSessionInfo = null;
               showDialog(

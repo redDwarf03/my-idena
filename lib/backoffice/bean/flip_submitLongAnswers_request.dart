@@ -66,22 +66,22 @@ class LongAnswer {
     LongAnswer({
         this.hash,
         this.answer,
-        this.easy,
+        this.wrongWords,
     });
 
     String hash;
     int answer;
-    bool easy;
+    bool wrongWords;
 
     factory LongAnswer.fromJson(Map<String, dynamic> json) => LongAnswer(
         hash: json["hash"],
         answer: json["answer"],
-        easy: json["easy"],
+        wrongWords: json["wrongWords"],
     );
 
     Map<String, dynamic> toJson() => {
         "hash": hash,
         "answer": answer,
-        "easy": easy,
+        "wrongWords": wrongWords,
     };
 }
