@@ -15,7 +15,7 @@ bool firstState = true;
 DnaAll dnaAll;
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
-String campaign = "{v20200819.1}";
+String campaign = "{v20200820.1}";
 bool checkFlipsQualityProcess = false;
 
 void main() async {
