@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/portofolio_view.dart';
@@ -6,6 +9,10 @@ import 'package:my_idena/pages/views/profile_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_deepLinks.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+HttpService httpService = HttpService();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.animationController}) : super(key: key);
@@ -128,22 +135,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => onAfterBuild(context));
-    return Container(
-      color: MyIdenaAppTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            getMainListViewUI(),
-            getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
-          ],
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: httpService.getDnaAll(),
+        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+          if (snapshot.hasData) {
+            dnaAll = snapshot.data;
+            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
+              return SizedBox();
+            } else {
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => onAfterBuild(context));
+
+              return Container(
+                color: MyIdenaAppTheme.background,
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Stack(
+                    children: <Widget>[
+                      getMainListViewUI(),
+                      getAppBarUI(),
+                      SizedBox(
+                        height: MediaQuery.of(context).padding.bottom,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   Widget getMainListViewUI() {
@@ -174,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void onAfterBuild(BuildContext context) {
-    if (deepLinkParamlist != null && deepLinkParamlist.length > 0) {
+    if (deepLinkParam != null) {
       showDialog(
           context: context,
           builder: (context) => SimpleDialog(
@@ -205,19 +227,109 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             SizedBox(
                               height: 20,
                             ),
-                            Text("Website: "),
-                            Text(deepLinkParamlist[0].value[0] != null
-                                ? deepLinkParamlist[0].value[0]
+                            Text(
+                              "Website: ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.2,
+                                color: MyIdenaAppTheme.darkText,
+                              ),
+                            ),
+                            Text(deepLinkParam.nonce_endpoint != null
+                                ? UtilDeepLinks()
+                                    .getHostname(deepLinkParam.nonce_endpoint)
                                 : ""),
                             SizedBox(
                               height: 20,
                             ),
-                            Text("Token: "),
-                            Text(deepLinkParamlist[1].value[0] != null
-                                ? deepLinkParamlist[1].value[0]
+                            Text(
+                              "Address: ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.2,
+                                color: MyIdenaAppTheme.darkText,
+                              ),
+                            ),
+                            Text(
+                              dnaAll.dnaIdentityResponse.result.address != null
+                                  ? dnaAll.dnaIdentityResponse.result.address
+                                  : "",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontSize: 13,
+                                letterSpacing: -0.2,
+                                color: MyIdenaAppTheme.darkText,
+                              ),
+                            ),
+                            Image.network(
+                              'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}',
+                              width: 50,
+                              height: 50,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "Token: ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.2,
+                                color: MyIdenaAppTheme.darkText,
+                              ),
+                            ),
+                            Text(deepLinkParam.token != null
+                                ? deepLinkParam.token
                                 : ""),
                             SizedBox(
                               height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                FlatButton(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Submit"),
+                                    ),
+                                    color: Colors.grey[200],
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0)),
+                                    onPressed: () {
+                                      deepLinkParam.address = dnaAll
+                                          .dnaIdentityResponse.result.address;
+                                      _launchDeepLink(deepLinkParam);
+                                      deepLinkParam = null;
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    }),
+                                FlatButton(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Cancel"),
+                                    ),
+                                    color: Colors.grey[200],
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0)),
+                                    onPressed: () {
+                                      deepLinkParam = null;
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    })
+                              ],
                             ),
                           ],
                         )
@@ -226,6 +338,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   )
                 ],
               ));
+    }
+  }
+
+  _launchDeepLink(deepLinkParam) async {
+    deepLinkParam = await UtilDeepLinks().getNonce(deepLinkParam);
+    deepLinkParam = await httpService.signin(deepLinkParam);
+    deepLinkParam = await UtilDeepLinks().authenticate(deepLinkParam);
+    if (await canLaunch(deepLinkParam.callback_url)) {
+      await launch(deepLinkParam.callback_url);
+    } else {
+      logger.e('Could not  launch $deepLinkParam.callback_url');
     }
   }
 

@@ -21,6 +21,9 @@ import 'package:my_idena/backoffice/bean/dna_identity_request.dart';
 import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/backoffice/bean/dna_sendTransaction_request.dart';
 import 'package:my_idena/backoffice/bean/dna_sendTransaction_response.dart';
+import 'package:my_idena/backoffice/bean/dna_signin_request.dart';
+import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
+import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
@@ -96,25 +99,25 @@ class HttpService {
         String reply = await response.transform(utf8.decoder).join();
         dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
 
-      // get Balance
-      HttpClientRequest request3 =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request3.headers.set('content-type', 'application/json');
+        // get Balance
+        HttpClientRequest request3 =
+            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+        request3.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapGetBalance = {
-        'method': DnaGetBalanceRequest.METHOD_NAME,
-        'params': [dnaIdentityResponse.result.address],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
+        Map<String, dynamic> mapGetBalance = {
+          'method': DnaGetBalanceRequest.METHOD_NAME,
+          'params': [dnaIdentityResponse.result.address],
+          'id': 101,
+          'key': idenaSharedPreferences.keyApp
+        };
 
-      dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapGetBalance);
-      request3.add(utf8.encode(json.encode(dnaGetBalanceRequest.toJson())));
-      response = await request3.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        dnaGetBalanceResponse = dnaGetBalanceResponseFromJson(reply);
-      }
+        dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapGetBalance);
+        request3.add(utf8.encode(json.encode(dnaGetBalanceRequest.toJson())));
+        response = await request3.close();
+        if (response.statusCode == 200) {
+          String reply = await response.transform(utf8.decoder).join();
+          dnaGetBalanceResponse = dnaGetBalanceResponseFromJson(reply);
+        }
 
         // get Epoch
         HttpClientRequest request4 =
@@ -341,5 +344,38 @@ class HttpService {
       logger.e(e.toString());
     } finally {}
     return bcnTransactionsResponse;
+  }
+
+  Future<DeepLinkParam> signin(deepLinkParam) async {
+
+    DnaSignInRequest dnaSignInRequest;
+    DnaSignInResponse dnaSignInResponse;
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> map = {
+        'method': DnaSignInRequest.METHOD_NAME,
+        "params": [deepLinkParam.nonce != null ? deepLinkParam.nonce : ""],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      dnaSignInRequest = DnaSignInRequest.fromJson(map);
+      request.add(utf8.encode(json.encode(dnaSignInRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaSignInResponse = dnaSignInResponseFromJson(reply);
+        deepLinkParam.signature = dnaSignInResponse.result;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+    return deepLinkParam;
   }
 }

@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 class DeepLinkParam {
-  String key;
-  List<String> value;
-
-  DeepLinkParam(this.key, this.value);
-
-  @override
-  String toString() {
-    return '{ ${this.key}, ${this.value} }';
-  }
+  String nonce_endpoint;
+  String token;
+  String callback_url;
+  String authentication_endpoint;
+  String favicon_url;
+  String nonce;
+  String address;
+  String signature;
+  bool authenticated;
+  DeepLinkParam();
 }
