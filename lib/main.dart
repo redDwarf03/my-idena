@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/on_boarding_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
@@ -15,8 +17,9 @@ bool firstState = true;
 DnaAll dnaAll;
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
-String campaign = "{v20200820.1}";
+String campaign = "{v20200821.1}";
 bool checkFlipsQualityProcess = false;
+List<DeepLinkParam> deepLinkParamlist;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +34,15 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
+enum UniLinksType { string, uri }
+
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  @override
+  initState() {
+    super.initState();
+    // initPlatformState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -44,41 +55,38 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      supportedLocales: [
-        Locale('en', ''),
-        Locale('fr', ''),
-        Locale('ru', ''),
-        Locale('cn', 'SC'),
-        Locale('cn', 'TC')
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        textTheme: MyIdenaAppTheme.textTheme,
-        platform: TargetPlatform.iOS,
-      ),
-          home: StreamBuilder(
-            stream: getLinksStream(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                // our app started by configured links
-                var uri = Uri.parse(snapshot.data);
-                var list = uri.queryParametersAll.entries
-                    .toList(); // we retrieve all query parameters , tzd://genius-team.com?product_id=1
-
-                return Text(list.map((f) => f.toString()).join('-'));
-                // we just print all //parameters but you can now do whatever you want, for example open //product details page.
-              } else {
-                // our app started normally
-                return OnBoardingScreen();
-              }
-            },
-          )    );
+        debugShowCheckedModeBanner: false,
+        supportedLocales: [
+          Locale('en', ''),
+          Locale('fr', ''),
+          Locale('ru', ''),
+          Locale('cn', 'SC'),
+          Locale('cn', 'TC')
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          textTheme: MyIdenaAppTheme.textTheme,
+          platform: TargetPlatform.iOS,
+        ),
+        home: StreamBuilder(
+          stream: getLinksStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var uri = Uri.parse(snapshot.data);
+              deepLinkParamlist = uri.queryParametersAll.entries
+                  .map((entry) => DeepLinkParam(entry.key, entry.value))
+                  .toList();
+              return Home();
+            } else {
+              return OnBoardingScreen();
+            }
+          },
+        ));
   }
 }
 
