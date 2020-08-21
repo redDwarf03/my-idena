@@ -119,9 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         animationController: widget.animationController,
       ),
     );
-
   }
-
 
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
@@ -130,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => onAfterBuild(context));
     return Container(
       color: MyIdenaAppTheme.background,
       child: Scaffold(
@@ -172,6 +171,62 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
       },
     );
+  }
+
+  void onAfterBuild(BuildContext context) {
+    if (deepLinkParamlist != null && deepLinkParamlist.length > 0) {
+      showDialog(
+          context: context,
+          builder: (context) => SimpleDialog(
+                contentPadding: EdgeInsets.zero,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context)
+                              .translate("Login confirmation"),
+                          style: TextStyle(
+                              fontFamily: MyIdenaAppTheme.fontName,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              letterSpacing: -0.1,
+                              color: MyIdenaAppTheme.darkText),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(AppLocalizations.of(context).translate(
+                                "Please confirm that you want to use your public address for the website login")),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text("Website: "),
+                            Text(deepLinkParamlist[0].value[0] != null
+                                ? deepLinkParamlist[0].value[0]
+                                : ""),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text("Token: "),
+                            Text(deepLinkParamlist[1].value[0] != null
+                                ? deepLinkParamlist[1].value[0]
+                                : ""),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ));
+    }
   }
 
   Widget getAppBarUI() {
