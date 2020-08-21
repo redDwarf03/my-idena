@@ -108,8 +108,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      ParametersScreen(animationController: animationController);
+                  tabBody = ParametersScreen(
+                      animationController: animationController);
                 });
               });
             } else if (index == 3) {
