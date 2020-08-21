@@ -17,9 +17,9 @@ bool firstState = true;
 DnaAll dnaAll;
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
-String campaign = "{v20200821.1}";
+String campaign = "{v20200822.1}";
 bool checkFlipsQualityProcess = false;
-List<DeepLinkParam> deepLinkParamlist;
+DeepLinkParam deepLinkParam;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +61,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           Locale('fr', ''),
           Locale('ru', ''),
           Locale('cn', 'SC'),
-          Locale('cn', 'TC')
+          Locale('cn', 'TC'),
+          Locale('sr', ''),
+
         ],
         localizationsDelegates: [
           AppLocalizations.delegate,
@@ -78,9 +80,37 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var uri = Uri.parse(snapshot.data);
-              deepLinkParamlist = uri.queryParametersAll.entries
-                  .map((entry) => DeepLinkParam(entry.key, entry.value))
-                  .toList();
+              var list = uri.queryParametersAll.entries.toList();
+              deepLinkParam = new DeepLinkParam();
+              for (var i = 0; i < list.length; i++) {
+                switch (list[i].key) {
+                  case "nonce_endpoint":
+                    {
+                      deepLinkParam.nonce_endpoint = list[i].value[0];
+                    }
+                    break;
+                  case "token":
+                    {
+                      deepLinkParam.token = list[i].value[0];
+                    }
+                    break;
+                  case "callback_url":
+                    {
+                      deepLinkParam.callback_url = list[i].value[0];
+                    }
+                    break;
+                  case "authentication_endpoint":
+                    {
+                      deepLinkParam.authentication_endpoint = list[i].value[0];
+                    }
+                    break;
+                }
+              }
+              logger.i("nonce_endpoint: " + deepLinkParam.nonce_endpoint);
+              logger.i("token: " + deepLinkParam.token);
+              logger.i("callback_url: " + deepLinkParam.callback_url);
+              logger.i("authentication_endpoint: " +
+                  deepLinkParam.authentication_endpoint);
               return Home();
             } else {
               return OnBoardingScreen();
