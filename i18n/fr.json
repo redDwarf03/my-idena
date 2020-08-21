@@ -89,7 +89,9 @@
   "Check flips quality": "Vérification de la qualité des flips",
   "Are both keywords relevant to the flip ?": "Les mots clés sont-ils pertinents pour le flip ?",
   "Both relevant": "Pertinent",
-  "Irrelevant": "Pas pertinent"
+  "Irrelevant": "Pas pertinent",
+  "Login confirmation": "Confirmation d'authentification",
+  "Please confirm that you want to use your public address for the website login": "Veuillez confirmer que vous souhaitez utiliser votre adresse publique pour la connexion au site Web"
 
 
   }
