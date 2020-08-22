@@ -17,6 +17,7 @@ import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_request.dart';
 import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
 import 'package:my_idena/backoffice/bean/flip_words_request.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
+import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
@@ -40,7 +41,7 @@ class ValidationSessionInfoFlips {
   bool ready;
   bool extra;
   bool available;
-  List<int> listWords;
+  List<Word> listWords;
   List<Uint8List> listImagesLeft;
   List<Uint8List> listImagesRight;
   int listOk;
@@ -101,6 +102,14 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
 
+    Map<String, dynamic> dictWordsDdata;
+    List wordsMap;
+    if (typeSession == EpochPeriod.LongSession) {
+      DictWords dictWordsList = await DictWords().getDictWords();
+      dictWordsDdata = dictWordsList.toJson();
+      wordsMap = dictWordsDdata["words"];
+    }
+
     if (simulationMode) {
       if (typeSession == EpochPeriod.ShortSession) {
         flipShortHashesResponse = FlipShortHashesResponse.fromJson(
@@ -156,7 +165,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           new List(flipLongHashesResponse.result.length);
     }
 
-    // TODO : distinguer Short/long
     for (int i = 0; i < listSessionValidationFlip.length; i++) {
       ValidationSessionInfoFlips validationSessionInfoFlips =
           new ValidationSessionInfoFlips();
@@ -287,47 +295,57 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
           listImages[int.tryParse(order4) ?? 0];
 
       // get Words
-      if (simulationMode) {
-        try {
-          String data = await loadAssets(
-              flipShortHashesResponse.result[i].hash + "_words");
-          flipWordsResponse = flipWordsResponseFromJson(data);
-        } catch (e) {
+      if (typeSession == EpochPeriod.LongSession) {
+        if (simulationMode) {
+          try {
+            String data = await loadAssets(
+                flipLongHashesResponse.result[i].hash + "_words");
+            flipWordsResponse = flipWordsResponseFromJson(data);
+          } catch (e) {
+            Map<String, dynamic> mapWords = {
+              "jsonrpc": "2.0",
+              "id": 51,
+              "result": {
+                "words": [0, 0]
+              }
+            };
+            flipWordsResponse = FlipWordsResponse.fromJson(mapWords);
+          }
+        } else {
+          HttpClientRequest requestWords = await httpClient
+              .postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+          requestWords.headers.set('content-type', 'application/json');
           Map<String, dynamic> mapWords = {
-            "jsonrpc": "2.0",
-            "id": 51,
-            "result": {
-              "words": [0, 0]
-            }
+            'method': FlipWordsRequest.METHOD_NAME,
+            'params': [flipLongHashesResponse.result[i].hash],
+            'id': 101,
+            'key': idenaSharedPreferences.keyApp
           };
-          flipWordsResponse =
-              FlipWordsResponse.fromJson(mapWords);
+          FlipWordsRequest flipWordsRequest =
+              FlipWordsRequest.fromJson(mapWords);
+          requestWords.add(utf8.encode(json.encode(flipWordsRequest.toJson())));
+          HttpClientResponse responseWords = await requestWords.close();
+          if (responseWords.statusCode == 200) {
+            String replyWords =
+                await responseWords.transform(utf8.decoder).join();
+            flipWordsResponse = flipWordsResponseFromJson(replyWords);
+          }
         }
-      } else {
-        HttpClientRequest requestWords =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        requestWords.headers.set('content-type', 'application/json');
-        Map<String, dynamic> mapWords = {
-          'method': FlipWordsRequest.METHOD_NAME,
-          'params': [flipShortHashesResponse.result[i].hash],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-        FlipWordsRequest flipWordsRequest = FlipWordsRequest.fromJson(mapWords);
-        requestWords.add(utf8.encode(json.encode(flipWordsRequest.toJson())));
-        HttpClientResponse responseWords = await requestWords.close();
-        if (responseWords.statusCode == 200) {
-          String replyWords =
-              await responseWords.transform(utf8.decoder).join();
-          flipWordsResponse = flipWordsResponseFromJson(replyWords);
+        List<Word> listWords = new List(flipWordsResponse.result.words.length);
+        for (int j = 0; j < flipWordsResponse.result.words.length; j++) {
+          Word word;
+          if(flipWordsResponse.result.words[j] == 0)
+          {
+            word = new Word(name: "", desc: "");
+          }
+          else
+          {
+            word = new Word(name: wordsMap[flipWordsResponse.result.words[j] - 1]["name"], desc: wordsMap[flipWordsResponse.result.words[j] - 1]["desc"]);
+          }
+          listWords[j] = word;
         }
+        validationSessionInfoFlips.listWords = listWords;
       }
-      List<int> listWords = new List(flipWordsResponse.result.words.length);
-      for (int j = 0; j < flipWordsResponse.result.words.length; j++) {
-        listWords[j] = flipWordsResponse.result.words[j];
-      }
-      validationSessionInfoFlips.listWords = listWords;
-
       listSessionValidationFlip[i] = validationSessionInfoFlips;
     }
 
@@ -343,7 +361,6 @@ Future<String> loadAssets(String fileName) async {
   try {
     return await rootBundle.loadString('test/examples/' + fileName + '.json');
   } catch (e) {
-    logger.e(e.toString());
   } finally {}
 }
 
@@ -401,8 +418,8 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
   return flipSubmitShortAnswersResponse;
 }
 
-Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
-    List selectionFlipList, List relevantFlipList, ValidationSessionInfo validationSessionInfo) async {
+Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList,
+    List relevantFlipList, ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
   }
@@ -423,10 +440,10 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
     List<LongAnswer> listAnswers = new List();
     for (int i = 0; i < selectionFlipList.length; i++) {
       if (selectionFlipList[i] != null) {
-        wrongWordsBool = true;
-        if(relevantFlipList[i] != null && relevantFlipList[i] == RelevantType.IRRELEVANT)
-        {
-          wrongWordsBool = false;
+        wrongWordsBool = false;
+        if (relevantFlipList[i] != null &&
+            relevantFlipList[i] == RelevantType.IRRELEVANT) {
+          wrongWordsBool = true;
         }
         LongAnswer answer = new LongAnswer(
             answer: selectionFlipList[i],
