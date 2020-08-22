@@ -48,7 +48,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         PageViewModel(
           title: "Warning",
           body:
-              "No version, to date, has been published to allow participation in the validation session. Do not use it during a validation session",
+              "2020-08-22 : No version, to date, has been published to allow participation in the validation session. Do not use it during a validation session",
           image: Align(
             child: Image.asset('assets/images/icon.png', width: 250.0),
             alignment: Alignment.bottomCenter,
