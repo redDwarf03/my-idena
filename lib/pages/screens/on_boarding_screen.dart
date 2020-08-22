@@ -35,9 +35,28 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
+    const pageDecorationDisclaimerBold = const PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: TextStyle(fontSize: 14.0, color: Colors.red, fontWeight: FontWeight.w700),
+      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: Colors.white,
+      imagePadding: EdgeInsets.zero,
+    );
     return IntroductionScreen(
       key: introKey,
       pages: [
+        PageViewModel(
+          title: "Warning",
+          body:
+              "No version, to date, has been published to allow participation in the validation session. Do not use it during a validation session",
+          image: Align(
+            child: Image.asset('assets/images/icon.png', width: 250.0),
+            alignment: Alignment.bottomCenter,
+          ),
+          decoration: pageDecorationDisclaimerBold,
+          footer: Text(campaign,
+              style: TextStyle(fontSize: 14.0, color: Colors.red)),
+        ),
         PageViewModel(
           title: "my Idena mobile app",
           body:
