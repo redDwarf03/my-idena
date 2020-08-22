@@ -80,6 +80,11 @@ class _TransactionsViewState extends State<TransactionsView> {
                                             BcnTransactionsResponse
                                                 bcnTransactionsResponse =
                                                 snapshot.data;
+                                                if(bcnTransactionsResponse
+                                                    .result.transactions == null)
+                                                    {
+                                                      return Container();
+                                                    }
                                             List<Transaction> transactions =
                                                 bcnTransactionsResponse
                                                     .result.transactions;
