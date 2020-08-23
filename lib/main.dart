@@ -63,6 +63,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           Locale('cn', 'SC'),
           Locale('cn', 'TC'),
           Locale('sr', ''),
+          Locale('sr', 'RS'),
 
         ],
         localizationsDelegates: [
