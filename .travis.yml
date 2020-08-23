@@ -28,5 +28,5 @@ jobs:
       before_script:
         - export BUILD_NAME=$TRAVIS_TAG
         - export BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-    script:
-      - if [[ $TRAVIS_TAG == "" ]]; then ./flutter/bin/flutter build apk --split-per-abi; else ./flutter/bin/flutter build apk --build-name $BUILD_NAME --build-number $BUILD_NUMBER --split-per-abi; fi
+      script:
+        - if [[ $TRAVIS_TAG == "" ]]; then ./flutter/bin/flutter build apk --split-per-abi; else ./flutter/bin/flutter build apk --build-name $BUILD_NAME --build-number $BUILD_NUMBER --split-per-abi; fi
