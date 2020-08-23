@@ -75,7 +75,7 @@ class _BottomBarViewState extends State<BottomBarView>
                       height: 62,
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(left: 8, right: 8, top: 4),
+                            const EdgeInsets.only(left: 8, right: 8, top: 0),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -193,7 +193,7 @@ class _BottomBarViewState extends State<BottomBarView>
           ),
         ),
         Text(
-          "This is a beta version. Use is at your own risk.",
+          "This is a beta version. Use is at your own risk. ",
           style: TextStyle(
             fontSize: 12,
             color: Colors.red,
