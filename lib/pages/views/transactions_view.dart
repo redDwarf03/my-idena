@@ -80,11 +80,11 @@ class _TransactionsViewState extends State<TransactionsView> {
                                             BcnTransactionsResponse
                                                 bcnTransactionsResponse =
                                                 snapshot.data;
-                                                if(bcnTransactionsResponse
-                                                    .result.transactions == null)
-                                                    {
-                                                      return Container();
-                                                    }
+                                            if (bcnTransactionsResponse
+                                                    .result.transactions ==
+                                                null) {
+                                              return Container();
+                                            }
                                             List<Transaction> transactions =
                                                 bcnTransactionsResponse
                                                     .result.transactions;
@@ -261,10 +261,11 @@ class _TransactionsViewState extends State<TransactionsView> {
                   ],
                 ),
                 Text(
-                  new DateFormat.yMd(Intl.defaultLocale)
-                      .add_jm()
+                  DateFormat.yMEd(
+                          Localizations.localeOf(context).languageCode)
+                      .add_Hm()
                       .format(DateTime.fromMillisecondsSinceEpoch(
-                          transaction.timestamp * 1000))
+                          transaction.timestamp * 1000).toLocal())
                       .toString(),
                   style: TextStyle(
                     fontFamily: MyIdenaAppTheme.fontName,
