@@ -271,7 +271,7 @@ class _ProfileViewState extends State<ProfileView> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 16, left: 16, right: 24),
+                                      top: 0, left: 16, right: 24),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -321,13 +321,17 @@ class _ProfileViewState extends State<ProfileView> {
                                                         const EdgeInsets.only(
                                                             left: 4.0),
                                                     child: Text(
-                                                      new DateFormat.yMd(Intl
-                                                              .defaultLocale)
-                                                          .add_jm()
+                                                      DateFormat.yMMMMEEEEd(
+                                                              Localizations
+                                                                      .localeOf(
+                                                                          context)
+                                                                  .languageCode)
+                                                          .add_Hm()
                                                           .format(dnaAll
                                                               .dnaGetEpochResponse
                                                               .result
-                                                              .nextValidation),
+                                                              .nextValidation.toLocal())
+                                                          .toString(),
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
@@ -374,7 +378,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 8),
+                                      left: 10, right: 10, top: 0, bottom: 8),
                                   child: Container(
                                     height: 2,
                                     decoration: BoxDecoration(
@@ -386,7 +390,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 16),
+                                      left: 10, right: 10, top: 0, bottom: 5),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
@@ -404,7 +408,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                 fontFamily:
                                                     MyIdenaAppTheme.fontName,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 16,
+                                                fontSize: 14,
                                                 letterSpacing: -0.2,
                                                 color: MyIdenaAppTheme.darkText,
                                               ),
@@ -414,7 +418,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                   const EdgeInsets.only(top: 4),
                                               child: Container(
                                                 height: 4,
-                                                width: 100,
+                                                width: 90,
                                                 decoration: BoxDecoration(
                                                   color: HexColor('#000000')
                                                       .withOpacity(0.2),
@@ -425,7 +429,7 @@ class _ProfileViewState extends State<ProfileView> {
                                                 child: Row(
                                                   children: <Widget>[
                                                     Container(
-                                                      width: 100,
+                                                      width: 90,
                                                       height: 4,
                                                       decoration: BoxDecoration(
                                                         gradient:
@@ -474,7 +478,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 8),
+                                      left: 10, right: 10, top: 0, bottom: 0),
                                   child: Container(
                                     height: 2,
                                     decoration: BoxDecoration(
