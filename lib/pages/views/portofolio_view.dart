@@ -59,7 +59,7 @@ class PortofolioView extends StatelessWidget {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 16, left: 16, right: 16),
+                                      top: 0, left: 16, right: 16),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(

@@ -43,13 +43,13 @@ class AboutView extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding:
-                          const EdgeInsets.only(top: 16, left: 16, right: 16),
+                          const EdgeInsets.only(top: 0, left: 0, right: 0),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                                  left: 0, right: 0, top: 4),
                               child: Column(
                                 children: <Widget>[
                                   Padding(
@@ -57,7 +57,7 @@ class AboutView extends StatelessWidget {
                                         left: 24,
                                         right: 24,
                                         top: 8,
-                                        bottom: 16),
+                                        bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -128,7 +128,7 @@ class AboutView extends StatelessWidget {
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
                                                 child: Text(
-                                                  "Cryptomatrix, Andrew, Rioda, Mahmoud, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados",
+                                                  "Cryptomatrix, Andrew, Rioda, Mahmoud, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados, Alek, Shadowcrypto",
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontFamily: MyIdenaAppTheme
@@ -148,7 +148,7 @@ class AboutView extends StatelessWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24, right: 24, top: 0, bottom: 0),
+                                        left: 0, right: 0, top: 0, bottom: 0),
                                     child: Container(
                                       height: 2,
                                       decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class AboutView extends StatelessWidget {
                                         left: 24,
                                         right: 24,
                                         top: 8,
-                                        bottom: 16),
+                                        bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -253,7 +253,7 @@ class AboutView extends StatelessWidget {
 
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24, right: 24, top: 0, bottom: 0),
+                                        left: 10, right: 10, top: 0, bottom: 0),
                                     child: Container(
                                       height: 2,
                                       decoration: BoxDecoration(
@@ -268,7 +268,7 @@ class AboutView extends StatelessWidget {
                                         left: 24,
                                         right: 24,
                                         top: 8,
-                                        bottom: 16),
+                                        bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
