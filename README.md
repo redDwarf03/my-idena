@@ -27,10 +27,10 @@ Consider supporting my-idena by donating to **0xf429e36d68be10428d73078439158957
 |OS   |Model   | Resolution  | app-arm64-v8a | app-armeabi-v7a | app-x86_64
 | :------------ | :------------ | ------------: | ------------: | ------------: | ------------: | 
 | Android 5 (Lollipop)| Nexus 5 | 1080x1920 |  |  |  |
-| Android 6.0.1 (Marshmallow) | Samsung Galaxy Note 4 | 1440x2560  |  |  |  |
-| Android 7 (Nougat) | Orange Rise 52 | 480x854 |  |  |  |
+| Android 6.0.1 (Marshmallow) | Samsung Galaxy Note 4 | 1440x2560  | - | X | - |
+| Android 7 (Nougat) | Orange Rise 52 | 480x854 | - | X | - |
 | Android 7 (Nougat) | Nexus 4 |  786x1280 |  |  |  |
-| Android 8.1 (Oréo) | Huawei P20 Pro |  1080x2240 |  |  |  |
+| Android 8.1 (Oréo) | Huawei P20 Pro |  1080x2240 | X | - | - |
 | Android 9 (Pie) | Pixel 2 | 1080x1920 |  |  |  |
 | Android 10 | Galaxy A40 | 1080x2340 | X | X | - |
 | Android 10 | Galaxy A41 | 1080x2400 |  |  |  |
