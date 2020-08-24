@@ -93,5 +93,9 @@
   "Login confirmation": "Потврда пријаве",  
   "Please confirm that you want to use your public address for the website login": "Молимо потврдите да желите да користите своју јавну адресу за пријаву на веб сајт",
   "No keywords available": "Нема доступних кључних речи",
-  "Release": "Издање"
+  "Release": "Издање",
+  "Last": "Last",
+  "Last transaction": "Last transaction",
+  "transactions": "transactions",
+  "No transaction": "No transaction"
 }
