@@ -93,7 +93,11 @@
   "Login confirmation": "Confirmation d'authentification",
   "Please confirm that you want to use your public address for the website login": "Veuillez confirmer que vous souhaitez utiliser votre adresse publique pour la connexion au site Web",
   "No keywords available": "Aucun mot disponible",
-  "Release": "Release"
+  "Release": "Release",
+  "Last": "Dernières",
+  "Last transaction": "Dernière transaction",
+  "transactions": "transactions",
+  "No transaction": "Aucune transaction"
 
 
   }
