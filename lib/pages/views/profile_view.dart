@@ -24,7 +24,6 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   Widget displayMiningSwitch() {
-    if (new UtilIdentity().canMine(dnaAll)) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -206,25 +205,8 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ],
       );
-    } else {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            AutoSizeText(
-              AppLocalizations.of(context)
-                  .translate("Your current status doesn't allow you to mine."),
-              style: TextStyle(
-                fontFamily: MyIdenaAppTheme.fontName,
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-                color: MyIdenaAppTheme.grey.withOpacity(0.5),
-              ),
-              maxLines: 1,
-            )
-          ]);
-    }
-  }
+    } 
+  
 
   @override
   Widget build(BuildContext context) {
@@ -280,18 +262,36 @@ class _ProfileViewState extends State<ProfileView> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 8, top: 16),
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .translate("Mining"),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  MyIdenaAppTheme.fontName,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              letterSpacing: -0.1,
-                                              color: MyIdenaAppTheme.darkText),
-                                        ),
+                                        child: new UtilIdentity()
+                                                    .canMine(dnaAll) ==
+                                                true
+                                            ? Text(
+                                                AppLocalizations.of(context)
+                                                    .translate("Mining"),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16,
+                                                    letterSpacing: -0.1,
+                                                    color: MyIdenaAppTheme
+                                                        .darkText),
+                                              )
+                                            : Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        "Your current status doesn't allow you to mine."),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16,
+                                                    letterSpacing: -0.1,
+                                                    color: MyIdenaAppTheme
+                                                        .darkText),
+                                              ),
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -299,7 +299,10 @@ class _ProfileViewState extends State<ProfileView> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          displayMiningSwitch(),
+                                          new UtilIdentity().canMine(dnaAll) ==
+                                                  true
+                                              ? displayMiningSwitch()
+                                              : Text(""),
                                           Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -330,7 +333,8 @@ class _ProfileViewState extends State<ProfileView> {
                                                           .format(dnaAll
                                                               .dnaGetEpochResponse
                                                               .result
-                                                              .nextValidation.toLocal())
+                                                              .nextValidation
+                                                              .toLocal())
                                                           .toString(),
                                                       textAlign:
                                                           TextAlign.center,
