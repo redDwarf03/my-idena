@@ -262,7 +262,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 8, top: 16),
-                                        child: new UtilIdentity()
+                                        child: UtilIdentity()
                                                     .canMine(dnaAll) ==
                                                 true
                                             ? Text(
