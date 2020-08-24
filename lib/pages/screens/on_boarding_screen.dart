@@ -1,8 +1,10 @@
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:introduction_screen/introduction_screen.dart';
-import 'package:my_idena/main.dart';
+import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
+import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -10,96 +12,430 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  final introKey = GlobalKey<IntroductionScreenState>();
+  PageController pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
+  int bottomSelectedIndex = 0;
+  final _keyForm = GlobalKey<FormState>();
+  String apiUrl;
+  String keyApp;
 
-  void _onIntroEnd(context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => Home()),
-    );
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const bodyStyle = TextStyle(fontSize: 14.0);
-    const pageDecoration = const PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
-      bodyTextStyle: bodyStyle,
-      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
-      imagePadding: EdgeInsets.zero,
-    );
-    const pageDecorationDisclaimer = const PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
-      bodyTextStyle: TextStyle(fontSize: 14.0, color: Colors.red),
-      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
-      imagePadding: EdgeInsets.zero,
-    );
-    const pageDecorationDisclaimerBold = const PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
-      bodyTextStyle: TextStyle(fontSize: 14.0, color: Colors.red, fontWeight: FontWeight.w700),
-      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
-      imagePadding: EdgeInsets.zero,
-    );
-    return IntroductionScreen(
-      key: introKey,
-      pages: [
-        PageViewModel(
-          title: "Warning",
-          body:
-              "2020-08-22 : No version, to date, has been published to allow participation in the validation session. Do not use it during a validation session",
-          image: Align(
-            child: Image.asset('assets/images/icon.png', width: 250.0),
-            alignment: Alignment.bottomCenter,
-          ),
-          decoration: pageDecorationDisclaimerBold,
-          footer: Text(campaign,
-              style: TextStyle(fontSize: 14.0, color: Colors.red)),
-        ),
-        PageViewModel(
-          title: "my Idena mobile app",
-          body:
-              "Welcome to \"my Idena\" !\n\nThis application is an application currently under development.\nYou use it at your own risk. In any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\nIn case of bugs, please notify them on the project's Github page (see \"About\" page).\nThe Idena core team is not participating in the development of this application",
-          image: Align(
-            child: Image.asset('assets/images/icon.png', width: 250.0),
-            alignment: Alignment.bottomCenter,
-          ),
-          decoration: pageDecorationDisclaimer,
-          footer: Text(campaign,
-              style: TextStyle(fontSize: 14.0, color: Colors.red)),
-        ),
-        PageViewModel(
-          title: "Configuration",
-          body:
-              "To configure the application, you must:\n\n\nFor a Windows PC:\n* execute 'idena-go.exe' with '--rpcaddr {ip_address} --rpcport {port_number}' (don't run the windows client application)\n* in the first launch, go to 'Parameters' page\n* type 'http://{ip_address}:{port_number}' to connect to your node\n* type the api.key (cf '%appdata%\Idena\node\datadir\api.key')\n\nFor a remote server and Android phone:\n\n* install Termux or equivalent on your Android phone\n* install ssh 'pkg install openssh -y'\n* setup tunnel connection using ssh 'ssh -L 9999:localhost:9009 YOUR_VPS_IP'\n* open 'my_idena', go to 'Parameters' page and type 'http://localhost:9999' and your api key in the following file './datadir/api.key'\n",
-          image: Align(
-            child:
-                Image.asset('assets/images/parameters-node.png', width: 345.0),
-            alignment: Alignment.bottomCenter,
-          ),
-          decoration: pageDecoration,
-          footer: Text(campaign,
-              style: TextStyle(fontSize: 14.0, color: Colors.red)),
-        ),
-      ],
-      onDone: () => _onIntroEnd(context),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
-      showSkipButton: true,
-      skipFlex: 0,
-      nextFlex: 0,
-      skip: const Text('Skip'),
-      next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-      dotsDecorator: const DotsDecorator(
-        size: Size(10.0, 10.0),
-        color: Colors.grey,
-        activeColor: Colors.black,
-        activeSize: Size(22.0, 10.0),
-        activeShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+    return FutureBuilder<IdenaSharedPreferences>(
+        future: SharedPreferencesHelper.getIdenaSharedPreferences(),
+        builder: (BuildContext context,
+            AsyncSnapshot<IdenaSharedPreferences> snapshot) {
+          if (snapshot.hasData == false) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Form(
+              key: _keyForm,
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (index) {
+                  _pageChanged(index);
+                },
+                children: <Widget>[
+                  _warning(index: 1),
+                  _getPageUrlApi(
+                      text: 'Type your\nurl api',
+                      index: 2,
+                      hint: 'urlApi',
+                      snapshot: snapshot,
+                      context: context),
+                  _getPageKeyApp(
+                      text: 'Type your\nkey app',
+                      index: 3,
+                      hint: 'keyApp',
+                      snapshot: snapshot,
+                      context: context),
+                ],
+              ),
+            );
+          }
+        });
+  }
+
+  void _pageChanged(int index) {
+    setState(() {
+      bottomSelectedIndex = index;
+    });
+  }
+
+  _warning({int index}) {
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(30),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: Image.asset('assets/images/icon.png'),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _getPageNav(index, context),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: <Widget>[
+                  _getTellText("Warning"),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  _getPageIndicator(index)
+                ],
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  _getPageUrlApi(
+      {String text,
+      int index,
+      String hint,
+      AsyncSnapshot<IdenaSharedPreferences> snapshot,
+      BuildContext context}) {
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(30),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: Image.asset('assets/images/icon.png'),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _getPageNav(index, context),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: <Widget>[
+                  _getTellText(text),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  _getPageIndicator(index)
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 20),
+                      child: TextFormField(
+                        controller: initialValue(snapshot.data.apiUrl == null
+                            ? ''
+                            : snapshot.data.apiUrl),
+                        validator: (val) => val.isEmpty
+                            ? AppLocalizations.of(context)
+                                .translate("Enter your API url")
+                            : null,
+                        onChanged: (val) => apiUrl = val,
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: MyIdenaAppTheme.fontName,
+                        ),
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey[400], width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(0xFFF2F3F8), width: 1.0),
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(top: 14.0),
+                          prefixIcon: Icon(
+                            FlevaIcons.link_2,
+                            color: Colors.black54,
+                          ),
+                          hintText: AppLocalizations.of(context)
+                              .translate("Enter your API url"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _getPageKeyApp(
+      {String text,
+      int index,
+      String hint,
+      AsyncSnapshot<IdenaSharedPreferences> snapshot,
+      BuildContext context}) {
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(30),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: Image.asset('assets/images/icon.png'),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  _getPageNav(index, context),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: <Widget>[
+                  _getTellText(text),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  _getPageIndicator(index)
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 20),
+                      child: TextFormField(
+                        controller: initialValue(snapshot.data.keyApp == null
+                            ? ''
+                            : snapshot.data.keyApp),
+                        validator: (val) => val.isEmpty
+                            ? AppLocalizations.of(context)
+                                .translate("Enter your key app")
+                            : null,
+                        onChanged: (val) => keyApp = val,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: MyIdenaAppTheme.fontName,
+                        ),
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey[400], width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color(0xFFF2F3F8), width: 1.0),
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(top: 14.0),
+                          prefixIcon: Icon(
+                            Icons.vpn_key,
+                            color: Colors.black54,
+                          ),
+                          hintText: AppLocalizations.of(context)
+                              .translate("Enter your key app"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _getPageNav(int index, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        InkWell(
+            splashColor: Colors.white.withOpacity(0.1),
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            onTap: () {
+              setState(() {
+                pageController.previousPage(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeIn,
+                );
+              });
+            },
+            child: index > 1
+                ? Icon(
+                    FlevaIcons.arrow_circle_left_outline,
+                    size: 40,
+                    color: Colors.black,
+                  )
+                : Text("")),
+        InkWell(
+            splashColor: Colors.white.withOpacity(0.1),
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            onTap: () {
+              setState(() {
+                if (index < 3) {
+                  pageController.nextPage(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeIn,
+                  );
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => Home()),
+                  );
+                }
+              });
+            },
+            child: index < 3
+                ? Icon(
+                    FlevaIcons.arrow_circle_right_outline,
+                    size: 40,
+                    color: Colors.black,
+                  )
+                : Icon(FlevaIcons.checkmark_circle_2_outline,
+                    size: 40, color: Colors.green)),
+      ],
+    );
+  }
+
+  initialValue(val) {
+    return TextEditingController(text: val);
+  }
+
+  _getTextBox(hint, snapshot, context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+        child: TextFormField(
+          controller: initialValue(
+              snapshot.data.apiUrl == null ? '' : snapshot.data.apiUrl),
+          validator: (val) => val.isEmpty
+              ? AppLocalizations.of(context).translate("Enter your API url")
+              : null,
+          onChanged: (val) => apiUrl = val,
+          keyboardType: TextInputType.text,
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: MyIdenaAppTheme.fontName,
+          ),
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[400], width: 1.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
+            ),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.only(top: 14.0),
+            prefixIcon: Icon(
+              FlevaIcons.link_2,
+              color: Colors.black54,
+            ),
+            hintText:
+                AppLocalizations.of(context).translate("Enter your API url"),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _getPageIndicator(index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: index == 1 ? 16 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+              color: index == 1 ? Colors.black : Colors.black54,
+              borderRadius: BorderRadius.circular(10)),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Container(
+          width: index == 2 ? 16 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+              color: index == 2 ? Colors.black : Colors.black54,
+              borderRadius: BorderRadius.circular(10)),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Container(
+          width: index == 3 ? 16 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+              color: index == 3 ? Colors.black : Colors.black54,
+              borderRadius: BorderRadius.circular(10)),
+        ),
+      ],
+    );
+  }
+
+  _getTellText(text) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: Colors.black, fontSize: 35, fontWeight: FontWeight.w500),
     );
   }
 }
