@@ -1,4 +1,5 @@
 import 'package:my_idena/pages/myIdena_home.dart';
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
@@ -549,7 +550,7 @@ class _ValidationListViewState extends State<ValidationListView>
         case 1:
           {
             icon = Icon(
-              Icons.blur_on,
+              FlevaIcons.checkmark_square_2_outline,
               color: Colors.green,
               size: 22,
             );
@@ -558,7 +559,7 @@ class _ValidationListViewState extends State<ValidationListView>
         case 2:
           {
             icon = Icon(
-              Icons.blur_on,
+              FlevaIcons.checkmark_square,
               color: Colors.blue,
               size: 22,
             );
@@ -567,7 +568,7 @@ class _ValidationListViewState extends State<ValidationListView>
         case 3:
           {
             icon = Icon(
-              Icons.blur_off,
+              FlevaIcons.close_square_outline,
               color: Colors.red,
               size: 22,
             );
@@ -576,8 +577,8 @@ class _ValidationListViewState extends State<ValidationListView>
         default:
           {
             icon = Icon(
-              Icons.blur_on,
-              color: MyIdenaAppTheme.dark_grey,
+              FlevaIcons.copy_outline,
+              color: Colors.grey[500],
               size: 22,
             );
             break;

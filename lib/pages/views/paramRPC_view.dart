@@ -1,3 +1,4 @@
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_idena/main.dart';
@@ -116,7 +117,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                       EdgeInsets.only(
                                                           top: 14.0),
                                                   prefixIcon: Icon(
-                                                    Icons.blur_on,
+                                                    FlevaIcons.link_2,
                                                     color: Colors.black54,
                                                   ),
                                                   hintText: AppLocalizations.of(
