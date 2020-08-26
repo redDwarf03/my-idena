@@ -97,6 +97,13 @@
   "Last": "Last",
   "Last transaction": "Last transaction",
   "transactions": "transactions",
-  "No transaction": "No transaction"
+  "No transaction": "No transaction",
+  "my Idena is an application currently under development. You use it at your own risk. \n\nIn any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\n": "my Idena is an application currently under development. You use it at your own risk. \n\nIn any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\n",
+  "In case of bugs, please notify them on the project's Github page (see \"About\" page).\n\nThe Idena core team is not participating in the development of this application": "In case of bugs, please notify them on the project's Github page (see \"About\" page).\n\nThe Idena core team is not participating in the development of this application",
+  "Welcome !": "Welcome !",
+  "Type your\nurl api": "Type your\nurl api",
+  "Type your\nkey app": "Type your\nkey app",
+  "Please, type the api.key (cf \\datadir\\api.key file)": "Please, type the api.key (cf \\datadir\\api.key file)",
+  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Please, type http://{ip_address}:{port_number}\nto connect to your node"
    
 }

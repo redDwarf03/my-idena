@@ -20,11 +20,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final _keyForm = GlobalKey<FormState>();
   String apiUrl;
   String keyApp;
+  bool _keyAppVisible;
 
   @override
   void dispose() {
     pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _keyAppVisible = false;
+    super.initState();
   }
 
   @override
@@ -41,22 +48,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: PageView(
                 controller: pageController,
                 onPageChanged: (index) {
-                  _pageChanged(index);
+                  setState(() {
+                    bottomSelectedIndex = index;
+                  });
                 },
                 children: <Widget>[
-                  _warning(index: 1),
+                  _welcome(index: 1),
                   _getPageUrlApi(
-                      text: 'Type your\nurl api',
-                      index: 2,
-                      hint: 'urlApi',
-                      snapshot: snapshot,
-                      context: context),
+                      index: 2, snapshot: snapshot),
                   _getPageKeyApp(
-                      text: 'Type your\nkey app',
-                      index: 3,
-                      hint: 'keyApp',
-                      snapshot: snapshot,
-                      context: context),
+                      index: 3, snapshot: snapshot),
                 ],
               ),
             );
@@ -64,338 +65,251 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         });
   }
 
-  void _pageChanged(int index) {
-    setState(() {
-      bottomSelectedIndex = index;
-    });
-  }
-
-  _warning({int index}) {
+  _welcome({int index}) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(30),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Image.asset('assets/images/icon.png'),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Image.asset('assets/images/img_idena_intro.png'),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(AppLocalizations.of(context).translate(
+                  "Welcome !"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                _getPageIndicator(index, Colors.white54, Colors.white),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("my Idena is an application currently under development. You use it at your own risk. \n\nIn any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\n"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.red[400],
+                      fontSize: 16,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2),
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("In case of bugs, please notify them on the project's Github page (see \"About\" page).\n\nThe Idena core team is not participating in the development of this application"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _getPageNav(index, context),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                children: <Widget>[
-                  _getTellText("Warning"),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  _getPageIndicator(index)
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
   _getPageUrlApi(
-      {String text,
-      int index,
-      String hint,
-      AsyncSnapshot<IdenaSharedPreferences> snapshot,
-      BuildContext context}) {
+      {int index,
+      AsyncSnapshot<IdenaSharedPreferences> snapshot}) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(30),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Image.asset('assets/images/icon.png'),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _getPageNav(index, context),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                children: <Widget>[
-                  _getTellText(text),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  _getPageIndicator(index)
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 30,
+                ),
+                Image.asset('assets/images/img_ip.png'),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("Type your\nurl api"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 20),
-                      child: TextFormField(
-                        controller: initialValue(snapshot.data.apiUrl == null
-                            ? ''
-                            : snapshot.data.apiUrl),
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate("Enter your API url")
-                            : null,
-                        onChanged: (val) => apiUrl = val,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: MyIdenaAppTheme.fontName,
-                        ),
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey[400], width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xFFF2F3F8), width: 1.0),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(top: 14.0),
-                          prefixIcon: Icon(
-                            FlevaIcons.link_2,
-                            color: Colors.black54,
-                          ),
-                          hintText: AppLocalizations.of(context)
-                              .translate("Enter your API url"),
-                        ),
-                      ),
-                    ),
+                      fontSize: 35,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                _getPageIndicator(index, Colors.white54, Colors.white),
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("Please, type http://{ip_address}:{port_number}\nto connect to your node"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                TextFormField(
+                  cursorColor: Colors.white,
+                  controller: initialValue(
+                      snapshot.data.apiUrl == null ? '' : snapshot.data.apiUrl),
+                  validator: (val) => val.isEmpty
+                      ? AppLocalizations.of(context)
+                          .translate("Enter your API url")
+                      : null,
+                  onChanged: (val) => apiUrl = val,
+                  keyboardType: TextInputType.text,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
                   ),
-                ],
-              ),
-            )
-          ],
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.grey[400], width: 1.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 14.0),
+                    prefixIcon: Icon(
+                      FlevaIcons.link_2,
+                      color: Colors.white54,
+                    ),
+                    hintText: AppLocalizations.of(context)
+                        .translate("Enter your API url"),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
   _getPageKeyApp(
-      {String text,
-      int index,
-      String hint,
-      AsyncSnapshot<IdenaSharedPreferences> snapshot,
-      BuildContext context}) {
+      {int index,
+      AsyncSnapshot<IdenaSharedPreferences> snapshot}) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(30),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 4,
-              child: Image.asset('assets/images/icon.png'),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _getPageNav(index, context),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
+        backgroundColor: Colors.black,
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
               child: Column(
                 children: <Widget>[
-                  _getTellText(text),
-                  SizedBox(
-                    height: 25,
+                  Image.asset('assets/images/img_key.png'),
+                  Text(
+                    AppLocalizations.of(context).translate("Type your\nkey app"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        letterSpacing: -0.2,
+                        fontSize: 35,
+                        fontWeight: FontWeight.w500),
                   ),
-                  _getPageIndicator(index)
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _getPageIndicator(index, Colors.white54, Colors.white),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    AppLocalizations.of(context).translate("Please, type the api.key (cf \\datadir\\api.key file)"),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        letterSpacing: -0.2),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  TextFormField(
+                    controller: initialValue(snapshot.data.keyApp == null
+                        ? ''
+                        : snapshot.data.keyApp),
+                    validator: (val) => val.isEmpty
+                        ? AppLocalizations.of(context)
+                            .translate("Enter your key app")
+                        : null,
+                    onChanged: (val) => keyApp = val,
+                    keyboardType: TextInputType.text,
+                    obscureText: !_keyAppVisible,
+                    style: TextStyle(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
+                      fontFamily: MyIdenaAppTheme.fontName,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 20),
-                      child: TextFormField(
-                        controller: initialValue(snapshot.data.keyApp == null
-                            ? ''
-                            : snapshot.data.keyApp),
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate("Enter your key app")
-                            : null,
-                        onChanged: (val) => keyApp = val,
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: MyIdenaAppTheme.fontName,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.grey[400], width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(top: 14.0),
+                      prefixIcon: Icon(
+                        Icons.vpn_key,
+                        color: Colors.white54,
+                      ),
+                      hintText: AppLocalizations.of(context)
+                          .translate("Enter your key app"),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _keyAppVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
                         ),
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey[400], width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xFFF2F3F8), width: 1.0),
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(top: 14.0),
-                          prefixIcon: Icon(
-                            Icons.vpn_key,
-                            color: Colors.black54,
-                          ),
-                          hintText: AppLocalizations.of(context)
-                              .translate("Enter your key app"),
-                        ),
+                        onPressed: () {
+                          setState(() {
+                            _keyAppVisible = !_keyAppVisible;
+                          });
+                        },
                       ),
                     ),
                   ),
                 ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _getPageNav(int index, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        InkWell(
-            splashColor: Colors.white.withOpacity(0.1),
-            highlightColor: Colors.transparent,
-            focusColor: Colors.transparent,
-            onTap: () {
-              setState(() {
-                pageController.previousPage(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeIn,
-                );
-              });
-            },
-            child: index > 1
-                ? Icon(
-                    FlevaIcons.arrow_circle_left_outline,
-                    size: 40,
-                    color: Colors.black,
-                  )
-                : Text("")),
-        InkWell(
-            splashColor: Colors.white.withOpacity(0.1),
-            highlightColor: Colors.transparent,
-            focusColor: Colors.transparent,
-            onTap: () {
-              setState(() {
-                if (index < 3) {
-                  pageController.nextPage(
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.easeIn,
-                  );
-                } else {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => Home()),
-                  );
-                }
-              });
-            },
-            child: index < 3
-                ? Icon(
-                    FlevaIcons.arrow_circle_right_outline,
-                    size: 40,
-                    color: Colors.black,
-                  )
-                : Icon(FlevaIcons.checkmark_circle_2_outline,
-                    size: 40, color: Colors.green)),
-      ],
-    );
+            ),
+          ),
+        ));
   }
 
   initialValue(val) {
     return TextEditingController(text: val);
   }
 
-  _getTextBox(hint, snapshot, context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-        child: TextFormField(
-          controller: initialValue(
-              snapshot.data.apiUrl == null ? '' : snapshot.data.apiUrl),
-          validator: (val) => val.isEmpty
-              ? AppLocalizations.of(context).translate("Enter your API url")
-              : null,
-          onChanged: (val) => apiUrl = val,
-          keyboardType: TextInputType.text,
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: MyIdenaAppTheme.fontName,
-          ),
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[400], width: 1.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
-            ),
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.only(top: 14.0),
-            prefixIcon: Icon(
-              FlevaIcons.link_2,
-              color: Colors.black54,
-            ),
-            hintText:
-                AppLocalizations.of(context).translate("Enter your API url"),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _getPageIndicator(index) {
+  _getPageIndicator(index, Color colorsSelected, Color colorsByDefault) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -403,7 +317,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           width: index == 1 ? 16 : 6,
           height: 6,
           decoration: BoxDecoration(
-              color: index == 1 ? Colors.black : Colors.black54,
+              color: index == 1 ? colorsByDefault : colorsSelected,
               borderRadius: BorderRadius.circular(10)),
         ),
         SizedBox(
@@ -413,7 +327,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           width: index == 2 ? 16 : 6,
           height: 6,
           decoration: BoxDecoration(
-              color: index == 2 ? Colors.black : Colors.black54,
+              color: index == 2 ? colorsByDefault : colorsSelected,
               borderRadius: BorderRadius.circular(10)),
         ),
         SizedBox(
@@ -423,19 +337,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           width: index == 3 ? 16 : 6,
           height: 6,
           decoration: BoxDecoration(
-              color: index == 3 ? Colors.black : Colors.black54,
+              color: index == 3 ? colorsByDefault : colorsSelected,
               borderRadius: BorderRadius.circular(10)),
         ),
       ],
-    );
-  }
-
-  _getTellText(text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: Colors.black, fontSize: 35, fontWeight: FontWeight.w500),
     );
   }
 }
