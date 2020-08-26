@@ -459,11 +459,10 @@ class _ProfileViewState extends State<ProfileView> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
-                                              child: AutoSizeText(
+                                              child: Text(
                                                 dnaAll.dnaIdentityResponse
                                                     .result.address,
                                                 textAlign: TextAlign.center,
-                                                maxLines: 1,
                                                 style: TextStyle(
                                                   fontFamily:
                                                       MyIdenaAppTheme.fontName,
