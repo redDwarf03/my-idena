@@ -543,6 +543,11 @@ class _ValidationListViewState extends State<ValidationListView>
 
   Widget getThumbnails() {
     iconList.clear();
+    if (selectedIconList == null || selectedIconList.length == 0) {
+      return Column(
+        children: iconList,
+      );
+    }
     for (int i = 0; i < nbFlips; i++) {
       Widget text;
       Widget icon;
