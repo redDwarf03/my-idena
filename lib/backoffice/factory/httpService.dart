@@ -47,6 +47,36 @@ class HttpService {
   BcnTransactionsRequest bcnTransactionsRequest;
   BcnTransactionsResponse bcnTransactionsResponse;
 
+  Future<bool> checkConnection(apiUrl, keyApp) async {
+    try {
+      HttpClient httpClient = new HttpClient();
+      // get CoinBase Address
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetCoinBaseAddress = {
+        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': keyApp
+      };
+      dnaGetCoinbaseAddrRequest =
+          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
+      request
+          .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        return true;
+      }
+    }
+    catch(e)
+    {
+      return false;
+    }
+  }
+
+
   Future<DnaAll> getDnaAll() async {
     DnaAll dnaAll = new DnaAll();
 
