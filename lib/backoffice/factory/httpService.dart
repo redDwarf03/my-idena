@@ -69,9 +69,14 @@ class HttpService {
       if (response.statusCode == 200) {
         return true;
       }
+      else
+      {
+        return false;
+      }
     }
     catch(e)
     {
+      logger.e(e);
       return false;
     }
   }

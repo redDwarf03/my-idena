@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
@@ -143,9 +145,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
               return SizedBox();
             } else {
-              WidgetsBinding.instance
-                  .addPostFrameCallback((_) => onAfterBuild(context));
-
               return Container(
                 color: MyIdenaAppTheme.background,
                 child: Scaffold(
@@ -156,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       getAppBarUI(),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,
-                      )
+                      ),
                     ],
                   ),
                 ),

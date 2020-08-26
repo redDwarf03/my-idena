@@ -104,6 +104,10 @@
   "Type your\nurl api": "Type your\nurl api",
   "Type your\nkey app": "Type your\nkey app",
   "Please, type the api.key (cf \\datadir\\api.key file)": "Please, type the api.key (cf \\datadir\\api.key file)",
-  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Please, type http://{ip_address}:{port_number}\nto connect to your node"
+  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Please, type http://{ip_address}:{port_number}\nto connect to your node",
+  "Offline": "Offline",
+  "Wifi": "Wifi",
+  "Cellular": "Cellular"
+
 
 }

@@ -101,10 +101,14 @@
   "my Idena is an application currently under development. You use it at your own risk. \n\nIn any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\n": "my Idena est une application actuellement en cours de développement. Son utilisation est de votre responsabilité. \n\nEn aucun cas, l'éditeur de l'application ne pourra être jugé responsable des problèmes liés à son utilisation ou des bugs.\n\n",
   "In case of bugs, please notify them on the project's Github page (see \"About\" page).\n\nThe Idena core team is not participating in the development of this application": "Dans le cas où vous constatez des bugs, merci de les notifier dans le projet GitHub (cf la page \"A propos\").\n\nL'équipe coeur d'Idena ne participe pas au développement de cette application",
   "Welcome !": "Bienvenue !",
-  "Type your\nurl api": "Saisissez l'url de l'api",
-  "Type your\nkey app": "Saisissez la clé de l'application",
+  "Type your\nurl api": "Saisissez\nl'url de l'api",
+  "Type your\nkey app": "Saisissez\nla clé de l'application",
   "Please, type the api.key (cf \\datadir\\api.key file)": "Veuillez saisir la clé de l'api (cf fichier \\datadir\\api.key)",
-  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Please, type http://{ip_address}:{port_number}\nto connect to your node"
+  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Veuillez saisir les informations http://{adresse_ip}:{numéro_de_port}\npour vous connecter à votre noeud",
+  "Offline": "Hors ligne",
+  "Wifi": "Wifi",
+  "Cellular": "Cellulaire"
+
 
 
 
