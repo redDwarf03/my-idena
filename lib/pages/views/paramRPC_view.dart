@@ -22,6 +22,13 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   final _keyFormParamRPC = GlobalKey<FormState>();
   String apiUrl;
   String keyApp;
+  bool _keyAppVisible;
+
+  @override
+  void initState() {
+    _keyAppVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +184,22 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                           context)
                                                       .translate(
                                                           "Enter your key app"),
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      _keyAppVisible
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _keyAppVisible =
+                                                            !_keyAppVisible;
+                                                      });
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ),
