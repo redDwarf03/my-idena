@@ -23,4 +23,4 @@ jobs:
       - git clone https://github.com/flutter/flutter.git -b stable
       - ./flutter/bin/flutter doctor
     script:
-      - ./deploy/bin/flutter build apk --split-per-abi
+      - ./flutter/bin/flutter build apk --split-per-abi
