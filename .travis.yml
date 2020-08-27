@@ -3,20 +3,17 @@ jobs:
   - os: linux
     name: Android
     language: android
-    jdk:
-      - oraclejdk8
     android: 
       components:
       - tools
       - platform-tools
       - build-tools-28.0.3
-      - android-28
+      - android-29
     addons:
       apt:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - ant
           - lib32stdc++6
           - fonts-droid
     before_install:
@@ -25,9 +22,5 @@ jobs:
       - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       - git clone https://github.com/flutter/flutter.git -b stable
       - ./flutter/bin/flutter doctor
-    build: &build
-      before_script:
-        - export BUILD_NAME=$TRAVIS_TAG
-        - export BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
-      script:
-        - if [[ $TRAVIS_TAG == "" ]]; then ./flutter/bin/flutter build apk --split-per-abi; else ./flutter/bin/flutter build apk --build-name $BUILD_NAME --build-number $BUILD_NUMBER --split-per-abi; fi
+    script:
+      - ./deploy/bin/flutter build apk --split-per-abi
