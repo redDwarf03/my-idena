@@ -26,17 +26,6 @@ class _BottomBarViewState extends State<BottomBarView>
   SharedPreferences sharedPreferences;
   Color backGroundBottom = MyIdenaAppTheme.white;
 
-  void getSimulationMode() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      try {
-        if (sharedPreferences.getBool("simulation_mode")) {
-          backGroundBottom = Colors.grey[300];
-        }
-      } catch (e) {}
-    });
-  }
-
   @override
   void initState() {
     animationController = AnimationController(
@@ -44,7 +33,6 @@ class _BottomBarViewState extends State<BottomBarView>
       duration: const Duration(milliseconds: 1000),
     );
     animationController.forward();
-    getSimulationMode();
 
     super.initState();
   }

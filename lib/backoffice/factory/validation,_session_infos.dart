@@ -54,17 +54,6 @@ class ValidationSessionInfo {
   List<ValidationSessionInfoFlips> listSessionValidationFlip;
 }
 
-bool simulationMode;
-
-Future<bool> getSimulationMode() async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  simulationMode = sharedPreferences.getBool("simulation_mode");
-  if (simulationMode == null) {
-    simulationMode = true;
-  }
-  return simulationMode;
-}
-
 Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
     ValidationSessionInfo validationSessionInfoInput) async {
   if (validationSessionInfoInput != null) {
@@ -74,7 +63,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
   validationSessionInfo.typeSession = typeSession;
   String method;
-  simulationMode = await getSimulationMode();
 
   Map<String, dynamic> mapExemple;
   switch (typeSession) {
