@@ -47,27 +47,12 @@ class _ValidationListViewState extends State<ValidationListView>
 
   int index = 0;
 
-  SharedPreferences sharedPreferences;
-  bool simulationMode;
-
-  void getSimulationMode() async {
-    simulationMode = true;
-    sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      if (sharedPreferences.getBool("simulation_mode") != null) {
-        simulationMode = sharedPreferences.getBool("simulation_mode");
-      }
-    });
-  }
-
   @override
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
 
     super.initState();
-
-    getSimulationMode();
 
     if (simulationMode) {
       dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
@@ -76,6 +61,11 @@ class _ValidationListViewState extends State<ValidationListView>
     // Init choice
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.ShortSession) {
+      validationSessionInfo = null;
+      selectionFlipList = new List();
+      relevantFlipList = new List();
+      iconList = new List();
+      selectedIconList = new List();
       nbFlips = 5;
       checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
@@ -882,6 +872,7 @@ class _ValidationListViewState extends State<ValidationListView>
           typeLaunchSession = EpochPeriod.LongSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
+          selectedIconList.clear();
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
@@ -891,10 +882,12 @@ class _ValidationListViewState extends State<ValidationListView>
         }
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
-          //submitLongAnswers(selectionFlipList, validationSessionInfo);
+          //submitLongAnswers(
+          //    selectionFlipList, relevantFlipList, validationSessionInfo);
           typeLaunchSession = EpochPeriod.ShortSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
+          selectedIconList.clear();
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(

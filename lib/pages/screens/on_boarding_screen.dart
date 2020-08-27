@@ -197,7 +197,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     try {
                       SharedPreferencesHelper.setIdenaSharedPreferences(
                           IdenaSharedPreferences(apiUrlController.text,
-                              keyAppController.text, null));
+                              keyAppController.text));
                     } catch (e) {
                       logger.e(e.toString());
                     }
@@ -293,7 +293,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       try {
                         SharedPreferencesHelper.setIdenaSharedPreferences(
                             IdenaSharedPreferences(apiUrlController.text,
-                                keyAppController.text, null));
+                                keyAppController.text));
                       } catch (e) {
                         logger.e(e.toString());
                       }
