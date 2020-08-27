@@ -16,6 +16,7 @@ jobs:
         sources:
           - ubuntu-toolchain-r-test
         packages:
+          - ant
           - lib32stdc++6
           - fonts-droid
     before_install:
