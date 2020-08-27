@@ -4,23 +4,18 @@ import 'package:my_idena/main.dart';
 class IdenaSharedPreferences {
   String apiUrl;
   String keyApp;
-  bool simulationMode;
-  IdenaSharedPreferences(this.apiUrl, this.keyApp, this.simulationMode);
+  IdenaSharedPreferences(this.apiUrl, this.keyApp);
 }
 
 class SharedPreferencesHelper {
   static final String _kApiUrl = "api_url";
   static final String _kKeyApp = "key_app";
-  static final String _kSimulationMode = "simulation_mode";
 
   static Future<IdenaSharedPreferences> getIdenaSharedPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return IdenaSharedPreferences(
         prefs.getString(_kApiUrl) == null ? '' : prefs.getString(_kApiUrl),
-        prefs.getString(_kKeyApp) == null ? '' : prefs.getString(_kKeyApp),
-        prefs.getBool(_kSimulationMode) == null
-            ? true
-            : prefs.getBool(_kSimulationMode));
+        prefs.getString(_kKeyApp) == null ? '' : prefs.getString(_kKeyApp));
   }
 
   static Future<bool> setIdenaSharedPreferences(
@@ -49,30 +44,6 @@ class SharedPreferencesHelper {
         {
           prefs.setString(_kKeyApp, prefs.getString(_kKeyApp));
         }
-      }
-      if(idenaSharedPreferences.simulationMode != null)
-      {
-          prefs.setBool(_kSimulationMode, idenaSharedPreferences.simulationMode);
-      }
-      return true;
-    } catch (e) {
-      logger.e(e.toString());
-      return false;
-    }
-  }
-
-  static Future<bool> setIdenaSharedPreferencesSimulationMode(
-      bool simulationMode) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      prefs.setBool(_kSimulationMode, simulationMode);
-      if(prefs.getString(_kKeyApp) != null)
-      {
-        prefs.setString(_kKeyApp, prefs.getString(_kKeyApp));
-      }
-      if(prefs.getString(_kApiUrl) != null)
-      {
-          prefs.setString(_kApiUrl, prefs.getString(_kApiUrl));
       }
       return true;
     } catch (e) {
