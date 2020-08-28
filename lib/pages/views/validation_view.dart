@@ -54,9 +54,7 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    if (simulationMode) {
-      dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
-    }
+    dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
 
     // Init choice
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
