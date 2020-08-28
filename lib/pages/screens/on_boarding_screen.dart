@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,19 +29,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   bool _checkNodeConnection;
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
+  StreamController _nodeController;
 
   @override
   void dispose() {
     pageController.dispose();
     apiUrlController.dispose();
     keyAppController.dispose();
+    _nodeController.close();
     super.dispose();
   }
 
   @override
   void initState() {
-    _keyAppVisible = false;
     super.initState();
+    _keyAppVisible = false;
+    _nodeController = StreamController<bool>.broadcast();
+
+    Timer.periodic(Duration(milliseconds: 100), (_) => checkNode());
+  }
+
+  Future checkNode() async {
+      httpService.checkConnection(apiUrlController.text, keyAppController.text).then((res) {
+        _nodeController.add(res);
+        return res;
+      });
   }
 
   @override
@@ -398,10 +412,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Widget checkNodeConnection() {
-    return FutureBuilder(
-        future: httpService.checkConnection(
-            apiUrlController.text, keyAppController.text),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+    return new StreamBuilder(
+        stream: _nodeController.stream,
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection) {
