@@ -15,11 +15,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
-int nbFlips;
+
 List selectionFlipList = new List();
 List relevantFlipList = new List();
 List<Widget> iconList = new List();
 int controllerChronoValue;
+bool initPage;
 // 0 = no selection, 1 = selected, 2 = relevant, 3 = relevant,
 List<int> selectedIconList = new List();
 
@@ -54,9 +55,8 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    if (simulationMode) {
-      dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
-    }
+    dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
+    initPage = true;
 
     // Init choice
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
@@ -66,7 +66,6 @@ class _ValidationListViewState extends State<ValidationListView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
-      nbFlips = 5;
       checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -76,7 +75,6 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
-      nbFlips = 18;
       if (checkFlipsQualityProcess == false) {
         controllerChrono = AnimationController(
             vsync: this,
@@ -86,19 +84,6 @@ class _ValidationListViewState extends State<ValidationListView>
       } else {
         controllerChrono = AnimationController(
             vsync: this, duration: Duration(seconds: controllerChronoValue));
-      }
-    }
-
-    if (checkFlipsQualityProcess == false) {
-      selectionFlipList = new List();
-      for (int i = 0; i < nbFlips; i++) {
-        selectionFlipList.add(AnswerType.NONE);
-        selectedIconList.add(0);
-      }
-    } else {
-      for (int i = 0; i < nbFlips; i++) {
-        relevantFlipList.add(RelevantType.RELEVANT);
-        selectedIconList.add(0);
       }
     }
   }
@@ -133,6 +118,30 @@ class _ValidationListViewState extends State<ValidationListView>
               if (validationSessionInfo.listSessionValidationFlip == null) {
                 return Text("");
               } else {
+                if (initPage) {
+                  if (checkFlipsQualityProcess == false) {
+                    selectionFlipList = new List();
+                    for (int i = 0;
+                        i <
+                            validationSessionInfo
+                                .listSessionValidationFlip.length;
+                        i++) {
+                      selectionFlipList.add(AnswerType.NONE);
+                      selectedIconList.add(0);
+                    }
+                  } else {
+                    for (int i = 0;
+                        i <
+                            validationSessionInfo
+                                .listSessionValidationFlip.length;
+                        i++) {
+                      relevantFlipList.add(RelevantType.RELEVANT);
+                      selectedIconList.add(0);
+                    }
+                  }
+                  initPage = false;
+                }
+
                 List<ValidationSessionInfoFlips> listSessionValidationFlip =
                     validationSessionInfo.listSessionValidationFlip;
 
@@ -379,7 +388,8 @@ class _ValidationListViewState extends State<ValidationListView>
       String word1Desc = "";
       String word2Desc = "";
 
-      if (validationSessionInfoFlips.listWords != null) {
+      if (validationSessionInfoFlips.listWords != null &&
+          validationSessionInfoFlips.listWords.length > 0) {
         word1Name = validationSessionInfoFlips.listWords[0] != null
             ? validationSessionInfoFlips.listWords[0].name
             : "";
@@ -538,7 +548,9 @@ class _ValidationListViewState extends State<ValidationListView>
         children: iconList,
       );
     }
-    for (int i = 0; i < nbFlips; i++) {
+    for (int i = 0;
+        i < validationSessionInfo.listSessionValidationFlip.length;
+        i++) {
       Widget text;
       Widget icon;
       switch (selectedIconList[i]) {
