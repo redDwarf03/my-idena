@@ -24,7 +24,6 @@ import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
