@@ -15,12 +15,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
-
+int nbFlips;
 List selectionFlipList = new List();
 List relevantFlipList = new List();
 List<Widget> iconList = new List();
 int controllerChronoValue;
-bool initPage;
 // 0 = no selection, 1 = selected, 2 = relevant, 3 = relevant,
 List<int> selectedIconList = new List();
 
@@ -55,8 +54,9 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
-    initPage = true;
+    if (simulationMode) {
+      dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
+    }
 
     // Init choice
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
@@ -66,6 +66,7 @@ class _ValidationListViewState extends State<ValidationListView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
+      nbFlips = 5;
       checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -75,6 +76,7 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
+      nbFlips = 18;
       if (checkFlipsQualityProcess == false) {
         controllerChrono = AnimationController(
             vsync: this,
@@ -84,6 +86,19 @@ class _ValidationListViewState extends State<ValidationListView>
       } else {
         controllerChrono = AnimationController(
             vsync: this, duration: Duration(seconds: controllerChronoValue));
+      }
+    }
+
+    if (checkFlipsQualityProcess == false) {
+      selectionFlipList = new List();
+      for (int i = 0; i < nbFlips; i++) {
+        selectionFlipList.add(AnswerType.NONE);
+        selectedIconList.add(0);
+      }
+    } else {
+      for (int i = 0; i < nbFlips; i++) {
+        relevantFlipList.add(RelevantType.RELEVANT);
+        selectedIconList.add(0);
       }
     }
   }
@@ -118,30 +133,6 @@ class _ValidationListViewState extends State<ValidationListView>
               if (validationSessionInfo.listSessionValidationFlip == null) {
                 return Text("");
               } else {
-                if (initPage) {
-                  if (checkFlipsQualityProcess == false) {
-                    selectionFlipList = new List();
-                    for (int i = 0;
-                        i <
-                            validationSessionInfo
-                                .listSessionValidationFlip.length;
-                        i++) {
-                      selectionFlipList.add(AnswerType.NONE);
-                      selectedIconList.add(0);
-                    }
-                  } else {
-                    for (int i = 0;
-                        i <
-                            validationSessionInfo
-                                .listSessionValidationFlip.length;
-                        i++) {
-                      relevantFlipList.add(RelevantType.RELEVANT);
-                      selectedIconList.add(0);
-                    }
-                  }
-                  initPage = false;
-                }
-
                 List<ValidationSessionInfoFlips> listSessionValidationFlip =
                     validationSessionInfo.listSessionValidationFlip;
 
@@ -393,15 +384,17 @@ class _ValidationListViewState extends State<ValidationListView>
         word1Name = validationSessionInfoFlips.listWords[0] != null
             ? validationSessionInfoFlips.listWords[0].name
             : "";
-        word2Name = validationSessionInfoFlips.listWords[1] != null
-            ? validationSessionInfoFlips.listWords[1].name
-            : "";
         word1Desc = validationSessionInfoFlips.listWords[0] != null
             ? validationSessionInfoFlips.listWords[0].desc
             : "";
-        word2Desc = validationSessionInfoFlips.listWords[1] != null
-            ? validationSessionInfoFlips.listWords[1].desc
-            : "";
+        if (validationSessionInfoFlips.listWords.length > 1) {
+          word2Name = validationSessionInfoFlips.listWords[1] != null
+              ? validationSessionInfoFlips.listWords[1].name
+              : "";
+          word2Desc = validationSessionInfoFlips.listWords[1] != null
+              ? validationSessionInfoFlips.listWords[1].desc
+              : "";
+        }
       }
       return LayoutBuilder(builder: (context, constraints) {
         return Padding(
@@ -548,9 +541,7 @@ class _ValidationListViewState extends State<ValidationListView>
         children: iconList,
       );
     }
-    for (int i = 0;
-        i < validationSessionInfo.listSessionValidationFlip.length;
-        i++) {
+    for (int i = 0; i < nbFlips; i++) {
       Widget text;
       Widget icon;
       switch (selectedIconList[i]) {
@@ -824,12 +815,11 @@ class _ValidationListViewState extends State<ValidationListView>
                                     validationSessionInfo = null;
                                     checkFlipsQualityProcess = false;
                                     selectedIconList.clear();
-
-                                    Navigator.push<dynamic>(
-                                        context,
-                                        MaterialPageRoute<dynamic>(
-                                            builder: (BuildContext context) =>
-                                                Home()));
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Home()),
+                                    );
                                   },
                                   padding: EdgeInsets.all(5.0),
                                   shape: RoundedRectangleBorder(
@@ -838,7 +828,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                   color: Colors.white,
                                   child: Text(
                                       AppLocalizations.of(context)
-                                          .translate("Go to home"),
+                                          .translate("Go home"),
                                       style: TextStyle(
                                         color: Colors.black,
                                         letterSpacing: 1.5,
@@ -900,12 +890,10 @@ class _ValidationListViewState extends State<ValidationListView>
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
           selectedIconList.clear();
-          Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) =>
-                    HomeScreen(animationController: animationController),
-              ));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
         }
       }
     });
