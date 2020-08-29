@@ -252,7 +252,7 @@ class _ProfileViewState extends State<ProfileView> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0, left: 16, right: 24),
+                                      top: 0, left: 10, right: 10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
