@@ -26,6 +26,7 @@ import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:http/http.dart' as http;
 
 class HttpService {
   DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
@@ -49,38 +50,54 @@ class HttpService {
 
   Future<bool> checkConnection(apiUrl, keyApp) async {
     try {
-      HttpClient httpClient = new HttpClient();
-      // get CoinBase Address
-      HttpClientRequest request =
-          await httpClient.postUrl(Uri.parse(apiUrl));
-      request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapGetCoinBaseAddress = {
-        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-        'params': [],
-        'id': 101,
-        'key': keyApp
-      };
-      dnaGetCoinbaseAddrRequest =
-          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-      request
-          .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
-      HttpClientResponse response = await request.close();
-      if (response.statusCode == 200) {
-        return true;
-      }
-      else
+      if(apiUrl == null || keyApp == null || apiUrl == "" || keyApp == "")
       {
         return false;
       }
-    }
-    catch(e)
-    {
-      logger.e(e);
+      bool _validURL = Uri.parse(apiUrl).isAbsolute;
+      if(!_validURL)
+      {
+        return false;
+      }
+      final responseHttp = await http.get(Uri.encodeFull(apiUrl), 
+      headers: {
+         "accept": "application/json"
+       });
+      if (responseHttp.statusCode != 200) {
+        return false;
+      } else {
+        HttpClient httpClient = new HttpClient();
+        // get CoinBase Address
+        HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
+        request.headers.set('content-type', 'application/json');
+
+        Map<String, dynamic> mapGetCoinBaseAddress = {
+          'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+          'key': keyApp
+        };
+        dnaGetCoinbaseAddrRequest =
+            DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
+        request
+            .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+        HttpClientResponse response = await request.close();
+        if (response.statusCode == 200) {
+          String reply = await response.transform(utf8.decoder).join();
+          if (dnaGetCoinbaseAddrResponseFromJson(reply).result == null) {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      }
+    } catch (e) {
       return false;
     }
   }
-
 
   Future<DnaAll> getDnaAll() async {
     DnaAll dnaAll = new DnaAll();
@@ -382,7 +399,6 @@ class HttpService {
   }
 
   Future<DeepLinkParam> signin(deepLinkParam) async {
-
     DnaSignInRequest dnaSignInRequest;
     DnaSignInResponse dnaSignInResponse;
     try {
