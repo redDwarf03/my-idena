@@ -8,6 +8,7 @@ import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
+import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 
@@ -46,14 +47,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    Timer.periodic(Duration(milliseconds: 100), (_) => checkNode());
+    Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+
+    
   }
 
   Future checkNode() async {
-      httpService.checkConnection(apiUrlController.text, keyAppController.text).then((res) {
+    if (!_nodeController.isClosed) {
+      httpService
+          .checkConnection(apiUrlController.text, keyAppController.text)
+          .then((res) {
         _nodeController.add(res);
         return res;
       });
+    }
   }
 
   @override
@@ -210,8 +217,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   onChanged: (val) {
                     try {
                       SharedPreferencesHelper.setIdenaSharedPreferences(
-                          IdenaSharedPreferences(apiUrlController.text,
-                              keyAppController.text));
+                          IdenaSharedPreferences(
+                              apiUrlController.text, keyAppController.text));
                     } catch (e) {
                       logger.e(e.toString());
                     }
@@ -306,8 +313,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onChanged: (val) {
                       try {
                         SharedPreferencesHelper.setIdenaSharedPreferences(
-                            IdenaSharedPreferences(apiUrlController.text,
-                                keyAppController.text));
+                            IdenaSharedPreferences(
+                                apiUrlController.text, keyAppController.text));
                       } catch (e) {
                         logger.e(e.toString());
                       }
@@ -394,21 +401,30 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Widget goHome() {
-    if (_checkNodeConnection != null && _checkNodeConnection) {
-      return IconButton(
-        icon: Icon(FlevaIcons.globe_2_outline),
-        color: Colors.green,
-        iconSize: 40,
-        onPressed: () {
-          Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => Home()));
-        },
-      );
-    } else {
-      return SizedBox(width: 1, height: 1);
-    }
+    return new StreamBuilder(
+        stream: _nodeController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _checkNodeConnection = snapshot.data;
+            if (_checkNodeConnection) {
+              return IconButton(
+                icon: Icon(FlevaIcons.globe_2_outline),
+                color: Colors.green,
+                iconSize: 40,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                  );
+                },
+              );
+            } else {
+              return SizedBox(width: 1, height: 1);
+            }
+          } else {
+            return SizedBox(width: 1, height: 1);
+          }
+        });
   }
 
   Widget checkNodeConnection() {
