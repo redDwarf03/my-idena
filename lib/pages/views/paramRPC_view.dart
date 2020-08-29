@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
@@ -23,11 +26,35 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   String apiUrl;
   String keyApp;
   bool _keyAppVisible;
+  bool _checkNodeConnection;
+  StreamController _nodeController;
+  TextEditingController apiUrlController = new TextEditingController();
+  TextEditingController keyAppController = new TextEditingController();
 
   @override
   void initState() {
-    _keyAppVisible = false;
     super.initState();
+    _keyAppVisible = false;
+    _nodeController = StreamController<bool>.broadcast();
+
+    Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+  }
+
+  Future checkNode() async {
+    if (!_nodeController.isClosed) {
+      httpService.checkConnection(apiUrlController.text, keyAppController.text).then((res) {
+        _nodeController.add(res);
+        return res;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _nodeController.close();
+    apiUrlController.dispose();
+    keyAppController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,6 +66,10 @@ class _ParamRPCViewState extends State<ParamRPCView> {
           if (snapshot.hasData == false) {
             return Center(child: CircularProgressIndicator());
           } else {
+            apiUrlController.text =
+                snapshot.data.apiUrl != null ? snapshot.data.apiUrl : "";
+            keyAppController.text =
+                snapshot.data.keyApp != null ? snapshot.data.keyApp : "";
             return AnimatedBuilder(
                 animation: widget.animationController,
                 builder: (BuildContext context, Widget child) {
@@ -72,7 +103,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 24, right: 24, top: 8, bottom: 16),
+                                      left: 24, right: 30, top: 8, bottom: 16),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
@@ -82,14 +113,20 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ConnectivityService()
+                                              .getConnectionStatus(context),
+                                          checkNodeConnection(),
+                                        ],
+                                      ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
                                               child: TextFormField(
-                                                controller: initialValue(
-                                                    snapshot.data.apiUrl == null
-                                                        ? ''
-                                                        : snapshot.data.apiUrl),
+                                                controller: apiUrlController,
                                                 validator: (val) => val.isEmpty
                                                     ? AppLocalizations.of(
                                                             context)
@@ -138,10 +175,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                               padding:
                                                   const EdgeInsets.only(top: 6),
                                               child: TextFormField(
-                                                controller: initialValue(
-                                                    snapshot.data.keyApp == null
-                                                        ? ''
-                                                        : snapshot.data.keyApp),
+controller: keyAppController,
                                                 validator: (val) => val.isEmpty
                                                     ? AppLocalizations.of(
                                                             context)
@@ -217,8 +251,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                           .setIdenaSharedPreferences(
                                                               IdenaSharedPreferences(
                                                                   apiUrl,
-                                                                  keyApp
-                                                                  ));
+                                                                  keyApp));
                                                     } catch (e) {
                                                       logger.e(e.toString());
                                                     }
@@ -297,7 +330,46 @@ class _ParamRPCViewState extends State<ParamRPCView> {
         });
   }
 
-  initialValue(val) {
-    return TextEditingController(text: val);
+  Widget checkNodeConnection() {
+    return new StreamBuilder(
+        stream: _nodeController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _checkNodeConnection = snapshot.data;
+            if (_checkNodeConnection) {
+              return Text(
+                "Connexion Noeud ok",
+                style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 12,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
+                    fontWeight: FontWeight.w500),
+              );
+            } else {
+              return Text(
+                "Connexion Noeud ko",
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
+                    fontWeight: FontWeight.w500),
+              );
+            }
+          } else {
+            _checkNodeConnection = false;
+            return Text(
+              "Connexion Noeud ko",
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 12,
+                  fontFamily: MyIdenaAppTheme.fontName,
+                  letterSpacing: -0.2,
+                  fontWeight: FontWeight.w500),
+            );
+          }
+        });
   }
+
 }
