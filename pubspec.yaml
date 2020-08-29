@@ -64,6 +64,8 @@ dependencies:
   
   connectivity: ^0.4.9+2
 
+  true_time: ^0.1.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

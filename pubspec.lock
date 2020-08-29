@@ -581,6 +581,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.17"
+  true_time:
+    dependency: "direct main"
+    description:
+      name: true_time
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   tuple:
     dependency: transitive
     description:
