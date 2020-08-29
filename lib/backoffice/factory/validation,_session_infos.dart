@@ -124,7 +124,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
           String reply = await response.transform(utf8.decoder).join();
-
+          logger.i(reply);
           flipShortHashesResponse = flipShortHashesResponseFromJson(reply);
         }
       }
@@ -134,7 +134,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
           String reply = await response.transform(utf8.decoder).join();
-
+          logger.i(reply);
           flipLongHashesResponse = flipLongHashesResponseFromJson(reply);
         }
       }
@@ -197,6 +197,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
         HttpClientResponse responseFlip = await requestFlip.close();
         if (responseFlip.statusCode == 200) {
           String replyFlip = await responseFlip.transform(utf8.decoder).join();
+          logger.i(replyFlip);
           flipGetResponse = flipGetResponseFromJson(replyFlip);
         }
       }
@@ -319,6 +320,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
             if (responseWords.statusCode == 200) {
               String replyWords =
                   await responseWords.transform(utf8.decoder).join();
+              logger.i(replyWords);
               flipWordsResponse = flipWordsResponseFromJson(replyWords);
               nbWords = flipWordsResponse.result.words.length;
             }
@@ -332,8 +334,8 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
             word = new Word(name: "", desc: "");
           } else {
             word = new Word(
-                name: wordsMap[flipWordsResponse.result.words[j] - 1]["name"],
-                desc: wordsMap[flipWordsResponse.result.words[j] - 1]["desc"]);
+                name: wordsMap[flipWordsResponse.result.words[j]]["name"],
+                desc: wordsMap[flipWordsResponse.result.words[j]]["desc"]);
           }
           listWords[j] = word;
         }
@@ -400,7 +402,7 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
-      print(reply);
+      logger.i(reply);
       flipSubmitShortAnswersResponse =
           flipSubmitShortAnswersResponseFromJson(reply);
     }
@@ -462,7 +464,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList,
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
-      print(reply);
+      logger.i(reply);
       flipSubmitLongAnswersResponse =
           flipSubmitLongAnswersResponseFromJson(reply);
     }
