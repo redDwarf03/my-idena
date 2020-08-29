@@ -101,10 +101,7 @@
   {"name": "business", "desc": "commercial enterprise, business enterprise"},
   {"name": "power", "desc": "world power, major power, great power, superpower"},
   {"name": "power", "desc": "force, might"},
-  {
-    "name": "tycoon",
-    "desc": "baron, big businessman, business leader, king, magnate, mogul"
-  },
+  {"name": "tycoon", "desc": "baron, big businessman, business leader, king, magnate, mogul"},
   {"name": "money", "desc": "wealth"},
   {"name": "money", "desc": "currency"},
   {"name": "change", "desc": "money received in return"},
@@ -324,26 +321,17 @@
   {"name": "practice", "desc": "pattern, customary way of operation or behavior"},
   {"name": "bank", "desc": "depository financial institution"},
   {"name": "bank", "desc": "sloping land"},
-  {
-    "name": "support",
-    "desc": "keep, livelihood, living, bread and butter, sustenance"
-  },
+  {"name": "support", "desc": "keep, livelihood, living, bread and butter, sustenance"},
   {"name": "support", "desc": "documentation, documentary validation"},
   {"name": "support", "desc": "aiding the cause or policy or interests of"},
   {"name": "support", "desc": "device that bears the weight of another thing"},
   {"name": "building", "desc": "edifice"},
   {"name": "range", "desc": "scope, reach, orbit, compass"},
-  {
-    "name": "range",
-    "desc": "large tract of grassy open land where livestock graze"
-  },
+  {"name": "range", "desc": "large tract of grassy open land where livestock graze"},
   {"name": "range", "desc": "mountain range, range of mountains"},
   {"name": "range", "desc": "stove, kitchen stove"},
   {"name": "stage", "desc": "phase, distinct time period in a sequence of events"},
-  {
-    "name": "stage",
-    "desc": "large platform on which people are seen by an audience"
-  },
+  {"name": "stage", "desc": "large platform on which people are seen by an audience"},
   {"name": "meeting", "desc": "planned coming together"},
   {"name": "meeting", "desc": "encounter, casual or unexpected convergence"},
   {"name": "town", "desc": ""},
@@ -378,10 +366,7 @@
   {"name": "account", "desc": "accounting, account statement"},
   {"name": "account", "desc": "explanation"},
   {"name": "difference", "desc": "dispute, difference of opinion, conflict"},
-  {
-    "name": "difference",
-    "desc": "remainder, number that remains after subtraction"
-  },
+  {"name": "difference", "desc": "remainder, number that remains after subtraction"},
   {"name": "material", "desc": "fabric, cloth, textile"},
   {"name": "material", "desc": "stuff"},
   {"name": "air", "desc": "mixture of gases"},
@@ -403,10 +388,7 @@
   {"name": "rule", "desc": "dominion, dominance or power through legal authority"},
   {"name": "rule", "desc": "principle, law concerning a natural phenomenon"},
   {"name": "rule", "desc": "regulation"},
-  {
-    "name": "rule",
-    "desc": "formula standard procedure for solving a mathematical problem"
-  },
+  {"name": "rule", "desc": "formula standard procedure for solving a mathematical problem"},
   {"name": "rule", "desc": "ruler, measuring stick"},
   {"name": "rule", "desc": "convention, norm of behavior, pattern"},
   {"name": "rule", "desc": "duration of a monarch's or government's power"},
@@ -427,10 +409,7 @@
   {"name": "marriage", "desc": "union, matrimony, spousal relationship, wedlock"},
   {"name": "union", "desc": "labor union, trade union"},
   {"name": "movement", "desc": "motion, move, change of position"},
-  {
-    "name": "movement",
-    "desc": "social movement, front, people with a common ideology"
-  },
+  {"name": "movement", "desc": "social movement, front, people with a common ideology"},
   {"name": "crusade", "desc": "campaign, cause"},
   {"name": "board", "desc": "gameboard"},
   {"name": "board", "desc": "committee having supervisory powers"},
@@ -516,16 +495,10 @@
   {"name": "factor", "desc": "anything that contributes causally to a result"},
   {"name": "pattern", "desc": "model, design"},
   {"name": "piece", "desc": "separate part of a whole"},
-  {
-    "name": "piece",
-    "desc": "musical composition, opus, composition, piece of music"
-  },
+  {"name": "piece", "desc": "musical composition, opus, composition, piece of music"},
   {"name": "front", "desc": "the side that is seen or that goes first"},
   {"name": "front", "desc": "battlefront, front line"},
-  {
-    "name": "front",
-    "desc": "atmospheric phenomenon at the boundary between two air masses"
-  },
+  {"name": "front", "desc": "atmospheric phenomenon at the boundary between two air masses"},
   {"name": "evening", "desc": "eve"},
   {"name": "tree", "desc": "tall perennial woody plant"},
   {"name": "population", "desc": "people who inhabit a territory"},
@@ -539,10 +512,7 @@
   {"name": "street", "desc": ""},
   {"name": "performance", "desc": "execution, carrying out"},
   {"name": "performance", "desc": "act of presenting a play or a piece"},
-  {
-    "name": "knowledge",
-    "desc": "cognition, result of perception, learning, or reasoning"
-  },
+  {"name": "knowledge", "desc": "cognition, result of perception, learning, or reasoning"},
   {"name": "design", "desc": "preliminary sketch, outline"},
   {"name": "design", "desc": "invention, innovation"},
   {"name": "page", "desc": "one side of one leaf"},
@@ -583,10 +553,7 @@
   {"name": "feature", "desc": "characteristic"},
   {"name": "feature", "desc": "facial feature"},
   {"name": "couple", "desc": "twosome, duo, duet"},
-  {
-    "name": "step",
-    "desc": "measure, maneuver made as part of progress toward a goal"
-  },
+  {"name": "step", "desc": "measure, maneuver made as part of progress toward a goal"},
   {"name": "step", "desc": "footstep, pace, stride"},
   {"name": "step", "desc": "stair"},
   {"name": "step", "desc": "gradation"},
@@ -817,25 +784,16 @@
   {"name": "chair", "desc": "professorship"},
   {"name": "chair", "desc": "seat"},
   {"name": "importance", "desc": ""},
-  {
-    "name": "facility",
-    "desc": "installation, building or place providing a particular service"
-  },
+  {"name": "facility", "desc": "installation, building or place providing a particular service"},
   {"name": "facility", "desc": "adeptness, adroitness, deftness, quickness"},
-  {
-    "name": "article",
-    "desc": "nonfictional prose forming an independent part of a publication"
-  },
+  {"name": "article", "desc": "nonfictional prose forming an independent part of a publication"},
   {"name": "object", "desc": "physical object, tangible and visible entity"},
   {"name": "object", "desc": "aim, objective, target"},
   {"name": "context", "desc": "linguistic context, context of use"},
   {"name": "survey", "desc": "sketch, resume"},
   {"name": "turn", "desc": "bend, crook, circular segment of a curve"},
   {"name": "collection", "desc": "aggregation, accumulation, assemblage"},
-  {
-    "name": "reference",
-    "desc": "citation, acknowledgment, credit, mention, quotation"
-  },
+  {"name": "reference", "desc": "citation, acknowledgment, credit, mention, quotation"},
   {"name": "reference", "desc": "reference point, point of reference"},
   {"name": "card", "desc": "calling card, visiting card"},
   {"name": "card", "desc": "menu, bill of fare, carte du jour, carte"},
@@ -876,10 +834,7 @@
   {"name": "river", "desc": "large natural stream of water"},
   {"name": "start", "desc": "beginning, commencement, first, outset, get-go"},
   {"name": "requirement", "desc": "necessity, essential, requisite"},
-  {
-    "name": "edge",
-    "desc": "sharp side formed by the intersection of two surfaces of an object"
-  },
+  {"name": "edge", "desc": "sharp side formed by the intersection of two surfaces of an object"},
   {"name": "edge", "desc": "slight competitive advantage"},
   {"name": "opposition", "desc": "enemy, foe"},
   {"name": "opposition", "desc": "political party opposed"},
@@ -939,10 +894,7 @@
   {"name": "speech", "desc": "exchange of spoken words, verbal discourse"},
   {"name": "speech", "desc": "manner of speaking"},
   {"name": "speech", "desc": "address"},
-  {
-    "name": "network",
-    "desc": "communication system with a group of broadcasting stations"
-  },
+  {"name": "network", "desc": "communication system with a group of broadcasting stations"},
   {"name": "network", "desc": "web, interconnected system"},
   {"name": "tea", "desc": "beverage"},
   {"name": "peace", "desc": "state prevailing during the absence of war"},
@@ -979,10 +931,7 @@
   {"name": "wind", "desc": "air current, current of air"},
   {"name": "truth", "desc": "verity, trueness, conformity to reality"},
   {"name": "truth", "desc": "true statement"},
-  {
-    "name": "safety",
-    "desc": "state of being certain that adverse effects will not be caused"
-  },
+  {"name": "safety", "desc": "state of being certain that adverse effects will not be caused"},
   {"name": "partner", "desc": "member of a partnership"},
   {"name": "partner", "desc": "spouse, married person, mate, better half"},
   {"name": "copy", "desc": "secondary representation of an original"},
@@ -1049,20 +998,14 @@
   {"name": "review", "desc": "critique, critical review, review article"},
   {"name": "route", "desc": "path, itinerary"},
   {"name": "telephone", "desc": "phone, telephone set"},
-  {
-    "name": "proportion",
-    "desc": "quotient of magnitude of a part and magnitude of the whole"
-  },
+  {"name": "proportion", "desc": "quotient of magnitude of a part and magnitude of the whole"},
   {"name": "proportion", "desc": "dimension"},
   {"name": "consideration", "desc": "careful thought"},
   {"name": "consideration", "desc": "thoughtfulness"},
   {"name": "driver", "desc": "operator of a motor vehicle"},
   {"name": "reform", "desc": "change for the better"},
   {"name": "distance", "desc": "aloofness"},
-  {
-    "name": "distance",
-    "desc": "property created by the space between two objects or points"
-  },
+  {"name": "distance", "desc": "property created by the space between two objects or points"},
   {"name": "exercise", "desc": "exercising, physical exercise"},
   {"name": "skin", "desc": "cutis, person's body covering"},
   {"name": "peel", "desc": "skin, rind of a fruit or vegetable"},
@@ -1081,10 +1024,7 @@
   {"name": "assessment", "desc": "judgment, judgement"},
   {"name": "path", "desc": "route, itinerary"},
   {"name": "district", "desc": "territory, territorial dominion"},
-  {
-    "name": "reaction",
-    "desc": "response revealing a person's feelings or attitude"
-  },
+  {"name": "reaction", "desc": "response revealing a person's feelings or attitude"},
   {"name": "reaction", "desc": "chemical reaction"},
   {"name": "reaction", "desc": "equal and opposite force"},
   {"name": "impact", "desc": "striking of one body against another"},
@@ -1230,10 +1170,7 @@
   {"name": "flat", "desc": "flat tire"},
   {"name": "flat", "desc": "apartment"},
   {"name": "selection", "desc": "excerpt, excerption, extract"},
-  {
-    "name": "selection",
-    "desc": "survival, survival of the fittest, natural selection"
-  },
+  {"name": "selection", "desc": "survival, survival of the fittest, natural selection"},
   {"name": "selection", "desc": "assortment of things from which to choose"},
   {"name": "football", "desc": "football game"},
   {"name": "factory", "desc": "mill, manufacturing plant, manufactory"},
@@ -1243,10 +1180,7 @@
   {"name": "intention", "desc": "volition"},
   {"name": "aircraft", "desc": ""},
   {"name": "decade", "desc": "decennary, decennium, period of 10 years"},
-  {
-    "name": "row",
-    "desc": "arrangement of objects or people side by side in a line"
-  },
+  {"name": "row", "desc": "arrangement of objects or people side by side in a line"},
   {"name": "quarrel", "desc": "row, wrangle, words, run-in, dustup"},
   {"name": "search", "desc": ""},
   {"name": "limit", "desc": "limitation"},
@@ -1269,10 +1203,7 @@
   {"name": "notice", "desc": "advance notification"},
   {"name": "notice", "desc": "announcement"},
   {"name": "rain", "desc": "rainfall"},
-  {
-    "name": "mountain",
-    "desc": "mount, land mass projecting above its surroundings"
-  },
+  {"name": "mountain", "desc": "mount, land mass projecting above its surroundings"},
   {"name": "concentration", "desc": "engrossment, absorption, immersion"},
   {"name": "concentration", "desc": "strength of solution"},
   {"name": "finance", "desc": "management of money"},
@@ -2427,10 +2358,7 @@
   {"name": "engagement", "desc": "betrothal"},
   {"name": "contest", "desc": ""},
   {"name": "courage", "desc": "bravery, braveness"},
-  {
-    "name": "hip",
-    "desc": "either side of the body below the waist and above the thigh"
-  },
+  {"name": "hip", "desc": "either side of the body below the waist and above the thigh"},
   {"name": "trainer", "desc": "one who trains persons or animals"},
   {"name": "assignment", "desc": "task"},
   {"name": "clay", "desc": "fine-grained soil"},
@@ -2501,10 +2429,7 @@
   {"name": "tap", "desc": "water faucet, spigot"},
   {"name": "tap", "desc": "wiretap, telephone tap"},
   {"name": "commerce", "desc": "commercialism, mercantilism"},
-  {
-    "name": "hobby",
-    "desc": "pursuit, by-line, hobby, sideline, spare-time activity"
-  },
+  {"name": "hobby", "desc": "pursuit, by-line, hobby, sideline, spare-time activity"},
   {"name": "pursuit", "desc": "quest, search"},
   {"name": "collar", "desc": "harness"},
   {"name": "rice", "desc": "grains used as food"},
@@ -2975,10 +2900,7 @@
   {"name": "trunk", "desc": "luggage compartment, automobile trunk"},
   {"name": "deadline", "desc": ""},
   {"name": "ego", "desc": "egotism, self-importance"},
-  {
-    "name": "mind",
-    "desc": "head, brain, what is responsible for one's thoughts and feelings"
-  },
+  {"name": "mind", "desc": "head, brain, what is responsible for one's thoughts and feelings"},
   {"name": "tiger", "desc": "large feline"},
   {"name": "bitch", "desc": "female dog"},
   {"name": "bitch", "desc": "unpleasant woman"},
@@ -3053,11 +2975,8 @@
   {"name": "cord", "desc": "corduroy, fabric"},
   {"name": "housewife", "desc": "homemaker"},
   {"name": "arena", "desc": "place for spectacles"},
-  {
-    "name": "inhibition",
-    "desc":
-      "suppression, conscious exclusion of unacceptable thoughts or desires"
-  },
+  {"name": "inhibition", "desc":
+      "suppression, conscious exclusion of unacceptable thoughts or desires"},
   {"name": "simplicity", "desc": "simpleness, uncomplicatedness"},
   {"name": "bet", "desc": "wager"},
   {"name": "immigrant", "desc": ""},
@@ -3203,10 +3122,7 @@
   {"name": "mushroom", "desc": "fungus"},
   {"name": "cemetery", "desc": "graveyard, burial site, burial ground"},
   {"name": "disposition", "desc": "temperament"},
-  {
-    "name": "hospitality",
-    "desc": "cordial reception, kindness in welcoming guests or strangers"
-  },
+  {"name": "hospitality", "desc": "cordial reception, kindness in welcoming guests or strangers"},
   {"name": "ivory", "desc": "tusk"},
   {"name": "nephew", "desc": ""},
   {"name": "affinity", "desc": "kinship"},
@@ -3246,10 +3162,7 @@
   {"name": "turkey", "desc": "bird domesticated for food"},
   {"name": "sulphur", "desc": "sulfur, S"},
   {"name": "conductor", "desc": "person who collects fares"},
-  {
-    "name": "conductor",
-    "desc": "substance that readily transmits electricity or heat"
-  },
+  {"name": "conductor", "desc": "substance that readily transmits electricity or heat"},
   {"name": "creed", "desc": "credo, system of principles or beliefs"},
   {"name": "meadow", "desc": "hayfield"},
   {"name": "trait", "desc": "distinguishing feature of your personal nature"},
@@ -3277,10 +3190,7 @@
   {"name": "decay", "desc": "radioactive decay"},
   {"name": "forestry", "desc": "science of planting and caring for forests"},
   {"name": "multimedia", "desc": "multimedia system"},
-  {
-    "name": "pest",
-    "desc": "blighter, cuss, pesterer, gadfly, persistently annoying person"
-  },
+  {"name": "pest", "desc": "blighter, cuss, pesterer, gadfly, persistently annoying person"},
   {"name": "screw", "desc": "fastener with a tapered threaded shank"},
   {"name": "cushion", "desc": ""},
   {"name": "facade", "desc": "frontage, frontal"},
