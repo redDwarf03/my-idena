@@ -21,7 +21,7 @@ class FlipSubmitShortAnswersRequest {
     int id;
     String key;
 
-    static const String METHOD_NAME = "flip_submitLongAnswers";
+    static const String METHOD_NAME = "flip_submitShortAnswers";
 
     factory FlipSubmitShortAnswersRequest.fromJson(Map<String, dynamic> json) => FlipSubmitShortAnswersRequest(
         method: json["method"],
