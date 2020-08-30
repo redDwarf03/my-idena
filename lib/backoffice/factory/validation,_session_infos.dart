@@ -120,6 +120,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
       if (typeSession == EpochPeriod.ShortSession) {
         flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+        logger.i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
         request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -130,6 +131,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       }
       if (typeSession == EpochPeriod.LongSession) {
         flipLongHashesRequest = FlipLongHashesRequest.fromJson(map);
+        logger.i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
         request.add(utf8.encode(json.encode(flipLongHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -316,6 +318,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
                 FlipWordsRequest.fromJson(mapWords);
             requestWords
                 .add(utf8.encode(json.encode(flipWordsRequest.toJson())));
+            logger.i(new JsonEncoder.withIndent('  ').convert(requestWords));
             HttpClientResponse responseWords = await requestWords.close();
             if (responseWords.statusCode == 200) {
               String replyWords =
@@ -399,6 +402,8 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
     request
         .add(utf8.encode(json.encode(flipSubmitShortAnswersRequest.toJson())));
+
+    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitShortAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
@@ -461,6 +466,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList,
 
     request
         .add(utf8.encode(json.encode(flipSubmitLongAnswersRequest.toJson())));
+    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitLongAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
