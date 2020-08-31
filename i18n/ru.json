@@ -104,7 +104,15 @@
   "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Please, type http://{ip_address}:{port_number}\nto connect to your node",
   "Offline": "Offline",
   "Wifi": "Wifi",
-  "Cellular": "Cellular"
+  "Cellular": "Cellular",
+  "Always be on time": "Always be on time",
+  "My set time: ": "My set time: ",
+  "The current time: ": "The current time: ",
+  "Ok, you are on time !": "Ok, you are on time !",
+  "Please check your local clock. The time must be synchronized with internet time": "Please check your local clock. The time must be synchronized with internet time",
+  "Connection to node ok": "Connection to node ok",
+  "Connection to node ko. Please check your settings.": "Connection to node ko. Please check your settings."
+
 
 
 
