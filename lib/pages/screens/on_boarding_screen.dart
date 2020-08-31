@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/main.dart';
@@ -11,6 +12,7 @@ import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:ntp/ntp.dart';
 
 HttpService httpService = HttpService();
 
@@ -31,6 +33,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
   StreamController _nodeController;
+  DateTime _myTime;
+  DateTime _ntpTime;
+  int _differenceTime;
+  bool timeOK;
 
   @override
   void dispose() {
@@ -48,8 +54,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _nodeController = StreamController<bool>.broadcast();
 
     Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
-
-    
   }
 
   Future checkNode() async {
@@ -87,8 +91,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 },
                 children: <Widget>[
                   _welcome(index: 1),
-                  _getPageUrlApi(index: 2, contextStream: context),
-                  _getPageKeyApp(index: 3, contextStream: context),
+                  _getTime(index: 2),
+                  _getPageUrlApi(index: 3, contextStream: context),
+                  _getPageKeyApp(index: 4, contextStream: context),
                 ],
               ),
             );
@@ -146,6 +151,91 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       fontFamily: MyIdenaAppTheme.fontName,
                       letterSpacing: -0.2),
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _getTime({int index}) {
+    getDifferenceTime();
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Image.asset('assets/images/img_time.png'),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("Always be on time"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                _getPageIndicator(index, Colors.white54, Colors.white),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(AppLocalizations.of(context).translate("My set time: "),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        letterSpacing: -0.2)),
+                Text(
+                  DateFormat.yMMMMEEEEd(
+                          Localizations.localeOf(context).languageCode)
+                      .add_Hm()
+                      .format(_myTime.toLocal()),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate("The current time: "),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        letterSpacing: -0.2)),
+                Text(
+                      DateFormat.yMMMMEEEEd(
+                              Localizations.localeOf(context).languageCode)
+                          .add_Hm()
+                          .format(_ntpTime.toLocal()),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                getDifferenceTimeMsg(),
               ],
             ),
           ),
@@ -406,7 +496,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
-            if (_checkNodeConnection) {
+            if (_checkNodeConnection && timeOK) {
               return IconButton(
                 icon: Icon(FlevaIcons.globe_2_outline),
                 color: Colors.green,
@@ -435,7 +525,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection) {
               return Text(
-                "Connexion Noeud ok",
+                AppLocalizations.of(context).translate("Connection to node ok"),
                 style: TextStyle(
                     color: Colors.green,
                     fontSize: 12,
@@ -445,7 +535,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               );
             } else {
               return Text(
-                "Connexion Noeud ko",
+                AppLocalizations.of(context).translate(
+                    "Connection to node ko. Please check your settings."),
                 style: TextStyle(
                     color: Colors.red,
                     fontSize: 12,
@@ -457,7 +548,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           } else {
             _checkNodeConnection = false;
             return Text(
-              "Connexion Noeud ko",
+              AppLocalizations.of(context).translate(
+                  "Connection to node ko. Please check your settings."),
               style: TextStyle(
                   color: Colors.red,
                   fontSize: 12,
@@ -467,5 +559,45 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             );
           }
         });
+  }
+
+  Future<void> getDifferenceTime() async {
+    _myTime = await NTP.now();
+
+    final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+    _ntpTime = _myTime.add(Duration(milliseconds: offset));
+
+    _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+
+    print('My time: $_myTime');
+    print('NTP time: $_ntpTime');
+    print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
+  }
+
+  Widget getDifferenceTimeMsg() {
+    if (_differenceTime.abs() > 500) {
+      timeOK = false;
+      return Text(
+        AppLocalizations.of(context).translate(
+            "Please check your local clock. The time must be synchronized with internet time"),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.red[400],
+            fontSize: 16,
+            fontFamily: MyIdenaAppTheme.fontName,
+            letterSpacing: -0.2),
+      );
+    } else {
+      timeOK = true;
+      return Text(
+        AppLocalizations.of(context).translate("Ok, you are on time !"),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.green[400],
+            fontSize: 16,
+            fontFamily: MyIdenaAppTheme.fontName,
+            letterSpacing: -0.2),
+      );
+    }
   }
 }
