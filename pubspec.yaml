@@ -66,6 +66,10 @@ dependencies:
 
   ntp: ^1.0.7
   
+  flutter_local_notifications: ^1.4.4+4
+
+  rxdart: ^0.24.1
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter
