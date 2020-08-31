@@ -11,7 +11,6 @@ import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
@@ -54,8 +53,16 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
+    httpService.getDnaAll();
     if (simulationMode) {
       dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
+    }
+    else
+    {
+      if(typeLaunchSession == EpochPeriod.LongSession)
+      {
+        dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
+      }
     }
 
     // Init choice
@@ -66,7 +73,7 @@ class _ValidationListViewState extends State<ValidationListView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
-      nbFlips = 5;
+      nbFlips = 1;
       checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -76,7 +83,7 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
-      nbFlips = 18;
+      nbFlips = 1;
       if (checkFlipsQualityProcess == false) {
         controllerChrono = AnimationController(
             vsync: this,
@@ -729,7 +736,7 @@ class _ValidationListViewState extends State<ValidationListView>
           RaisedButton(
             elevation: 5.0,
             onPressed: () {
-              //submitShortAnswers(selectionFlipList, validationSessionInfo);
+              submitShortAnswers(selectionFlipList, validationSessionInfo);
               typeLaunchSession = EpochPeriod.LongSession;
               validationSessionInfo = null;
               checkFlipsQualityProcess = false;
@@ -780,8 +787,8 @@ class _ValidationListViewState extends State<ValidationListView>
             elevation: 5.0,
             onPressed: () {
               checkFlipsQualityProcess = false;
-              //submitLongAnswers(
-              //    selectionFlipList, relevantFlipList, validationSessionInfo);
+              submitLongAnswers(
+                  selectionFlipList, relevantFlipList, validationSessionInfo);
               typeLaunchSession = EpochPeriod.ShortSession;
               validationSessionInfo = null;
               selectedIconList.clear();
@@ -870,7 +877,7 @@ class _ValidationListViewState extends State<ValidationListView>
       if (status == AnimationStatus.dismissed) {
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.ShortSession) {
-          //submitShortAnswers(selectionFlipList, validationSessionInfo);
+          submitShortAnswers(selectionFlipList, validationSessionInfo);
           typeLaunchSession = EpochPeriod.LongSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
@@ -884,8 +891,8 @@ class _ValidationListViewState extends State<ValidationListView>
         }
         if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
-          //submitLongAnswers(
-          //    selectionFlipList, relevantFlipList, validationSessionInfo);
+          submitLongAnswers(
+              selectionFlipList, relevantFlipList, validationSessionInfo);
           typeLaunchSession = EpochPeriod.ShortSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;

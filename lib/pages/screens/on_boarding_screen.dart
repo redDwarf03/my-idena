@@ -37,6 +37,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   DateTime _ntpTime;
   int _differenceTime;
   bool timeOK;
+  Timer _timerCheckNode;
+  Timer _timerDifferenceTime;
 
   @override
   void dispose() {
@@ -44,6 +46,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     apiUrlController.dispose();
     keyAppController.dispose();
     _nodeController.close();
+    _timerCheckNode.cancel();
+    _timerDifferenceTime.cancel();
     super.dispose();
   }
 
@@ -53,14 +57,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
-
-    getDifferenceTime();
+    _timerCheckNode = Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+    _timerDifferenceTime = Timer.periodic(Duration(milliseconds: 1000), (_) => getDifferenceTime());
 
   }
 
   Future checkNode() async {
-    if (!_nodeController.isClosed) {
+    if (!_nodeController.isClosed && _timerCheckNode.isActive) {
       httpService
           .checkConnection(apiUrlController.text, keyAppController.text)
           .then((res) {
@@ -163,7 +166,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   _getTime({int index}) {
-    getDifferenceTime();
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -580,17 +582,26 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Future<void> getDifferenceTime() async {
-    _myTime = await NTP.now();
+    if (_timerDifferenceTime.isActive) {
+      _myTime = await NTP.now();
 
-    final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-    _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+      _ntpTime = _myTime.add(Duration(milliseconds: offset));
 
-    _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+
+      print('My time: $_myTime');
+      print('NTP time: $_ntpTime');
+      print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
+
+      if (!mounted) return;
+      setState(() {});
+    }
 
   }
 
   Widget getDifferenceTimeMsg() {
-    if (_differenceTime == null || _differenceTime.abs() > 500) {
+    if (_differenceTime == null || _differenceTime.abs() > 2000) {
       timeOK = false;
       return Text(
         AppLocalizations.of(context).translate(

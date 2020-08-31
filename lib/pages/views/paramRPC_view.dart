@@ -30,6 +30,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   StreamController _nodeController;
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
+  Timer _timer;
 
   @override
   void initState() {
@@ -37,11 +38,11 @@ class _ParamRPCViewState extends State<ParamRPCView> {
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+    _timer = Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
   }
 
   Future checkNode() async {
-    if (!_nodeController.isClosed) {
+    if (!_nodeController.isClosed && _timer.isActive) {
       httpService
           .checkConnection(apiUrlController.text, keyAppController.text)
           .then((res) {
@@ -54,6 +55,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   @override
   void dispose() {
     _nodeController.close();
+    _timer.cancel();
     apiUrlController.dispose();
     keyAppController.dispose();
     super.dispose();

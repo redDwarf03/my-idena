@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena/main.dart';
@@ -5,9 +7,9 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:ntp/ntp.dart';
 
-  DateTime _myTime;
-  DateTime _ntpTime;
-  int _differenceTime;
+DateTime _myTime;
+DateTime _ntpTime;
+int _differenceTime;
 
 class TimeView extends StatefulWidget {
   final AnimationController animationController;
@@ -21,16 +23,24 @@ class TimeView extends StatefulWidget {
 }
 
 class _TimeViewState extends State<TimeView> {
+  Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    getDifferenceTime();
+
+    _timer = Timer.periodic(
+        Duration(milliseconds: 1000), (_) => getDifferenceTime());
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    getDifferenceTime();
     return AnimatedBuilder(
         animation: widget.animationController,
         builder: (BuildContext context, Widget child) {
@@ -233,17 +243,20 @@ class _TimeViewState extends State<TimeView> {
   }
 
   Future<void> getDifferenceTime() async {
-    _myTime = await NTP.now();
+    if (_timer.isActive) {
+      _myTime = await NTP.now();
 
-    final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-    _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+      _ntpTime = _myTime.add(Duration(milliseconds: offset));
 
-    _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-
+      _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      if (!mounted) return;
+      setState(() {});
+    }
   }
 
   Widget getDifferenceTimeMsg() {
-    if (_differenceTime == null || _differenceTime.abs() > 500) {
+    if (_differenceTime == null || _differenceTime.abs() > 1000) {
       return Text(
         AppLocalizations.of(context).translate(
             "Please check your local clock. The time must be synchronized with internet time"),

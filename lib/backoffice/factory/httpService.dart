@@ -100,7 +100,6 @@ class HttpService {
   }
 
   Future<DnaAll> getDnaAll() async {
-    DnaAll dnaAll = new DnaAll();
 
     try {
       HttpClient httpClient = new HttpClient();
@@ -185,9 +184,11 @@ class HttpService {
 
         dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapGetEpoch);
         request4.add(utf8.encode(json.encode(dnaGetEpochRequest.toJson())));
+        logger.i(new JsonEncoder.withIndent('  ').convert(dnaGetEpochRequest));
         response = await request4.close();
         if (response.statusCode == 200) {
           String reply = await response.transform(utf8.decoder).join();
+          logger.i(reply);
           dnaGetEpochResponse = dnaGetEpochResponseFromJson(reply);
         }
 
