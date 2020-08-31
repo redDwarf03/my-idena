@@ -42,7 +42,9 @@ class _ParamRPCViewState extends State<ParamRPCView> {
 
   Future checkNode() async {
     if (!_nodeController.isClosed) {
-      httpService.checkConnection(apiUrlController.text, keyAppController.text).then((res) {
+      httpService
+          .checkConnection(apiUrlController.text, keyAppController.text)
+          .then((res) {
         _nodeController.add(res);
         return res;
       });
@@ -113,15 +115,17 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ConnectivityService()
-                                              .getConnectionStatus(context),
-                                          checkNodeConnection(),
-                                        ],
-                                      ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                ConnectivityService()
+                                                    .getConnectionStatus(
+                                                        context),
+                                                checkNodeConnection(),
+                                              ],
+                                            ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
@@ -175,7 +179,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                               padding:
                                                   const EdgeInsets.only(top: 6),
                                               child: TextFormField(
-controller: keyAppController,
+                                                controller: keyAppController,
                                                 validator: (val) => val.isEmpty
                                                     ? AppLocalizations.of(
                                                             context)
@@ -338,7 +342,7 @@ controller: keyAppController,
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection) {
               return Text(
-                "Connexion Noeud ok",
+                AppLocalizations.of(context).translate("Connection to node ok"),
                 style: TextStyle(
                     color: Colors.green,
                     fontSize: 12,
@@ -348,7 +352,8 @@ controller: keyAppController,
               );
             } else {
               return Text(
-                "Connexion Noeud ko",
+                AppLocalizations.of(context).translate(
+                    "Connection to node ko. Please check your settings."),
                 style: TextStyle(
                     color: Colors.red,
                     fontSize: 12,
@@ -360,7 +365,8 @@ controller: keyAppController,
           } else {
             _checkNodeConnection = false;
             return Text(
-              "Connexion Noeud ko",
+              AppLocalizations.of(context).translate(
+                  "Connection to node ko. Please check your settings."),
               style: TextStyle(
                   color: Colors.red,
                   fontSize: 12,
@@ -371,5 +377,4 @@ controller: keyAppController,
           }
         });
   }
-
 }
