@@ -240,9 +240,6 @@ class _TimeViewState extends State<TimeView> {
 
     _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
 
-    print('My time: $_myTime');
-    print('NTP time: $_ntpTime');
-    print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
   }
 
   Widget getDifferenceTimeMsg() {
