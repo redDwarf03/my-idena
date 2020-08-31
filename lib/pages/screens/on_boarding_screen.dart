@@ -54,6 +54,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _nodeController = StreamController<bool>.broadcast();
 
     Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+
+    getDifferenceTime();
+
   }
 
   Future checkNode() async {
@@ -198,10 +201,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         fontFamily: MyIdenaAppTheme.fontName,
                         letterSpacing: -0.2)),
                 Text(
-                  DateFormat.yMMMMEEEEd(
-                          Localizations.localeOf(context).languageCode)
-                      .add_Hm()
-                      .format(_myTime.toLocal()),
+                  _myTime != null
+                      ? DateFormat.yMMMMEEEEd(
+                              Localizations.localeOf(context).languageCode)
+                          .add_Hm()
+                          .format(_myTime.toLocal())
+                      : "",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
@@ -213,7 +218,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   height: 20,
                 ),
                 Text(
-                  AppLocalizations.of(context).translate("The current time: "),
+                    AppLocalizations.of(context)
+                        .translate("The current time: "),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -221,10 +227,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         fontFamily: MyIdenaAppTheme.fontName,
                         letterSpacing: -0.2)),
                 Text(
-                      DateFormat.yMMMMEEEEd(
+                  _ntpTime != null
+                      ? DateFormat.yMMMMEEEEd(
                               Localizations.localeOf(context).languageCode)
                           .add_Hm()
-                          .format(_ntpTime.toLocal()),
+                          .format(_ntpTime.toLocal())
+                      : "",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
@@ -575,7 +583,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   Widget getDifferenceTimeMsg() {
-    if (_differenceTime.abs() > 500) {
+    if (_differenceTime == null || _differenceTime.abs() > 500) {
       timeOK = false;
       return Text(
         AppLocalizations.of(context).translate(

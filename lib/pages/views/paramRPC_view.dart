@@ -123,7 +123,6 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                 ConnectivityService()
                                                     .getConnectionStatus(
                                                         context),
-                                                checkNodeConnection(),
                                               ],
                                             ),
                                             Padding(
@@ -241,6 +240,10 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                 ),
                                               ),
                                             ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            checkNodeConnection(),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
