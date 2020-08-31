@@ -459,7 +459,7 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList,
     List<ParamLongAnswer> params = new List();
     params.add(answers);
     flipSubmitLongAnswersRequest.method =
-        FlipSubmitShortAnswersRequest.METHOD_NAME;
+        FlipSubmitLongAnswersRequest.METHOD_NAME;
     flipSubmitLongAnswersRequest.params = params;
     flipSubmitLongAnswersRequest.id = 101;
     flipSubmitLongAnswersRequest.key = idenaSharedPreferences.keyApp;
