@@ -302,7 +302,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ConnectivityService().getConnectionStatus(contextStream),
-                    checkNodeConnection(),
                   ],
                 ),
                 TextFormField(
@@ -346,6 +345,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         .translate("Enter your API url"),
                   ),
                 ),
+                    checkNodeConnection(),
               ],
             ),
           ),
@@ -399,7 +399,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ConnectivityService().getConnectionStatus(contextStream),
-                      checkNodeConnection(),
                     ],
                   ),
                   TextFormField(
@@ -455,6 +454,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       ),
                     ),
                   ),
+                    checkNodeConnection(),
                   goHome(),
                 ],
               ),
@@ -492,6 +492,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           height: 6,
           decoration: BoxDecoration(
               color: index == 3 ? colorsByDefault : colorsSelected,
+              borderRadius: BorderRadius.circular(10)),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Container(
+          width: index == 4 ? 16 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+              color: index == 4 ? colorsByDefault : colorsSelected,
               borderRadius: BorderRadius.circular(10)),
         ),
       ],
@@ -577,9 +587,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
 
-    print('My time: $_myTime');
-    print('NTP time: $_ntpTime');
-    print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
   }
 
   Widget getDifferenceTimeMsg() {
