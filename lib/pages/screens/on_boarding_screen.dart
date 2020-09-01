@@ -16,12 +16,20 @@ import 'package:ntp/ntp.dart';
 
 HttpService httpService = HttpService();
 
+DateTime _myTime;
+DateTime _ntpTime;
+int _differenceTime;
+bool timeOK;
+Timer _timerCheckNode;
+Timer _timerDifferenceTime;
+
 class OnBoardingScreen extends StatefulWidget {
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen>
+    with TickerProviderStateMixin {
   PageController pageController = PageController(
     initialPage: 0,
     keepPage: true,
@@ -33,12 +41,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
   StreamController _nodeController;
-  DateTime _myTime;
-  DateTime _ntpTime;
-  int _differenceTime;
-  bool timeOK;
-  Timer _timerCheckNode;
-  Timer _timerDifferenceTime;
 
   @override
   void dispose() {
@@ -57,9 +59,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    _timerCheckNode = Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
-    _timerDifferenceTime = Timer.periodic(Duration(milliseconds: 1000), (_) => getDifferenceTime());
-
+    _timerCheckNode =
+        Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
   }
 
   Future checkNode() async {
@@ -195,57 +196,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(AppLocalizations.of(context).translate("My set time: "),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        letterSpacing: -0.2)),
-                Text(
-                  _myTime != null
-                      ? DateFormat.yMMMMEEEEd(
-                              Localizations.localeOf(context).languageCode)
-                          .add_Hm()
-                          .format(_myTime.toLocal())
-                      : "",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: MyIdenaAppTheme.fontName,
-                      letterSpacing: -0.2),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                    AppLocalizations.of(context)
-                        .translate("The current time: "),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        letterSpacing: -0.2)),
-                Text(
-                  _ntpTime != null
-                      ? DateFormat.yMMMMEEEEd(
-                              Localizations.localeOf(context).languageCode)
-                          .add_Hm()
-                          .format(_ntpTime.toLocal())
-                      : "",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: MyIdenaAppTheme.fontName,
-                      letterSpacing: -0.2),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                getDifferenceTimeMsg(),
+                new OnBoardingTimer(),
               ],
             ),
           ),
@@ -347,7 +298,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         .translate("Enter your API url"),
                   ),
                 ),
-                    checkNodeConnection(),
+                checkNodeConnection(),
               ],
             ),
           ),
@@ -456,7 +407,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       ),
                     ),
                   ),
-                    checkNodeConnection(),
+                  checkNodeConnection(),
                   goHome(),
                 ],
               ),
@@ -580,24 +531,103 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           }
         });
   }
+}
+
+class OnBoardingTimer extends StatefulWidget {
+  @override
+  _OnBoardingTimerState createState() => _OnBoardingTimerState();
+}
+
+class _OnBoardingTimerState extends State<OnBoardingTimer> {
+  @override
+  void initState() {
+    _timerDifferenceTime = Timer.periodic(
+        Duration(milliseconds: 1000), (_) => getDifferenceTime());
+
+    super.initState();
+  }
+
+  @override
+  @override
+  void dispose() {
+    _timerDifferenceTime.cancel();
+    super.dispose();
+  }
 
   Future<void> getDifferenceTime() async {
     if (_timerDifferenceTime.isActive) {
       _myTime = await NTP.now();
 
-      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-      _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      try {
+        final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+        _ntpTime = _myTime.add(Duration(milliseconds: offset));
 
-      _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-
+        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      } catch (e) {}
       print('My time: $_myTime');
       print('NTP time: $_ntpTime');
       print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
 
-      //if (!mounted) return;
-      //setState(() {});
+      if (!mounted) return;
+      setState(() {});
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(AppLocalizations.of(context).translate("My set time: "),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: MyIdenaAppTheme.fontName,
+                letterSpacing: -0.2)),
+        Text(
+          _myTime != null
+              ? DateFormat.yMMMMEEEEd(
+                      Localizations.localeOf(context).languageCode)
+                  .add_Hms()
+                  .format(_myTime.toLocal())
+              : "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontFamily: MyIdenaAppTheme.fontName,
+              letterSpacing: -0.2),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(AppLocalizations.of(context).translate("The current time: "),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: MyIdenaAppTheme.fontName,
+                letterSpacing: -0.2)),
+        Text(
+          _ntpTime != null
+              ? DateFormat.yMMMMEEEEd(
+                      Localizations.localeOf(context).languageCode)
+                  .add_Hms()
+                  .format(_ntpTime.toLocal())
+              : "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontFamily: MyIdenaAppTheme.fontName,
+              letterSpacing: -0.2),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        getDifferenceTimeMsg(),
+      ],
+    );
   }
 
   Widget getDifferenceTimeMsg() {

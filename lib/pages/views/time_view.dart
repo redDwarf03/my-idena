@@ -27,10 +27,10 @@ class _TimeViewState extends State<TimeView> {
 
   @override
   void initState() {
-    super.initState();
-
     _timer = Timer.periodic(
         Duration(milliseconds: 1000), (_) => getDifferenceTime());
+
+    super.initState();
   }
 
   @override
@@ -132,7 +132,7 @@ class _TimeViewState extends State<TimeView> {
                                                   Localizations.localeOf(
                                                           context)
                                                       .languageCode)
-                                              .add_Hm()
+                                              .add_Hms()
                                               .format(_myTime.toLocal())
                                           : "",
                                       textAlign: TextAlign.center,
@@ -198,7 +198,7 @@ class _TimeViewState extends State<TimeView> {
                                                   Localizations.localeOf(
                                                           context)
                                                       .languageCode)
-                                              .add_Hm()
+                                              .add_Hms()
                                               .format(_ntpTime.toLocal())
                                           : "",
                                       textAlign: TextAlign.center,
@@ -246,10 +246,16 @@ class _TimeViewState extends State<TimeView> {
     if (_timer.isActive) {
       _myTime = await NTP.now();
 
-      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-      _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      try {
+        final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+        _ntpTime = _myTime.add(Duration(milliseconds: offset));
 
-      _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      } catch (e) {}
+      print('My time: $_myTime');
+      print('NTP time: $_ntpTime');
+      print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
+
       if (!mounted) return;
       setState(() {});
     }
