@@ -53,7 +53,7 @@ class _ValidationListViewState extends State<ValidationListView>
 
     super.initState();
 
-    httpService.getDnaAll();
+    getDnaAllForEpoch();
     if (simulationMode) {
       dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
     }
@@ -73,7 +73,7 @@ class _ValidationListViewState extends State<ValidationListView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
-      nbFlips = 1;
+      nbFlips = 5;
       checkFlipsQualityProcess = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -83,7 +83,7 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
-      nbFlips = 1;
+      nbFlips = 17;
       if (checkFlipsQualityProcess == false) {
         controllerChrono = AnimationController(
             vsync: this,
@@ -741,6 +741,7 @@ class _ValidationListViewState extends State<ValidationListView>
               validationSessionInfo = null;
               checkFlipsQualityProcess = false;
               selectedIconList.clear();
+              controllerChrono.dispose();
               Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
@@ -870,6 +871,11 @@ class _ValidationListViewState extends State<ValidationListView>
     } else {
       return SizedBox();
     }
+  }
+
+  getDnaAllForEpoch() async
+  {
+     await httpService.getDnaAll();
   }
 
   Widget getChrono() {
