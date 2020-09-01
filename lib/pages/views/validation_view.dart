@@ -1,5 +1,4 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
@@ -20,6 +19,7 @@ HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 DnaAll dnaAllForValidationSession;
 String typeLaunchSessionForValidationSession;
+bool checkFlipsQualityProcessForValidationSession;
 int nbFlips = 0;
 List selectionFlipList = new List();
 List relevantFlipList = new List();
@@ -35,6 +35,7 @@ class ValidationListView extends StatefulWidget {
   final DnaAll dnaAll;
   final bool simulationMode;
   final String typeLaunchSession;
+  final bool checkFlipsQualityProcess;
 
   const ValidationListView(
       {Key key,
@@ -42,6 +43,7 @@ class ValidationListView extends StatefulWidget {
       this.mainScreenAnimation,
       this.simulationMode,
       this.typeLaunchSession,
+      this.checkFlipsQualityProcess,
       this.dnaAll})
       : super(key: key);
 
@@ -68,7 +70,8 @@ class _ValidationListViewState extends State<ValidationListView>
 
     dnaAllForValidationSession = widget.dnaAll;
     typeLaunchSessionForValidationSession = widget.typeLaunchSession;
-
+    checkFlipsQualityProcessForValidationSession =
+        widget.checkFlipsQualityProcess;
     super.initState();
 
     if (widget.simulationMode) {
@@ -90,7 +93,7 @@ class _ValidationListViewState extends State<ValidationListView>
       iconList = new List();
       selectedIconList = new List();
       nbFlips = 5;
-      checkFlipsQualityProcess = false;
+      checkFlipsQualityProcessForValidationSession = false;
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
@@ -100,7 +103,7 @@ class _ValidationListViewState extends State<ValidationListView>
     if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
       nbFlips = 17;
-      if (checkFlipsQualityProcess == false) {
+      if (checkFlipsQualityProcessForValidationSession == false) {
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
@@ -112,7 +115,7 @@ class _ValidationListViewState extends State<ValidationListView>
       }
     }
 
-    if (checkFlipsQualityProcess == false) {
+    if (checkFlipsQualityProcessForValidationSession == false) {
       selectionFlipList = new List();
       for (int i = 0; i < nbFlips; i++) {
         selectionFlipList.add(AnswerType.NONE);
@@ -308,15 +311,17 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                         ],
                                                                       ),
                                                                       new ValidationWordsView(
-                                                                        index:
-                                                                            index,
-                                                                        relevantFlipList:
-                                                                            relevantFlipList,
-                                                                        selectedIconList:
-                                                                            selectedIconList,
-                                                                        validationSessionInfoFlips:
-                                                                            listSessionValidationFlip[index],
-                                                                      ),
+                                                                          index:
+                                                                              index,
+                                                                          relevantFlipList:
+                                                                              relevantFlipList,
+                                                                          selectedIconList:
+                                                                              selectedIconList,
+                                                                              dnaAll: dnaAllForValidationSession,
+                                                                          validationSessionInfoFlips: listSessionValidationFlip[
+                                                                              index],
+                                                                          checkFlipsQualityProcess:
+                                                                              checkFlipsQualityProcessForValidationSession),
                                                                       Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             top:
@@ -385,7 +390,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                       selectionFlipList: selectionFlipList,
                                       dnaAll: dnaAllForValidationSession,
                                       checkFlipsQualityProcess:
-                                          checkFlipsQualityProcess,
+                                          checkFlipsQualityProcessForValidationSession,
                                     )),
                                     Container(
                                         child: ValidationShortSessionButtonView(
@@ -403,7 +408,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                       selectionFlipList: selectionFlipList,
                                       dnaAll: dnaAllForValidationSession,
                                       checkFlipsQualityProcess:
-                                          checkFlipsQualityProcess,
+                                          checkFlipsQualityProcessForValidationSession,
                                       validationSessionInfo:
                                           validationSessionInfo,
                                     )),
@@ -432,7 +437,7 @@ class _ValidationListViewState extends State<ValidationListView>
           submitShortAnswers(selectionFlipList, validationSessionInfo);
           typeLaunchSessionForValidationSession = EpochPeriod.LongSession;
           validationSessionInfo = null;
-          checkFlipsQualityProcess = false;
+          checkFlipsQualityProcessForValidationSession = false;
           selectedIconList.clear();
           Navigator.push<dynamic>(
               context,
@@ -448,7 +453,7 @@ class _ValidationListViewState extends State<ValidationListView>
               selectionFlipList, relevantFlipList, validationSessionInfo);
           typeLaunchSessionForValidationSession = EpochPeriod.ShortSession;
           validationSessionInfo = null;
-          checkFlipsQualityProcess = false;
+          checkFlipsQualityProcessForValidationSession = false;
           selectedIconList.clear();
           Navigator.pushReplacement(
             context,

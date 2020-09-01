@@ -4,16 +4,14 @@ import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ntp/ntp.dart';
-
-HttpService httpService = HttpService();
 
 DateTime _myTime;
 DateTime _ntpTime;
@@ -40,6 +38,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
   StreamController _nodeController;
+  HttpService httpService = HttpService();
+  var logger = Logger();
 
   @override
   void dispose() {

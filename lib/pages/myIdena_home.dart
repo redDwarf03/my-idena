@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
-import 'views/bottom_bar_view.dart';
-import 'package:my_idena/main.dart';
-import '../myIdena_app/myIdena_app_theme.dart';
-import 'screens/home_screen.dart';
-import 'screens/about_screen.dart';
+import 'package:my_idena/pages/views/bottom_bar_view.dart';
+import 'package:my_idena/pages/screens/home_screen.dart';
+import 'package:my_idena/pages/screens/about_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -82,15 +81,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
-            firstState = true;
             if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      HomeScreen(animationController: animationController);
+                  tabBody = HomeScreen(
+                      animationController: animationController,
+                      firstState: true);
                 });
               });
             } else if (index == 1) {
@@ -101,6 +100,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 setState(() {
                   tabBody = ValidationSessionScreen(
                       typeLaunchSession: EpochPeriod.ShortSession,
+                      checkFlipsQualityProcess: false,
                       animationController: animationController);
                 });
               });

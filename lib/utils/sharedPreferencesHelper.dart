@@ -1,5 +1,7 @@
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_idena/main.dart';
+
+var logger = Logger();
 
 class IdenaSharedPreferences {
   String apiUrl;

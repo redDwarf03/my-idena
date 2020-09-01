@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/main.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 HttpService httpService = HttpService();
+DnaAll dnaAll;
 
 class TransactionsView extends StatefulWidget {
   final AnimationController animationController;

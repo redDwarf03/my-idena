@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/flip_examples.dart';
 import 'package:my_idena/backoffice/bean/flip_get_request.dart';
 import 'package:my_idena/backoffice/bean/flip_get_response.dart';
@@ -17,12 +18,13 @@ import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
 import 'package:my_idena/backoffice/bean/flip_words_request.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/beans/dictWords.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
+var logger = Logger();
+ 
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
