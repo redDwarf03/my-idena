@@ -20,10 +20,10 @@ import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 bool firstState = true;
-DnaAll dnaAll;
+DnaAll dnaAll = new DnaAll();
 String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
-String campaign = "v20200829.1";
+String campaign = "v20200831.1";
 bool simulationMode = true;
 bool checkFlipsQualityProcess = false;
 DeepLinkParam deepLinkParam;
