@@ -1,4 +1,4 @@
-library IdentityStatus;
+library identity_status;
 
 const String Human = "Human";
 const String Verified = "Verified";

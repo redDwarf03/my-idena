@@ -17,7 +17,7 @@ class UtilDeepLinks {
 
   Future<DeepLinkParam> getNonce(DeepLinkParam deepLinkParam) async {
     final http.Response response = await http.post(
-      deepLinkParam.nonce_endpoint,
+      deepLinkParam.nonceEndpoint,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -33,6 +33,10 @@ class UtilDeepLinks {
         deepLinkParam.nonce = nonceEndpointResponse.data.nonce;
         return deepLinkParam;
       }
+      else
+      {
+        return null;
+      }
     } else {
       return null;
     }
@@ -40,7 +44,7 @@ class UtilDeepLinks {
 
   Future<DeepLinkParam> authenticate(DeepLinkParam deepLinkParam) async {
     final http.Response response = await http.post(
-      deepLinkParam.authentication_endpoint,
+      deepLinkParam.authenticationEndpoint,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -55,5 +59,9 @@ class UtilDeepLinks {
       deepLinkParam.authenticated = authenticateResponse.data.authenticated;
       return deepLinkParam;
     } 
+    else
+    {
+      return null;
+    }
   }
 }

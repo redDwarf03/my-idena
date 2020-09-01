@@ -2,8 +2,10 @@
 - branchement flips création
 - notification arrêt noeud
 - attente on/off minage
-- vérifier que le tel est à l'heure
-- format date
 - implémenter les cas non passants
     - deep link
     
+- quitter l'onboarding dans la navigation
+- gestion de l'heure 
+- lancement auto session validation
+- passe pas à la long session

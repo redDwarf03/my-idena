@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/about_view.dart';
 import 'package:my_idena/pages/views/donation_view.dart';
