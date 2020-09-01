@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
@@ -50,7 +51,6 @@ class _ValidationLongSessionButtonViewState
             onPressed: () {
               submitLongAnswers(widget.selectionFlipList,
                   widget.relevantFlipList, widget.validationSessionInfo);
-              widget.selectedIconList.clear();
               showDialog(
                   context: context,
                   builder: (context) => SimpleDialog(
@@ -76,11 +76,10 @@ class _ValidationLongSessionButtonViewState
                                 RaisedButton(
                                   elevation: 5.0,
                                   onPressed: () {
-                                    widget.selectedIconList.clear();
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HomeScreen()),
+                                          builder: (context) => Home()),
                                     );
                                   },
                                   padding: EdgeInsets.all(5.0),

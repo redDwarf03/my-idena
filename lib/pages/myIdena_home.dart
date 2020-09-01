@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
@@ -31,7 +33,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = HomeScreen(animationController: animationController);
+    tabBody = HomeScreen(
+      animationController: animationController,
+      firstState: true,
+    );
     super.initState();
   }
 
@@ -72,62 +77,130 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget bottomBar() {
-    return Column(
-      children: <Widget>[
-        const Expanded(
-          child: SizedBox(),
-        ),
-        BottomBarView(
-          tabIconsList: tabIconsList,
-          addClick: () {},
-          changeIndex: (int index) {
-            if (index == 0) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody = HomeScreen(
-                      animationController: animationController,
-                      firstState: true);
-                });
-              });
-            } else if (index == 1) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody = ValidationSessionScreen(
-                      typeLaunchSession: EpochPeriod.ShortSession,
-                      checkFlipsQualityProcess: false,
-                      animationController: animationController);
-                });
-              });
-            } else if (index == 2) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody = ParametersScreen(
-                      animationController: animationController);
-                });
-              });
-            } else if (index == 3) {
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      AboutScreen(animationController: animationController);
-                });
-              });
+    bool displayAll = false;
+    return FutureBuilder(
+        future: httpService.getDnaAll(),
+        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+          if (snapshot.hasData) {
+            dnaAll = snapshot.data;
+            if (dnaAll != null && dnaAll.dnaIdentityResponse != null) {
+              displayAll = true;
             }
-          },
-        ),
-      ],
-    );
+          }
+
+          if (displayAll) {
+            return Column(
+              children: <Widget>[
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                BottomBarView(
+                  tabIconsList: tabIconsList,
+                  addClick: () {},
+                  changeIndex: (int index) {
+                    if (index == 0) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = HomeScreen(
+                              animationController: animationController,
+                              firstState: true);
+                        });
+                      });
+                    } else if (index == 1) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = ValidationSessionScreen(
+                              typeLaunchSession: EpochPeriod.ShortSession,
+                              checkFlipsQualityProcess: false,
+                              dnaAll: dnaAll,
+                              animationController: animationController);
+                        });
+                      });
+                    } else if (index == 2) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = ParametersScreen(
+                              animationController: animationController);
+                        });
+                      });
+                    } else if (index == 3) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = AboutScreen(
+                              animationController: animationController);
+                        });
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          } else {
+            return Column(
+              children: <Widget>[
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                BottomBarView(
+                  tabIconsList: tabIconsList,
+                  addClick: () {},
+                  changeIndex: (int index) {
+                    if (index == 0) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = HomeScreen(
+                              animationController: animationController,
+                              firstState: true);
+                        });
+                      });
+                    } else if (index == 1) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {});
+                      });
+                    } else if (index == 2) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = ParametersScreen(
+                              animationController: animationController);
+                        });
+                      });
+                    } else if (index == 3) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
+                          tabBody = AboutScreen(
+                              animationController: animationController);
+                        });
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          }
+        });
   }
 }

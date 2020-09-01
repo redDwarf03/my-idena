@@ -20,7 +20,6 @@ class Orderable<T> {
   /// is currently dragged
   bool selected = false;
 
-  /// TODO : clarify validation goal & process
   bool validated = false;
 
   double get x => currentPosition.dx;

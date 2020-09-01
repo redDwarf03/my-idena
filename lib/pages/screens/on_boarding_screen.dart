@@ -63,14 +63,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   }
 
   Future checkNode() async {
-    if (!_nodeController.isClosed && _timerCheckNode.isActive) {
-      httpService
-          .checkConnection(apiUrlController.text, keyAppController.text)
-          .then((res) {
+    httpService
+        .checkConnection(apiUrlController.text, keyAppController.text)
+        .then((res) {
+      if (!_nodeController.isClosed && _timerCheckNode.isActive) {
         _nodeController.add(res);
         return res;
-      });
-    }
+      }
+    });
   }
 
   @override
@@ -563,9 +563,6 @@ class _OnBoardingTimerState extends State<OnBoardingTimer> {
 
         _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
       } catch (e) {}
-      print('My time: $_myTime');
-      print('NTP time: $_ntpTime');
-      print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
 
       if (!mounted) return;
       setState(() {});
