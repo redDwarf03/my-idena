@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/title_view.dart';
-import 'package:my_idena/pages/views/validation_view.dart';
+import 'package:my_idena/pages/views/validation_session_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
   const ValidationSessionScreen(
-      {Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess})
+      {Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess, this.dnaAll})
       : super(key: key);
 
   final AnimationController animationController;
   final String typeLaunchSession;
   final bool checkFlipsQualityProcess;
+  final DnaAll dnaAll;
 
   @override
   _ValidationSessionScreenState createState() =>
@@ -75,8 +77,10 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
     );
 
     listViews.add(
-      ValidationListView(
+      ValidationSessionView(
         typeLaunchSession: widget.typeLaunchSession,
+        simulationMode: true,
+        dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(

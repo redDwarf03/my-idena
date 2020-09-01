@@ -12,12 +12,14 @@ class ValidationShortSessionButtonView extends StatefulWidget {
   final List<int> selectedIconList;
   final ValidationSessionInfo validationSessionInfo;
   final DnaAll dnaAll;
-
+  final AnimationController animationController;
+  
   const ValidationShortSessionButtonView(
       {Key key,
       this.selectionFlipList,
       this.selectedIconList,
       this.dnaAll,
+      this.animationController,
       this.validationSessionInfo})
       : super(key: key);
 
@@ -45,12 +47,12 @@ class _ValidationShortSessionButtonViewState
             onPressed: () {
               submitShortAnswers(
                   widget.selectionFlipList, widget.validationSessionInfo);
-              widget.selectedIconList.clear();
               Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) =>
-                        ValidationSessionScreen(),
+                        ValidationSessionScreen(animationController: widget.animationController, dnaAll: widget.dnaAll, typeLaunchSession: EpochPeriod.LongSession, checkFlipsQualityProcess: false,),
+
                   ));
             },
             padding: EdgeInsets.all(5.0),

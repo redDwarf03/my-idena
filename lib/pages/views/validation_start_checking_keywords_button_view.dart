@@ -5,19 +5,21 @@ import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
-import 'package:my_idena/pages/views/validation_view.dart';
+import 'package:my_idena/pages/views/validation_session_view.dart';
 
 class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
   final List selectionFlipList;
   final AnimationController controllerChrono;
   final DnaAll dnaAll;
   final bool checkFlipsQualityProcess;
+  final AnimationController animationController;
 
   const ValidationStartCheckingKeywordsButtonView(
       {Key key,
       this.selectionFlipList,
       this.controllerChrono,
       this.dnaAll,
+      this.animationController,
       this.checkFlipsQualityProcess})
       : super(key: key);
 
@@ -101,7 +103,7 @@ class _ValidationStartCheckingKeywordsButtonViewState
                                         context,
                                         MaterialPageRoute<dynamic>(
                                           builder: (BuildContext context) =>
-                                              ValidationSessionScreen(),
+                                              ValidationSessionScreen(animationController: widget.animationController, dnaAll: widget.dnaAll, typeLaunchSession: EpochPeriod.LongSession, checkFlipsQualityProcess: true,),
                                         ));
                                   },
                                   padding: EdgeInsets.all(5.0),

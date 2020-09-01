@@ -8,7 +8,7 @@ import 'package:my_idena/pages/views/validation_long_session_button_view.dart';
 import 'package:my_idena/pages/views/validation_short_session_button_view.dart';
 import 'package:my_idena/pages/views/validation_start_checking_keywords_button_view.dart';
 import 'package:my_idena/pages/views/validation_thumbnails_view.dart';
-import 'package:my_idena/pages/views/validation_words_view.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
@@ -29,7 +29,7 @@ int controllerChronoValue;
 // 0 = no selection, 1 = selected, 2 = relevant, 3 = relevant,
 List<int> selectedIconList = new List();
 
-class ValidationListView extends StatefulWidget {
+class ValidationSessionView extends StatefulWidget {
   final AnimationController mainScreenAnimationController;
   final Animation<dynamic> mainScreenAnimation;
   final DnaAll dnaAll;
@@ -37,7 +37,7 @@ class ValidationListView extends StatefulWidget {
   final String typeLaunchSession;
   final bool checkFlipsQualityProcess;
 
-  const ValidationListView(
+  const ValidationSessionView(
       {Key key,
       this.mainScreenAnimationController,
       this.mainScreenAnimation,
@@ -48,10 +48,10 @@ class ValidationListView extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ValidationListViewState createState() => _ValidationListViewState();
+  _ValidationSessionViewState createState() => _ValidationSessionViewState();
 }
 
-class _ValidationListViewState extends State<ValidationListView>
+class _ValidationSessionViewState extends State<ValidationSessionView>
     with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController controllerChrono;
@@ -102,8 +102,13 @@ class _ValidationListViewState extends State<ValidationListView>
     }
     if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
-      nbFlips = 17;
       if (checkFlipsQualityProcessForValidationSession == false) {
+        validationSessionInfo = null;
+        selectionFlipList = new List();
+        relevantFlipList = new List();
+        iconList = new List();
+        selectedIconList = new List();
+        nbFlips = 17;
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
@@ -132,12 +137,6 @@ class _ValidationListViewState extends State<ValidationListView>
   @override
   void dispose() {
     controllerChrono.dispose();
-    validationSessionInfo = null;
-    selectionFlipList = new List();
-    relevantFlipList = new List();
-    iconList = new List();
-    selectedIconList = new List();
-
     super.dispose();
   }
 
@@ -310,18 +309,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      new ValidationWordsView(
-                                                                          index:
-                                                                              index,
-                                                                          relevantFlipList:
-                                                                              relevantFlipList,
-                                                                          selectedIconList:
-                                                                              selectedIconList,
-                                                                              dnaAll: dnaAllForValidationSession,
-                                                                          validationSessionInfoFlips: listSessionValidationFlip[
-                                                                              index],
-                                                                          checkFlipsQualityProcess:
-                                                                              checkFlipsQualityProcessForValidationSession),
+                                                                      checkWords(listSessionValidationFlip[index], index),
                                                                       Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             top:
@@ -370,6 +358,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                     ],
                                   ),
                                 ),
+                                
                                 new ValidationThumbnailsView(
                                   iconList: iconList,
                                   nbFlips: nbFlips,
@@ -389,6 +378,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                       controllerChrono: controllerChrono,
                                       selectionFlipList: selectionFlipList,
                                       dnaAll: dnaAllForValidationSession,
+                                      animationController: animationController,
                                       checkFlipsQualityProcess:
                                           checkFlipsQualityProcessForValidationSession,
                                     )),
@@ -397,6 +387,7 @@ class _ValidationListViewState extends State<ValidationListView>
                                       selectedIconList: selectedIconList,
                                       selectionFlipList: selectionFlipList,
                                       dnaAll: dnaAllForValidationSession,
+                                      animationController: animationController,
                                       validationSessionInfo:
                                           validationSessionInfo,
                                     )),
@@ -435,15 +426,14 @@ class _ValidationListViewState extends State<ValidationListView>
                 .dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.ShortSession) {
           submitShortAnswers(selectionFlipList, validationSessionInfo);
-          typeLaunchSessionForValidationSession = EpochPeriod.LongSession;
-          validationSessionInfo = null;
-          checkFlipsQualityProcessForValidationSession = false;
-          selectedIconList.clear();
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
                 builder: (BuildContext context) => ValidationSessionScreen(
-                    animationController: animationController),
+                    animationController: animationController,
+                    dnaAll: dnaAllForValidationSession,
+                    checkFlipsQualityProcess: false,
+                    typeLaunchSession: EpochPeriod.LongSession),
               ));
         }
         if (dnaAllForValidationSession
@@ -451,10 +441,6 @@ class _ValidationListViewState extends State<ValidationListView>
             EpochPeriod.LongSession) {
           submitLongAnswers(
               selectionFlipList, relevantFlipList, validationSessionInfo);
-          typeLaunchSessionForValidationSession = EpochPeriod.ShortSession;
-          validationSessionInfo = null;
-          checkFlipsQualityProcessForValidationSession = false;
-          selectedIconList.clear();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Home()),
@@ -486,4 +472,173 @@ class _ValidationListViewState extends State<ValidationListView>
       ],
     );
   }
+
+  Widget checkWords(ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+            EpochPeriod.LongSession &&
+        widget.checkFlipsQualityProcess) {
+      String word1Name = "";
+      String word2Name = "";
+      String word1Desc = "";
+      String word2Desc = "";
+
+      if (validationSessionInfoFlips.listWords != null &&
+          validationSessionInfoFlips.listWords.length > 0) {
+        word1Name = validationSessionInfoFlips.listWords[0] != null
+            ? validationSessionInfoFlips.listWords[0].name
+            : "";
+        word1Desc = validationSessionInfoFlips.listWords[0] != null
+            ? validationSessionInfoFlips.listWords[0].desc
+            : "";
+        if (validationSessionInfoFlips.listWords.length > 1) {
+          word2Name = validationSessionInfoFlips.listWords[1] != null
+              ? validationSessionInfoFlips.listWords[1].name
+              : "";
+          word2Desc = validationSessionInfoFlips.listWords[1] != null
+              ? validationSessionInfoFlips.listWords[1].desc
+              : "";
+        }
+      }
+      return LayoutBuilder(builder: (context, constraints) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 0, right: 0, top: 15, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)
+                        .translate("Are both keywords relevant to the flip ?"),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    word1Name == ""
+                        ? AppLocalizations.of(context)
+                            .translate("No keywords available")
+                        : word1Name,
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
+                  ),
+                  Text(
+                    word1Desc == "" ? "" : word1Desc,
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
+                  ),
+                  SizedBox(width: 1, height: 10),
+                  Text(
+                    word2Name == ""
+                        ? AppLocalizations.of(context)
+                            .translate("No keywords available")
+                        : word2Name,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
+                  ),
+                  Text(
+                    word2Desc == "" ? "" : word2Desc,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        RaisedButton(
+                          elevation: 5.0,
+                          onPressed: () {
+                            setState(() {
+                              relevantFlipList[index] =
+                                  RelevantType.RELEVANT;
+                              selectedIconList[index] = 2;
+                            });
+                          },
+                          padding: EdgeInsets.all(5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          color: selectedIconList[index] == 2
+                              ? Colors.blue
+                              : Colors.white,
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Both relevant"),
+                              style: TextStyle(
+                                color:
+                                    selectedIconList[index] == 2
+                                        ? Colors.white
+                                        : Colors.blue,
+                                letterSpacing: 1.5,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: MyIdenaAppTheme.fontName,
+                              )),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          height: 1,
+                        ),
+                        RaisedButton(
+                          elevation: 5.0,
+                          onPressed: () {
+                            setState(() {
+                              relevantFlipList[index] =
+                                  RelevantType.IRRELEVANT;
+                              selectedIconList[index] = 3;
+                            });
+                          },
+                          padding: EdgeInsets.all(5.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          color: selectedIconList[index] == 3
+                              ? Colors.red
+                              : Colors.white,
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Irrelevant"),
+                              style: TextStyle(
+                                color:
+                                    selectedIconList[index] == 3
+                                        ? Colors.white
+                                        : Colors.red,
+                                letterSpacing: 1.5,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: MyIdenaAppTheme.fontName,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      });
+    } else {
+      return SizedBox();
+    }
+  }
+
 }
