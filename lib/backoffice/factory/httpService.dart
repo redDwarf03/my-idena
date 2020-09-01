@@ -50,20 +50,15 @@ class HttpService {
 
   Future<bool> checkConnection(apiUrl, keyApp) async {
     try {
-
-      if(apiUrl == null || keyApp == null || apiUrl == "" || keyApp == "")
-      {
+      if (apiUrl == null || keyApp == null || apiUrl == "" || keyApp == "") {
         return false;
       }
       bool _validURL = Uri.parse(apiUrl).isAbsolute;
-      if(!_validURL)
-      {
+      if (!_validURL) {
         return false;
       }
-      final responseHttp = await http.get(Uri.encodeFull(apiUrl), 
-      headers: {
-         "accept": "application/json"
-       });
+      final responseHttp = await http
+          .get(Uri.encodeFull(apiUrl), headers: {"accept": "application/json"});
       if (responseHttp.statusCode != 200) {
         return false;
       } else {
@@ -100,7 +95,6 @@ class HttpService {
   }
 
   Future<DnaAll> getDnaAll() async {
-
     try {
       HttpClient httpClient = new HttpClient();
 
@@ -184,11 +178,9 @@ class HttpService {
 
         dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapGetEpoch);
         request4.add(utf8.encode(json.encode(dnaGetEpochRequest.toJson())));
-        logger.i(new JsonEncoder.withIndent('  ').convert(dnaGetEpochRequest));
         response = await request4.close();
         if (response.statusCode == 200) {
           String reply = await response.transform(utf8.decoder).join();
-          logger.i(reply);
           dnaGetEpochResponse = dnaGetEpochResponseFromJson(reply);
         }
 

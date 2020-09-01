@@ -21,10 +21,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 bool firstState = true;
 DnaAll dnaAll = new DnaAll();
-String typeLaunchSession = EpochPeriod.ShortSession;
 var logger = Logger();
 String campaign = "v20200831.1";
-bool simulationMode = true;
 bool checkFlipsQualityProcess = false;
 DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
@@ -288,17 +286,5 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     } else {
       logger.e('Could not  launch $deepLinkParam.callback_url');
     }
-  }
-}
-
-class HexColor extends Color {
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
   }
 }

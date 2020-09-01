@@ -3,6 +3,7 @@ import 'package:my_idena/main.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 
 class AboutView extends StatelessWidget {
   final AnimationController animationController;
@@ -42,8 +43,7 @@ class AboutView extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 0, left: 0, right: 0),
+                      padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -54,10 +54,7 @@ class AboutView extends StatelessWidget {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24,
-                                        right: 24,
-                                        top: 8,
-                                        bottom: 5),
+                                        left: 24, right: 24, top: 8, bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -160,10 +157,7 @@ class AboutView extends StatelessWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24,
-                                        right: 24,
-                                        top: 8,
-                                        bottom: 5),
+                                        left: 24, right: 24, top: 8, bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -232,7 +226,8 @@ class AboutView extends StatelessWidget {
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
-                                                child: Text(campaign,
+                                                child: Text(
+                                                  campaign,
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontFamily: MyIdenaAppTheme
@@ -250,7 +245,6 @@ class AboutView extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10, right: 10, top: 0, bottom: 0),
@@ -265,10 +259,7 @@ class AboutView extends StatelessWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24,
-                                        right: 24,
-                                        top: 8,
-                                        bottom: 5),
+                                        left: 24, right: 24, top: 8, bottom: 5),
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -338,7 +329,8 @@ class AboutView extends StatelessWidget {
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
                                                 child: Image.asset(
-                                                    'assets/images/reddwarf.jpg', width: 70),
+                                                    'assets/images/reddwarf.jpg',
+                                                    width: 70),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
