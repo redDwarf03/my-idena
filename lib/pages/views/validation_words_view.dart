@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/main.dart';
+import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
@@ -11,12 +11,16 @@ class ValidationWordsView extends StatefulWidget {
   final int index;
   final List<int> selectedIconList;
   final List relevantFlipList;
-
+  final bool checkFlipsQualityProcess;
+  final DnaAll dnaAll;
+  
   const ValidationWordsView(
       {Key key,
       this.validationSessionInfoFlips,
       this.index,
       this.selectedIconList,
+      this.checkFlipsQualityProcess,
+      this.dnaAll,
       this.relevantFlipList})
       : super(key: key);
 
@@ -26,9 +30,9 @@ class ValidationWordsView extends StatefulWidget {
 
 class _ValidationWordsViewState extends State<ValidationWordsView> {
   Widget build(BuildContext context) {
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession &&
-        checkFlipsQualityProcess) {
+        widget.checkFlipsQualityProcess) {
       String word1Name = "";
       String word2Name = "";
       String word1Desc = "";

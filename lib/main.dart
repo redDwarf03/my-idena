@@ -18,11 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-bool firstState = true;
 DnaAll dnaAll = new DnaAll();
 var logger = Logger();
 String campaign = "v20200831.1";
-bool checkFlipsQualityProcess = false;
 DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
 

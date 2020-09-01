@@ -2,27 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
 
-HttpService httpService = HttpService();
-bool miningSwitchValue;
-
 class ProfileView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
+  final bool firstState;
 
-  const ProfileView({Key key, this.animationController, this.animation})
+  const ProfileView({Key key, this.animationController, this.animation, this.firstState})
       : super(key: key);
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
 }
 
+
 class _ProfileViewState extends State<ProfileView> {
+
+  bool firstStateForView;
+  HttpService httpService = HttpService();
+  bool miningSwitchValue;
+  DnaAll dnaAll;
+  
+  @override
+    void initState() {
+
+      firstStateForView = widget.firstState;
+      super.initState();
+    }
+  
+
   Widget displayMiningSwitch() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -213,9 +225,9 @@ class _ProfileViewState extends State<ProfileView> {
             if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
               return Text("");
             } else {
-              if (firstState) {
+              if (firstStateForView) {
                 miningSwitchValue = dnaAll.dnaIdentityResponse.result.online;
-                firstState = false;
+                firstStateForView = false;
               }
               return AnimatedBuilder(
                   animation: widget.animationController,

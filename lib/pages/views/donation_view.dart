@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 
-HttpService httpService = HttpService();
 
 class DonationView extends StatefulWidget {
   final AnimationController animationController;
@@ -24,6 +23,9 @@ class _DonationViewState extends State<DonationView> {
   final _keyFormDonation = GlobalKey<FormState>();
   final number = TextEditingController();
   String amount = '';
+  HttpService httpService = HttpService();
+  var logger = Logger();
+  DnaAll dnaAll;
 
   @override
   void initState() {

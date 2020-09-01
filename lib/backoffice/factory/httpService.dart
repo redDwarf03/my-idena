@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_request.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
@@ -24,29 +25,12 @@ import 'package:my_idena/backoffice/bean/dna_sendTransaction_response.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_request.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
 
+
 class HttpService {
-  DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
-  DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
-  DnaIdentityRequest dnaIdentityRequest;
-  DnaIdentityResponse dnaIdentityResponse;
-  DnaGetBalanceRequest dnaGetBalanceRequest;
-  DnaGetBalanceResponse dnaGetBalanceResponse;
-  DnaGetEpochRequest dnaGetEpochRequest;
-  DnaGetEpochResponse dnaGetEpochResponse;
-  DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
-  DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
-  DnaBecomeOnlineRequest dnaBecomeOnlineRequest;
-  DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
-  DnaBecomeOfflineRequest dnaBecomeOfflineRequest;
-  DnaBecomeOfflineResponse dnaBecomeOfflineResponse;
-  DnaSendTransactionRequest dnaSendTransactionRequest;
-  DnaSendTransactionResponse dnaSendTransactionResponse;
-  BcnTransactionsRequest bcnTransactionsRequest;
-  BcnTransactionsResponse bcnTransactionsResponse;
+  var logger = Logger();
 
   Future<bool> checkConnection(apiUrl, keyApp) async {
     try {
@@ -73,7 +57,7 @@ class HttpService {
           'id': 101,
           'key': keyApp
         };
-        dnaGetCoinbaseAddrRequest =
+        DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest =
             DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
         request
             .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
@@ -95,6 +79,17 @@ class HttpService {
   }
 
   Future<DnaAll> getDnaAll() async {
+    DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
+    DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
+    DnaIdentityRequest dnaIdentityRequest;
+    DnaIdentityResponse dnaIdentityResponse;
+    DnaGetBalanceRequest dnaGetBalanceRequest;
+    DnaGetBalanceResponse dnaGetBalanceResponse;
+    DnaGetEpochRequest dnaGetEpochRequest;
+    DnaGetEpochResponse dnaGetEpochResponse;
+    DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
+    DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
+    DnaAll dnaAll = new DnaAll();
     try {
       HttpClient httpClient = new HttpClient();
 
@@ -225,6 +220,7 @@ class HttpService {
   }
 
   Future<DnaBecomeOnlineResponse> becomeOnline() async {
+    DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -242,7 +238,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(map);
+      DnaBecomeOnlineRequest dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOnlineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -256,6 +252,7 @@ class HttpService {
   }
 
   Future<DnaBecomeOfflineResponse> becomeOffline() async {
+    DnaBecomeOfflineResponse dnaBecomeOfflineResponse;
     HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
@@ -273,7 +270,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaBecomeOfflineRequest = DnaBecomeOfflineRequest.fromJson(map);
+      DnaBecomeOfflineRequest dnaBecomeOfflineRequest = DnaBecomeOfflineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOfflineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -321,6 +318,8 @@ class HttpService {
 
   Future<DnaSendTransactionResponse> sendTransaction(
       String from, double amount) async {
+
+    DnaSendTransactionResponse dnaSendTransactionResponse;
     if (amount <= 0) {
       return null;
     }
@@ -345,7 +344,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaSendTransactionRequest = DnaSendTransactionRequest.fromJson(map);
+      DnaSendTransactionRequest dnaSendTransactionRequest = DnaSendTransactionRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaSendTransactionRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -360,6 +359,8 @@ class HttpService {
 
   Future<BcnTransactionsResponse> getTransactions(
       String address, int count) async {
+
+    BcnTransactionsResponse bcnTransactionsResponse;
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -377,7 +378,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      bcnTransactionsRequest = BcnTransactionsRequest.fromJson(map);
+      BcnTransactionsRequest bcnTransactionsRequest = BcnTransactionsRequest.fromJson(map);
       request.add(utf8.encode(json.encode(bcnTransactionsRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -392,8 +393,8 @@ class HttpService {
   }
 
   Future<DeepLinkParam> signin(deepLinkParam) async {
-    DnaSignInRequest dnaSignInRequest;
-    DnaSignInResponse dnaSignInResponse;
+     
+     DnaSignInResponse dnaSignInResponse;
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -409,7 +410,7 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      dnaSignInRequest = DnaSignInRequest.fromJson(map);
+      DnaSignInRequest dnaSignInRequest = DnaSignInRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaSignInRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {

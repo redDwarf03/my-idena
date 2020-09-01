@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/portofolio_view.dart';
 import 'package:my_idena/pages/views/profile_view.dart';
@@ -12,23 +12,27 @@ import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_deepLinks.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-HttpService httpService = HttpService();
+import 'package:my_idena/main.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key, this.animationController}) : super(key: key);
+  const HomeScreen({Key key, this.animationController, this.firstState}) : super(key: key);
 
   final AnimationController animationController;
+  final bool firstState;
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
+  HttpService httpService = HttpService();
+  var logger = Logger();
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
+  DnaAll dnaAll;
 
   @override
   void initState() {
@@ -104,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             curve:
                 Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
+        firstState: widget.firstState
       ),
     );
 

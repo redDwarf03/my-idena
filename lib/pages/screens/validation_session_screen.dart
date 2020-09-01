@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/validation_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
   const ValidationSessionScreen(
-      {Key key, this.animationController, this.typeLaunchSession})
+      {Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess})
       : super(key: key);
 
   final AnimationController animationController;
   final String typeLaunchSession;
+  final bool checkFlipsQualityProcess;
+
   @override
   _ValidationSessionScreenState createState() =>
       _ValidationSessionScreenState();
@@ -62,7 +63,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
     const int count = 8;
     listViews.add(
       TitleView(
-        titleTxt: checkFlipsQualityProcess
+        titleTxt: widget.checkFlipsQualityProcess
             ? "Check flips quality"
             : "Select meaningful story: left or right",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -76,6 +77,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
     listViews.add(
       ValidationListView(
         typeLaunchSession: widget.typeLaunchSession,
+        checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
