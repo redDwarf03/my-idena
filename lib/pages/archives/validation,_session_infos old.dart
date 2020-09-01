@@ -8,10 +8,8 @@ import 'package:my_idena/backoffice/bean/flip_get_response.dart';
 import 'package:my_idena/backoffice/bean/flip_longHashes_request.dart';
 import 'package:my_idena/backoffice/bean/flip_shortHashes_request.dart';
 import 'package:my_idena/backoffice/bean/flip_shortHashes_response.dart';
-import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
-import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -257,7 +255,6 @@ Future<ValidationSessionInfoFlips> getValidationFlips(
   IdenaSharedPreferences idenaSharedPreferences =
       await SharedPreferencesHelper.getIdenaSharedPreferences();
   FlipGetResponse flipGetResponse;
-  FlipWordsResponse flipWordsResponse;
   ValidationSessionInfoFlips validationSessionInfoFlips = new ValidationSessionInfoFlips();
   try {
     // get Flip

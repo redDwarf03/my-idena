@@ -4,7 +4,6 @@ import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
-import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/pages/views/validation_long_session_button_view.dart';
 import 'package:my_idena/pages/views/validation_short_session_button_view.dart';

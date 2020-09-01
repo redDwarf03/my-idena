@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +21,6 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
-import 'package:ethereum_util/ethereum_util.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
 class ValidationSessionInfoFlips {
@@ -53,8 +51,10 @@ class ValidationSessionInfo {
   List<ValidationSessionInfoFlips> listSessionValidationFlip;
 }
 
-Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
-    ValidationSessionInfo validationSessionInfoInput) async {
+Future<ValidationSessionInfo> getValidationSessionInfo(
+    String typeSession,
+    ValidationSessionInfo validationSessionInfoInput,
+    bool simulationMode) async {
   if (validationSessionInfoInput != null) {
     return validationSessionInfoInput;
   }
@@ -63,7 +63,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
   validationSessionInfo.typeSession = typeSession;
   String method;
 
-  Map<String, dynamic> mapExemple;
   switch (typeSession) {
     case EpochPeriod.ShortSession:
       {
@@ -120,7 +119,8 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 
       if (typeSession == EpochPeriod.ShortSession) {
         flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+        logger.i(
+            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
         request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -131,7 +131,8 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
       }
       if (typeSession == EpochPeriod.LongSession) {
         flipLongHashesRequest = FlipLongHashesRequest.fromJson(map);
-        logger.i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
+        logger
+            .i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
         request.add(utf8.encode(json.encode(flipLongHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -358,7 +359,9 @@ Future<ValidationSessionInfo> getValidationSessionInfo(String typeSession,
 Future<String> loadAssets(String fileName) async {
   try {
     return await rootBundle.loadString('test/examples/' + fileName + '.json');
-  } catch (e) {} finally {}
+  } catch (e) {
+    return null;
+  } finally {}
 }
 
 Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
@@ -403,7 +406,8 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     request
         .add(utf8.encode(json.encode(flipSubmitShortAnswersRequest.toJson())));
 
-    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitShortAnswersRequest));
+    logger.i(new JsonEncoder.withIndent('  ')
+        .convert(flipSubmitShortAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
@@ -466,7 +470,8 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List selectionFlipList,
 
     request
         .add(utf8.encode(json.encode(flipSubmitLongAnswersRequest.toJson())));
-    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitLongAnswersRequest));
+    logger.i(
+        new JsonEncoder.withIndent('  ').convert(flipSubmitLongAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();

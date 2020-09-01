@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/portofolio_view.dart';
@@ -237,9 +236,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 color: MyIdenaAppTheme.darkText,
                               ),
                             ),
-                            Text(deepLinkParam.nonce_endpoint != null
+                            Text(deepLinkParam.nonceEndpoint != null
                                 ? UtilDeepLinks()
-                                    .getHostname(deepLinkParam.nonce_endpoint)
+                                    .getHostname(deepLinkParam.nonceEndpoint)
                                 : ""),
                             SizedBox(
                               height: 20,

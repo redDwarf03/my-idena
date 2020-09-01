@@ -12,7 +12,6 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/on_boarding_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:logger/logger.dart';
 import 'package:my_idena/utils/util_deepLinks.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +94,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     switch (list[i].key) {
                       case "nonce_endpoint":
                         {
-                          deepLinkParam.nonce_endpoint = list[i].value[0];
+                          deepLinkParam.nonceEndpoint = list[i].value[0];
                         }
                         break;
                       case "token":
@@ -105,22 +104,22 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         break;
                       case "callback_url":
                         {
-                          deepLinkParam.callback_url = list[i].value[0];
+                          deepLinkParam.callbackUrl = list[i].value[0];
                         }
                         break;
                       case "authentication_endpoint":
                         {
-                          deepLinkParam.authentication_endpoint =
+                          deepLinkParam.authenticationEndpoint =
                               list[i].value[0];
                         }
                         break;
                     }
                   }
-                  logger.i("nonce_endpoint: " + deepLinkParam.nonce_endpoint);
+                  logger.i("nonce_endpoint: " + deepLinkParam.nonceEndpoint);
                   logger.i("token: " + deepLinkParam.token);
-                  logger.i("callback_url: " + deepLinkParam.callback_url);
+                  logger.i("callback_url: " + deepLinkParam.callbackUrl);
                   logger.i("authentication_endpoint: " +
-                      deepLinkParam.authentication_endpoint);
+                      deepLinkParam.authenticationEndpoint);
                   Timer.run(() {
                     onAfterBuild(context);
                   });
@@ -176,9 +175,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                                 color: MyIdenaAppTheme.darkText,
                               ),
                             ),
-                            Text(deepLinkParam.nonce_endpoint != null
+                            Text(deepLinkParam.nonceEndpoint != null
                                 ? UtilDeepLinks()
-                                    .getHostname(deepLinkParam.nonce_endpoint)
+                                    .getHostname(deepLinkParam.nonceEndpoint)
                                 : ""),
                             SizedBox(
                               height: 20,

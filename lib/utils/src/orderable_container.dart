@@ -41,12 +41,12 @@ class OrderableContainerState extends State<OrderableContainer> {
 /// widgets
 class OrderableWidget<T> extends StatefulWidget {
   final Orderable<T> data;
-  Size itemSize;
-  double maxPos;
-  Direction direction;
-  VoidCallback onMove;
-  VoidCallback onDrop;
-  double step;
+  final Size itemSize;
+  final double maxPos;
+  final Direction direction;
+  final VoidCallback onMove;
+  final VoidCallback onDrop;
+  final double step;
   final WidgetFactory<T> itemBuilder;
 
   OrderableWidget(
@@ -64,9 +64,6 @@ class OrderableWidget<T> extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new OrderableWidgetState(data: data);
 
-  @override
-  String toString({DiagnosticLevel minLevel: DiagnosticLevel.debug}) =>
-      'DraggableText{data: $data, position: ${data.currentPosition}}';
 }
 
 class OrderableWidgetState<T> extends State<OrderableWidget<T>>
@@ -137,7 +134,4 @@ class OrderableWidgetState<T> extends State<OrderableWidget<T>>
           (isHorizontal ? widget.itemSize.width : widget.itemSize.height) <
       widget.maxPos;
 
-  @override
-  String toString({DiagnosticLevel minLevel: DiagnosticLevel.debug}) =>
-      'OrderableWidgetState{data: $data}';
 }
