@@ -1,34 +1,50 @@
+import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
-import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
-import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/pages/views/validation_long_session_button_view.dart';
+import 'package:my_idena/pages/views/validation_short_session_button_view.dart';
+import 'package:my_idena/pages/views/validation_start_checking_keywords_button_view.dart';
+import 'package:my_idena/pages/views/validation_thumbnails_view.dart';
+import 'package:my_idena/pages/views/validation_words_view.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/answer_type.dart' as AnswerType;
 import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
-int nbFlips;
+DnaAll dnaAllForValidationSession;
+String typeLaunchSessionForValidationSession;
+int nbFlips = 0;
 List selectionFlipList = new List();
 List relevantFlipList = new List();
 List<Widget> iconList = new List();
 int controllerChronoValue;
+
 // 0 = no selection, 1 = selected, 2 = relevant, 3 = relevant,
 List<int> selectedIconList = new List();
 
 class ValidationListView extends StatefulWidget {
-  const ValidationListView(
-      {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
-
   final AnimationController mainScreenAnimationController;
   final Animation<dynamic> mainScreenAnimation;
+  final DnaAll dnaAll;
+  final bool simulationMode;
+  final String typeLaunchSession;
+
+  const ValidationListView(
+      {Key key,
+      this.mainScreenAnimationController,
+      this.mainScreenAnimation,
+      this.simulationMode,
+      this.typeLaunchSession,
+      this.dnaAll})
+      : super(key: key);
 
   @override
   _ValidationListViewState createState() => _ValidationListViewState();
@@ -51,22 +67,23 @@ class _ValidationListViewState extends State<ValidationListView>
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
 
+    dnaAllForValidationSession = widget.dnaAll;
+    typeLaunchSessionForValidationSession = widget.typeLaunchSession;
+
     super.initState();
 
-    getDnaAllForEpoch();
-    if (simulationMode) {
-      dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
-    }
-    else
-    {
-      if(typeLaunchSession == EpochPeriod.LongSession)
-      {
-        dnaAll.dnaGetEpochResponse.result.currentPeriod = typeLaunchSession;
+    if (widget.simulationMode) {
+      dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod =
+          typeLaunchSessionForValidationSession;
+    } else {
+      if (typeLaunchSessionForValidationSession == EpochPeriod.LongSession) {
+        dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod =
+            typeLaunchSessionForValidationSession;
       }
     }
 
     // Init choice
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.ShortSession) {
       validationSessionInfo = null;
       selectionFlipList = new List();
@@ -78,17 +95,17 @@ class _ValidationListViewState extends State<ValidationListView>
       controllerChrono = AnimationController(
           vsync: this,
           duration: Duration(
-              seconds: dnaAll
+              seconds: dnaAllForValidationSession
                   .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
     }
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
         EpochPeriod.LongSession) {
       nbFlips = 17;
       if (checkFlipsQualityProcess == false) {
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
-                seconds: dnaAll
+                seconds: dnaAllForValidationSession
                     .dnaCeremonyIntervalsResponse.result.longSessionDuration));
       } else {
         controllerChrono = AnimationController(
@@ -112,9 +129,7 @@ class _ValidationListViewState extends State<ValidationListView>
 
   @override
   void dispose() {
-    animationController.dispose();
     controllerChrono.dispose();
-
     validationSessionInfo = null;
     selectionFlipList = new List();
     relevantFlipList = new List();
@@ -128,8 +143,9 @@ class _ValidationListViewState extends State<ValidationListView>
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: getValidationSessionInfo(
-            dnaAll.dnaGetEpochResponse.result.currentPeriod,
-            validationSessionInfo),
+            dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod,
+            validationSessionInfo,
+            widget.simulationMode),
         builder: (BuildContext context,
             AsyncSnapshot<ValidationSessionInfo> snapshot) {
           if (snapshot.hasData) {
@@ -292,10 +308,16 @@ class _ValidationListViewState extends State<ValidationListView>
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      getWords(
-                                                                          listSessionValidationFlip[
-                                                                              index],
-                                                                          index),
+                                                                      new ValidationWordsView(
+                                                                        index:
+                                                                            index,
+                                                                        relevantFlipList:
+                                                                            relevantFlipList,
+                                                                        selectedIconList:
+                                                                            selectedIconList,
+                                                                        validationSessionInfoFlips:
+                                                                            listSessionValidationFlip[index],
+                                                                      ),
                                                                       Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             top:
@@ -344,7 +366,11 @@ class _ValidationListViewState extends State<ValidationListView>
                                     ],
                                   ),
                                 ),
-                                getThumbnails(),
+                                new ValidationThumbnailsView(
+                                  iconList: iconList,
+                                  nbFlips: nbFlips,
+                                  selectedIconList: selectedIconList,
+                                ),
                               ],
                             ),
                             Row(
@@ -355,11 +381,33 @@ class _ValidationListViewState extends State<ValidationListView>
                                     Container(child: getChrono()),
                                     Container(
                                         child:
-                                            getStartCheckingKeywordsButton()),
+                                            ValidationStartCheckingKeywordsButtonView(
+                                      controllerChrono: controllerChrono,
+                                      selectionFlipList: selectionFlipList,
+                                      dnaAll: dnaAllForValidationSession,
+                                      checkFlipsQualityProcess:
+                                          checkFlipsQualityProcess,
+                                    )),
                                     Container(
-                                        child: validationShortSessionButton()),
+                                        child: ValidationShortSessionButtonView(
+                                      selectedIconList: selectedIconList,
+                                      selectionFlipList: selectionFlipList,
+                                      dnaAll: dnaAllForValidationSession,
+                                      validationSessionInfo:
+                                          validationSessionInfo,
+                                    )),
                                     Container(
-                                        child: validationLongSessionButton()),
+                                        child:
+                                            new ValidationLongSessionButtonView(
+                                      relevantFlipList: relevantFlipList,
+                                      selectedIconList: selectedIconList,
+                                      selectionFlipList: selectionFlipList,
+                                      dnaAll: dnaAllForValidationSession,
+                                      checkFlipsQualityProcess:
+                                          checkFlipsQualityProcess,
+                                      validationSessionInfo:
+                                          validationSessionInfo,
+                                    )),
                                   ],
                                 ),
                               ],
@@ -376,515 +424,14 @@ class _ValidationListViewState extends State<ValidationListView>
         });
   }
 
-  Widget getWords(
-      ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-            EpochPeriod.LongSession &&
-        checkFlipsQualityProcess) {
-      String word1Name = "";
-      String word2Name = "";
-      String word1Desc = "";
-      String word2Desc = "";
-
-      if (validationSessionInfoFlips.listWords != null &&
-          validationSessionInfoFlips.listWords.length > 0) {
-        word1Name = validationSessionInfoFlips.listWords[0] != null
-            ? validationSessionInfoFlips.listWords[0].name
-            : "";
-        word1Desc = validationSessionInfoFlips.listWords[0] != null
-            ? validationSessionInfoFlips.listWords[0].desc
-            : "";
-        if (validationSessionInfoFlips.listWords.length > 1) {
-          word2Name = validationSessionInfoFlips.listWords[1] != null
-              ? validationSessionInfoFlips.listWords[1].name
-              : "";
-          word2Desc = validationSessionInfoFlips.listWords[1] != null
-              ? validationSessionInfoFlips.listWords[1].desc
-              : "";
-        }
-      }
-      return LayoutBuilder(builder: (context, constraints) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 0, right: 0, top: 15, bottom: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate("Are both keywords relevant to the flip ?"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    word1Name == ""
-                        ? AppLocalizations.of(context)
-                            .translate("No keywords available")
-                        : word1Name,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Text(
-                    word1Desc == "" ? "" : word1Desc,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  SizedBox(width: 1, height: 10),
-                  Text(
-                    word2Name == ""
-                        ? AppLocalizations.of(context)
-                            .translate("No keywords available")
-                        : word2Name,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Text(
-                    word2Desc == "" ? "" : word2Desc,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RaisedButton(
-                          elevation: 5.0,
-                          onPressed: () {
-                            setState(() {
-                              relevantFlipList[index] = RelevantType.RELEVANT;
-                              selectedIconList[index] = 2;
-                            });
-                          },
-                          padding: EdgeInsets.all(5.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          color: selectedIconList[index] == 2
-                              ? Colors.blue
-                              : Colors.white,
-                          child: Text(
-                              AppLocalizations.of(context)
-                                  .translate("Both relevant"),
-                              style: TextStyle(
-                                color: selectedIconList[index] == 2
-                                    ? Colors.white
-                                    : Colors.blue,
-                                letterSpacing: 1.5,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: MyIdenaAppTheme.fontName,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 30,
-                          height: 1,
-                        ),
-                        RaisedButton(
-                          elevation: 5.0,
-                          onPressed: () {
-                            setState(() {
-                              relevantFlipList[index] = RelevantType.IRRELEVANT;
-                              selectedIconList[index] = 3;
-                            });
-                          },
-                          padding: EdgeInsets.all(5.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          color: selectedIconList[index] == 3
-                              ? Colors.red
-                              : Colors.white,
-                          child: Text(
-                              AppLocalizations.of(context)
-                                  .translate("Irrelevant"),
-                              style: TextStyle(
-                                color: selectedIconList[index] == 3
-                                    ? Colors.white
-                                    : Colors.red,
-                                letterSpacing: 1.5,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: MyIdenaAppTheme.fontName,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      });
-    } else {
-      return SizedBox();
-    }
-  }
-
-  Widget getThumbnails() {
-    iconList.clear();
-    if (selectedIconList == null || selectedIconList.length == 0) {
-      return Column(
-        children: iconList,
-      );
-    }
-    for (int i = 0; i < nbFlips; i++) {
-      Widget text;
-      Widget icon;
-      switch (selectedIconList[i]) {
-        case 1:
-          {
-            icon = Icon(
-              FlevaIcons.checkmark_square_2_outline,
-              color: Colors.green,
-              size: 22,
-            );
-            break;
-          }
-        case 2:
-          {
-            icon = Icon(
-              FlevaIcons.checkmark_square,
-              color: Colors.blue,
-              size: 22,
-            );
-            break;
-          }
-        case 3:
-          {
-            icon = Icon(
-              FlevaIcons.close_square_outline,
-              color: Colors.red,
-              size: 22,
-            );
-            break;
-          }
-        default:
-          {
-            icon = Icon(
-              FlevaIcons.copy_outline,
-              color: Colors.grey[500],
-              size: 22,
-            );
-            break;
-          }
-      }
-      iconList.add(icon);
-    }
-
-    return Column(
-      children: iconList,
-    );
-  }
-
-  Widget getStartCheckingKeywordsButton() {
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-            EpochPeriod.LongSession &&
-        checkFlipsQualityProcess == false) {
-      for (int i = 0; i < selectionFlipList.length; i++) {
-        if (selectionFlipList[i] == AnswerType.NONE) {
-          return SizedBox();
-        }
-      }
-
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          RaisedButton(
-            elevation: 5.0,
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                        contentPadding: EdgeInsets.zero,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "Your answers are not yet submitted"),
-                                  style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      letterSpacing: -0.1,
-                                      color: MyIdenaAppTheme.darkText),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "Please qualify the keywords relevance and submit the answers."),
-                                  style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: -0.1,
-                                      color: MyIdenaAppTheme.darkText),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "The flips with relevant keywords will be penalized"),
-                                  style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: -0.1,
-                                      color: MyIdenaAppTheme.darkText),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                RaisedButton(
-                                  elevation: 5.0,
-                                  onPressed: () {
-                                    checkFlipsQualityProcess = true;
-                                    Duration durationChrono =
-                                        controllerChrono.duration *
-                                            controllerChrono.value;
-                                    controllerChronoValue =
-                                        durationChrono.inSeconds;
-                                    Navigator.push<dynamic>(
-                                        context,
-                                        MaterialPageRoute<dynamic>(
-                                          builder: (BuildContext context) =>
-                                              ValidationSessionScreen(
-                                                  animationController:
-                                                      animationController),
-                                        ));
-                                  },
-                                  padding: EdgeInsets.all(5.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  color: Colors.white,
-                                  child: Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Ok, I understand"),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        letterSpacing: 1.5,
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ));
-            },
-            padding: EdgeInsets.all(5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Colors.white,
-            child: Text(
-                AppLocalizations.of(context)
-                    .translate("Start checking keywords"),
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 1.5,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: MyIdenaAppTheme.fontName,
-                )),
-          ),
-        ],
-      );
-    } else {
-      return SizedBox();
-    }
-  }
-
-  Widget validationShortSessionButton() {
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-        EpochPeriod.ShortSession) {
-      for (int i = 0; i < selectionFlipList.length; i++) {
-        if (selectionFlipList[i] == AnswerType.NONE) {
-          return SizedBox();
-        }
-      }
-
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          RaisedButton(
-            elevation: 5.0,
-            onPressed: () {
-              submitShortAnswers(selectionFlipList, validationSessionInfo);
-              typeLaunchSession = EpochPeriod.LongSession;
-              validationSessionInfo = null;
-              checkFlipsQualityProcess = false;
-              selectedIconList.clear();
-              controllerChrono.dispose();
-              Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => ValidationSessionScreen(
-                        animationController: animationController),
-                  ));
-            },
-            padding: EdgeInsets.all(5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Colors.white,
-            child:
-                Text(AppLocalizations.of(context).translate("Submit answers"),
-                    style: TextStyle(
-                      color: Colors.black,
-                      letterSpacing: 1.5,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: MyIdenaAppTheme.fontName,
-                    )),
-          ),
-        ],
-      );
-    } else {
-      return SizedBox();
-    }
-  }
-
-  Widget validationLongSessionButton() {
-    if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
-            EpochPeriod.LongSession &&
-        checkFlipsQualityProcess) {
-      for (int i = 0; i < selectionFlipList.length; i++) {
-        if (selectedIconList[i] == 0 || selectedIconList[i] == 1) {
-          return SizedBox();
-        }
-      }
-
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          RaisedButton(
-            elevation: 5.0,
-            onPressed: () {
-              checkFlipsQualityProcess = false;
-              submitLongAnswers(
-                  selectionFlipList, relevantFlipList, validationSessionInfo);
-              typeLaunchSession = EpochPeriod.ShortSession;
-              validationSessionInfo = null;
-              selectedIconList.clear();
-              showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                        contentPadding: EdgeInsets.zero,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "Your answers for the validation session have been submitted successfully!"),
-                                  style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      letterSpacing: -0.1,
-                                      color: MyIdenaAppTheme.darkText),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                RaisedButton(
-                                  elevation: 5.0,
-                                  onPressed: () {
-                                    typeLaunchSession =
-                                        EpochPeriod.ShortSession;
-                                    validationSessionInfo = null;
-                                    checkFlipsQualityProcess = false;
-                                    selectedIconList.clear();
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Home()),
-                                    );
-                                  },
-                                  padding: EdgeInsets.all(5.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  color: Colors.white,
-                                  child: Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Go home"),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        letterSpacing: 1.5,
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ));
-            },
-            padding: EdgeInsets.all(5.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Colors.white,
-            child:
-                Text(AppLocalizations.of(context).translate("Submit answers"),
-                    style: TextStyle(
-                      color: Colors.black,
-                      letterSpacing: 1.5,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: MyIdenaAppTheme.fontName,
-                    )),
-          ),
-        ],
-      );
-    } else {
-      return SizedBox();
-    }
-  }
-
-  getDnaAllForEpoch() async
-  {
-     await httpService.getDnaAll();
-  }
-
   Widget getChrono() {
     controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+        if (dnaAllForValidationSession
+                .dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.ShortSession) {
           submitShortAnswers(selectionFlipList, validationSessionInfo);
-          typeLaunchSession = EpochPeriod.LongSession;
+          typeLaunchSessionForValidationSession = EpochPeriod.LongSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
           selectedIconList.clear();
@@ -895,11 +442,12 @@ class _ValidationListViewState extends State<ValidationListView>
                     animationController: animationController),
               ));
         }
-        if (dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+        if (dnaAllForValidationSession
+                .dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession) {
           submitLongAnswers(
               selectionFlipList, relevantFlipList, validationSessionInfo);
-          typeLaunchSession = EpochPeriod.ShortSession;
+          typeLaunchSessionForValidationSession = EpochPeriod.ShortSession;
           validationSessionInfo = null;
           checkFlipsQualityProcess = false;
           selectedIconList.clear();

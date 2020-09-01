@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
@@ -99,6 +100,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody = ValidationSessionScreen(
+                      typeLaunchSession: EpochPeriod.ShortSession,
                       animationController: animationController);
                 });
               });

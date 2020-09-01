@@ -1,8 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../myIdena_app/tabIcon_data.dart';

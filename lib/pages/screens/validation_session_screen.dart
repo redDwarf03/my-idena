@@ -6,14 +6,19 @@ import 'package:my_idena/pages/views/validation_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
-  const ValidationSessionScreen({Key key, this.animationController}) : super(key: key);
+  const ValidationSessionScreen(
+      {Key key, this.animationController, this.typeLaunchSession})
+      : super(key: key);
 
   final AnimationController animationController;
+  final String typeLaunchSession;
   @override
-  _ValidationSessionScreenState createState() => _ValidationSessionScreenState();
+  _ValidationSessionScreenState createState() =>
+      _ValidationSessionScreenState();
 }
 
-class _ValidationSessionScreenState extends State<ValidationSessionScreen> with TickerProviderStateMixin {
+class _ValidationSessionScreenState extends State<ValidationSessionScreen>
+    with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
   List<Widget> listViews = <Widget>[];
@@ -57,7 +62,9 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
     const int count = 8;
     listViews.add(
       TitleView(
-        titleTxt: checkFlipsQualityProcess ? "Check flips quality" : "Select meaningful story: left or right",
+        titleTxt: checkFlipsQualityProcess
+            ? "Check flips quality"
+            : "Select meaningful story: left or right",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -68,6 +75,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
 
     listViews.add(
       ValidationListView(
+        typeLaunchSession: widget.typeLaunchSession,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
@@ -76,8 +84,6 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
         mainScreenAnimationController: widget.animationController,
       ),
     );
-
-
   }
 
   Future<bool> getData() async {
