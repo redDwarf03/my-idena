@@ -594,8 +594,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       print('NTP time: $_ntpTime');
       print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
 
-      if (!mounted) return;
-      setState(() {});
+      //if (!mounted) return;
+      //setState(() {});
     }
 
   }
