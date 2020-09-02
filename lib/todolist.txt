@@ -5,5 +5,4 @@
 - implémenter les cas non passants
     - deep link
     
-- quitter l'onboarding dans la navigation
 - lancement auto session validation
