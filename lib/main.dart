@@ -11,10 +11,11 @@ import 'package:my_idena/enums/connection_status.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/on_boarding_screen.dart';
+import 'package:my_idena/pages/screens/route_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:my_idena/utils/util_deepLinks.dart';
-import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,9 +42,6 @@ class MyApp extends StatefulWidget {
 enum UniLinksType { string, uri }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  bool timeOk = false;
-  bool nodeOk = false;
-
   @override
   initState() {
     super.initState();
@@ -62,81 +60,77 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
     return StreamProvider<ConnectivityStatus>(
-        create: (contextStream) =>
-            ConnectivityService().connectionStatusController.stream,
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            supportedLocales: [
-              Locale('en', ''),
-              Locale('fr', ''),
-              Locale('ru', ''),
-              Locale('cn', 'SC'),
-              Locale('cn', 'TC'),
-              Locale('sr', ''),
-              Locale('sr', 'RS'),
-            ],
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            theme: ThemeData(
-              primarySwatch: Colors.grey,
-              textTheme: MyIdenaAppTheme.textTheme,
-              platform: TargetPlatform.iOS,
-            ),
-            home: StreamBuilder(
-              stream: getLinksStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var uri = Uri.parse(snapshot.data);
-                  var list = uri.queryParametersAll.entries.toList();
-                  deepLinkParam = new DeepLinkParam();
-                  for (var i = 0; i < list.length; i++) {
-                    switch (list[i].key) {
-                      case "nonce_endpoint":
-                        {
-                          deepLinkParam.nonceEndpoint = list[i].value[0];
-                        }
-                        break;
-                      case "token":
-                        {
-                          deepLinkParam.token = list[i].value[0];
-                        }
-                        break;
-                      case "callback_url":
-                        {
-                          deepLinkParam.callbackUrl = list[i].value[0];
-                        }
-                        break;
-                      case "authentication_endpoint":
-                        {
-                          deepLinkParam.authenticationEndpoint =
-                              list[i].value[0];
-                        }
-                        break;
+      create: (contextStream) =>
+          ConnectivityService().connectionStatusController.stream,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        supportedLocales: [
+          Locale('en', ''),
+          Locale('fr', ''),
+          Locale('ru', ''),
+          Locale('cn', 'SC'),
+          Locale('cn', 'TC'),
+          Locale('sr', ''),
+          Locale('sr', 'RS'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          textTheme: MyIdenaAppTheme.textTheme,
+          platform: TargetPlatform.iOS,
+        ),
+        home: StreamBuilder(
+          stream: getLinksStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var uri = Uri.parse(snapshot.data);
+              var list = uri.queryParametersAll.entries.toList();
+              deepLinkParam = new DeepLinkParam();
+              for (var i = 0; i < list.length; i++) {
+                switch (list[i].key) {
+                  case "nonce_endpoint":
+                    {
+                      deepLinkParam.nonceEndpoint = list[i].value[0];
                     }
-                  }
-                  logger.i("nonce_endpoint: " + deepLinkParam.nonceEndpoint);
-                  logger.i("token: " + deepLinkParam.token);
-                  logger.i("callback_url: " + deepLinkParam.callbackUrl);
-                  logger.i("authentication_endpoint: " +
-                      deepLinkParam.authenticationEndpoint);
-                  Timer.run(() {
-                    onAfterBuild(context);
-                  });
-
-                  return Home();
-                } else {
-                  getStart();
-                  if (nodeOk && timeOk) {
-                    return Home();
-                  } else {
-                    return OnBoardingScreen();
-                  }
+                    break;
+                  case "token":
+                    {
+                      deepLinkParam.token = list[i].value[0];
+                    }
+                    break;
+                  case "callback_url":
+                    {
+                      deepLinkParam.callbackUrl = list[i].value[0];
+                    }
+                    break;
+                  case "authentication_endpoint":
+                    {
+                      deepLinkParam.authenticationEndpoint = list[i].value[0];
+                    }
+                    break;
                 }
-              },
-            )));
+              }
+              logger.i("nonce_endpoint: " + deepLinkParam.nonceEndpoint);
+              logger.i("token: " + deepLinkParam.token);
+              logger.i("callback_url: " + deepLinkParam.callbackUrl);
+              logger.i("authentication_endpoint: " +
+                  deepLinkParam.authenticationEndpoint);
+              Timer.run(() {
+                onAfterBuild(context);
+              });
+
+              return Home();
+            } else {
+              return RouteScreen();
+            }
+          },
+        ),
+      ),
+    );
   }
 
   void onAfterBuild(BuildContext context) {
@@ -290,36 +284,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     if (await canLaunch(deepLinkParam.callback_url)) {
       await launch(deepLinkParam.callback_url);
     } else {
-      logger.e('Could not  launch $deepLinkParam.callback_url');
+      logger.e('Could not launch $deepLinkParam.callback_url');
     }
-  }
-
-  Future<void> getDifferenceTime() async {
-    timeOk = false;
-    try {
-      DateTime _myTime = await NTP.now();
-      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-      DateTime _ntpTime = _myTime.add(Duration(milliseconds: offset));
-      int _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-      if (_differenceTime != null && _differenceTime.abs() <= 2000) {
-        timeOk = true;
-      }
-    } catch (e) {}
-  }
-
-  Future<void> getStart() async {
-    await getDifferenceTime();
-    nodeOk = false;
-    return FutureBuilder(
-        future: httpService.getDnaAll(),
-        // ignore: missing_return
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll != null && dnaAll.dnaIdentityResponse != null) {
-              nodeOk = true;
-            }
-          }
-        });
   }
 }
