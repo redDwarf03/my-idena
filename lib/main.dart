@@ -14,6 +14,7 @@ import 'package:my_idena/pages/screens/on_boarding_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/utils/util_deepLinks.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,6 +41,9 @@ class MyApp extends StatefulWidget {
 enum UniLinksType { string, uri }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  bool timeOk = false;
+  bool nodeOk = false;
+
   @override
   initState() {
     super.initState();
@@ -124,7 +128,12 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
                   return Home();
                 } else {
-                  return OnBoardingScreen();
+                  getStart();
+                  if (nodeOk && timeOk) {
+                    return Home();
+                  } else {
+                    return OnBoardingScreen();
+                  }
                 }
               },
             )));
@@ -283,5 +292,34 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     } else {
       logger.e('Could not  launch $deepLinkParam.callback_url');
     }
+  }
+
+  Future<void> getDifferenceTime() async {
+    timeOk = false;
+    try {
+      DateTime _myTime = await NTP.now();
+      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+      DateTime _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      int _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      if (_differenceTime != null && _differenceTime.abs() <= 2000) {
+        timeOk = true;
+      }
+    } catch (e) {}
+  }
+
+  Widget getStart() {
+    getDifferenceTime();
+    nodeOk = false;
+    return FutureBuilder(
+        future: httpService.getDnaAll(),
+        // ignore: missing_return
+        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+          if (snapshot.hasData) {
+            dnaAll = snapshot.data;
+            if (dnaAll != null && dnaAll.dnaIdentityResponse != null) {
+              nodeOk = true;
+            }
+          }
+        });
   }
 }
