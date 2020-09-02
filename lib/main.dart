@@ -307,8 +307,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     } catch (e) {}
   }
 
-  Widget getStart() {
-    getDifferenceTime();
+  Future<void> getStart() async {
+    await getDifferenceTime();
     nodeOk = false;
     return FutureBuilder(
         future: httpService.getDnaAll(),
