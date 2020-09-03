@@ -5,7 +5,6 @@ import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:my_idena/utils/util_deepLinks.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,6 +23,7 @@ class DeepLinkScreen extends StatefulWidget {
 class _DeepLinkScreenState extends State<DeepLinkScreen> {
   HttpService httpService = HttpService();
   DnaAll dnaAll;
+  DeepLinkParam deepLinkParam;
   @override
   void dispose() {
     super.dispose();
@@ -32,6 +32,7 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
   @override
   void initState() {
     super.initState();
+    deepLinkParam = widget.deepLinkParam;
   }
 
   @override
@@ -44,7 +45,7 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
             if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
               return Center(child: CircularProgressIndicator());
             } else {
-              if (widget.deepLinkParam != null) {
+              if (deepLinkParam != null) {
                 return Scaffold(
                   backgroundColor: Colors.black,
                   body: Center(
@@ -78,16 +79,17 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          Text(AppLocalizations.of(context)
-                                              .translate(
-                                                  "Please confirm that you want to use your public address for the website login"),
-                                        style: TextStyle(
-                                            fontFamily:
-                                                MyIdenaAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            letterSpacing: -0.1,
-                                            color: MyIdenaAppTheme.white),),
+                                          Text(
+                                            AppLocalizations.of(context).translate(
+                                                "Please confirm that you want to use your public address for the website login"),
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    MyIdenaAppTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                letterSpacing: -0.1,
+                                                color: MyIdenaAppTheme.white),
+                                          ),
                                           SizedBox(
                                             height: 20,
                                           ),
@@ -103,20 +105,19 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                               color: MyIdenaAppTheme.white,
                                             ),
                                           ),
-                                          Text(widget.deepLinkParam
-                                                      .nonceEndpoint !=
-                                                  null
-                                              ? UtilDeepLinks().getHostname(
-                                                  widget.deepLinkParam
-                                                      .nonceEndpoint)
-                                              : "",
-                                        style: TextStyle(
-                                            fontFamily:
-                                                MyIdenaAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            letterSpacing: -0.1,
-                                            color: MyIdenaAppTheme.white),),
+                                          Text(
+                                            deepLinkParam.nonceEndpoint != null
+                                                ? UtilDeepLinks().getHostname(
+                                                    deepLinkParam.nonceEndpoint)
+                                                : "",
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    MyIdenaAppTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 16,
+                                                letterSpacing: -0.1,
+                                                color: MyIdenaAppTheme.white),
+                                          ),
                                           SizedBox(
                                             height: 20,
                                           ),
@@ -169,16 +170,17 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                             ),
                                           ),
                                           Text(
-                                              widget.deepLinkParam.token != null
-                                                  ? widget.deepLinkParam.token
-                                                  : "",
-                                        style: TextStyle(
-                                            fontFamily:
-                                                MyIdenaAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            letterSpacing: -0.1,
-                                            color: MyIdenaAppTheme.white),),
+                                            deepLinkParam.token != null
+                                                ? deepLinkParam.token
+                                                : "",
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    MyIdenaAppTheme.fontName,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                                letterSpacing: -0.1,
+                                                color: MyIdenaAppTheme.white),
+                                          ),
                                           SizedBox(
                                             height: 20,
                                           ),
@@ -197,22 +199,15 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                                           BorderRadius.circular(
                                                               20.0)),
                                                   onPressed: () {
-                                                    widget.deepLinkParam
-                                                            .address =
+                                                    deepLinkParam.address =
                                                         dnaAll
                                                             .dnaIdentityResponse
                                                             .result
                                                             .address;
-                                                    _launchDeepLink(
-                                                        widget.deepLinkParam);
                                                     setState(() {
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    Home()),
-                                                      );
+                                                      deepLinkParam = null;
+                                                      _launchDeepLink(
+                                                          widget.deepLinkParam);
                                                     });
                                                   }),
                                               FlatButton(
@@ -227,13 +222,7 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                                               20.0)),
                                                   onPressed: () {
                                                     setState(() {
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    Home()),
-                                                      );
+                                                      deepLinkParam = null;
                                                     });
                                                   })
                                             ],
@@ -265,10 +254,13 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
     deepLinkParam = await UtilDeepLinks().getNonce(deepLinkParam);
     deepLinkParam = await httpService.signin(deepLinkParam);
     deepLinkParam = await UtilDeepLinks().authenticate(deepLinkParam);
-    if (await canLaunch(deepLinkParam.callback_url)) {
-      await launch(deepLinkParam.callback_url);
+    try {
+      launch(deepLinkParam.callbackUrl);
+    } catch (e) {}
+    /*if (await canLaunch(deepLinkParam.callbackUrl)) {
+      await launch(deepLinkParam.callbackUrl);
     } else {
-      logger.e('Could not launch $deepLinkParam.callback_url');
-    }
+      logger.e('Could not launch ' + deepLinkParam.callbackUrl);
+    }*/
   }
 }
