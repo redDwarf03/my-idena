@@ -136,7 +136,10 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   void dispose() {
-    controllerChrono.dispose();
+    if(controllerChrono != null)
+    {
+      controllerChrono.dispose();
+    }
     super.dispose();
   }
 
