@@ -45,14 +45,14 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   }
 
   Future checkNode() async {
-    if (!_nodeController.isClosed && _timer.isActive) {
-      httpService
-          .checkConnection(apiUrlController.text, keyAppController.text)
-          .then((res) {
+    httpService
+        .checkConnection(apiUrlController.text, keyAppController.text)
+        .then((res) {
+      if (!_nodeController.isClosed && _timer.isActive) {
         _nodeController.add(res);
         return res;
-      });
-    }
+      }
+    });
   }
 
   @override
