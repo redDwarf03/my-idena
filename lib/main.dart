@@ -21,7 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 DnaAll dnaAll = new DnaAll();
 var logger = Logger();
-String campaign = "v20200831.1";
+String campaign = "v20200904.1";
 DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
 
