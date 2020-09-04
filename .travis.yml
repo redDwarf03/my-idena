@@ -22,5 +22,6 @@ jobs:
       - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       - git clone https://github.com/flutter/flutter.git -b stable
       - ./flutter/bin/flutter doctor
+      - bundle install
     script:
       - ./flutter/bin/flutter build apk --split-per-abi
