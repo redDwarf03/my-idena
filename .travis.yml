@@ -24,4 +24,4 @@ jobs:
       - ./flutter/bin/flutter doctor
       - bundle install
     script:
-      - ./flutter/bin/flutter build apk --split-per-abi
+      - fastlane beta
