@@ -111,7 +111,8 @@
   "Ok, you are on time !": "Ok, vous êtes à l'heure !",
   "Please check your local clock. The time must be synchronized with internet time": "Veuillez vérifier votre heure locale. L'heure doit être synchronisée avec l'horaire internet",
   "Connection to node ok": "Connexion au noeud ok",
-  "Connection to node ko. Please check your settings.": "Connexion au noeud ko. Veuillez vérifier vos paramètres."
+  "Connection to node ko. Please check your settings.": "Connexion au noeud ko. Veuillez vérifier vos paramètres.",
+  "My flips"  : "Mes flips"
 
 
 
