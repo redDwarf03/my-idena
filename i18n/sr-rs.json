@@ -111,7 +111,8 @@
   "Ok, you are on time !": "У реду, време је синхронизовано !",
   "Please check your local clock. The time must be synchronized with internet time": "Провери свој локални сат. Време мора бити синхронизовано са временом на интернету",
   "Connection to node ok": "Веза са нодом је у реду",
-  "Connection to node ko. Please check your settings.": "Connection to node ko. Please check your settings."
+  "Connection to node ko. Please check your settings.": "Connection to node ko. Please check your settings.",
+  "My flips"  : "My flips"
 
 
 

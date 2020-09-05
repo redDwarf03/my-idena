@@ -47,8 +47,7 @@ app.*.map.json
 
 # archive
 lib/pages/archives/*.dart
-/todolist.txt
-lib/todolist.txt
 android/fastlane/Appfile
 api-5373400179997468599-215172-2a68660d069f.json
 ios/fastlane/Appfile
+lib/todolist.txt
