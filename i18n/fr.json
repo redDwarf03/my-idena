@@ -120,7 +120,8 @@
   "Make sure it is not possible to read the shuffled images as a meaningful story": "Vérifiez bien qu’il n’est pas possible d’identifier une histoire qui a du sens dans les images mélangées",
   "Before - Something happens - After": "Avant - Quelque chose arrive - Après",
   "Use keywords for the story": "Pour votre histoire, utilisez les mots clés",
-  "and template \"Before – Something happens – After\"": "et représentez \"Avant – Quelque chose arrive – Après\""
+  "and template \"Before – Something happens – After\"": "et représentez \"Avant – Quelque chose arrive – Après\"",
+  "Submit flip": "Soumettre le flip"
 
 
 

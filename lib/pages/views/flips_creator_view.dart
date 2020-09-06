@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +6,7 @@ import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/orderable_stack.dart';
 import 'package:my_idena/utils/util_flip.dart';
@@ -83,6 +83,11 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
       case 3:
         {
           return buildStep3(context);
+        }
+        break;
+      case 4:
+        {
+          return buildStep4(context);
         }
         break;
       default:
@@ -882,17 +887,6 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                         MyIdenaAppTheme.grey.withOpacity(0.5),
                                   ),
                                 ),
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "Make sure it is not possible to read the shuffled images as a meaningful story"),
-                                  style: TextStyle(
-                                    fontFamily: MyIdenaAppTheme.fontName,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                    color:
-                                        MyIdenaAppTheme.grey.withOpacity(0.5),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -1015,7 +1009,236 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                           RaisedButton(
                             elevation: 5.0,
                             onPressed: () async {
-                              // TODO
+                              setState(() {
+                                step = 4;
+                              });
+                            },
+                            padding: EdgeInsets.all(15.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Next step"),
+                              style: TextStyle(
+                                color: Colors.black,
+                                letterSpacing: 1.5,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: MyIdenaAppTheme.fontName,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildStep4(BuildContext context) {
+    return AnimatedBuilder(
+      animation: widget.animationController,
+      builder: (BuildContext context, Widget child) {
+        return FadeTransition(
+          opacity: widget.animation,
+          child: new Transform(
+            transform: new Matrix4.translationValues(
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 16, bottom: 18),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: MyIdenaAppTheme.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                      topRight: Radius.circular(68.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: MyIdenaAppTheme.grey.withOpacity(0.2),
+                        offset: Offset(1.1, 1.1),
+                        blurRadius: 10.0),
+                  ],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 4),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate("Submit flip"),
+                                  style: TextStyle(
+                                    fontFamily: MyIdenaAppTheme.fontName,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    letterSpacing: -0.2,
+                                    color: MyIdenaAppTheme.darkText,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Container(
+                                    height: 4,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          HexColor('#000000').withOpacity(0.2),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(4.0)),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          width: 70,
+                                          height: 4,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(colors: [
+                                              HexColor('#000000')
+                                                  .withOpacity(0.1),
+                                              HexColor('#000000'),
+                                            ]),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4.0)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
+                                Text(
+                                  AppLocalizations.of(context).translate(
+                                      "Make sure it is not possible to read the shuffled images as a meaningful story"),
+                                  style: TextStyle(
+                                    fontFamily: MyIdenaAppTheme.fontName,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    color:
+                                        MyIdenaAppTheme.grey.withOpacity(0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 0, left: 16, right: 16),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 4),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    height: 390,
+                                    child: ListView(
+                                      children: <Widget>[
+                                        Column(
+                                          children: <Widget>[
+                                            imgToDisplay_1,
+                                            SizedBox(height: 5.0),
+                                            imgToDisplay_2,
+                                            SizedBox(height: 5.0),
+                                            imgToDisplay_3,
+                                            SizedBox(height: 5.0),
+                                            imgToDisplay_4,
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 4),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    height: 390,
+                                    child: ListView(
+                                      children: <Widget>[],
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          RaisedButton(
+                            elevation: 5.0,
+                            onPressed: () async {
+                              setState(() {
+                                step = 3;
+                              });
+                            },
+                            padding: EdgeInsets.all(15.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Previous step"),
+                              style: TextStyle(
+                                color: Colors.black,
+                                letterSpacing: 1.5,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: MyIdenaAppTheme.fontName,
+                              ),
+                            ),
+                          ),
+                          RaisedButton(
+                            elevation: 5.0,
+                            onPressed: () async {
+                              setState(() {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home()),
+                                );
+                              });
                             },
                             padding: EdgeInsets.all(15.0),
                             shape: RoundedRectangleBorder(

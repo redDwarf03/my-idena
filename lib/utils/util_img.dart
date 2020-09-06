@@ -54,8 +54,11 @@ Image resizeImg(File imgFile) {
 }
 
 Image addShuffleArrowsIcon(Image imgFile) {
-  /*ImageTool.Image shuffleArrowsIcon = ImageTool.decodePng(File('assets/images/shuffle_arrows.png').readAsBytesSync());
-  ImageTool.Image imgInput = ImageTool.decodePng(imgFile);
+
+
+
+/*  ImageTool.Image shuffleArrowsIcon = ImageTool.decodePng(File('assets/images/shuffle_arrows.png').readAsBytesSync());
+  ImageTool.Image imgInput = ImageTool.decodeImage(imgFile.);
 
   ImageTool.copyInto(imgFile, shuffleArrowsIcon, dstX: imgFile.width - shuffleArrowsIcon.width - 10, dstY: imgFile.height - shuffleArrowsIcon.height - 10);*/
   return imgFile;
