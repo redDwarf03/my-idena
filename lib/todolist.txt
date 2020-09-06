@@ -3,6 +3,8 @@
 - notification arrêt noeud
 - attente on/off minage
 - implémenter les cas non passants
-    - deep link
-    
+
+- deep link
+- ui pour les transactions 
 - lancement auto session validation
+

@@ -112,7 +112,16 @@
   "Please check your local clock. The time must be synchronized with internet time": "Please check your local clock. The time must be synchronized with internet time",
   "Connection to node ok": "Connection to node ok",
   "Connection to node ko. Please check your settings.": "Connection to node ko. Please check your settings.",
-  "My flips"  : "My flips"
+  "My flips"  : "My flips",
+  "Shuffle images": "Shuffle images",
+  "Shuffle images in order to make a nonsense sequence of images": "Shuffle images in order to make a nonsense sequence of images",
+  "Select 4 images to tell your story": "Select 4 images to tell your story",
+  "Please no text on images to explain your story": "Please no text on images to explain your story",
+  "Make sure it is not possible to read the shuffled images as a meaningful story": "Make sure it is not possible to read the shuffled images as a meaningful story",
+  "Before - Something happens - After": "Before - Something happens - After",
+  "Use keywords for the story": "Use keywords for the story",
+  "and template \"Before – Something happens – After\"": "and template \"Before – Something happens – After\""
+
 
 
 
