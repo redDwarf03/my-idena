@@ -70,6 +70,8 @@ dependencies:
 
   rxdart: ^0.24.1
     
+  image: ^2.1.14
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

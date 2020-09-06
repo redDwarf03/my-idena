@@ -112,7 +112,16 @@
   "Please check your local clock. The time must be synchronized with internet time": "Veuillez vérifier votre heure locale. L'heure doit être synchronisée avec l'horaire internet",
   "Connection to node ok": "Connexion au noeud ok",
   "Connection to node ko. Please check your settings.": "Connexion au noeud ko. Veuillez vérifier vos paramètres.",
-  "My flips"  : "Mes flips"
+  "My flips"  : "Mes flips",
+  "Shuffle images": "Mélanger les images",
+  "Shuffle images in order to make a nonsense sequence of images": "Mélangez les images afin de créer une séquence d’images sans aucun sens",
+  "Select 4 images to tell your story": "Sélectionnez 4 images qui racontent votre histoire",
+  "Please no text on images to explain your story": "Pas de texte expliquant votre histoire sur les images, SVP",
+  "Make sure it is not possible to read the shuffled images as a meaningful story": "Vérifiez bien qu’il n’est pas possible d’identifier une histoire qui a du sens dans les images mélangées",
+  "Before - Something happens - After": "Avant - Quelque chose arrive - Après",
+  "Use keywords for the story": "Pour votre histoire, utilisez les mots clés",
+  "and template \"Before – Something happens – After\"": "et représentez \"Avant – Quelque chose arrive – Après\""
+
 
 
 
