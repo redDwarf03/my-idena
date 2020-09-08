@@ -1,11 +1,8 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/utils/identityStatus.dart' as IdentityStatus;
 
-
 class UtilIdentity {
-
-bool isCeremonyCandidate(DnaAll dnaAll)
-{
+  bool isCeremonyCandidate(DnaAll dnaAll) {
     if (dnaAll.dnaIdentityResponse == null) {
       return false;
     }
@@ -17,27 +14,36 @@ bool isCeremonyCandidate(DnaAll dnaAll)
       IdentityStatus.Suspended,
       IdentityStatus.Zombie,
     ];
-    return (dnaAll.dnaIdentityResponse.result.madeFlips >= dnaAll.dnaIdentityResponse.result.requiredFlips && identityStatus1
-                .contains(dnaAll.dnaIdentityResponse.result.state));
-}
+    return (dnaAll.dnaIdentityResponse.result.madeFlips >=
+            dnaAll.dnaIdentityResponse.result.requiredFlips &&
+        identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state));
+  }
 
   bool canValidate(DnaAll dnaAll) {
     if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
       return false;
     }
-    int numOfFlipsToSubmit = dnaAll.dnaIdentityResponse.result.requiredFlips -
-        dnaAll.dnaIdentityResponse.result.flips.length;
-    bool shouldSendFlips = numOfFlipsToSubmit > 0;
     var identityStatus1 = [
       IdentityStatus.Human,
       IdentityStatus.Verified,
       IdentityStatus.Newbie
     ];
+
     var identityStatus2 = [
       IdentityStatus.Candidate,
       IdentityStatus.Suspended,
       IdentityStatus.Zombie
     ];
+
+    bool shouldSendFlips = true;
+    if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state)) {
+      try {
+        int numOfFlipsToSubmit =
+            dnaAll.dnaIdentityResponse.result.requiredFlips -
+                dnaAll.dnaIdentityResponse.result.flips.length;
+        shouldSendFlips = numOfFlipsToSubmit > 0;
+      } catch (e) {}
+    }
 
     return ((identityStatus1
                 .contains(dnaAll.dnaIdentityResponse.result.state) &&

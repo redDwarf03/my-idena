@@ -57,7 +57,7 @@
   "Okay, let’s start": "Okay, let’s start",
   "Your answers for the validation session have been submitted successfully!": "Your answers for the validation session have been submitted successfully!",
   "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer.": "Now solve bunch of flips to check its quality. The flip is qualified if the majority, equals more than 2/3 participants, gives the same answer.",
-  "Your current status doesn't allow you to mine.": "Your current status\ndoesn't allow you to mine.",
+  "Your current status doesn't allow you to mine.": "Your current status doesn't allow you to mine.",
   "Select meaningful story: left or right": "Select meaningful story: left or right",
   "Transactions": "Transactions",
   "Transaction": "Transaction",
@@ -125,7 +125,9 @@
   "Idena validation will start soon": "Idena validation will start soon",
   "Waiting for the end of long session": "Waiting for the end of long session",
   "Please wait. The network is reaching consensus about validated identities": "Please wait. The network is reaching consensus about validated identities",
-  "Please wait for the validation report": "Please wait for the validation report"
+  "Please wait for the validation report": "Please wait for the validation report",
+  "Online mining status": "Online mining status",
+  "Your status doesn't allow you to participate in the validation session": "Your status doesn't allow you to participate in the validation session"
 
 
 

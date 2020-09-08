@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/views/validation_session_countdown.view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
@@ -11,10 +9,9 @@ import 'package:my_idena/utils/util_identity.dart';
 class ProfileView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
-  final bool firstState;
 
   const ProfileView(
-      {Key key, this.animationController, this.animation, this.firstState})
+      {Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -22,196 +19,14 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  bool firstStateForView;
-  HttpService httpService = HttpService();
-  bool miningSwitchValue;
+  HttpService httpService = new HttpService();
   DnaAll dnaAll;
 
   @override
   void initState() {
-    firstStateForView = widget.firstState;
     super.initState();
   }
 
-  Widget displayMiningSwitch() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Switch(
-          value: miningSwitchValue,
-          onChanged: (value) {
-            setState(() {
-              if (miningSwitchValue) {
-                showDialog(
-                    context: context,
-                    builder: (context) => SimpleDialog(
-                          contentPadding: EdgeInsets.zero,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                      AppLocalizations.of(context).translate(
-                                          "Deactivate mining status"),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 20.0,
-                                      )),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                      AppLocalizations.of(context).translate(
-                                          "Submit the form to deactivate your mining status."),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 15.0,
-                                      )),
-                                  SizedBox(height: 20.0),
-                                  Text(
-                                      AppLocalizations.of(context).translate(
-                                          "You can activate it again afterwards."),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 15.0,
-                                      )),
-                                  SizedBox(height: 10.0),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      FlatButton(
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate("Submit"),
-                                          ),
-                                          color: Colors.grey[200],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0)),
-                                          onPressed: () {
-                                            httpService.becomeOffline();
-                                            miningSwitchValue =
-                                                !miningSwitchValue;
-                                            setState(() {
-                                              Navigator.pop(context);
-                                            });
-                                          }),
-                                      FlatButton(
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate("Cancel"),
-                                          ),
-                                          color: Colors.grey[200],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0)),
-                                          onPressed: () {
-                                            setState(() {
-                                              Navigator.pop(context);
-                                            });
-                                          })
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ));
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (context) => SimpleDialog(
-                          contentPadding: EdgeInsets.zero,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Activate mining status"),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 20.0,
-                                      )),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                      AppLocalizations.of(context).translate(
-                                          "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour."),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 15.0,
-                                      )),
-                                  SizedBox(height: 20.0),
-                                  Text(
-                                      AppLocalizations.of(context).translate(
-                                          "You can deactivate your online status at any time."),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: MyIdenaAppTheme.fontName,
-                                        fontSize: 15.0,
-                                      )),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      FlatButton(
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate("Submit"),
-                                          ),
-                                          color: Colors.grey[200],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0)),
-                                          onPressed: () {
-                                            setState(() {
-                                              httpService.becomeOnline();
-                                              miningSwitchValue =
-                                                  !miningSwitchValue;
-                                              Navigator.pop(context);
-                                            });
-                                          }),
-                                      FlatButton(
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate("Cancel"),
-                                          ),
-                                          color: Colors.grey[200],
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0)),
-                                          onPressed: () {
-                                            setState(() {
-                                              Navigator.pop(context);
-                                            });
-                                          })
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ));
-              }
-            });
-          },
-          activeTrackColor: Colors.green[100],
-          activeColor: Colors.green[300],
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,10 +38,6 @@ class _ProfileViewState extends State<ProfileView> {
             if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
               return Text("");
             } else {
-              if (firstStateForView) {
-                miningSwitchValue = dnaAll.dnaIdentityResponse.result.online;
-                firstStateForView = false;
-              }
               return AnimatedBuilder(
                   animation: widget.animationController,
                   builder: (BuildContext context, Widget child) {
@@ -258,154 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0, left: 10, right: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 4, bottom: 8, top: 16),
-                                        child: UtilIdentity().canMine(dnaAll) ==
-                                                true
-                                            ? Text(
-                                                AppLocalizations.of(context)
-                                                    .translate("Mining"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: MyIdenaAppTheme
-                                                        .fontName,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16,
-                                                    letterSpacing: -0.1,
-                                                    color: MyIdenaAppTheme
-                                                        .darkText),
-                                              )
-                                            : Text(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        "Your current status doesn't allow you to mine."),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: MyIdenaAppTheme
-                                                        .fontName,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16,
-                                                    letterSpacing: -0.1,
-                                                    color: MyIdenaAppTheme
-                                                        .darkText),
-                                              ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          new UtilIdentity().canMine(dnaAll) ==
-                                                  true
-                                              ? displayMiningSwitch()
-                                              : Text(""),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Icon(
-                                                    Icons.access_time,
-                                                    color: MyIdenaAppTheme.grey
-                                                        .withOpacity(0.5),
-                                                    size: 16,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 4.0),
-                                                    child: Text(
-                                                      DateFormat.yMMMMEEEEd(
-                                                              Localizations
-                                                                      .localeOf(
-                                                                          context)
-                                                                  .languageCode)
-                                                          .add_Hm()
-                                                          .format(dnaAll
-                                                              .dnaGetEpochResponse
-                                                              .result
-                                                              .nextValidation
-                                                              .toLocal())
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            MyIdenaAppTheme
-                                                                .fontName,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 14,
-                                                        letterSpacing: 0.0,
-                                                        color: MyIdenaAppTheme
-                                                            .grey
-                                                            .withOpacity(0.5),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4, bottom: 14),
-                                                child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate(
-                                                          "Next validation"),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: MyIdenaAppTheme
-                                                        .fontName,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 12,
-                                                    letterSpacing: 0.0,
-                                                    color: MyIdenaAppTheme
-                                                        .nearlyDarkBlue,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                new ValidationSessionCountdownText(
-                                  nextValidation: dnaAll.dnaGetEpochResponse
-                                      .result.nextValidation,
-                                  animationController:
-                                      widget.animationController,
-                                  dnaAll: dnaAll,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 0, bottom: 8),
-                                  child: Container(
-                                    height: 2,
-                                    decoration: BoxDecoration(
-                                      color: MyIdenaAppTheme.background,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 0, bottom: 5),
+                                      left: 10, right: 10, top: 16, bottom: 5),
                                   child: Row(
                                     children: <Widget>[
                                       Expanded(
