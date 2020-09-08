@@ -22,7 +22,7 @@ bool isCeremonyCandidate(DnaAll dnaAll)
 }
 
   bool canValidate(DnaAll dnaAll) {
-    if (dnaAll.dnaIdentityResponse == null) {
+    if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
       return false;
     }
     int numOfFlipsToSubmit = dnaAll.dnaIdentityResponse.result.requiredFlips -

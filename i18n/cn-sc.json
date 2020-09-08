@@ -121,7 +121,13 @@
   "Before - Something happens - After": "Before - Something happens - After",
   "Use keywords for the story": "Use keywords for the story",
   "and template \"Before – Something happens – After\"": "and template \"Before – Something happens – After\"",
-  "Submit flip": "Submit flip"
+  "Submit flip": "Submit flip",
+  "Idena validation will start soon": "Idena validation will start soon",
+  "Waiting for the end of long session": "Waiting for the end of long session",
+  "Please wait. The network is reaching consensus about validated identities": "Please wait. The network is reaching consensus about validated identities",
+  "Please wait for the validation report": "Please wait for the validation report"
+
+  
   
 
   

@@ -116,9 +116,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = ValidationSessionScreen(
-                              typeLaunchSession: EpochPeriod.ShortSession,
-                              checkFlipsQualityProcess: false,
+                          tabBody = CreateFlipScreen(
                               dnaAll: dnaAll,
                               animationController: animationController);
                         });
