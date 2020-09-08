@@ -125,7 +125,9 @@
   "Idena validation will start soon": "Idena validation will start soon",
   "Waiting for the end of long session": "Waiting for the end of long session",
   "Please wait. The network is reaching consensus about validated identities": "Please wait. The network is reaching consensus about validated identities",
-  "Please wait for the validation report": "Please wait for the validation report"
+  "Please wait for the validation report": "Please wait for the validation report",
+  "Online mining status": "Online mining status",
+  "Your status doesn't allow you to participate in the validation session": "Your status doesn't allow you to participate in the validation session"
 
 
 

@@ -98,11 +98,11 @@ flutter:
     - assets/images/
     - i18n/fr.json
     - i18n/en.json 
-    - i18n/cn-sc.json
-    - i18n/cn-tc.json
+    - i18n/cn_sc.json
+    - i18n/cn_tc.json
     - i18n/ru.json
-    - i18n/sr.json
-    - i18n/sr-rs.json
+    - i18n/sr_Latn.json
+    - i18n/sr_Cyrl.json
     - lib/utils/words.json
     - test/examples/
     

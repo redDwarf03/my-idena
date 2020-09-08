@@ -17,14 +17,30 @@ class AppLocalizations {
 
   // Static member to have a simple access to the delegate from the MaterialApp
   static const LocalizationsDelegate<AppLocalizations> delegate =
-  _AppLocalizationsDelegate();
+      _AppLocalizationsDelegate();
 
   Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
     // Load the language JSON file from the "lang" folder
-    String jsonString =
-    await rootBundle.loadString('i18n/${locale.languageCode}.json');
+    String jsonString;
+    if (locale.languageCode != null &&
+        locale.scriptCode != null &&
+        locale.countryCode != null) {
+      jsonString = await rootBundle.loadString(
+          'i18n/${locale.languageCode}_${locale.scriptCode}_${locale.countryCode}.json');
+    } else {
+      if (locale.languageCode != null &&
+          locale.scriptCode != null &&
+          locale.countryCode == null) {
+        jsonString = await rootBundle.loadString(
+            'i18n/${locale.languageCode}_${locale.scriptCode}.json');
+      } else {
+        jsonString =
+            await rootBundle.loadString('i18n/${locale.languageCode}.json');
+      }
+    }
+
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
     _localizedStrings = jsonMap.map((key, value) {
@@ -51,7 +67,20 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    return ['en', 'fr'].contains(locale.languageCode);
+    if(['en', 'fr', 'ru'].contains(locale.languageCode))
+    {
+      return true;
+    }
+    if('sr' == locale.languageCode && ['Latn', 'Cyrl'].contains(locale.scriptCode))
+    {
+      return true;
+    }
+    // TODO: à corriger 
+    if('cn' == locale.languageCode && ['Sc', 'Tc'].contains(locale.scriptCode))
+    {
+      return true;
+    }
+    return false;
   }
 
   @override
