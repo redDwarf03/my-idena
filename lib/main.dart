@@ -221,18 +221,19 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         supportedLocales: [
-          Locale('en', ''),
-          Locale('fr', ''),
-          Locale('ru', ''),
-          Locale('cn', 'SC'),
-          Locale('cn', 'TC'),
-          Locale('sr', ''),
-          Locale('sr', 'RS'),
+          const Locale('en', ''),
+          const Locale('fr', ''),
+          const Locale('ru', ''),
+          const Locale('cn', 'SC'),
+          const Locale('cn', 'TC'),
+          const Locale.fromSubtags(languageCode: 'sr', scriptCode: 'Latn'),
+          const Locale.fromSubtags(languageCode: 'sr', scriptCode: 'Cyrl'),
         ],
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         theme: ThemeData(
           primarySwatch: Colors.grey,
