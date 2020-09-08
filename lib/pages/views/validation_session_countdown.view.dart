@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
@@ -8,6 +9,7 @@ import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/util_date.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
@@ -75,9 +77,23 @@ class _ValidationSessionCountdownTextState
   }
 
   _buildChild() {
-    if(UtilIdentity().canValidate(widget.dnaAll) == false)
-    {
-        return SizedBox(width: 1, height: 1);
+    if (UtilIdentity().canValidate(widget.dnaAll) == false) {
+      return Padding(
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 8),
+          child: Container(
+              child: Row(children: <Widget>[
+            Text(
+              AppLocalizations.of(context).translate(
+                  "Your status doesn't allow you to participate in the validation session"),
+              style: TextStyle(
+                  fontFamily: MyIdenaAppTheme.fontName,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  letterSpacing: 0.0,
+                  color: MyIdenaAppTheme.darkText),
+            )
+          ])));
     }
     if (currentPeriod == null) currentPeriod = EpochPeriod.None;
     switch (currentPeriod) {
@@ -121,7 +137,7 @@ class _ValidationSessionCountdownTextState
                   child: Row(children: <Widget>[
                 Text(
                   AppLocalizations.of(context)
-                          .translate("Waiting for the end of long session"),
+                      .translate("Waiting for the end of long session"),
                   style: TextStyle(
                       fontFamily: MyIdenaAppTheme.fontName,
                       fontWeight: FontWeight.w500,
@@ -140,7 +156,7 @@ class _ValidationSessionCountdownTextState
                   child: Row(children: <Widget>[
                 Text(
                   AppLocalizations.of(context).translate(
-                          "Please wait. The network is reaching consensus about validated identities"),
+                      "Please wait. The network is reaching consensus about validated identities"),
                   style: TextStyle(
                       fontFamily: MyIdenaAppTheme.fontName,
                       fontWeight: FontWeight.w500,
@@ -152,7 +168,7 @@ class _ValidationSessionCountdownTextState
         }
       default:
         {
-          return SizedBox(width: 1, height: 1);
+          return diplayNextValidationDate(dnaAll);
         }
     }
   }
@@ -171,5 +187,72 @@ class _ValidationSessionCountdownTextState
                 checkFlipsQualityProcess: false,
                 dnaAll: widget.dnaAll,
                 animationController: widget.animationController)));
+  }
+
+  Widget diplayNextValidationDate(DnaAll thisDnaAll) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            AppLocalizations.of(context).translate("Next validation"),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: MyIdenaAppTheme.fontName,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              letterSpacing: -0.2,
+              color: MyIdenaAppTheme.darkText,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Container(
+              height: 4,
+              width: 90,
+              decoration: BoxDecoration(
+                color: HexColor('#000000').withOpacity(0.2),
+                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 90,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        HexColor('#000000').withOpacity(0.1),
+                        HexColor('#000000'),
+                      ]),
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              DateFormat.yMMMMEEEEd(
+                      Localizations.localeOf(context).languageCode)
+                  .add_Hm()
+                  .format(thisDnaAll.dnaGetEpochResponse.result.nextValidation
+                      .toLocal())
+                  .toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: MyIdenaAppTheme.fontName,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                letterSpacing: 0.0,
+                color: MyIdenaAppTheme.grey.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
