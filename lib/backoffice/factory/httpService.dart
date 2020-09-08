@@ -28,7 +28,6 @@ import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
 
-
 class HttpService {
   var logger = Logger();
 
@@ -238,7 +237,8 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      DnaBecomeOnlineRequest dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(map);
+      DnaBecomeOnlineRequest dnaBecomeOnlineRequest =
+          DnaBecomeOnlineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOnlineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -270,7 +270,8 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      DnaBecomeOfflineRequest dnaBecomeOfflineRequest = DnaBecomeOfflineRequest.fromJson(map);
+      DnaBecomeOfflineRequest dnaBecomeOfflineRequest =
+          DnaBecomeOfflineRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaBecomeOfflineRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -318,7 +319,6 @@ class HttpService {
 
   Future<DnaSendTransactionResponse> sendTransaction(
       String from, double amount) async {
-
     DnaSendTransactionResponse dnaSendTransactionResponse;
     if (amount <= 0) {
       return null;
@@ -344,7 +344,8 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      DnaSendTransactionRequest dnaSendTransactionRequest = DnaSendTransactionRequest.fromJson(map);
+      DnaSendTransactionRequest dnaSendTransactionRequest =
+          DnaSendTransactionRequest.fromJson(map);
       request.add(utf8.encode(json.encode(dnaSendTransactionRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -359,7 +360,6 @@ class HttpService {
 
   Future<BcnTransactionsResponse> getTransactions(
       String address, int count) async {
-
     BcnTransactionsResponse bcnTransactionsResponse;
     try {
       HttpClient httpClient = new HttpClient();
@@ -378,7 +378,8 @@ class HttpService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      BcnTransactionsRequest bcnTransactionsRequest = BcnTransactionsRequest.fromJson(map);
+      BcnTransactionsRequest bcnTransactionsRequest =
+          BcnTransactionsRequest.fromJson(map);
       request.add(utf8.encode(json.encode(bcnTransactionsRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -393,8 +394,7 @@ class HttpService {
   }
 
   Future<DeepLinkParam> signin(deepLinkParam) async {
-     
-     DnaSignInResponse dnaSignInResponse;
+    DnaSignInResponse dnaSignInResponse;
     try {
       HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
@@ -422,5 +422,113 @@ class HttpService {
       logger.e(e.toString());
     } finally {}
     return deepLinkParam;
+  }
+
+  Future<bool> getMiningStatus(int waitForMiningStatus) async {
+    DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
+    DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
+    DnaIdentityRequest dnaIdentityRequest;
+    DnaIdentityResponse dnaIdentityResponse;
+    bool miningStatus;
+
+    try {
+      HttpClient httpClient = new HttpClient();
+
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+      if (idenaSharedPreferences == null) {
+        return null;
+      }
+
+      // get CoinBase Address
+      HttpClientRequest request1 =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request1.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetCoinBaseAddress = {
+        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      dnaGetCoinbaseAddrRequest =
+          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
+      request1
+          .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+      HttpClientResponse response = await request1.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponseFromJson(reply);
+      }
+
+      // get Identity
+      HttpClientRequest request2 =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request2.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetIdentity = {
+        'method': DnaIdentityRequest.METHOD_NAME,
+        'params': [dnaGetCoinbaseAddrResponse.result],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      dnaIdentityRequest = DnaIdentityRequest.fromJson(mapGetIdentity);
+      request2.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
+      response = await request2.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
+        miningStatus = dnaIdentityResponse.result.online;
+        // waitForMiningStatus.value : 1 = wait for become offline, 2 = wait for become online
+        if (miningStatus && waitForMiningStatus == 1) {
+          return null;
+        }
+        if (!miningStatus && waitForMiningStatus == 2) {
+          return null;
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+    return miningStatus;
+  }
+
+  Future<String> getCurrentPeriod() async {
+    String currentPeriod;
+    try {
+      HttpClient httpClient = new HttpClient();
+      DnaGetEpochRequest dnaGetEpochRequest;
+      DnaGetEpochResponse dnaGetEpochResponse;
+
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+      if (idenaSharedPreferences == null) {
+        return null;
+      }
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapGetEpoch = {
+        'method': DnaGetEpochRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapGetEpoch);
+      request.add(utf8.encode(json.encode(dnaGetEpochRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        dnaGetEpochResponse = dnaGetEpochResponseFromJson(reply);
+        currentPeriod = dnaGetEpochResponse.result.currentPeriod;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+    return currentPeriod;
   }
 }

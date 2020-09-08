@@ -134,7 +134,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
-              widget.animationController.forward();
+              if(!widget.animationController.isCompleted) widget.animationController.forward();
               return listViews[index];
             },
           );

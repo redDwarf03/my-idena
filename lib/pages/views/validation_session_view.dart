@@ -26,7 +26,7 @@ List relevantFlipList = new List();
 List<Widget> iconList = new List();
 int controllerChronoValue;
 
-// 0 = no selection, 1 = selected, 2 = relevant, 3 = relevant,
+// 0 = no selection, 1 = selected, 2 = relevant, 3 = no relevant,
 List<int> selectedIconList = new List();
 
 class ValidationSessionView extends StatefulWidget {

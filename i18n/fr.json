@@ -121,7 +121,11 @@
   "Before - Something happens - After": "Avant - Quelque chose arrive - Après",
   "Use keywords for the story": "Pour votre histoire, utilisez les mots clés",
   "and template \"Before – Something happens – After\"": "et représentez \"Avant – Quelque chose arrive – Après\"",
-  "Submit flip": "Soumettre le flip"
+  "Submit flip": "Soumettre le flip",
+  "Idena validation will start soon": "La session de validation va bientôt débuter",
+  "Waiting for the end of long session": "En attente de la fin de la session longue",
+  "Please wait. The network is reaching consensus about validated identities": "Veuillez patienter. Le réseau est en cours de formation du consensus concernant les identités validées",
+  "Please wait for the validation report": "Veuillez patienter pour le rapport de validation"
 
 
 

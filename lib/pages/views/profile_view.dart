@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/views/validation_session_countdown.view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
@@ -12,28 +13,25 @@ class ProfileView extends StatefulWidget {
   final Animation animation;
   final bool firstState;
 
-  const ProfileView({Key key, this.animationController, this.animation, this.firstState})
+  const ProfileView(
+      {Key key, this.animationController, this.animation, this.firstState})
       : super(key: key);
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
 }
 
-
 class _ProfileViewState extends State<ProfileView> {
-
   bool firstStateForView;
   HttpService httpService = HttpService();
   bool miningSwitchValue;
   DnaAll dnaAll;
-  
-  @override
-    void initState() {
 
-      firstStateForView = widget.firstState;
-      super.initState();
-    }
-  
+  @override
+  void initState() {
+    firstStateForView = widget.firstState;
+    super.initState();
+  }
 
   Widget displayMiningSwitch() {
     return Row(
@@ -380,11 +378,18 @@ class _ProfileViewState extends State<ProfileView> {
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
                                       )
                                     ],
                                   ),
+                                ),
+                                new ValidationSessionCountdownText(
+                                  nextValidation: dnaAll.dnaGetEpochResponse
+                                      .result.nextValidation,
+                                  animationController:
+                                      widget.animationController,
+                                  dnaAll: dnaAll,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
