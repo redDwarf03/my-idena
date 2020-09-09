@@ -98,8 +98,8 @@ flutter:
     - assets/images/
     - i18n/fr.json
     - i18n/en.json 
-    - i18n/cn_sc.json
-    - i18n/cn_tc.json
+    - i18n/zh_Hans.json
+    - i18n/zh_Hant.json
     - i18n/ru.json
     - i18n/sr_Latn.json
     - i18n/sr_Cyrl.json
