@@ -3,6 +3,7 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
 
 class MiningView extends StatefulWidget {
@@ -93,7 +94,10 @@ class _MiningViewState extends State<MiningView> {
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 18),
+                                                  left: 6,
+                                                  right: 10,
+                                                  top: 16,
+                                                  bottom: 14),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -111,63 +115,21 @@ class _MiningViewState extends State<MiningView> {
                                                               CrossAxisAlignment
                                                                   .center,
                                                           children: <Widget>[
-                                                               Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 4,
-                                                                  bottom: 2),
-                                                          child:Text(
-                                                                AppLocalizations.of(
-                                                                        context)
-                                                                    .translate(
-                                                                        "Mining"),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        MyIdenaAppTheme
-                                                                            .fontName,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontSize:
-                                                                        16,
-                                                                    letterSpacing:
-                                                                        -0.1,
-                                                                    color: MyIdenaAppTheme
-                                                                        .darkText),
-                                                              ),),
-                                                              displayMiningSwitch()
-                                                            ])
-                                                      : Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
-                                                          children: <Widget>[
-                                                              Icon(
-                                                                Icons
-                                                                    .info_outline,
-                                                                size: 20,
-                                                              ),
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .only(
+                                                                        left: 0,
                                                                         bottom:
-                                                                            1),
+                                                                            2),
                                                                 child: Text(
                                                                   AppLocalizations.of(
                                                                           context)
                                                                       .translate(
-                                                                          "Your current status doesn't allow you to mine."),
+                                                                          "Mining"),
                                                                   textAlign:
                                                                       TextAlign
-                                                                          .left,
+                                                                          .center,
                                                                   style: TextStyle(
                                                                       fontFamily: MyIdenaAppTheme
                                                                           .fontName,
@@ -175,14 +137,93 @@ class _MiningViewState extends State<MiningView> {
                                                                           FontWeight
                                                                               .w500,
                                                                       fontSize:
-                                                                          12,
+                                                                          16,
                                                                       letterSpacing:
                                                                           -0.1,
                                                                       color: MyIdenaAppTheme
                                                                           .darkText),
                                                                 ),
-                                                              )
-                                                            ]),
+                                                              ),
+                                                              displayMiningSwitch()
+                                                            ])
+                                                      : Row(children: <Widget>[
+                                                          Expanded(
+                                                              child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: <
+                                                                      Widget>[
+                                                                Text(
+                                                                  AppLocalizations.of(
+                                                                          context)
+                                                                      .translate(
+                                                                          "Your current status doesn't allow you to mine."),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontFamily:
+                                                                        MyIdenaAppTheme
+                                                                            .fontName,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontSize:
+                                                                        14,
+                                                                    letterSpacing:
+                                                                        -0.2,
+                                                                    color: MyIdenaAppTheme
+                                                                        .darkText,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 4),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 4,
+                                                                    width: 90,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: HexColor(
+                                                                              '#000000')
+                                                                          .withOpacity(
+                                                                              0.2),
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(4.0)),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Container(
+                                                                          width:
+                                                                              90,
+                                                                          height:
+                                                                              4,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            gradient:
+                                                                                LinearGradient(colors: [
+                                                                              HexColor('#000000').withOpacity(0.1),
+                                                                              HexColor('#000000'),
+                                                                            ]),
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(4.0)),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ]))
+                                                        ]),
                                                 ],
                                               ),
                                             ),

@@ -92,7 +92,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
-      nbFlips = 5;
+      nbFlips = 1;
       checkFlipsQualityProcessForValidationSession = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -108,7 +108,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         relevantFlipList = new List();
         iconList = new List();
         selectedIconList = new List();
-        nbFlips = 17;
+        nbFlips = 1;
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
@@ -136,8 +136,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   void dispose() {
-    if(controllerChrono != null)
-    {
+    if (controllerChrono != null) {
       controllerChrono.dispose();
     }
     super.dispose();
@@ -312,7 +311,10 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      checkWords(listSessionValidationFlip[index], index),
+                                                                      checkWords(
+                                                                          listSessionValidationFlip[
+                                                                              index],
+                                                                          index),
                                                                       Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             top:
@@ -361,7 +363,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                     ],
                                   ),
                                 ),
-                                
                                 new ValidationThumbnailsView(
                                   iconList: iconList,
                                   nbFlips: nbFlips,
@@ -476,7 +477,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     );
   }
 
-  Widget checkWords(ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+  Widget checkWords(
+      ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
     if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
             EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
@@ -570,8 +572,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              relevantFlipList[index] =
-                                  RelevantType.RELEVANT;
+                              relevantFlipList[index] = RelevantType.RELEVANT;
                               selectedIconList[index] = 2;
                             });
                           },
@@ -586,10 +587,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                               AppLocalizations.of(context)
                                   .translate("Both relevant"),
                               style: TextStyle(
-                                color:
-                                    selectedIconList[index] == 2
-                                        ? Colors.white
-                                        : Colors.blue,
+                                color: selectedIconList[index] == 2
+                                    ? Colors.white
+                                    : Colors.blue,
                                 letterSpacing: 1.5,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
@@ -604,8 +604,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              relevantFlipList[index] =
-                                  RelevantType.IRRELEVANT;
+                              relevantFlipList[index] = RelevantType.IRRELEVANT;
                               selectedIconList[index] = 3;
                             });
                           },
@@ -620,10 +619,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                               AppLocalizations.of(context)
                                   .translate("Irrelevant"),
                               style: TextStyle(
-                                color:
-                                    selectedIconList[index] == 3
-                                        ? Colors.white
-                                        : Colors.red,
+                                color: selectedIconList[index] == 3
+                                    ? Colors.white
+                                    : Colors.red,
                                 letterSpacing: 1.5,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
@@ -643,5 +641,4 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       return SizedBox();
     }
   }
-
 }
