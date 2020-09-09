@@ -14,13 +14,15 @@ import 'package:my_idena/utils/util_identity.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
   final DateTime nextValidation;
+  final String currentPeriod;
   final AnimationController animationController;
   final DnaAll dnaAll;
   const ValidationSessionCountdownText(
       {Key key,
       @required this.nextValidation,
       this.animationController,
-      this.dnaAll})
+      this.dnaAll,
+      this.currentPeriod})
       : super(key: key);
 
   @override
@@ -168,7 +170,7 @@ class _ValidationSessionCountdownTextState
         }
       default:
         {
-          return diplayNextValidationDate(dnaAll);
+          return displayNextValidationDate(dnaAll);
         }
     }
   }
@@ -189,7 +191,7 @@ class _ValidationSessionCountdownTextState
                 animationController: widget.animationController)));
   }
 
-  Widget diplayNextValidationDate(DnaAll thisDnaAll) {
+  Widget displayNextValidationDate(DnaAll thisDnaAll) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -241,6 +243,68 @@ class _ValidationSessionCountdownTextState
                   .format(thisDnaAll.dnaGetEpochResponse.result.nextValidation
                       .toLocal())
                   .toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: MyIdenaAppTheme.fontName,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                letterSpacing: 0.0,
+                color: MyIdenaAppTheme.grey.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget displayCurrentPeriod(DnaAll thisDnaAll) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            AppLocalizations.of(context).translate("Current period"),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: MyIdenaAppTheme.fontName,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              letterSpacing: -0.2,
+              color: MyIdenaAppTheme.darkText,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Container(
+              height: 4,
+              width: 90,
+              decoration: BoxDecoration(
+                color: HexColor('#000000').withOpacity(0.2),
+                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 90,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        HexColor('#000000').withOpacity(0.1),
+                        HexColor('#000000'),
+                      ]),
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              currentPeriod != null ? currentPeriod : "",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: MyIdenaAppTheme.fontName,

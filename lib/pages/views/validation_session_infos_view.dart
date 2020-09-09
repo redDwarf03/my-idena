@@ -89,8 +89,11 @@ class _ValidationSessionInfosViewState
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  
                                                   new ValidationSessionCountdownText(
+                                                    currentPeriod: dnaAll
+                                                        .dnaGetEpochResponse
+                                                        .result
+                                                        .currentPeriod,
                                                     nextValidation: dnaAll
                                                         .dnaGetEpochResponse
                                                         .result
