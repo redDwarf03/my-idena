@@ -5,5 +5,3 @@ const String ShortSession = "ShortSession";
 const String LongSession = "LongSession";
 const String AfterLongSession = "AfterLongSession";
 const String None = "None";
-
-
