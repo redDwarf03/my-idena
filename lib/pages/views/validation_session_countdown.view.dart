@@ -172,6 +172,7 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
+                      displayCurrentPeriod(),
                     ]))
               ])));
         }
@@ -231,6 +232,7 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
+                      displayCurrentPeriod(),
                     ]))
               ])));
         }
