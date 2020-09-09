@@ -3,10 +3,8 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
-import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/about_screen.dart';
@@ -138,17 +136,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         }
                         setState(() {
                           tabBody = AboutScreen(
-                              animationController: animationController);
-                        });
-                      });
-                    } else if (index == 4) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = CreateFlipScreen(
-                              dnaAll: dnaAll,
                               animationController: animationController);
                         });
                       });
