@@ -290,7 +290,7 @@ class _ValidationSessionCountdownTextState
         }
       default:
         {
-          return displayNextValidationDate(widget.dnaAll);
+          return displayNextValidationDate(widget.nextValidation);
         }
     }
   }
@@ -311,8 +311,8 @@ class _ValidationSessionCountdownTextState
                 animationController: widget.animationController)));
   }
 
-  Widget displayNextValidationDate(DnaAll thisDnaAll) {
-    if (thisDnaAll != null && thisDnaAll.dnaGetEpochResponse != null) {
+  Widget displayNextValidationDate(DateTime nextValidation) {
+    if (nextValidation != null) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,8 +360,7 @@ class _ValidationSessionCountdownTextState
               DateFormat.yMMMMEEEEd(
                       Localizations.localeOf(context).languageCode)
                   .add_Hm()
-                  .format(thisDnaAll.dnaGetEpochResponse.result.nextValidation
-                      .toLocal())
+                  .format(nextValidation.toLocal())
                   .toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -373,7 +372,10 @@ class _ValidationSessionCountdownTextState
               ),
             ),
           ),
-          if (currentPeriod != EpochPeriod.None) displayCurrentPeriod(),
+          if (currentPeriod != null &&
+              currentPeriod != "" &&
+              currentPeriod != EpochPeriod.None)
+            displayCurrentPeriod(),
         ],
       );
     } else {
