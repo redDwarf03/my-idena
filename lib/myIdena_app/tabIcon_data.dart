@@ -5,15 +5,19 @@ class TabIconData {
   TabIconData({
     this.index = 0,
     this.isSelected = false,
+    this.isActive = true,
     this.animationController,
     this.icon,
-    this.selectedIcon
+    this.selectedIcon,
+    this.inactiveIcon
   });
 
   bool isSelected;
+  bool isActive;
   int index;
   Icon icon;
   Icon selectedIcon;
+  Icon inactiveIcon;
 
   AnimationController animationController;
 
@@ -21,30 +25,38 @@ class TabIconData {
     TabIconData(
       index: 0,
       isSelected: true,
+      isActive: true,
       animationController: null,
       icon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.grey[500],)
+      selectedIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.grey[500],),
+      inactiveIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(
       index: 1,
       isSelected: false,
+      isActive: true,
       animationController: null,
       icon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.grey[500],)
+      selectedIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.grey[500],),
+      inactiveIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(
       index: 2,
       isSelected: false,
+      isActive: true,
       animationController: null,
       icon: Icon(FlevaIcons.settings_2_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(FlevaIcons.settings_2_outline, size: 40, color: Colors.grey[500],)
+      selectedIcon: Icon(FlevaIcons.settings_2_outline, size: 40, color: Colors.grey[500],),
+      inactiveIcon: Icon(FlevaIcons.settings_2_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(
       index: 3,
       isSelected: false,
+      isActive: true,
       animationController: null,
       icon: Icon(Icons.info_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(Icons.info_outline, size: 40, color: Colors.grey[500],)
+      selectedIcon: Icon(Icons.info_outline, size: 40, color: Colors.grey[500],),
+      inactiveIcon: Icon(Icons.info_outline, size: 40, color: Colors.white,)
     ),
   ];
 }
