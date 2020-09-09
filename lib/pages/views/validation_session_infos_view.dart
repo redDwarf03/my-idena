@@ -90,14 +90,14 @@ class _ValidationSessionInfosViewState
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   new ValidationSessionCountdownText(
-                                                    currentPeriod: dnaAll
-                                                        .dnaGetEpochResponse
-                                                        .result
-                                                        .currentPeriod,
                                                     nextValidation: dnaAll
-                                                        .dnaGetEpochResponse
-                                                        .result
-                                                        .nextValidation,
+                                                                .dnaGetEpochResponse !=
+                                                            null
+                                                        ? dnaAll
+                                                            .dnaGetEpochResponse
+                                                            .result
+                                                            .nextValidation
+                                                        : null,
                                                     animationController: widget
                                                         .animationController,
                                                     dnaAll: dnaAll,
