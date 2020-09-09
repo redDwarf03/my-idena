@@ -67,17 +67,15 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    if(['en', 'fr', 'ru'].contains(locale.languageCode))
-    {
+    if (['en', 'fr', 'ru'].contains(locale.languageCode)) {
       return true;
     }
-    if('sr' == locale.languageCode && ['Latn', 'Cyrl'].contains(locale.scriptCode))
-    {
+    if ('sr' == locale.languageCode &&
+        ['Latn', 'Cyrl'].contains(locale.scriptCode)) {
       return true;
     }
-    // TODO: à corriger 
-    if('cn' == locale.languageCode && ['Sc', 'Tc'].contains(locale.scriptCode))
-    {
+    if ('zh' == locale.languageCode &&
+        ['Hant', 'Hans'].contains(locale.scriptCode)) {
       return true;
     }
     return false;
