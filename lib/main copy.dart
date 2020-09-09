@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,15 +8,12 @@ import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/enums/connection_status.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/deep_link_screen.dart';
 import 'package:my_idena/pages/screens/route_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/utils/util_deepLinks.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 DnaAll dnaAll = new DnaAll();
 var logger = Logger();
