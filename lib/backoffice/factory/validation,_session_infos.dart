@@ -24,7 +24,7 @@ import 'package:my_idena/utils/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
 var logger = Logger();
- 
+
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
       {this.hash,
@@ -51,6 +51,7 @@ class ValidationSessionInfo {
 
   String typeSession;
   List<ValidationSessionInfoFlips> listSessionValidationFlip;
+  List<ValidationSessionInfoFlips> listSessionValidationFlipExtra;
 }
 
 Future<ValidationSessionInfo> getValidationSessionInfo(
@@ -147,17 +148,18 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
 
     FlipGetResponse flipGetResponse;
     FlipWordsResponse flipWordsResponse;
-    List<ValidationSessionInfoFlips> listSessionValidationFlip;
+    List<ValidationSessionInfoFlips> listSessionValidationFlip = new List();
+    List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
+        new List();
+    int nbFlips = 0;
     if (typeSession == EpochPeriod.ShortSession) {
-      listSessionValidationFlip =
-          new List(flipShortHashesResponse.result.length);
+      nbFlips = flipShortHashesResponse.result.length;
     }
     if (typeSession == EpochPeriod.LongSession) {
-      listSessionValidationFlip =
-          new List(flipLongHashesResponse.result.length);
+      nbFlips = flipLongHashesResponse.result.length;
     }
 
-    for (int i = 0; i < listSessionValidationFlip.length; i++) {
+    for (int i = 0; i < nbFlips; i++) {
       ValidationSessionInfoFlips validationSessionInfoFlips =
           new ValidationSessionInfoFlips();
       if (typeSession == EpochPeriod.ShortSession) {
@@ -347,10 +349,16 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
         }
         validationSessionInfoFlips.listWords = listWords;
       }
-      listSessionValidationFlip[i] = validationSessionInfoFlips;
+      if (validationSessionInfoFlips.extra) {
+        listSessionValidationFlipExtra.add(validationSessionInfoFlips);
+      } else {
+        listSessionValidationFlip.add(validationSessionInfoFlips);
+      }
     }
 
     validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
+    validationSessionInfo.listSessionValidationFlipExtra =
+        listSessionValidationFlipExtra;
   } catch (e) {
     logger.e(e.toString());
   } finally {}
