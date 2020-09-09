@@ -20,7 +20,6 @@ ValidationSessionInfo validationSessionInfo;
 DnaAll dnaAllForValidationSession;
 String typeLaunchSessionForValidationSession;
 bool checkFlipsQualityProcessForValidationSession;
-int nbFlips = 0;
 List selectionFlipList = new List();
 List relevantFlipList = new List();
 List<Widget> iconList = new List();
@@ -55,6 +54,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController controllerChrono;
+  bool initStateOk;
 
   String get timerString {
     Duration duration = controllerChrono.duration * controllerChrono.value;
@@ -65,6 +65,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   void initState() {
+    initStateOk = true;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
 
@@ -92,7 +93,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       relevantFlipList = new List();
       iconList = new List();
       selectedIconList = new List();
-      nbFlips = 1;
       checkFlipsQualityProcessForValidationSession = false;
       controllerChrono = AnimationController(
           vsync: this,
@@ -108,7 +108,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         relevantFlipList = new List();
         iconList = new List();
         selectedIconList = new List();
-        nbFlips = 1;
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
@@ -117,19 +116,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       } else {
         controllerChrono = AnimationController(
             vsync: this, duration: Duration(seconds: controllerChronoValue));
-      }
-    }
-
-    if (checkFlipsQualityProcessForValidationSession == false) {
-      selectionFlipList = new List();
-      for (int i = 0; i < nbFlips; i++) {
-        selectionFlipList.add(AnswerType.NONE);
-        selectedIconList.add(0);
-      }
-    } else {
-      for (int i = 0; i < nbFlips; i++) {
-        relevantFlipList.add(RelevantType.RELEVANT);
-        selectedIconList.add(0);
       }
     }
   }
@@ -161,7 +147,29 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
               } else {
                 List<ValidationSessionInfoFlips> listSessionValidationFlip =
                     validationSessionInfo.listSessionValidationFlip;
-
+                if (initStateOk) {
+                  if (checkFlipsQualityProcessForValidationSession == false) {
+                    selectionFlipList = new List();
+                    for (int i = 0;
+                        i <
+                            validationSessionInfo
+                                .listSessionValidationFlip.length;
+                        i++) {
+                      selectionFlipList.add(AnswerType.NONE);
+                      selectedIconList.add(0);
+                    }
+                  } else {
+                    for (int i = 0;
+                        i <
+                            validationSessionInfo
+                                .listSessionValidationFlip.length;
+                        i++) {
+                      relevantFlipList.add(RelevantType.RELEVANT);
+                      selectedIconList.add(0);
+                    }
+                  }
+                  initStateOk = false;
+                }
                 return AnimatedBuilder(
                     animation: widget.mainScreenAnimationController,
                     builder: (BuildContext context, Widget child) {
@@ -365,7 +373,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                 ),
                                 new ValidationThumbnailsView(
                                   iconList: iconList,
-                                  nbFlips: nbFlips,
+                                  nbFlips: listSessionValidationFlip.length,
                                   selectedIconList: selectedIconList,
                                 ),
                               ],
