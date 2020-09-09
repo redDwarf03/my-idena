@@ -7,7 +7,11 @@ import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
   const ValidationSessionScreen(
-      {Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess, this.dnaAll})
+      {Key key,
+      this.animationController,
+      this.typeLaunchSession,
+      this.checkFlipsQualityProcess,
+      this.dnaAll})
       : super(key: key);
 
   final AnimationController animationController;
@@ -79,7 +83,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
     listViews.add(
       ValidationSessionView(
         typeLaunchSession: widget.typeLaunchSession,
-        simulationMode: true,
+        simulationMode: false,
         dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -134,7 +138,8 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
-              if(!widget.animationController.isCompleted) widget.animationController.forward();
+              if (!widget.animationController.isCompleted)
+                widget.animationController.forward();
               return listViews[index];
             },
           );
