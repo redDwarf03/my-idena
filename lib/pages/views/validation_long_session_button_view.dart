@@ -11,6 +11,7 @@ class ValidationLongSessionButtonView extends StatefulWidget {
   final List<int> selectedIconList;
   final List relevantFlipList;
   final DnaAll dnaAll;
+  final String currentPeriod;
   final bool checkFlipsQualityProcess;
   final ValidationSessionInfo validationSessionInfo;
 
@@ -20,6 +21,7 @@ class ValidationLongSessionButtonView extends StatefulWidget {
       this.selectedIconList,
       this.relevantFlipList,
       this.dnaAll,
+      this.currentPeriod,
       this.checkFlipsQualityProcess,
       this.validationSessionInfo})
       : super(key: key);
@@ -32,7 +34,7 @@ class ValidationLongSessionButtonView extends StatefulWidget {
 class _ValidationLongSessionButtonViewState
     extends State<ValidationLongSessionButtonView> {
   Widget build(BuildContext context) {
-    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (widget.currentPeriod ==
             EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       for (int i = 0; i < widget.selectionFlipList.length; i++) {

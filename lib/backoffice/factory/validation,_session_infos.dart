@@ -63,7 +63,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
   }
 
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
-  validationSessionInfo.typeSession = typeSession;
   String method;
 
   switch (typeSession) {

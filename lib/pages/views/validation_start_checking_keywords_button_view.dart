@@ -11,6 +11,7 @@ class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
   final List selectionFlipList;
   final AnimationController controllerChrono;
   final DnaAll dnaAll;
+  final String currentPeriod;
   final bool checkFlipsQualityProcess;
   final AnimationController animationController;
 
@@ -19,6 +20,7 @@ class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
       this.selectionFlipList,
       this.controllerChrono,
       this.dnaAll,
+      this.currentPeriod,
       this.animationController,
       this.checkFlipsQualityProcess})
       : super(key: key);
@@ -31,7 +33,7 @@ class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
 class _ValidationStartCheckingKeywordsButtonViewState
     extends State<ValidationStartCheckingKeywordsButtonView> {
   Widget build(BuildContext context) {
-    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (widget.currentPeriod ==
             EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess == false) {
       for (int i = 0; i < widget.selectionFlipList.length; i++) {

@@ -18,7 +18,7 @@ import 'package:uni_links/uni_links.dart';
 
 DnaAll dnaAll = new DnaAll();
 var logger = Logger();
-String campaign = "v20200908.1";
+String campaign = "v20200910.1";
 DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
 
