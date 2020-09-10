@@ -36,8 +36,8 @@ class TabIconData {
       isSelected: false,
       isActive: true,
       animationController: null,
-      icon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.grey[500],),
+      icon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,),
+      selectedIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,),
       inactiveIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(

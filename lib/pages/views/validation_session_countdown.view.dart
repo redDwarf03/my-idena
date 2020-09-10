@@ -135,7 +135,8 @@ class _ValidationSessionCountdownTextState
                         AppLocalizations.of(context)
                                 .translate("Idena validation will start soon") +
                             " : " +
-                            "${printDuration(Duration(seconds: timeCounter))}",
+                            "${printDuration(Duration(seconds: timeCounter))}" + "\n" + AppLocalizations.of(context)
+                                .translate("Please, stay on this page until launch."),
                         style: TextStyle(
                           fontFamily: MyIdenaAppTheme.fontName,
                           fontWeight: FontWeight.w500,
@@ -172,14 +173,63 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
-                      displayCurrentPeriod(),
                     ]))
               ])));
         }
       case EpochPeriod.ShortSession:
         {
           WidgetsBinding.instance.addPostFrameCallback((_) => launchSession());
-          return SizedBox(width: 1, height: 1);
+          return Padding(
+              padding:
+                  const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
+              child: Container(
+                  child: Row(children: <Widget>[
+                Expanded(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context)
+                            .translate("Idena validation will start soon"),
+                        style: TextStyle(
+                          fontFamily: MyIdenaAppTheme.fontName,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          letterSpacing: -0.2,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Container(
+                          height: 4,
+                          width: 90,
+                          decoration: BoxDecoration(
+                            color: HexColor('#000000').withOpacity(0.2),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.0)),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                width: 90,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    HexColor('#000000').withOpacity(0.1),
+                                    HexColor('#000000'),
+                                  ]),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.0)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]))
+              ])));
         }
       case EpochPeriod.LongSession:
         {
@@ -232,7 +282,6 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
-                      displayCurrentPeriod(),
                     ]))
               ])));
         }
@@ -374,10 +423,6 @@ class _ValidationSessionCountdownTextState
               ),
             ),
           ),
-          if (currentPeriod != null &&
-              currentPeriod != "" &&
-              currentPeriod != EpochPeriod.None)
-            displayCurrentPeriod(),
         ],
       );
     } else {

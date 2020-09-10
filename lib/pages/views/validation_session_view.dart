@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ import 'package:my_idena/utils/util_hexcolor.dart';
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 DnaAll dnaAllForValidationSession;
-String typeLaunchSessionForValidationSession;
 bool checkFlipsQualityProcessForValidationSession;
 List selectionFlipList = new List();
 List relevantFlipList = new List();
@@ -55,7 +55,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   AnimationController animationController;
   AnimationController controllerChrono;
   bool initStateOk;
-
+  String currentPeriod;
   String get timerString {
     Duration duration = controllerChrono.duration * controllerChrono.value;
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
@@ -66,27 +66,21 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   @override
   void initState() {
     initStateOk = true;
+
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
 
     dnaAllForValidationSession = widget.dnaAll;
-    typeLaunchSessionForValidationSession = widget.typeLaunchSession;
+    
     checkFlipsQualityProcessForValidationSession =
         widget.checkFlipsQualityProcess;
     super.initState();
 
-    if (widget.simulationMode) {
-      dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod =
-          typeLaunchSessionForValidationSession;
-    } else {
-      if (typeLaunchSessionForValidationSession == EpochPeriod.LongSession) {
-        dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod =
-            typeLaunchSessionForValidationSession;
-      }
-    }
+    currentPeriod = widget.typeLaunchSession;
+    print("validationSessionView: " + currentPeriod);
 
     // Init choice
-    if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
+    if (currentPeriod ==
         EpochPeriod.ShortSession) {
       validationSessionInfo = null;
       selectionFlipList = new List();
@@ -94,13 +88,18 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       iconList = new List();
       selectedIconList = new List();
       checkFlipsQualityProcessForValidationSession = false;
+      Duration duree = (dnaAllForValidationSession
+              .dnaGetEpochResponse.result.nextValidation
+              .add(new Duration(
+                  seconds: dnaAllForValidationSession
+                      .dnaCeremonyIntervalsResponse
+                      .result
+                      .shortSessionDuration)))
+          .difference(DateTime.now());
       controllerChrono = AnimationController(
-          vsync: this,
-          duration: Duration(
-              seconds: dnaAllForValidationSession
-                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration));
+          vsync: this, duration: Duration(seconds: duree.inSeconds));
     }
-    if (dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod ==
+    if (currentPeriod ==
         EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
@@ -108,11 +107,23 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         relevantFlipList = new List();
         iconList = new List();
         selectedIconList = new List();
+        Duration duree = (dnaAllForValidationSession
+                .dnaGetEpochResponse.result.nextValidation
+                .add(new Duration(
+                    seconds: dnaAllForValidationSession
+                        .dnaCeremonyIntervalsResponse
+                        .result
+                        .shortSessionDuration))
+                .add(new Duration(
+                    seconds: dnaAllForValidationSession
+                        .dnaCeremonyIntervalsResponse
+                        .result
+                        .longSessionDuration)))
+            .difference(DateTime.now());
         controllerChrono = AnimationController(
             vsync: this,
             duration: Duration(
-                seconds: dnaAllForValidationSession
-                    .dnaCeremonyIntervalsResponse.result.longSessionDuration));
+                seconds: duree.inSeconds));
       } else {
         controllerChrono = AnimationController(
             vsync: this, duration: Duration(seconds: controllerChronoValue));
@@ -132,7 +143,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: getValidationSessionInfo(
-            dnaAllForValidationSession.dnaGetEpochResponse.result.currentPeriod,
+            currentPeriod,
             validationSessionInfo,
             widget.simulationMode),
         builder: (BuildContext context,
@@ -390,6 +401,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                       controllerChrono: controllerChrono,
                                       selectionFlipList: selectionFlipList,
                                       dnaAll: dnaAllForValidationSession,
+                                      currentPeriod: currentPeriod,
                                       animationController: animationController,
                                       checkFlipsQualityProcess:
                                           checkFlipsQualityProcessForValidationSession,
@@ -398,6 +410,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                         child: ValidationShortSessionButtonView(
                                       selectedIconList: selectedIconList,
                                       selectionFlipList: selectionFlipList,
+                                      currentPeriod: currentPeriod,
                                       dnaAll: dnaAllForValidationSession,
                                       animationController: animationController,
                                       validationSessionInfo:
@@ -409,6 +422,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                       relevantFlipList: relevantFlipList,
                                       selectedIconList: selectedIconList,
                                       selectionFlipList: selectionFlipList,
+                                      currentPeriod: currentPeriod,
                                       dnaAll: dnaAllForValidationSession,
                                       checkFlipsQualityProcess:
                                           checkFlipsQualityProcessForValidationSession,
@@ -434,8 +448,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget getChrono() {
     controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        if (dnaAllForValidationSession
-                .dnaGetEpochResponse.result.currentPeriod ==
+        if (currentPeriod ==
             EpochPeriod.ShortSession) {
           submitShortAnswers(selectionFlipList, validationSessionInfo);
           Navigator.push<dynamic>(
@@ -448,8 +461,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                     typeLaunchSession: EpochPeriod.LongSession),
               ));
         }
-        if (dnaAllForValidationSession
-                .dnaGetEpochResponse.result.currentPeriod ==
+        if (currentPeriod ==
             EpochPeriod.LongSession) {
           submitLongAnswers(
               selectionFlipList, relevantFlipList, validationSessionInfo);
@@ -487,7 +499,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   Widget checkWords(
       ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
-    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (currentPeriod ==
             EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       String word1Name = "";

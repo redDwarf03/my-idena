@@ -259,9 +259,10 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                             parent: widget.tabIconData.animationController,
                             curve: Interval(0.1, 1.0,
                                 curve: Curves.fastOutSlowIn))),
-                    child: widget.tabIconData.isSelected
+                    child: widget.tabIconData.isActive ? 
+                    widget.tabIconData.isSelected
                         ? widget.tabIconData.selectedIcon
-                        : widget.tabIconData.icon),
+                        : widget.tabIconData.icon : widget.tabIconData.inactiveIcon),
                 Positioned(
                   top: 4,
                   left: 6,

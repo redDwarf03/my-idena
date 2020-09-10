@@ -109,7 +109,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         });
                       });
                     } else if (index == 1) {
-                      animationController.reverse().then<dynamic>((data) {
+                      /*animationController.reverse().then<dynamic>((data) {
                         if (!mounted) {
                           return;
                         }
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               dnaAll: dnaAll,
                               animationController: animationController);
                         });
-                      });
+                      });*/
                     } else if (index == 2) {
                       animationController.reverse().then<dynamic>((data) {
                         if (!mounted) {

@@ -83,7 +83,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
     listViews.add(
       ValidationSessionView(
         typeLaunchSession: widget.typeLaunchSession,
-        simulationMode: true,
+        simulationMode: false,
         dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(

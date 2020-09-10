@@ -12,6 +12,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
   final List<int> selectedIconList;
   final ValidationSessionInfo validationSessionInfo;
   final DnaAll dnaAll;
+  final String currentPeriod;
   final AnimationController animationController;
   
   const ValidationShortSessionButtonView(
@@ -19,6 +20,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
       this.selectionFlipList,
       this.selectedIconList,
       this.dnaAll,
+      this.currentPeriod,
       this.animationController,
       this.validationSessionInfo})
       : super(key: key);
@@ -31,7 +33,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
 class _ValidationShortSessionButtonViewState
     extends State<ValidationShortSessionButtonView> {
   Widget build(BuildContext context) {
-    if (widget.dnaAll.dnaGetEpochResponse.result.currentPeriod ==
+    if (widget.currentPeriod ==
         EpochPeriod.ShortSession) {
       for (int i = 0; i < widget.selectionFlipList.length; i++) {
         if (widget.selectionFlipList[i] == AnswerType.NONE) {
