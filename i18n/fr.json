@@ -47,7 +47,7 @@
   "Start checking keywords": "Démarrer la qualification des mots clés",
   "Your answers are not yet submitted": "Vos réponses ne sont pas encore envoyées",
   "Please qualify the keywords relevance and submit the answers.": "Veuillez qualifier la pertinence des mots clés et envoyez les réponses.",
-  "The flips with relevant keywords will be penalized": "Les flips avec des mots clés non pertinents seront pénalisés",
+  "The flips with irrelevant keywords will be penalized": "Les flips avec des mots clés non pertinents seront pénalisés",
   "Ok, I understand": "Ok, je comprends",
   "Score": "Score",
   "Required flips": "Flips requis",
@@ -78,7 +78,7 @@
   "Mining status On": "Statut minage: On",
   "Transaction type unknown": "Type de transaction inconnu",
   "From: ": "De: ",
-  "Montant: ": "Montant: ",
+  "Amount: ": "Montant: ",
   "Received": "Reçu",
   "Sent": "Envoyé",
   "Fees: ": "Frais: ",
@@ -129,7 +129,8 @@
   "Online mining status": "Statut du minage en ligne",
   "Your status doesn't allow you to participate in the validation session": "Votre statut ne permet pas de participer à la session de validation",
   "Current period": "Période en cours",
-  "Please, stay on this page until launch.": "Veuillez rester sur cette page jusqu'au lancement."
+  "Please, stay on this page until launch.": "Veuillez rester sur cette page jusqu'au lancement.",
+  "To participate in the validation session, you must provide your flips": "Pour participer à la session de validation, vous devez fournir, au préalable, vos flips"
 
 
 

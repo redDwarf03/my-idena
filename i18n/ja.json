@@ -47,7 +47,7 @@
   "Start checking keywords": "キーワードのチェックを始めました",
   "Your answers are not yet submitted": "回答がまだ提出されていません",
   "Please qualify the keywords relevance and submit the answers.": "キーワードとの関連性を評価して回答して下さい。",
-  "The flips with relevant keywords will be penalized": "キーワードと関連しないフリップにはペナルティが課せられます。",
+  "The flips with irrelevant keywords will be penalized": "キーワードと関連しないフリップにはペナルティが課せられます。",
   "Ok, I understand": "了解。理解しました。",
   "Score": "スコア",
   "Required flips": "必要なフリップ",
@@ -78,7 +78,7 @@
   "Mining status On": "採掘オン",
   "Transaction type unknown": "不明な処理タイプ",
   "From: ": "発信元：",
-  "Montant: ": "金額：",
+  "MonAmounttant: ": "金額：",
   "Received": "受診済",
   "Sent": "送信済",
   "Fees: ": "料金：",
@@ -128,7 +128,8 @@
   "Please wait for the validation report": "検証レポートをお待ちください",
   "Online mining status": "オンラインマイニング状況",
   "Your status doesn't allow you to participate in the validation session": "検証セッションへの参加資格がある状態になっていません",
-  "Current period": "現在の期間"
+  "Current period": "現在の期間",
+  "To participate in the validation session, you must provide your flips": "To participate in the validation session, you must provide your flips"
 
 
 

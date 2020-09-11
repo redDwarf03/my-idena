@@ -47,7 +47,7 @@
   "Start checking keywords": "Start checking keywords",
   "Your answers are not yet submitted": "Your answers are not yet submitted",
   "Please qualify the keywords relevance and submit the answers.": "Please qualify the keywords relevance and submit the answers.",
-  "The flips with relevant keywords will be penalized": "The flips with relevant keywords will be penalized",
+  "The flips with irrelevant keywords will be penalized": "The flips with irrelevant keywords will be penalized",
   "Ok, I understand": "Ok, I understand",
   "Score": "Score",
   "Required flips": "Required flips",
@@ -78,7 +78,7 @@
   "Mining status On": "Mining status On",
   "Transaction type unknown": "Transaction type unknown",
   "From: ": "From: ",
-  "Montant: ": "Montant: ",
+  "Amount: ": "Montant: ",
   "Received": "Received",
   "Sent": "Sent",
   "Fees: ": "Fees: ",
@@ -129,6 +129,7 @@
   "Online mining status": "Online mining status",
   "Your status doesn't allow you to participate in the validation session": "Your status doesn't allow you to participate in the validation session",
   "Current period": "Current period",
-  "Please, stay on this page until launch.": "Please, stay on this page until launch."
+  "Please, stay on this page until launch.": "Please, stay on this page until launch.",
+  "To participate in the validation session, you must provide your flips": "To participate in the validation session, you must provide your flips"
   
 }
