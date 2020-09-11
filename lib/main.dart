@@ -221,6 +221,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           const Locale('en', ''),
           const Locale('fr', ''),
           const Locale('ru', ''),
+          const Locale('ja', ''),
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
           const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
           const Locale.fromSubtags(languageCode: 'sr', scriptCode: 'Latn'),
