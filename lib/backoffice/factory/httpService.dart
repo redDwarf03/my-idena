@@ -40,11 +40,11 @@ class HttpService {
       if (!_validURL) {
         return false;
       }
-      final responseHttp = await http
-          .get(Uri.encodeFull(apiUrl), headers: {"accept": "application/json"});
-      if (responseHttp.statusCode != 200) {
+/*      final responseHttp = await http
+          .get(Uri.encodeFull(apiUrl), headers: {"accept": "application/json"}).timeout(const Duration(seconds: 5), onTimeout: () {return null;});
+      if (responseHttp == null || responseHttp.statusCode != 200) {
         return false;
-      } else {
+      } else {*/
         HttpClient httpClient = new HttpClient();
         // get CoinBase Address
         HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
@@ -71,7 +71,8 @@ class HttpService {
         } else {
           return false;
         }
-      }
+      /*}*/
+      
     } catch (e) {
       return false;
     }
