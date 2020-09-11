@@ -82,7 +82,7 @@ class _ValidationStartCheckingKeywordsButtonViewState
                                 ),
                                 Text(
                                   AppLocalizations.of(context).translate(
-                                      "The flips with relevant keywords will be penalized"),
+                                      "The flips with irrelevant keywords will be penalized"),
                                   style: TextStyle(
                                       fontFamily: MyIdenaAppTheme.fontName,
                                       fontWeight: FontWeight.w500,

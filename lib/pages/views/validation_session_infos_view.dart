@@ -3,6 +3,7 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/validation_session_countdown.view.dart';
+import 'package:my_idena/utils/util_hexcolor.dart';
 
 class ValidationSessionInfosView extends StatefulWidget {
   final AnimationController animationController;
@@ -55,8 +56,10 @@ class _ValidationSessionInfosViewState
                                     left: 24, right: 24, top: 16, bottom: 18),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: MyIdenaAppTheme.white,
-                                    borderRadius: BorderRadius.only(
+                  gradient: LinearGradient(colors: [
+                    HexColor("#FFEAC9"),
+                    HexColor("#FFC971")
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),                                    borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(8.0),
                                         bottomLeft: Radius.circular(8.0),
                                         bottomRight: Radius.circular(8.0),

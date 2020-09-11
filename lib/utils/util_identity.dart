@@ -1,6 +1,10 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/utils/identityStatus.dart' as IdentityStatus;
 
+const int CAN_VALIDATE = 0;
+const int WRONG_STATUS = 1;
+const int FLIPS_REQUIRED = 2;
+
 class UtilIdentity {
   bool isCeremonyCandidate(DnaAll dnaAll) {
     if (dnaAll.dnaIdentityResponse == null) {
@@ -19,9 +23,10 @@ class UtilIdentity {
         identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state));
   }
 
-  bool canValidate(DnaAll dnaAll) {
+  // 1 =
+  int canValidate(DnaAll dnaAll) {
     if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-      return false;
+      return WRONG_STATUS;
     }
     var identityStatus1 = [
       IdentityStatus.Human,
@@ -35,20 +40,30 @@ class UtilIdentity {
       IdentityStatus.Zombie
     ];
 
-    bool shouldSendFlips = true;
-    if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state)) {
-      try {
-        int numOfFlipsToSubmit =
-            dnaAll.dnaIdentityResponse.result.requiredFlips -
-                dnaAll.dnaIdentityResponse.result.flips.length;
-        shouldSendFlips = numOfFlipsToSubmit > 0;
-      } catch (e) {}
-    }
+    if (identityStatus2.contains(dnaAll.dnaIdentityResponse.result.state)) {
+      return CAN_VALIDATE;
+    } else {
+      bool shouldSendFlips = true;
+      if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state)) {
+        try {
+          int numOfFlipsToSubmit =
+              dnaAll.dnaIdentityResponse.result.requiredFlips -
+                  dnaAll.dnaIdentityResponse.result.flips.length;
+          shouldSendFlips = numOfFlipsToSubmit > 0;
+        } catch (e) {}
+      }
 
-    return ((identityStatus1
-                .contains(dnaAll.dnaIdentityResponse.result.state) &&
-            !shouldSendFlips) ||
-        identityStatus2.contains(dnaAll.dnaIdentityResponse.result.state));
+      if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state) &&
+          !shouldSendFlips) {
+        return CAN_VALIDATE;
+      } else {
+        if (shouldSendFlips == false) {
+          return WRONG_STATUS;
+        } else {
+          return FLIPS_REQUIRED;
+        }
+      }
+    }
   }
 
   bool canMine(DnaAll dnaAll) {
