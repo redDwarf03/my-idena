@@ -66,7 +66,8 @@ class _ValidationSessionCountdownTextState
   }
 
   _buildChild() {
-    if (UtilIdentity().canValidate(widget.dnaAll) == false) {
+    int canValidate = UtilIdentity().canValidate(widget.dnaAll);
+    if (canValidate > 0) {
       return Padding(
           padding: const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
           child: Container(
@@ -76,17 +77,29 @@ class _ValidationSessionCountdownTextState
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                  Text(
-                    AppLocalizations.of(context).translate(
-                        "Your status doesn't allow you to participate in the validation session"),
-                    style: TextStyle(
-                      fontFamily: MyIdenaAppTheme.fontName,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      letterSpacing: -0.2,
-                      color: MyIdenaAppTheme.darkText,
-                    ),
-                  ),
+                  canValidate == 1
+                      ? Text(
+                          AppLocalizations.of(context).translate(
+                              "Your status doesn't allow you to participate in the validation session"),
+                          style: TextStyle(
+                            fontFamily: MyIdenaAppTheme.fontName,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            letterSpacing: -0.2,
+                            color: MyIdenaAppTheme.darkText,
+                          ),
+                        )
+                      : Text(
+                          AppLocalizations.of(context).translate(
+                              "To participate in the validation session, you must provide your flips"),
+                          style: TextStyle(
+                            fontFamily: MyIdenaAppTheme.fontName,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            letterSpacing: -0.2,
+                            color: MyIdenaAppTheme.darkText,
+                          ),
+                        ),
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Container(
@@ -135,8 +148,10 @@ class _ValidationSessionCountdownTextState
                         AppLocalizations.of(context)
                                 .translate("Idena validation will start soon") +
                             " : " +
-                            "${printDuration(Duration(seconds: timeCounter))}" + "\n" + AppLocalizations.of(context)
-                                .translate("Please, stay on this page until launch."),
+                            "${printDuration(Duration(seconds: timeCounter))}" +
+                            "\n" +
+                            AppLocalizations.of(context).translate(
+                                "Please, stay on this page until launch."),
                         style: TextStyle(
                           fontFamily: MyIdenaAppTheme.fontName,
                           fontWeight: FontWeight.w500,

@@ -63,8 +63,8 @@ class _DonationViewState extends State<DonationView> {
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(8.0),
                                     bottomLeft: Radius.circular(8.0),
-                                    bottomRight: Radius.circular(8.0),
-                                    topRight: Radius.circular(68.0)),
+                                    bottomRight: Radius.circular(68.0),
+                                    topRight: Radius.circular(8.0)),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
                                       color:
