@@ -47,7 +47,7 @@
   "Start checking keywords": "Otpočnite proveru ključnih reči",
   "Your answers are not yet submitted": "Vaši odgovori još nisu poslati",
   "Please qualify the keywords relevance and submit the answers.": "Molimo ocenite relevantnost ključnih reči i pošaljite odgovore.",
-  "The flips with relevant keywords will be penalized": "Flipovi sa irelevantnim ključnim rečima će biti kažnjeni",
+  "The flips with irrelevant keywords will be penalized": "Flipovi sa irelevantnim ključnim rečima će biti kažnjeni",
   "Ok, I understand": "U redu, razumem",
   "Score": "Rezultat",
   "Required flips": "Potrebni flipovi",
@@ -78,7 +78,7 @@
   "Mining status On": "Status kopanja Uključen",
   "Transaction type unknown": "Tip transakcije nepoznat",
   "From: ": "Od: ",
-  "Montant: ": "Za: ",
+  "Amount: ": "Za: ",
   "Received": "Primljene",
   "Sent": "Poslate",
   "Fees: ": "Provizije: ",
@@ -129,7 +129,8 @@
   "Online mining status": "Online mining status",
   "Your status doesn't allow you to participate in the validation session": "Your status doesn't allow you to participate in the validation session",
   "Current period": "Current period",
-  "Please, stay on this page until launch.": "Please, stay on this page until launch."
+  "Please, stay on this page until launch.": "Please, stay on this page until launch.",
+  "To participate in the validation session, you must provide your flips": "To participate in the validation session, you must provide your flips"
 
 
 
