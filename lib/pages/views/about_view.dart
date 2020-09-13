@@ -125,7 +125,7 @@ class AboutView extends StatelessWidget {
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
                                                 child: Text(
-                                                  "Mahmoud !!!, Cryptomatrix, Andrew, Rioda, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados, Alek, Shadowcrypto, Kazunori, Bingbinglee, gσѕϯ111, ...",
+                                                  "Mahmoud !!!, Cryptomatrix, Andrew, Rioda, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados, Alek, Shadowcrypto, Kazunori, Bingbinglee, gσѕϯ111, Neotame, ...",
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontFamily: MyIdenaAppTheme
