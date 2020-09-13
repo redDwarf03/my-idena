@@ -40,6 +40,16 @@ class UtilIdentity {
       IdentityStatus.Zombie
     ];
 
+    var identityStatus3 = [
+      IdentityStatus.Terminating,
+      IdentityStatus.Undefined,
+      IdentityStatus.Invite,
+    ];
+
+    if (identityStatus3.contains(dnaAll.dnaIdentityResponse.result.state)) {
+      return WRONG_STATUS;
+    }
+
     if (identityStatus2.contains(dnaAll.dnaIdentityResponse.result.state)) {
       return CAN_VALIDATE;
     } else {
