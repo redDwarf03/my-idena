@@ -1,0 +1,5 @@
+my Idena is a mobile client for Idena developped by the dev community. 
+
+Idena is the first proof-of-person blockchain where every node belongs to a certain individual and has equal voting power. It is one of the most decentralized blockchains.
+
+Idena's network of validated people solves the blockchain oracle problem: Its independent mining nodes can act as oracles. To formalize an unique human, Idena does not require the disclosure of any personal data (no KYC). It proves the humanness and uniqueness of its participants by running an AI-hard Turing test at the same time for everyone around the globe.
