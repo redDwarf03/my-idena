@@ -19,9 +19,11 @@ jobs:
     before_install:
       - yes | sdkmanager "platforms;android-29"
     install:
-      - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
+      - gem install bundler
+        sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       - git clone https://github.com/flutter/flutter.git -b stable
       - ./flutter/bin/flutter doctor
       - bundle install
+      - flutter build appbundle
     script:
       - fastlane beta
