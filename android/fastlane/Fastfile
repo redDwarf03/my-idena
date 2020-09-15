@@ -16,36 +16,46 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+  desc "Deploy to internal test application"
+  
+  lane :internal do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'internal',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+
   end
 
-  desc "Submit a new Beta Build"
-  lane :beta do
-    build_number = number_of_commits()
-    Dir.chdir "../.." do
-      sh("flutter", "packages", "get")
-      sh("flutter", "clean")
-      sh("flutter", "build", "appbundle", "--build-number=#{build_number}")
+  def getVersionInfo()
+    version_info = flutter_version(
+      pubspec_location: '../pubspec.yaml'
+    )
+  end
+
+  def getVersionCode(version_info)
+    return version_info['version_code']
+  end
+
+  def getVersionName(version_info)
+    return version_info['version_name']
+  end
+
+  def flutter_build(versionName,number)
+  
+    Dir.chdir '../../' do
+      sh('flutter', 'packages', 'get')
+      sh('flutter', 'clean')
+      sh(
+        "flutter build appbundle --build-name=#{
+          versionName
+        } --build-number=#{number.to_s}"
+      )
     end
-    upload_to_play_store(track: 'beta', aab: '../build/app/outputs/bundle/release/app-release.aab')
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
-  end
-end
-
-lane :beta do
-  # ...
-  gradle(
-    task: 'assemble',
-    build_type: 'Release'
-  )
-  upload_to_play_store(track: 'beta')
-  slack(message: 'Successfully distributed a new beta build')
-  # ...
 end
