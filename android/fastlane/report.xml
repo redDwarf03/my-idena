@@ -5,19 +5,44 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.0167067">
+      <testcase classname="fastlane.lanes" name="0: setup_travis" time="0.1278417">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: assembleRelease" time="173.0538221">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.0927436">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: upload_to_play_store" time="27.7824469">
+      <testcase classname="fastlane.lanes" name="2: flutter_version" time="0.2030075">
         
-          <failure message="C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:48:in `block in parsing_binding'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:352:in `run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;C:/Ruby26-x64/bin/fastlane:23:in `load'&#10;C:/Ruby26-x64/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;Cannot find changelog because no version code given - please specify :version_code" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: flutter_version" time="0.4919031">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: flutter packages get" time="13.1107328">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: flutter clean" time="14.02008">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: flutter build appbundle --build-name=1.0.1 --build-number=3" time="520.968778">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: upload_to_play_store" time="45.6450092">
+        
+          <failure message="C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:229:in `chdir'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:35:in `block (2 levels) in parsing_binding'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:352:in `run'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;C:/Ruby26-x64/lib/ruby/gems/2.6.0/gems/fastlane-2.159.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;C:/Ruby26-x64/bin/fastlane:23:in `load'&#10;C:/Ruby26-x64/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;Google Api Error: forbidden: APK specifies a version code that has already been used. - APK specifies a version code that has already been used." />
         
       </testcase>
     
