@@ -21,6 +21,16 @@ or alternatively using `brew install fastlane`
 fastlane android internal
 ```
 Deploy to internal test application
+### android alpha
+```
+fastlane android alpha
+```
+
+### android beta
+```
+fastlane android beta
+```
+
 
 ----
 
