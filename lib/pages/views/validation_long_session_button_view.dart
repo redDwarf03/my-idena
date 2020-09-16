@@ -34,14 +34,33 @@ class ValidationLongSessionButtonView extends StatefulWidget {
 class _ValidationLongSessionButtonViewState
     extends State<ValidationLongSessionButtonView> {
   Widget build(BuildContext context) {
-    if (widget.currentPeriod ==
-            EpochPeriod.LongSession &&
+    if (widget.currentPeriod == EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       for (int i = 0; i < widget.selectionFlipList.length; i++) {
         if (widget.selectedIconList[i] == 0 ||
             widget.selectedIconList[i] == 1) {
           return SizedBox();
         }
+      }
+
+      int nbIrrelevant = 0;
+      int nbRelevant = 0;
+      for (int i = 0; i < widget.selectionFlipList.length; i++) {
+        if (widget.selectedIconList[i] == 2) {
+          nbRelevant++;
+        }
+        if (widget.selectedIconList[i] == 3) {
+          nbIrrelevant++;
+        }
+      }
+
+      if (nbIrrelevant != 0 && nbRelevant / nbIrrelevant < 3) {
+        return Text("The number of flips that can be reported\nshould be limited to 1/3",
+            style: TextStyle(
+                fontFamily: MyIdenaAppTheme.fontName,
+                fontSize: 14,
+                letterSpacing: -0.1,
+                color: Colors.red));
       }
 
       return Column(
