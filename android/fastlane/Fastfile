@@ -28,8 +28,33 @@ platform :android do
       version_code: version_code,
       aab: '../build/app/outputs/bundle/release/app-release.aab',
     )
-
   end
+
+  lane :alpha do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'alpha',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  end
+
+
+  lane :beta do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'beta',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  end
+
 
   def getVersionInfo()
     version_info = flutter_version(
