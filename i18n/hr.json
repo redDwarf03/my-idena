@@ -102,7 +102,7 @@
   "Type your\nurl api": "Ukucajte\nurl api",
   "Type your\nkey app": "Ukucajte\nkey app",
   "Please, type the api.key (cf \\datadir\\api.key file)": "Molimo vas, ukucajte api.key (cf \\datadir\\api.key file)",
-  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Molimo vas, Ukucajte http://{ip_address}:{port_number}\ da se spojite sa nodom",
+  "Please, type http://{ip_address}:{port_number}\nto connect to your node": "Molimo vas, Ukucajte http://{ip_address}:{port_number}\nda se spojite sa nodom",
   "Offline": "Offline",
   "Wifi": "Wifi",
   "Cellular": "Cellular",

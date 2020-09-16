@@ -67,7 +67,7 @@ class _AppLocalizationsDelegate
   @override
   bool isSupported(Locale locale) {
     // Include all of your supported language codes here
-    if (['en', 'fr', 'ru', 'ja'].contains(locale.languageCode)) {
+    if (['en', 'fr', 'hr', 'ru', 'ja'].contains(locale.languageCode)) {
       return true;
     }
     if ('sr' == locale.languageCode &&
