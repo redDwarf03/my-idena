@@ -71,7 +71,9 @@ dependencies:
   rxdart: ^0.24.1
     
   image: ^2.1.14
-  
+
+  pubspec_yaml: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -107,6 +109,7 @@ flutter:
     - i18n/sr_Cyrl.json
     - lib/utils/words.json
     - test/examples/
+    - pubspec.yaml
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
