@@ -23,6 +23,4 @@ jobs:
       - git clone https://github.com/flutter/flutter.git -b stable
       - ./flutter/bin/flutter doctor
       - bundle install
-      - flutter build appbundle
-    script:
-      - fastlane beta
+      - ./flutter build appbundle
