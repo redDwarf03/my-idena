@@ -1,13 +1,16 @@
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
+import 'package:my_idena/pages/screens/iDNA_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/about_screen.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -47,27 +50,155 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: MyIdenaAppTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                ],
-              );
-            }
-          },
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: httpService.getDnaAll(),
+        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            dnaAll = snapshot.data;
+            return Container(
+              color: MyIdenaAppTheme.background,
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                drawer: Drawer(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0.0),
+                              bottomLeft: Radius.circular(48.0),
+                              bottomRight: Radius.circular(48.0),
+                              topRight: Radius.circular(0.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: MyIdenaAppTheme.grey.withOpacity(0.7),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
+                                radius: 50.0,
+                              ),
+                            ),
+                            Align(
+                              alignment:
+                                  Alignment.centerRight + Alignment(0, .3),
+                              child: Text(
+                                dnaAll.dnaIdentityResponse.result.address
+                                        .substring(0, 20) +
+                                    "...",
+                                style: TextStyle(
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                  fontSize: 12,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment:
+                                  Alignment.centerRight + Alignment(0, .8),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    dnaAll.dnaIdentityResponse.result.state,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: MyIdenaAppTheme.fontName,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(FlevaIcons.color_palette_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("My flips")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = CreateFlipScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(FlevaIcons.activity),
+                        title: Text(
+                            AppLocalizations.of(context).translate("iDNA")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = IDNAScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(FlevaIcons.settings_2_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("Parameters")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = ParametersScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.info_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("About")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = AboutScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                body: FutureBuilder<bool>(
+                  future: getData(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox();
+                    } else {
+                      return Stack(
+                        children: <Widget>[
+                          tabBody,
+                          bottomBar(dnaAll),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ),
+            );
+          }
+        });
   }
 
   Future<bool> getData() async {
@@ -75,7 +206,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return true;
   }
 
-  Widget bottomBar() {
+  Widget bottomBar(DnaAll dnaAll) {
     bool displayAll = false;
     return FutureBuilder(
         future: httpService.getDnaAll(),
