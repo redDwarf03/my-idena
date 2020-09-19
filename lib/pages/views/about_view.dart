@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/main.dart';
-
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
+import 'package:flutter/services.dart';
+import 'package:yaml/yaml.dart';
 
-class AboutView extends StatelessWidget {
+class AboutView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
 
@@ -13,15 +13,25 @@ class AboutView extends StatelessWidget {
       : super(key: key);
 
   @override
+  _AboutViewState createState() => _AboutViewState();
+}
+
+class _AboutViewState extends State<AboutView> {
+  @override
+  initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -223,22 +233,39 @@ class AboutView extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 6),
-                                                child: Text(
-                                                  campaign,
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontFamily: MyIdenaAppTheme
-                                                        .fontName,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 13,
-                                                    color: MyIdenaAppTheme.grey
-                                                        .withOpacity(0.5),
-                                                  ),
-                                                ),
-                                              ),
+                                              FutureBuilder(
+                                                  future: rootBundle.loadString(
+                                                      "pubspec.yaml"),
+                                                  builder: (context, snapshot) {
+                                                    String version = "Unknown";
+                                                    if (snapshot.hasData) {
+                                                      var yaml = loadYaml(
+                                                          snapshot.data);
+                                                      version = yaml["version"];
+                                                    }
+
+                                                    return Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 6),
+                                                      child: Text(
+                                                        '${version.split("+")[0]}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              MyIdenaAppTheme
+                                                                  .fontName,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 13,
+                                                          color: MyIdenaAppTheme
+                                                              .grey
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
                                             ],
                                           ),
                                         ),
