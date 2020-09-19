@@ -18,9 +18,9 @@ import 'package:my_idena/backoffice/bean/flip_submitShortAnswers_response.dart';
 import 'package:my_idena/backoffice/bean/flip_words_request.dart';
 import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/beans/dictWords.dart';
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/utils/relevance_type.dart' as RelevantType;
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
+import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
 var logger = Logger();

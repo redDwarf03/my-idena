@@ -25,7 +25,7 @@ import 'package:my_idena/backoffice/bean/dna_sendTransaction_response.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_request.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {

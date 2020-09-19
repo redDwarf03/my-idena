@@ -1,4 +1,4 @@
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 
 class FlipExamples {
   FlipExamples();

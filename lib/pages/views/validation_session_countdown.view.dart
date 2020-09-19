@@ -7,7 +7,7 @@ import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/util_date.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';

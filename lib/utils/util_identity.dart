@@ -1,5 +1,5 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/utils/identityStatus.dart' as IdentityStatus;
+import 'package:my_idena/enums/identity_status.dart' as IdentityStatus;
 
 const int CAN_VALIDATE = 0;
 const int WRONG_STATUS = 1;

@@ -3,8 +3,8 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/utils/answer_type.dart' as AnswerType;
+import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
 
 class ValidationShortSessionButtonView extends StatefulWidget {

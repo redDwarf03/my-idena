@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/on_boarding_screen.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:ntp/ntp.dart';
 
 class RouteScreen extends StatefulWidget {

@@ -10,7 +10,7 @@ import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:ntp/ntp.dart';
 
 DateTime _myTime;
