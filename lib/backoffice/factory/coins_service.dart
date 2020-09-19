@@ -12,7 +12,7 @@ class CoinsService {
       HttpClient httpClient = new HttpClient();
 
       HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://api.coingecko.com/api/v3/coins/idena"));
+          .getUrl(Uri.parse("https://api.coingecko.com/api/v3/coins/idena?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false"));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
