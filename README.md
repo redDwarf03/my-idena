@@ -4,7 +4,7 @@ Idena iOS and Android app based on Flutter framework .
 
 [![Build Status](https://travis-ci.com/redDwarf03/my-idena.svg?branch=master)](https://travis-ci.com/redDwarf03/my-idena)
 
-[![Get it on Google Play](doc/google-play-badge.png)](https://play.google.com/store/apps/details?id=io.reddwarf.my_idena)
+[![Get it on Google Play](/assets/images/google-play-badge.png)](https://play.google.com/store/apps/details?id=io.reddwarf.my_idena)
 
 ## Configuration
 ##### for a Windows PC:
