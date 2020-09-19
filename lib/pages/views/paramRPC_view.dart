@@ -8,7 +8,7 @@ import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/sharedPreferencesHelper.dart';
+import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 
 class ParamRPCView extends StatefulWidget {
   final AnimationController animationController;
