@@ -47,7 +47,7 @@ class HttpService {
       } else {*/
         HttpClient httpClient = new HttpClient();
         // get CoinBase Address
-        HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
+        HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl)).timeout(const Duration(seconds: 5), onTimeout: () {return null;});
         request.headers.set('content-type', 'application/json');
 
         Map<String, dynamic> mapGetCoinBaseAddress = {

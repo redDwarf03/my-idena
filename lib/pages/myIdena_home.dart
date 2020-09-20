@@ -5,7 +5,7 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
-import 'package:my_idena/pages/screens/iDNA_screen.dart';
+import 'package:my_idena/pages/screens/market_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
@@ -141,12 +141,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         },
                       ),
                       ListTile(
-                        leading: Icon(FlevaIcons.activity),
+                        leading: Icon(Icons.show_chart),
                         title: Text(
                             AppLocalizations.of(context).translate("iDNA")),
                         onTap: () {
                           setState(() {
-                            tabBody = IDNAScreen(
+                            tabBody = MarketScreen(
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();

@@ -132,7 +132,19 @@
   "Please, stay on this page until launch.": "Please, stay on this page until launch.",
   "To participate in the validation session, you must provide your flips": "To participate in the validation session, you must provide your flips",
   "The number of flips that can be reported\nshould be limited to 1/3": "The number of flips that can be reported\nshould be limited to 1/3",
-  "iDNA": "iDNA"
+  "iDNA": "iDNA",
+  "Charts": "Charts",
+  "Market": "Market",
+  "Idena Price": "Idena Price",
+  "Market Cap": "Market Cap",
+  "24h Trad. Vol": "24h Trad. Vol",
+  "24h Low": "24h Low",
+  "24h High": "24h High",
+  "ATH": "ATH",
+  "ATL": "ATL",
+  "Price": "Price"
+
+
 
 
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/coins_response.dart';
 import 'package:my_idena/backoffice/factory/coins_service.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/utils/app_localizations.dart';
 
 class PriceView extends StatefulWidget {
   final AnimationController animationController;
@@ -91,7 +92,7 @@ class _PriceViewState extends State<PriceView> {
                                                           TableRow(
                                                             children: [
                                                               Text(
-                                                                "Market Cap",
+                                                                "",
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -109,7 +110,7 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                coinsResponse.marketData.marketCap.toString(),
+                                                                "",
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
@@ -130,7 +131,10 @@ class _PriceViewState extends State<PriceView> {
                                                               ),
                                                               Text(
                                                                 "   " +
-                                                                    "24h Volume",
+                                                                    AppLocalizations.of(
+                                                                            context)
+                                                                        .translate(
+                                                                            "Idena Price"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -148,7 +152,105 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "52 959 €",
+                                                                "   " +
+                                                                    coinsResponse
+                                                                        .marketData
+                                                                        .currentPrice[
+                                                                            'eur']
+                                                                        .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      MyIdenaAppTheme
+                                                                          .fontName,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          TableRow(
+                                                            children: [
+                                                              Text(
+                                                                AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        "Market Cap"),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      MyIdenaAppTheme
+                                                                          .fontName,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .marketCap[
+                                                                        'eur']
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      MyIdenaAppTheme
+                                                                          .fontName,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12,
+                                                                  color: MyIdenaAppTheme
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "   " +
+                                                                    AppLocalizations.of(
+                                                                            context)
+                                                                        .translate(
+                                                                            "24h Trad. Vol"),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      MyIdenaAppTheme
+                                                                          .fontName,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .totalVolume[
+                                                                        'eur']
+                                                                    .toString(),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
@@ -172,7 +274,10 @@ class _PriceViewState extends State<PriceView> {
                                                           TableRow(
                                                             children: [
                                                               Text(
-                                                                "Circulating",
+                                                                AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        "24h Low"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -190,7 +295,11 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "30,819 M iDNA",
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .low24H[
+                                                                        'eur']
+                                                                    .toString(),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
@@ -211,7 +320,10 @@ class _PriceViewState extends State<PriceView> {
                                                               ),
                                                               Text(
                                                                 "   " +
-                                                                    "Max Supply",
+                                                                    AppLocalizations.of(
+                                                                            context)
+                                                                        .translate(
+                                                                            "24h High"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -229,7 +341,11 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "N/A",
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .high24H[
+                                                                        'eur']
+                                                                    .toString(),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
@@ -253,7 +369,10 @@ class _PriceViewState extends State<PriceView> {
                                                           TableRow(
                                                             children: [
                                                               Text(
-                                                                "Tot Supply",
+                                                                AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        "ATH"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -271,7 +390,10 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "58,049 M iDNA",
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .ath['eur']
+                                                                    .toString(),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
@@ -291,7 +413,11 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "   " + "ROI",
+                                                                "   " +
+                                                                    AppLocalizations.of(
+                                                                            context)
+                                                                        .translate(
+                                                                            "ATL"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .left,
@@ -309,24 +435,30 @@ class _PriceViewState extends State<PriceView> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                "+ 36,56 %",
+                                                                coinsResponse
+                                                                    .marketData
+                                                                    .atl['eur']
+                                                                    .toString(),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .right,
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        MyIdenaAppTheme
-                                                                            .fontName,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .green),
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      MyIdenaAppTheme
+                                                                          .fontName,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12,
+                                                                  color: MyIdenaAppTheme
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                ),
                                                               ),
                                                             ],
-                                                          )
+                                                          ),
                                                         ],
                                                       )
                                                     ],

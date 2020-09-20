@@ -153,7 +153,7 @@ class CommunityData {
 
     dynamic facebookLikes;
     int twitterFollowers;
-    int redditAveragePosts48H;
+    double redditAveragePosts48H;
     double redditAverageComments48H;
     int redditSubscribers;
     int redditAccountsActive48H;
@@ -162,7 +162,7 @@ class CommunityData {
     factory CommunityData.fromJson(Map<String, dynamic> json) => CommunityData(
         facebookLikes: json["facebook_likes"],
         twitterFollowers: json["twitter_followers"],
-        redditAveragePosts48H: json["reddit_average_posts_48h"],
+        redditAveragePosts48H: json["reddit_average_posts_48h"].toDouble(),
         redditAverageComments48H: json["reddit_average_comments_48h"].toDouble(),
         redditSubscribers: json["reddit_subscribers"],
         redditAccountsActive48H: json["reddit_accounts_active_48h"],
@@ -512,7 +512,7 @@ class MarketData {
     double priceChangePercentage30D;
     double priceChangePercentage60D;
     double priceChangePercentage200D;
-    int priceChangePercentage1Y;
+    double priceChangePercentage1Y;
     int marketCapChange24H;
     double marketCapChangePercentage24H;
     Map<String, double> priceChange24HInCurrency;
@@ -553,7 +553,7 @@ class MarketData {
         priceChangePercentage30D: json["price_change_percentage_30d"].toDouble(),
         priceChangePercentage60D: json["price_change_percentage_60d"].toDouble(),
         priceChangePercentage200D: json["price_change_percentage_200d"].toDouble(),
-        priceChangePercentage1Y: json["price_change_percentage_1y"],
+        priceChangePercentage1Y: json["price_change_percentage_1y"].toDouble(),
         marketCapChange24H: json["market_cap_change_24h"],
         marketCapChangePercentage24H: json["market_cap_change_percentage_24h"].toDouble(),
         priceChange24HInCurrency: Map.from(json["price_change_24h_in_currency"]).map((k, v) => MapEntry<String, double>(k, v.toDouble())),
