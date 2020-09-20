@@ -4,7 +4,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../myIdena_app/tabIcon_data.dart';
+import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView(

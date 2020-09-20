@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/views/about_view.dart';
-import 'package:my_idena/pages/views/donation_view.dart';
 import 'package:my_idena/pages/views/price_view.dart';
+import 'package:my_idena/pages/views/charts_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
-class IDNAScreen extends StatefulWidget {
-  const IDNAScreen({Key key, this.animationController}) : super(key: key);
+class MarketScreen extends StatefulWidget {
+  const MarketScreen({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _IDNAScreenState createState() => _IDNAScreenState();
+  _MarketScreenState createState() => _MarketScreenState();
 }
 
-class _IDNAScreenState extends State<IDNAScreen>
+class _MarketScreenState extends State<MarketScreen>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -56,10 +55,10 @@ class _IDNAScreenState extends State<IDNAScreen>
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 2;
+    const int count = 4;
     listViews.add(
       TitleView(
-        titleTxt: "iDNA",
+        titleTxt: "Market",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -70,6 +69,27 @@ class _IDNAScreenState extends State<IDNAScreen>
 
     listViews.add(
       PriceView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      TitleView(
+        titleTxt: "Charts",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      ChartsView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
