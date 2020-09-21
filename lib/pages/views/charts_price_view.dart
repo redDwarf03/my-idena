@@ -6,18 +6,18 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_common/common.dart' as charts_common;
 import 'package:my_idena/utils/app_localizations.dart';
 
-class ChartsView extends StatefulWidget {
+class ChartsPriceView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
 
-  const ChartsView({Key key, this.animationController, this.animation})
+  const ChartsPriceView({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
-  _ChartsViewState createState() => _ChartsViewState();
+  _ChartsPriceViewState createState() => _ChartsPriceViewState();
 }
 
-class _ChartsViewState extends State<ChartsView> {
+class _ChartsPriceViewState extends State<ChartsPriceView> {
   CoinsService coinsService = new CoinsService();
 
   List<charts.Series<Price, DateTime>> _seriesLineData;
@@ -25,7 +25,6 @@ class _ChartsViewState extends State<ChartsView> {
   @override
   initState() {
     super.initState();
-
     _seriesLineData = List<charts.Series<Price, DateTime>>();
   }
 
@@ -40,7 +39,15 @@ class _ChartsViewState extends State<ChartsView> {
           } else {
             CoinsPriceResponse coinsPriceResponse = snapshot.data;
             List<Price> linePricesData = new List();
+            double min = 10;
+            double max = 0;
             for (int i = 0; i < coinsPriceResponse.prices.length; i++) {
+              if (min > coinsPriceResponse.prices[i][1].toDouble()) {
+                min = coinsPriceResponse.prices[i][1].toDouble();
+              }
+              if (max < coinsPriceResponse.prices[i][1].toDouble()) {
+                max = coinsPriceResponse.prices[i][1].toDouble();
+              }
               Price price = new Price(
                   DateTime.fromMillisecondsSinceEpoch(
                       coinsPriceResponse.prices[i][0].toInt()),
@@ -128,8 +135,8 @@ class _ChartsViewState extends State<ChartsView> {
                                                                             new charts.StaticNumericTickProviderSpec(
                                                                           <charts.TickSpec<num>>[
                                                                             charts.TickSpec<num>(0),
-                                                                            charts.TickSpec<num>(0.1),
-                                                                            charts.TickSpec<num>(0.2),
+                                                                            charts.TickSpec<num>(min),
+                                                                            charts.TickSpec<num>(max),
                                                                           ],
                                                                         ),
                                                                       ),
@@ -159,8 +166,9 @@ class _ChartsViewState extends State<ChartsView> {
                                                                             behaviorPosition: charts.BehaviorPosition.bottom,
                                                                             titleOutsideJustification: charts.OutsideJustification.middleDrawArea),
                                                                         new charts.ChartTitle(
-                                                                            AppLocalizations.of(context).translate(
-                                                                                "Price") + " " + "(EUR)",
+                                                                            AppLocalizations.of(context).translate("Price") +
+                                                                                " " +
+                                                                                "(EUR)",
                                                                             titleStyleSpec:
                                                                                 charts_common.TextStyleSpec(
                                                                               fontFamily: MyIdenaAppTheme.fontName,
