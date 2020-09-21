@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/views/charts_volume_view.dart';
 import 'package:my_idena/pages/views/price_view.dart';
-import 'package:my_idena/pages/views/charts_view.dart';
+import 'package:my_idena/pages/views/charts_price_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
@@ -55,7 +56,7 @@ class _MarketScreenState extends State<MarketScreen>
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 4;
+    const int count = 5;
     listViews.add(
       TitleView(
         titleTxt: "Market",
@@ -89,7 +90,17 @@ class _MarketScreenState extends State<MarketScreen>
     );
 
     listViews.add(
-      ChartsView(
+      ChartsPriceView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      ChartsVolumeView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
