@@ -7,6 +7,7 @@ import 'package:my_idena/pages/screens/create_flip_screen.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/market_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
+import 'package:my_idena/pages/screens/validation_basics_screen.dart';
 import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/about_screen.dart';
@@ -143,10 +144,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ListTile(
                         leading: Icon(Icons.show_chart),
                         title: Text(
-                            AppLocalizations.of(context).translate("iDNA")),
+                            AppLocalizations.of(context).translate("Market")),
                         onTap: () {
                           setState(() {
                             tabBody = MarketScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(FlevaIcons.checkmark_square_2_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("Validation Basics")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = ValidationBasicsScreen(
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();
