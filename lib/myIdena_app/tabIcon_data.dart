@@ -27,18 +27,18 @@ class TabIconData {
       isSelected: true,
       isActive: true,
       animationController: null,
-      icon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.black,),
-      selectedIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.grey[500],),
-      inactiveIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.white,)
+      icon: Icon(Icons.add_circle_outline, size: 40, color: Colors.black,),
+      selectedIcon: Icon(Icons.add_circle_outline, size: 40, color: Colors.black,),
+      inactiveIcon: Icon(Icons.add_circle_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(
       index: 1,
-      isSelected: false,
+      isSelected: true,
       isActive: true,
       animationController: null,
-      icon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,),
-      selectedIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,),
-      inactiveIcon: Icon(FlevaIcons.color_palette_outline, size: 40, color: Colors.white,)
+      icon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.black,),
+      selectedIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.grey[500],),
+      inactiveIcon: Icon(FlevaIcons.globe_2_outline, size: 40, color: Colors.white,)
     ),
     TabIconData(
       index: 2,

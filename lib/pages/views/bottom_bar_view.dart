@@ -198,6 +198,7 @@ class _BottomBarViewState extends State<BottomBarView>
         if (tabIconData.index == tab.index) {
           tab.isSelected = true;
         }
+
       });
     });
   }

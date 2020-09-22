@@ -24,17 +24,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   AnimationController animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Widget tabBody = Container(
     color: MyIdenaAppTheme.background,
   );
 
-  @override
-  void initState() {
+  void initTabIconsList(int index) {
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
-    tabIconsList[0].isSelected = true;
+    if (index != 0) {
+      tabIconsList[index].isSelected = true;
+    }
+  }
+
+  @override
+  void initState() {
+    initTabIconsList(1);
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
@@ -63,6 +70,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             return Container(
               color: MyIdenaAppTheme.background,
               child: Scaffold(
+                key: _scaffoldKey,
                 backgroundColor: Colors.transparent,
                 drawer: Drawer(
                   child: ListView(
@@ -137,7 +145,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             AppLocalizations.of(context).translate("My flips")),
                         onTap: () {
                           setState(() {
+                            initTabIconsList(0);
                             tabBody = CreateFlipScreen(
+                                dnaAll: dnaAll,
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();
@@ -149,6 +159,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             AppLocalizations.of(context).translate("Market")),
                         onTap: () {
                           setState(() {
+                            initTabIconsList(0);
                             tabBody = MarketScreen(
                                 animationController: animationController);
                           });
@@ -157,10 +168,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                       ListTile(
                         leading: Icon(FlevaIcons.checkmark_square_2_outline),
-                        title: Text(
-                            AppLocalizations.of(context).translate("Validation Basics")),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Validation Basics")),
                         onTap: () {
                           setState(() {
+                            initTabIconsList(0);
                             tabBody = ValidationBasicsScreen(
                                 animationController: animationController);
                           });
@@ -169,10 +181,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                       ListTile(
                         leading: Icon(FlevaIcons.settings_2_outline),
-                        title: Text(
-                            AppLocalizations.of(context).translate("Parameters")),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Parameters")),
                         onTap: () {
                           setState(() {
+                            initTabIconsList(2);
                             tabBody = ParametersScreen(
                                 animationController: animationController);
                           });
@@ -199,6 +212,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             AppLocalizations.of(context).translate("About")),
                         onTap: () {
                           setState(() {
+                            initTabIconsList(3);
                             tabBody = AboutScreen(
                                 animationController: animationController);
                           });
@@ -263,22 +277,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
+                          _scaffoldKey.currentState.openDrawer();
+                        });
+                      });
+                    } else if (index == 1) {
+                      animationController.reverse().then<dynamic>((data) {
+                        if (!mounted) {
+                          return;
+                        }
+                        setState(() {
                           tabBody = HomeScreen(
                               animationController: animationController,
                               firstState: true);
                         });
                       });
-                    } else if (index == 1) {
-                      /*animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = CreateFlipScreen(
-                              dnaAll: dnaAll,
-                              animationController: animationController);
-                        });
-                      });*/
                     } else if (index == 2) {
                       animationController.reverse().then<dynamic>((data) {
                         if (!mounted) {
