@@ -1,4 +1,5 @@
 import 'package:fleva_icons/fleva_icons.dart';
+import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
@@ -8,6 +9,7 @@ import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/market_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/screens/validation_basics_screen.dart';
+import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/about_screen.dart';
@@ -177,6 +179,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),
+                      /*ListTile(
+                        leading: Icon(FlevaIcons.bulb_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("Validation")),
+                        onTap: () {
+                          setState(() {
+                            tabBody = ValidationSessionScreen(dnaAll: dnaAll,
+                            checkFlipsQualityProcess: false,
+                            typeLaunchSession: EpochPeriod.ShortSession,
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),*/
                       ListTile(
                         leading: Icon(Icons.info_outline),
                         title: Text(
