@@ -142,7 +142,29 @@
   "24h High": "24h High",
   "ATH": "ATH",
   "ATL": "ATL",
-  "Price": "Price"
+  "Price": "Price",
+  "Volume": "Volume",
+  "Validation Basics": "Validation Basics",
+  "What is a Good Flip?": "What is a Good Flip?",
+  "What is a Bad Flip?": "What is a Bad Flip?",
+  "A good flip earns you rewards in iDNA": "A good flip earns you rewards in iDNA",
+  "A bad flip penalizes you in iDNA": "A bad flip penalizes you in iDNA",
+  "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.": "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.",
+  "A good flip is EASY to solve for humans, but hard for robots.": "A good flip is EASY to solve for humans, but hard for robots.",
+  "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.": "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.",
+  "A good flip uses no text.": "A good flip uses no text.",
+  "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.": "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.",
+  "A good flip should be relevant to both of the seed words.": "A good flip should be relevant to both of the seed words.",
+  "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.": "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.",
+  "A good flip uses the shuffle to create a 100% non logical alternative.": "A good flip uses the shuffle to create a 100% non logical alternative.",
+  "A bad flip has NO logical story, even if it uses both keywords.": "A bad flip has NO logical story, even if it uses both keywords.",
+  "A bad flip contains numbers or letters on images.": "A bad flip contains numbers or letters on images.",
+  "A bad flip is hard to understand.": "A bad flip is hard to understand.",
+  "A bad flip contains hateful, inappropriate or NSFW content.": "A bad flip contains hateful, inappropriate or NSFW content.",
+  "A bad flip does NOT USE BOTH keywords in the story.": "A bad flip does NOT USE BOTH keywords in the story.",
+  "A bad flip uses objects in images in sequence (1-2-3-4).": "A bad flip uses objects in images in sequence (1-2-3-4).",
+  "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation"
+
 
 
 

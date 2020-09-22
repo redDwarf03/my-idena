@@ -5,25 +5,26 @@ import 'package:my_idena/utils/app_localizations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 final List<String> imgList = [
-  'assets/images/MLxLbPf.png',
-  'assets/images/JjSbN82.png',
-  'assets/images/kfesVk9.png',
-  'assets/images/8W1F0vx.png',
-  'assets/images/c0CTFVj.png'
+  'assets/images/oDjyU6n.png',
+  'assets/images/Jdn57tT.jpg',
+  'assets/images/nV3UqZY.jpg',
+  'assets/images/t2yZ6g5.jpg',
+  'assets/images/Ax39IvJ.jpg',
+  'assets/images/1CTnBFo.jpg',
 ];
 
-class GoodFlipView extends StatefulWidget {
+class BadFlipView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
 
-  const GoodFlipView({Key key, this.animationController, this.animation})
+  const BadFlipView({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
-  _GoodFlipViewState createState() => _GoodFlipViewState();
+  _BadFlipViewState createState() => _BadFlipViewState();
 }
 
-class _GoodFlipViewState extends State<GoodFlipView> {
+class _BadFlipViewState extends State<BadFlipView> {
   int _current = 0;
 
   @override
@@ -101,7 +102,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                               AppLocalizations.of(
                                                                       context)
                                                                   .translate(
-                                                                      "A good flip earns you rewards in iDNA"),
+                                                                      "A bad flip penalizes you in iDNA"),
                                                               textAlign:
                                                                   TextAlign
                                                                       .start,
@@ -114,7 +115,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                           .bold,
                                                                   fontSize: 14,
                                                                   color: Colors
-                                                                      .green),
+                                                                      .red),
                                                             ),
                                                           ],
                                                         ),
@@ -128,9 +129,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -138,7 +138,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end."),
+                                                                        "A bad flip has NO logical story, even if it uses both keywords."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -164,9 +164,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -174,7 +173,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip is EASY to solve for humans, but hard for robots."),
+                                                                        "A bad flip contains numbers or letters on images."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -200,9 +199,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -210,7 +208,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity."),
+                                                                        "A bad flip is hard to understand."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -236,9 +234,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -246,7 +243,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip uses no text."),
+                                                                        "A bad flip contains hateful, inappropriate or NSFW content."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -272,9 +269,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -282,7 +278,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture."),
+                                                                        "A bad flip does NOT USE BOTH keywords in the story."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -308,9 +304,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -318,7 +313,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip should be relevant to both of the seed words."),
+                                                                        "A bad flip uses objects in images in sequence (1-2-3-4)."),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -344,9 +339,8 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                           children: [
                                                             Icon(
                                                               FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
+                                                                  .close_square_outline,
+                                                              color: Colors.red,
                                                               size: 18,
                                                             ),
                                                             Expanded(
@@ -354,43 +348,7 @@ class _GoodFlipViewState extends State<GoodFlipView> {
                                                                 AppLocalizations.of(
                                                                         context)
                                                                     .translate(
-                                                                        "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity."),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        MyIdenaAppTheme
-                                                                            .fontName,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: MyIdenaAppTheme
-                                                                        .grey),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Icon(
-                                                              FlevaIcons
-                                                                  .checkmark_square_2_outline,
-                                                              color:
-                                                                  Colors.green,
-                                                              size: 18,
-                                                            ),
-                                                            Expanded(
-                                                              child: Text(
-                                                                AppLocalizations.of(
-                                                                        context)
-                                                                    .translate(
-                                                                        "A good flip uses the shuffle to create a 100% non logical alternative."),
+                                                                        "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation"),
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/views/bad_flip_view.dart';
 import 'package:my_idena/pages/views/good_flip_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 class ValidationBasicsScreen extends StatefulWidget {
-  const ValidationBasicsScreen({Key key, this.animationController}) : super(key: key);
+  const ValidationBasicsScreen({Key key, this.animationController})
+      : super(key: key);
 
   final AnimationController animationController;
   @override
@@ -54,7 +56,7 @@ class _ValidationBasicsScreenState extends State<ValidationBasicsScreen>
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 2;
+    const int count = 3;
     listViews.add(
       TitleView(
         titleTxt: "Validation Basics",
@@ -68,6 +70,16 @@ class _ValidationBasicsScreenState extends State<ValidationBasicsScreen>
 
     listViews.add(
       GoodFlipView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      BadFlipView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
