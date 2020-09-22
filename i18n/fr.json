@@ -142,13 +142,26 @@
   "24h High": "24h High",
   "ATH": "ATH",
   "ATL": "ATL",
-  "Price": "Prix"
-
-
-
-
-
-
-
-
-  }
+  "Price": "Prix",
+  "Volume": "Volume",
+  "Validation Basics": "Les fondamentaux de la validation",
+  "What is a Good Flip?": "Qu'est-ce qu'un bon Flip ?",
+  "What is a Bad Flip?": "Qu'est-ce qu'un mauvais Flip ?",
+  "A good flip earns you rewards in iDNA": "Un bon flip vous récompense en iDNA",
+  "A bad flip penalizes you in iDNA": "Un mauvais flip vous pénalise en iDNA",
+  "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.": "Un bon flip raconte une histoire, liée chronologiquement et représentant un évènement ou un processus avec un début et une fin.",
+  "A good flip is EASY to solve for humans, but hard for robots.": "Un bon flip est FACILE à résoudre pour les humains, mais difficile pour les robots.",
+  "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.": "Un bon flip utilise des images claires, simples, et met en avant une histoire évidente sans ambiguïté.",
+  "A good flip uses no text.": "Un bon flip n'utilise pas de texte.",
+  "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.": "Un bon flip utilise des concepts simples que N'IMPORTE QUI DANS LE MONDE peut comprendre, indépendamment de sa langue maternelle ou de sa culture.",
+  "A good flip should be relevant to both of the seed words.": "Un bon flip doit être pertinent par rapport aux deux mots-clés attribués.",
+  "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.": "Un bon flip doit utiliser tous les outils disponibles, y compris le dessin et le montage afin d'aider à lutter contre les IA et pour augmenter leur créativité.",
+  "A good flip uses the shuffle to create a 100% non logical alternative.": "Un bon flip utilise le mélange/mixage afin de créer une alternative 100% illogique.",
+  "A bad flip has NO logical story, even if it uses both keywords.": "Un mauvais flip ne contient PAS d'histoire logique, même s'il utilise les deux mots-clés.",
+  "A bad flip contains numbers or letters on images.": "Un mauvais flip contient des nombres ou des lettres sur les images.",
+  "A bad flip is hard to understand.": "Un mauvais flip est compliqué à comprendre.",
+  "A bad flip contains hateful, inappropriate or NSFW content.": "Un mauvais flip contient des propos haineux, inappropriés ou NSFW (-Not safe for work-, c'est-à-dire des images qu'on ne pourrait pas regarder au travail, notamment pornographique ou gore).",
+  "A bad flip does NOT USE BOTH keywords in the story.": "Un mauvais flip n'utilise pas LES DEUX mots-clés dans son histoire.",
+  "A bad flip uses objects in images in sequence (1-2-3-4).": "Un mauvais flip utilise des objets séquencés en images (1-2-3-4).",
+  "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "Si même un seul de vos flips est signalé durant la session de validation, vous perdrez 100% de vos récompenses, y compris les récompenses d'invitation, pour ladite validation"
+}
