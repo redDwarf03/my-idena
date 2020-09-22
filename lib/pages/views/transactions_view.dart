@@ -74,7 +74,7 @@ class _TransactionsViewState extends State<TransactionsView> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0, left: 16, right: 24),
+                                      top: 0, left: 0, right: 0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -99,8 +99,7 @@ class _TransactionsViewState extends State<TransactionsView> {
                                                       MyIdenaAppTheme.darkText),
                                             ),
                                             Text(
-                                              " " +
-                                                  transactions.length.toString() +
+                                              transactions.length.toString() +
                                                   " ",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -133,10 +132,14 @@ class _TransactionsViewState extends State<TransactionsView> {
                                           Expanded(
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 0, right: 0, top: 4),
+                                                  left: 5, right: 5, top: 0),
                                               child: Column(
                                                 children: <Widget>[
                                                   new Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
                                                     height: 440,
                                                     child: ListView.builder(
                                                         physics:
@@ -181,13 +184,21 @@ class _TransactionsViewState extends State<TransactionsView> {
   Widget getImageTo(Transaction transaction) {
     if (transaction.from != null &&
         transaction.from != dnaAll.dnaIdentityResponse.result.address) {
-      return Image.network(
-        'https://robohash.org/${transaction.from}',
-        width: 30,
-        height: 30,
-      );
+      return Column(children: [
+        SizedBox(
+          height: 10,
+        ),
+        Image.network(
+          'https://robohash.org/${transaction.from}',
+          width: 60,
+          height: 60,
+        ),
+        SizedBox(
+          height: 10,
+        )
+      ]);
     } else {
-      return SizedBox(width: 30, height: 0);
+      return SizedBox(width: 60, height: 80);
     }
   }
 
@@ -197,12 +208,12 @@ class _TransactionsViewState extends State<TransactionsView> {
         transaction.usedFee == null
             ? ""
             : AppLocalizations.of(context).translate("Fees: ") +
-                transaction.usedFee +
+                double.parse(transaction.usedFee).toStringAsFixed(10) +
                 " iDNA",
         style: TextStyle(
           fontFamily: MyIdenaAppTheme.fontName,
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: 16,
           color: MyIdenaAppTheme.darkText,
         ),
       );
@@ -225,7 +236,7 @@ class _TransactionsViewState extends State<TransactionsView> {
           style: TextStyle(
             fontFamily: MyIdenaAppTheme.fontName,
             fontWeight: FontWeight.w600,
-            fontSize: 12,
+            fontSize: 16,
             color: MyIdenaAppTheme.darkText,
           ),
         );
@@ -240,7 +251,7 @@ class _TransactionsViewState extends State<TransactionsView> {
           style: TextStyle(
             fontFamily: MyIdenaAppTheme.fontName,
             fontWeight: FontWeight.w600,
-            fontSize: 12,
+            fontSize: 16,
             color: MyIdenaAppTheme.darkText,
           ),
         );
@@ -253,11 +264,15 @@ class _TransactionsViewState extends State<TransactionsView> {
   Widget getDirection(Transaction transaction) {
     if (transaction.from != null &&
         transaction.from != dnaAll.dnaIdentityResponse.result.address) {
-      return new Icon(Icons.vertical_align_bottom,
-          color: Colors.blue[600], size: 22.0);
+      return new Image.asset(
+        'assets/images/Download-256.png',
+        height: 32,
+      );
     } else {
-      return new Icon(Icons.vertical_align_top,
-          color: Colors.red[600], size: 22.0);
+      return new Image.asset(
+        'assets/images/upload_64x64.png',
+        height: 32,
+      );
     }
   }
 
@@ -271,7 +286,7 @@ class _TransactionsViewState extends State<TransactionsView> {
         style: TextStyle(
           fontFamily: MyIdenaAppTheme.fontName,
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: 16,
           color: MyIdenaAppTheme.darkText,
         ),
       );
@@ -292,93 +307,97 @@ class _TransactionsViewState extends State<TransactionsView> {
     ];
     if (typeAccepted.contains(transaction.type)) {
       return Container(
-          child: new Card(
-              child: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        getDirection(transaction),
-                        getTransactionType(transaction),
-                      ],
-                    ),
-                  ],
-                ),
-                Text(
-                  DateFormat.yMEd(Localizations.localeOf(context).languageCode)
-                      .add_Hm()
-                      .format(DateTime.fromMillisecondsSinceEpoch(
-                              transaction.timestamp * 1000)
-                          .toLocal())
-                      .toString(),
-                  style: TextStyle(
-                    fontFamily: MyIdenaAppTheme.fontName,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: MyIdenaAppTheme.darkText,
-                  ),
-                ),
-              ]),
-          new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: 30,
-                  height: 0,
-                ),
-                getImageTo(transaction),
-                new Column(
+          child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: new Card(
+                  elevation: 5.0,
+                  child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      getFrom(transaction),
-                      getAmount(transaction),
-                      getFees(transaction),
-                    ]),
-              ]),
-          Column(
-            children: [
-              new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    new Icon(Icons.check_circle_outline,
-                        color: Colors.green, size: 15.0),
-                    SizedBox(
-                      width: 5,
-                      height: 10,
-                    ),
-                    Text(
-                      transaction.hash == null
-                          ? ""
-                          : AppLocalizations.of(context)
-                                  .translate("Blockchain transaction ID: ") +
-                              transaction.hash.substring(0, 15) +
-                              "...",
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        color: MyIdenaAppTheme.darkText,
+                      new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    getDirection(transaction),
+                                    getTransactionType(transaction),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Text(
+                              DateFormat.yMEd(Localizations.localeOf(context)
+                                      .languageCode)
+                                  .add_Hm()
+                                  .format(DateTime.fromMillisecondsSinceEpoch(
+                                          transaction.timestamp * 1000)
+                                      .toLocal())
+                                  .toString(),
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: MyIdenaAppTheme.darkText,
+                              ),
+                            ),
+                          ]),
+                      new Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 10,
+                              height: 0,
+                            ),
+                            getImageTo(transaction),
+                            new Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  getFrom(transaction),
+                                  getAmount(transaction),
+                                  getFees(transaction),
+                                ]),
+                          ]),
+                      Column(
+                        children: [
+                          new Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                new Icon(Icons.check_circle_outline,
+                                    color: Colors.green, size: 20.0),
+                                SizedBox(
+                                  width: 5,
+                                  height: 10,
+                                ),
+                                Text(
+                                  transaction.hash == null
+                                      ? ""
+                                      : AppLocalizations.of(context).translate(
+                                              "Blockchain trans. ID: ") +
+                                          transaction.hash.substring(0, 15) +
+                                          "...",
+                                  style: TextStyle(
+                                    fontFamily: MyIdenaAppTheme.fontName,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: MyIdenaAppTheme.darkText,
+                                  ),
+                                ),
+                              ]),
+                        ],
                       ),
-                    ),
-                  ]),
-            ],
-          ),
-        ],
-      )));
+                    ],
+                  ))));
     } else {
       return Container(width: 0, height: 0);
     }
@@ -428,11 +447,11 @@ class _TransactionsViewState extends State<TransactionsView> {
       text = "Transaction type unknown";
     }
     return Text(
-      AppLocalizations.of(context).translate(text),
+      "   " + AppLocalizations.of(context).translate(text),
       style: TextStyle(
         fontFamily: MyIdenaAppTheme.fontName,
         fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontSize: 16,
         color: MyIdenaAppTheme.darkText,
       ),
     );

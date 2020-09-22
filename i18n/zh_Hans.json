@@ -63,7 +63,7 @@
   "Transaction": "Transaction",
   "Fee, DNA": "Fee, DNA",
   "Date": "Date",
-  "Blockchain transaction ID: ": "Blockchain transaction ID: ",
+  "Blockchain trans. ID: ": "Blockchain trans. ID: ",
   "Confirmed": "Confirmed",
   "You don't have any transactions yet": "You don't have any transactions yet",
   "Amount, DNA": "Amount, DNA",
