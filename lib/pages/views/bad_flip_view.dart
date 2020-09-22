@@ -332,17 +332,12 @@ class _BadFlipViewState extends State<BadFlipView> {
                                                             ),
                                                           ],
                                                         ),
+                                                        SizedBox(width: 10, height: 10,),
                                                         Row(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Icon(
-                                                              FlevaIcons
-                                                                  .close_square_outline,
-                                                              color: Colors.red,
-                                                              size: 18,
-                                                            ),
                                                             Expanded(
                                                               child: Text(
                                                                 AppLocalizations.of(
