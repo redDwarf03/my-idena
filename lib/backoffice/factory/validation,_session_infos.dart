@@ -50,6 +50,10 @@ class ValidationSessionInfo {
   ValidationSessionInfo({this.typeSession, this.listSessionValidationFlip});
 
   String typeSession;
+  bool loadingFlipsOk;
+  bool loadingWordsOk;
+  String loadingFlipsError;
+  String loadingWordsError;
   List<ValidationSessionInfoFlips> listSessionValidationFlip;
   List<ValidationSessionInfoFlips> listSessionValidationFlipExtra;
 }
@@ -63,6 +67,9 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
   }
 
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
+  validationSessionInfo.loadingFlipsOk = false;
+  validationSessionInfo.loadingWordsOk = false;
+
   String method;
 
   switch (typeSession) {
@@ -288,6 +295,8 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
       validationSessionInfoFlips.listImagesRight[3] =
           listImages[int.tryParse(order4) ?? 0];
 
+      validationSessionInfo.loadingFlipsOk = true;
+
       // get Words
       int nbWords = 0;
       if (typeSession == EpochPeriod.LongSession) {
@@ -331,8 +340,12 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
               flipWordsResponse = flipWordsResponseFromJson(replyWords);
               nbWords = flipWordsResponse.result.words.length;
             }
-          } catch (e) {}
+          } catch (e) {
+            validationSessionInfo.loadingWordsOk = false;
+          }
         }
+
+        validationSessionInfo.loadingWordsOk = true;
 
         List<Word> listWords = new List(nbWords);
         for (int j = 0; j < nbWords; j++) {
@@ -359,6 +372,7 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
     validationSessionInfo.listSessionValidationFlipExtra =
         listSessionValidationFlipExtra;
   } catch (e) {
+    validationSessionInfo.loadingFlipsOk = false;
     logger.e(e.toString());
   } finally {}
 
