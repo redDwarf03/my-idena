@@ -179,13 +179,6 @@ class _BottomBarViewState extends State<BottomBarView>
             ),
           ),
         ),
-        Text(
-          "This is a beta version. Use is at your own risk. ",
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.red,
-          ),
-        )
       ],
     );
   }
