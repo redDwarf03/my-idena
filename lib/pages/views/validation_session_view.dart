@@ -24,6 +24,7 @@ List selectionFlipList = new List();
 List relevantFlipList = new List();
 List<Widget> iconList = new List();
 int controllerChronoValue;
+bool isLoading = false;
 
 // 0 = no selection, 1 = selected, 2 = relevant, 3 = no relevant,
 List<int> selectedIconList = new List();
@@ -71,7 +72,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         duration: const Duration(milliseconds: 2000), vsync: this);
 
     dnaAllForValidationSession = widget.dnaAll;
-    
+
     checkFlipsQualityProcessForValidationSession =
         widget.checkFlipsQualityProcess;
     super.initState();
@@ -80,8 +81,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     print("validationSessionView: " + currentPeriod);
 
     // Init choice
-    if (currentPeriod ==
-        EpochPeriod.ShortSession) {
+    if (currentPeriod == EpochPeriod.ShortSession) {
       validationSessionInfo = null;
       selectionFlipList = new List();
       relevantFlipList = new List();
@@ -99,8 +99,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       controllerChrono = AnimationController(
           vsync: this, duration: Duration(seconds: duree.inSeconds));
     }
-    if (currentPeriod ==
-        EpochPeriod.LongSession) {
+    if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
         selectionFlipList = new List();
@@ -121,9 +120,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                         .longSessionDuration)))
             .difference(DateTime.now());
         controllerChrono = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds: duree.inSeconds));
+            vsync: this, duration: Duration(seconds: duree.inSeconds));
       } else {
         controllerChrono = AnimationController(
             vsync: this, duration: Duration(seconds: controllerChronoValue));
@@ -139,22 +136,90 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     super.dispose();
   }
 
+  _refreshAction() async {
+    setState(() {
+      isLoading = true;
+    });
+    try
+    {
+      validationSessionInfo = await getValidationSessionInfo(currentPeriod, null, widget.simulationMode);
+    }
+    catch(e)
+    {
+
+    }
+    finally{
+      setState(() => isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }    
     return FutureBuilder(
         future: getValidationSessionInfo(
-            currentPeriod,
-            validationSessionInfo,
-            widget.simulationMode),
+            currentPeriod, validationSessionInfo, widget.simulationMode),
         builder: (BuildContext context,
             AsyncSnapshot<ValidationSessionInfo> snapshot) {
           if (snapshot.hasData) {
             validationSessionInfo = snapshot.data;
             if (validationSessionInfo == null) {
-              return Text("");
+              return Column(
+                children: [
+                    SizedBox(
+                      width: 10,
+                      height: 30,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate("Hey oh! Idena ! Wake up !\nPlease refresh..."),
+                      style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                      height: 10,
+                    ),
+                    FloatingActionButton(
+                      onPressed: _refreshAction,
+                      backgroundColor: Colors.red,
+                      child: new Icon(Icons.refresh, color: Colors.white),
+                    ),
+                ],
+              );
             } else {
               if (validationSessionInfo.listSessionValidationFlip == null) {
-                return Text("");
+                return Column(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                      height: 30,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate("Hey oh! Idena ! Wake up !\nPlease refresh..."),
+                      style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                      height: 10,
+                    ),
+                    FloatingActionButton(
+                      onPressed: _refreshAction,
+                      backgroundColor: Colors.red,
+                      child: new Icon(Icons.refresh, color: Colors.white),
+                    ),
+                  ],
+                );
               } else {
                 List<ValidationSessionInfoFlips> listSessionValidationFlip =
                     validationSessionInfo.listSessionValidationFlip;
@@ -448,8 +513,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget getChrono() {
     controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        if (currentPeriod ==
-            EpochPeriod.ShortSession) {
+        if (currentPeriod == EpochPeriod.ShortSession) {
           submitShortAnswers(selectionFlipList, validationSessionInfo);
           Navigator.push<dynamic>(
               context,
@@ -461,8 +525,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                     typeLaunchSession: EpochPeriod.LongSession),
               ));
         }
-        if (currentPeriod ==
-            EpochPeriod.LongSession) {
+        if (currentPeriod == EpochPeriod.LongSession) {
           submitLongAnswers(
               selectionFlipList, relevantFlipList, validationSessionInfo);
           Navigator.pushReplacement(
@@ -499,8 +562,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   Widget checkWords(
       ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
-    if (currentPeriod ==
-            EpochPeriod.LongSession &&
+    if (currentPeriod == EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       String word1Name = "";
       String word2Name = "";
