@@ -31,6 +31,11 @@ fastlane android alpha
 fastlane android beta
 ```
 
+### android production
+```
+fastlane android production
+```
+
 
 ----
 
