@@ -144,7 +144,8 @@ class _MiningViewState extends State<MiningView> {
                                                                           .darkText),
                                                                 ),
                                                               ),
-                                                              displayMiningSwitch()
+                                                              displayMiningSwitch(),
+                                                              displayPenalty(),
                                                             ])
                                                       : Row(children: <Widget>[
                                                           Expanded(
@@ -245,6 +246,23 @@ class _MiningViewState extends State<MiningView> {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  Widget displayPenalty() {
+    if (double.tryParse(dnaAll.dnaIdentityResponse.result.penalty) != null &&
+        double.parse(dnaAll.dnaIdentityResponse.result.penalty) > 0) {
+      return Text(
+        AppLocalizations.of(context).translate("Penalty: ") + double.parse(dnaAll.dnaIdentityResponse.result.penalty).toDouble().toStringAsFixed(4) + " iDNA",
+        style: TextStyle(
+            fontFamily: MyIdenaAppTheme.fontName,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            letterSpacing: -0.1,
+            color: MyIdenaAppTheme.darkText),
+      );
+    } else {
+      return Text("");
+    }
   }
 
   Widget displayMiningSwitch() {
