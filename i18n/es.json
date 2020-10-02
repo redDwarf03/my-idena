@@ -163,5 +163,8 @@
   "A bad flip contains hateful, inappropriate or NSFW content.": "Un mal flip contiene contenido odioso, inapropiado o NSFW.",
   "A bad flip does NOT USE BOTH keywords in the story.": "Un mal flip NO UTILIZA AMBAS palabras clave en la historia.",
   "A bad flip uses objects in images in sequence (1-2-3-4).": "Un mal flip utiliza objetos en imágenes en secuencia (1-2-3-4).",
-  "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "Si incluso uno de sus flips enviados es reportado durante la validación, pierde el 100% de sus recompensas, incluyendo las recompensas de invitación para esa validación."
+  "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "Si incluso uno de sus flips enviados es reportado durante la validación, pierde el 100% de sus recompensas, incluyendo las recompensas de invitación para esa validación.",
+  "Hey oh! Idena ! Wake up !\nPlease refresh...": "Hey oh! Idena ! Wake up !\nPlease refresh...\nIf the flips don't appear,\nclose the app and relaunch it again",
+  "Penalty: ": "Penalty: "
+
 }
