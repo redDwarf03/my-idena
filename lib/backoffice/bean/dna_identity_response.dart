@@ -71,7 +71,7 @@ class Result {
   List<FlipKeyWordPair> flipKeyWordPairs;
   int madeFlips;
   int totalQualifiedFlips;
-  int totalShortFlipPoints;
+  double totalShortFlipPoints;
   dynamic flips;
   bool online;
   int generation;
