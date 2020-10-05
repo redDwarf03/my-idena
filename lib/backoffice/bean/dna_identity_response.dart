@@ -96,7 +96,7 @@ class Result {
                 .map((x) => FlipKeyWordPair.fromJson(x))),
         madeFlips: json["madeFlips"],
         totalQualifiedFlips: json["totalQualifiedFlips"],
-        totalShortFlipPoints: json["totalShortFlipPoints"],
+        totalShortFlipPoints: json["totalShortFlipPoints"].toDouble(),
         flips: json["flips"],
         online: json["online"],
         generation: json["generation"],
