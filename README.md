@@ -19,8 +19,6 @@ Idena iOS and Android app based on Flutter framework .
 * setup tunnel connection using ssh ``ssh -L 9999:localhost:9009 YOUR_VPS_IP``
 * open **my_idena**, go to "Parameters" page and type ``http://localhost:9999`` and your api key in the following file ``./datadir/api.key``
 
-## Work in progress
-
 ## Help
 
 Consider supporting my-idena by donating to **0xf429e36d68be10428d730784391589572ee0f72b**
