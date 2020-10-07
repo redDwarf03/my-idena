@@ -22,7 +22,6 @@ class ParamRPCView extends StatefulWidget {
 }
 
 class _ParamRPCViewState extends State<ParamRPCView> {
-
   HttpService httpService = HttpService();
   var logger = Logger();
   final _keyFormParamRPC = GlobalKey<FormState>();
