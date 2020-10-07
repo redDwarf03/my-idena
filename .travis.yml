@@ -23,6 +23,7 @@ jobs:
       -in android/app/keystore/key.jks.enc -out android/app/keystore/key.jks -d
     - gem install bundler
     install:
+    - gradle wrapper --gradle-version 6.6.1
     - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
     - git clone https://github.com/flutter/flutter.git -b stable
     - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
