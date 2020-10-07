@@ -25,8 +25,9 @@ jobs:
     install:
     - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
     - git clone https://github.com/flutter/flutter.git -b stable
-    - "./flutter/bin/flutter doctor"
+    - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+    - flutter doctor
     - bundle install
     - cd android
     - cd app
-    - "./flutter/bin/flutter build appbundle"
+    - flutter build appbundle"
