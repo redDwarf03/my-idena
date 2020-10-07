@@ -27,5 +27,6 @@ jobs:
     - git clone https://github.com/flutter/flutter.git -b stable
     - "./flutter/bin/flutter doctor"
     - bundle install
-    - ls
+    - cd android
+    - cd app
     - "./flutter/bin/flutter build appbundle"
