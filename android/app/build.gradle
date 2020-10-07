@@ -55,7 +55,7 @@ android {
             if(System.getenv("CI") == "true") {
                 keyAlias System.getenv("keystore_alias")
                 keyPassword System.getenv("keystore_password")
-                storeFile System.getenv("storeFile") ? file(System.getenv("storeFile")) : null
+                storeFile System.getenv("storeFile") ? rootProject.file(System.getenv("storeFile")) : null
                 storePassword System.getenv("keystore_alias_password")
             } else {
                 keyAlias keystoreProperties['keyAlias']
