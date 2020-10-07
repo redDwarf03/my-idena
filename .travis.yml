@@ -16,6 +16,7 @@ jobs:
         packages:
         - lib32stdc++6
         - fonts-droid
+        - ant
     before_install:
     - yes | sdkmanager "platforms;android-29"
     - openssl aes-256-cbc -K $encrypted_4f837f3546c7_key -iv $encrypted_4f837f3546c7_iv
