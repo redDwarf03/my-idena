@@ -30,4 +30,4 @@ jobs:
     - bundle install
     - cd android
     - cd app
-    - flutter build appbundle"
+    - flutter build appbundle
