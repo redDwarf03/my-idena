@@ -36,3 +36,11 @@ jobs:
     - cd android
     - cd app
     - flutter build appbundle
+  - stage: GitHub Release
+    script: echo "Deploying to Github releases ..."
+    deploy:
+      provider: releases
+      api_key: $GITUHB_OAUTH_TOKEN
+      skip_cleanup: true
+      on:
+        tages: true
