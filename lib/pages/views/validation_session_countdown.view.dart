@@ -1,7 +1,9 @@
 import 'dart:async';
-
+import 'package:badges/badges.dart';
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
@@ -30,7 +32,9 @@ class ValidationSessionCountdownText extends StatefulWidget {
 
 class _ValidationSessionCountdownTextState
     extends State<ValidationSessionCountdownText> {
+  var logger = Logger();
   bool timeUpFlag = false;
+  bool sendIdna = false;
   bool sessionAlert = false;
   bool afterLongSession = false;
   int timeCounter = 0;
@@ -297,6 +301,7 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
+                      sendIdna ? Container() : gift(context)
                     ]))
               ])));
         }
@@ -351,6 +356,7 @@ class _ValidationSessionCountdownTextState
                           ),
                         ),
                       ),
+                      sendIdna ? Container() : gift(context)
                     ]))
               ])));
         }
@@ -364,6 +370,135 @@ class _ValidationSessionCountdownTextState
   @override
   Widget build(BuildContext context) {
     return _buildChild();
+  }
+
+  Widget gift(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          AppLocalizations.of(context).translate(
+              "If you are satisfied with the validation session with the mobile application, you can send a tip of 1 or 10 IDNA. Thank you."),
+          style: TextStyle(
+            fontFamily: MyIdenaAppTheme.fontName,
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            letterSpacing: -0.2,
+            color: MyIdenaAppTheme.darkText,
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Badge(
+              shape: BadgeShape.square,
+              borderRadius: 20,
+              badgeContent: Text('1 iDNA',
+                  style: TextStyle(color: Colors.white, fontSize: 10)),
+              badgeColor: Colors.green[300],
+              child: IconButton(
+                icon: Icon(
+                  FlevaIcons.gift,
+                  color: Colors.black54,
+                  size: 30,
+                ),
+                tooltip: 'Send 1 iDNA',
+                onPressed: () {
+                  try {
+                    httpService.sendTransaction(
+                        widget.dnaAll.dnaIdentityResponse.result.address, 1);
+                  } catch (e) {
+                    logger.e(e.toString());
+                  }
+                  showDialog(
+                      context: context,
+                      builder: (context) => SimpleDialog(
+                            contentPadding: EdgeInsets.zero,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Thank you !!! :)"),
+                                      style: TextStyle(
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: -0.1,
+                                          color: MyIdenaAppTheme.darkText),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                  setState(() {
+                    sendIdna = true;
+                  });
+                },
+              ),
+            ),
+            Badge(
+              shape: BadgeShape.square,
+              borderRadius: 20,
+              badgeContent: Text('10 iDNA',
+                  style: TextStyle(color: Colors.white, fontSize: 10)),
+              badgeColor: Colors.green[300],
+              child: IconButton(
+                icon: Icon(
+                  FlevaIcons.gift,
+                  color: Colors.black54,
+                  size: 30,
+                ),
+                tooltip: 'Send 10 iDNA',
+                onPressed: () {
+                  try {
+                    httpService.sendTransaction(
+                        widget.dnaAll.dnaIdentityResponse.result.address, 1);
+                  } catch (e) {
+                    logger.e(e.toString());
+                  }
+                  showDialog(
+                      context: context,
+                      builder: (context) => SimpleDialog(
+                            contentPadding: EdgeInsets.zero,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Thank you !!! :)"),
+                                      style: TextStyle(
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: -0.1,
+                                          color: MyIdenaAppTheme.darkText),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                  setState(() {
+                    sendIdna = true;
+                  });
+                },
+              ),
+            ),
+          ],
+        )
+      ],
+    );
   }
 
   void launchSession() {

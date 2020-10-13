@@ -45,34 +45,37 @@ class HttpService {
       if (responseHttp == null || responseHttp.statusCode != 200) {
         return false;
       } else {*/
-        HttpClient httpClient = new HttpClient();
-        // get CoinBase Address
-        HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl)).timeout(const Duration(seconds: 5), onTimeout: () {return null;});
-        request.headers.set('content-type', 'application/json');
+      HttpClient httpClient = new HttpClient();
+      // get CoinBase Address
+      HttpClientRequest request = await httpClient
+          .postUrl(Uri.parse(apiUrl))
+          .timeout(const Duration(seconds: 5), onTimeout: () {
+        return null;
+      });
+      request.headers.set('content-type', 'application/json');
 
-        Map<String, dynamic> mapGetCoinBaseAddress = {
-          'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': keyApp
-        };
-        DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest =
-            DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-        request
-            .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
-        HttpClientResponse response = await request.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          if (dnaGetCoinbaseAddrResponseFromJson(reply).result == null) {
-            return false;
-          } else {
-            return true;
-          }
-        } else {
+      Map<String, dynamic> mapGetCoinBaseAddress = {
+        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': keyApp
+      };
+      DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest =
+          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
+      request.add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        if (dnaGetCoinbaseAddrResponseFromJson(reply).result == null) {
           return false;
+        } else {
+          return true;
         }
+      } else {
+        return false;
+      }
       /*}*/
-      
+
     } catch (e) {
       return false;
     }
@@ -338,7 +341,7 @@ class HttpService {
         "params": [
           {
             "from": from,
-            "to": "0x72563cb949bd0167acfff47b5865fe30e1960e70",
+            "to": "0xf429e36D68BE10428D730784391589572Ee0f72B",
             'amount': amount.toString()
           }
         ],
