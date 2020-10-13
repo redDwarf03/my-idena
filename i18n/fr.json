@@ -165,6 +165,7 @@
   "A bad flip uses objects in images in sequence (1-2-3-4).": "Un mauvais flip utilise des objets séquencés en images (1-2-3-4).",
   "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "Si même un seul de vos flips est signalé durant la session de validation, vous perdrez 100% de vos récompenses, y compris les récompenses d'invitation, pour ladite validation",
   "Hey oh! Idena ! Wake up !\nPlease refresh...": "Hey oh! Idena ! On se réveille !\nsvp rechargez la page...\nSi les flips n'apparaissent pas,\nfermez l'app et relancez la",
-  "Penalty: ": "Penalty: "
+  "Penalty: ": "Penalty: ",
+  "If you are satisfied with the validation session with the mobile application, you can send a tip of 1 or 10 IDNA. Thank you.": "Si vous êtes satisfaits avec la session de validation via l'application mobile, vous pouvez envoyer un petit pourboire de 1 ou 10 iDNA. Merci"
 
 }

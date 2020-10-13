@@ -56,10 +56,14 @@ class _ValidationSessionInfosViewState
                                     left: 24, right: 24, top: 16, bottom: 18),
                                 child: Container(
                                   decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    HexColor("#FFEAC9"),
-                    HexColor("#FFC971")
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),                                    borderRadius: BorderRadius.only(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          HexColor("#FFEAC9"),
+                                          HexColor("#FFC971")
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight),
+                                    borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(8.0),
                                         bottomLeft: Radius.circular(8.0),
                                         bottomRight: Radius.circular(8.0),
