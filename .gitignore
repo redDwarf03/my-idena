@@ -55,3 +55,4 @@ lib/todolist.txt
 android/app/keystore/key.jks
 android/app/keystore/_.txt
 android/app/keystore/key.jks.old
+android/fastlane/report.xml
