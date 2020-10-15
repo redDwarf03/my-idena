@@ -461,7 +461,7 @@ class _ValidationSessionCountdownTextState
                 onPressed: () {
                   try {
                     httpService.sendTransaction(
-                        widget.dnaAll.dnaIdentityResponse.result.address, 1);
+                        widget.dnaAll.dnaIdentityResponse.result.address, 10);
                   } catch (e) {
                     logger.e(e.toString());
                   }
