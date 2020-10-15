@@ -60,3 +60,4 @@ ios/fastlane/metadata/review_information/last_name.txt
 ios/fastlane/metadata/review_information/email_address.txt
 ios/fastlane/metadata/review_information/phone_number.txt
 android/fastlane/report.xml
+ios/build/XCBuildData/
