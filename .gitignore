@@ -61,3 +61,7 @@ ios/fastlane/metadata/review_information/email_address.txt
 ios/fastlane/metadata/review_information/phone_number.txt
 android/fastlane/report.xml
 /ios/build/XCBuildData/
+ios/Runner.ipa
+ios/Runner.app.dSYM.zip
+ios/fastlane/report.xml
+ios/Flutter/.last_build_id
