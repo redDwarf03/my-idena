@@ -139,17 +139,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 ),
                 Text(
                   AppLocalizations.of(context).translate(
-                      "my Idena is an application currently under development. You use it at your own risk. \n\nIn any case, the owner of this application can't be held responsible for problems related to use or bugs.\n\n"),
+                      "Idena is the first proof-of-person blockchain where every node belongs to a certain individual and has equal voting power. It is one of the most decentralized blockchains.\n\n"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.red[400],
+                      color: Colors.white,
                       fontSize: 16,
                       fontFamily: MyIdenaAppTheme.fontName,
                       letterSpacing: -0.2),
                 ),
                 Text(
                   AppLocalizations.of(context).translate(
-                      "In case of bugs, please notify them on the project's Github page (see \"About\" page).\n\nThe Idena core team is not participating in the development of this application"),
+                      "Idena's network of validated people solves the blockchain oracle problem: Its independent mining nodes can act as oracles. To formalize a unique human, Idena does not require the disclosure of any personal data (no KYC). It proves the humanness and uniqueness of its participants by running an AI-hard Turing test at the same time for everyone around the globe."),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
