@@ -7,6 +7,7 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
+import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/enums/connection_status.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/deep_link_screen.dart';
@@ -20,6 +21,9 @@ DnaAll dnaAll = new DnaAll();
 var logger = Logger();
 DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
+List wordsMap;
+DictWords dictWords;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,12 +50,21 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   initState() {
     super.initState();
     initPlatformState();
+    initWords();
   }
 
   @override
   dispose() {
     if (_sub != null) _sub.cancel();
     super.dispose();
+  }
+
+  initWords() async {
+    Map<String, dynamic> dictWordsDdata;
+    dictWords = await DictWords().getDictWords();
+    dictWordsDdata = dictWords.toJson();
+    wordsMap = dictWordsDdata["words"];
+    logger.i("Nb words loaded: " + wordsMap.length.toString());
   }
 
   initPlatformState() async {

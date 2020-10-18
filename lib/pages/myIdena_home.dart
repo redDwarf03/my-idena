@@ -143,7 +143,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      /*  ListTile(
+                      /*ListTile(
                         leading: Icon(FlevaIcons.color_palette_outline),
                         title: Text(
                             AppLocalizations.of(context).translate("My flips")),

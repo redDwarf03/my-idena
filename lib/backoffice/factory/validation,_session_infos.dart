@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/backoffice/bean/flip_examples.dart';
 import 'package:my_idena/backoffice/bean/flip_get_request.dart';
 import 'package:my_idena/backoffice/bean/flip_get_response.dart';
@@ -96,14 +97,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
     HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
-
-    Map<String, dynamic> dictWordsDdata;
-    List wordsMap;
-    if (typeSession == EpochPeriod.LongSession) {
-      DictWords dictWordsList = await DictWords().getDictWords();
-      dictWordsDdata = dictWordsList.toJson();
-      wordsMap = dictWordsDdata["words"];
-    }
 
     if (simulationMode) {
       if (typeSession == EpochPeriod.ShortSession) {
