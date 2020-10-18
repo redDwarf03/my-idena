@@ -7,6 +7,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
 import 'package:my_idena/pages/screens/market_screen.dart';
+import 'package:my_idena/pages/screens/oracle_votings_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
 import 'package:my_idena/pages/screens/validation_basics_screen.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
@@ -14,6 +15,7 @@ import 'package:my_idena/pages/views/bottom_bar_view.dart';
 import 'package:my_idena/pages/screens/home_screen.dart';
 import 'package:my_idena/pages/screens/about_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_identity.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -126,7 +128,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 child: Padding(
                                   padding: EdgeInsets.all(5.0),
                                   child: Text(
-                                    dnaAll.dnaIdentityResponse.result.state,
+                                    new UtilIdentity().mapToFriendlyStatus(
+                                        dnaAll
+                                            .dnaIdentityResponse.result.state),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: MyIdenaAppTheme.fontName,
@@ -139,7 +143,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                    /*  ListTile(
+                      /*  ListTile(
                         leading: Icon(FlevaIcons.color_palette_outline),
                         title: Text(
                             AppLocalizations.of(context).translate("My flips")),
@@ -179,6 +183,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),
+                      /*ListTile(
+                        leading: Icon(FlevaIcons.eye_outline),
+                        title: Text(
+                            AppLocalizations.of(context).translate("Oracles")),
+                        onTap: () {
+                          setState(() {
+                            initTabIconsList(0);
+                            tabBody = OracleVotingsScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),*/
                       ListTile(
                         leading: Icon(FlevaIcons.settings_2_outline),
                         title: Text(AppLocalizations.of(context)
