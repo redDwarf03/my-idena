@@ -380,7 +380,7 @@ class _ValidationSessionCountdownTextState
         ),
         Text(
           AppLocalizations.of(context).translate(
-              "If you are satisfied with the validation session with the mobile application, you can send a tip of 1 or 10 IDNA. Thank you."),
+              "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you."),
           style: TextStyle(
             fontFamily: MyIdenaAppTheme.fontName,
             fontWeight: FontWeight.w500,
@@ -462,6 +462,56 @@ class _ValidationSessionCountdownTextState
                   try {
                     httpService.sendTransaction(
                         widget.dnaAll.dnaIdentityResponse.result.address, 10);
+                  } catch (e) {
+                    logger.e(e.toString());
+                  }
+                  showDialog(
+                      context: context,
+                      builder: (context) => SimpleDialog(
+                            contentPadding: EdgeInsets.zero,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Thank you !!! :)"),
+                                      style: TextStyle(
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: -0.1,
+                                          color: MyIdenaAppTheme.darkText),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                  setState(() {
+                    sendIdna = true;
+                  });
+                },
+              ),
+            ),
+            Badge(
+              shape: BadgeShape.square,
+              borderRadius: 20,
+              badgeContent: Text('50 iDNA',
+                  style: TextStyle(color: Colors.white, fontSize: 10)),
+              badgeColor: Colors.green[300],
+              child: IconButton(
+                icon: Icon(
+                  FlevaIcons.gift,
+                  color: Colors.black54,
+                  size: 30,
+                ),
+                tooltip: 'Send 50 iDNA',
+                onPressed: () {
+                  try {
+                    httpService.sendTransaction(
+                        widget.dnaAll.dnaIdentityResponse.result.address, 50);
                   } catch (e) {
                     logger.e(e.toString());
                   }
