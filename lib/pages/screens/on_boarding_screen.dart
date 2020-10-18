@@ -298,6 +298,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   ),
                 ),
                 checkNodeConnection(),
+                goHome(),
               ],
             ),
           ),
@@ -468,7 +469,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection && timeOK) {
               return IconButton(
-                icon: Icon(FlevaIcons.globe_2_outline),
+                icon: Icon(FlevaIcons.home_outline),
                 color: Colors.green,
                 iconSize: 40,
                 onPressed: () {

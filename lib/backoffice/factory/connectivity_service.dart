@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/enums/connection_status.dart';
@@ -31,6 +31,11 @@ class ConnectivityService {
   }
 
   Widget getConnectionStatus(BuildContext context) {
+    if (Platform.isIOS) {
+      return SizedBox(
+        height: 2,
+      );
+    }
     // Get our connection status from the provider
     var connectionStatus = Provider.of<ConnectivityStatus>(context);
     if (connectionStatus == null) {
@@ -97,10 +102,11 @@ class ConnectivityService {
                             fontWeight: FontWeight.w500)),
                   ],
                 ));
-          }
-          else
-          {
-            return SizedBox(width: 1, height: 1,);
+          } else {
+            return SizedBox(
+              width: 1,
+              height: 1,
+            );
           }
         }
       }
