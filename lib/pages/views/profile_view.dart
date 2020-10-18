@@ -23,12 +23,6 @@ class _ProfileViewState extends State<ProfileView> {
   DnaAll dnaAll;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: httpService.getDnaAll(),

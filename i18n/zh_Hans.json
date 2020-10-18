@@ -166,10 +166,48 @@
   "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation": "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation",
   "Hey oh! Idena ! Wake up !\nPlease refresh...": "Hey oh! Idena ! Wake up !\nPlease refresh...\nIf the flips don't appear,\nclose the app and relaunch it again",
   "Penalty: ": "Penalty: ",
-  "If you are satisfied with the validation session with the mobile application, you can send a tip of 1 or 10 IDNA. Thank you.": "If you are satisfied with the validation session with the mobile application, you can send a tip of 1 or 10 IDNA."
-
-
-
+  "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.": "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
+  "Oracles": "Oracles",
+  "All votings": "All votings",
+  "My voting": "My votings",
+  "New voting": "New voting",
+  "Status": "Status",
+  "Open": "Open",
+  "Pending": "Pending",
+  "Voted": "Voted",
+  "Counting": "Counting",
+  "Archive": "Archive",
+  "Total prize": "Total prize",
+  "Add fund": "Add fund",
+  "Deadline": "Deadline",
+  "vote": "vote",
+  "votes": "votes",
+  "Oracle votings": "Oracle votings",
+  "Deposit": "Deposit",
+  "Your reward": "Your reward",
+  "Quorum required": "Quorum required",
+  "Choose an option to vote": "Choose an option to vote",
+  "% min. votes required": "% min. votes required",
+  "Vote": "Vote",
+  "Yes": "Yes",
+  "No": "No",
+  "Transfer from": "Transfer from",
+  "To address": "To address",
+  "Send": "Send",
+  "Free voting": "Free voting",
+  "You haven't any votings yet": "You haven't any votings yet",
+  "Title": "Title",
+  "Description": "Description",
+  "Voting deposit": "Voting deposit",
+  "Start date": "Start date",
+  "Start now": "Start now",
+  "Show all": "Show all",
+  "Part of the optionsis hidden": "Part of the optionsis hidden",
+  "Name of options": "Name of options",
+  "Option 1": "Option 1",
+  "Option 2": "Option 2",
+  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters."
 
   
+
 }
