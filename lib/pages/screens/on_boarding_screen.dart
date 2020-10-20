@@ -541,34 +541,30 @@ class OnBoardingTimer extends StatefulWidget {
 class _OnBoardingTimerState extends State<OnBoardingTimer> {
   @override
   void initState() {
-    _timerDifferenceTime = Timer.periodic(
-        Duration(milliseconds: 1000), (_) => getDifferenceTime());
 
     super.initState();
+    _timeUpdate();
   }
 
-  @override
+  _timeUpdate() {
+    _timerDifferenceTime = Timer(const Duration(seconds: 1), () async {
+      _myTime = await NTP.now();
+      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+      _ntpTime = _myTime.add(Duration(milliseconds: offset));
+      if (!mounted) return;
+      setState(() {
+        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      });
+      _timeUpdate();
+    });
+  }
+
   @override
   void dispose() {
     _timerDifferenceTime.cancel();
     super.dispose();
   }
 
-  Future<void> getDifferenceTime() async {
-    if (_timerDifferenceTime.isActive) {
-      _myTime = await NTP.now();
-
-      try {
-        final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-        _ntpTime = _myTime.add(Duration(milliseconds: offset));
-
-        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-      } catch (e) {}
-
-      if (!mounted) return;
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
