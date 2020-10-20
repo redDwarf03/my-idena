@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
@@ -140,15 +141,10 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     setState(() {
       isLoading = true;
     });
-    try
-    {
-      validationSessionInfo = await getValidationSessionInfo(currentPeriod, null, widget.simulationMode);
-    }
-    catch(e)
-    {
-
-    }
-    finally{
+    try {
+      validationSessionInfo = await getValidationSessionInfo(
+          currentPeriod, null, widget.simulationMode);
+    } catch (e) {} finally {
       setState(() => isLoading = false);
     }
   }
@@ -157,7 +153,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget build(BuildContext context) {
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
-    }    
+    }
     return FutureBuilder(
         future: getValidationSessionInfo(
             currentPeriod, validationSessionInfo, widget.simulationMode),
@@ -168,28 +164,29 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
             if (validationSessionInfo == null) {
               return Column(
                 children: [
-                    SizedBox(
-                      width: 10,
-                      height: 30,
+                  SizedBox(
+                    width: 10,
+                    height: 30,
+                  ),
+                  Text(
+                    AppLocalizations.of(context).translate(
+                        "Hey oh! Idena ! Wake up !\nPlease refresh..."),
+                    style: TextStyle(
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.red,
                     ),
-                    Text(
-                      AppLocalizations.of(context).translate("Hey oh! Idena ! Wake up !\nPlease refresh..."),
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    FloatingActionButton(
-                      onPressed: _refreshAction,
-                      backgroundColor: Colors.red,
-                      child: new Icon(Icons.refresh, color: Colors.white),
-                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                    height: 10,
+                  ),
+                  FloatingActionButton(
+                    onPressed: _refreshAction,
+                    backgroundColor: Colors.red,
+                    child: new Icon(Icons.refresh, color: Colors.white),
+                  ),
                 ],
               );
             } else {
@@ -201,7 +198,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                       height: 30,
                     ),
                     Text(
-                      AppLocalizations.of(context).translate("Hey oh! Idena ! Wake up !\nPlease refresh..."),
+                      AppLocalizations.of(context).translate(
+                          "Hey oh! Idena ! Wake up !\nPlease refresh..."),
                       style: TextStyle(
                         fontFamily: MyIdenaAppTheme.fontName,
                         fontWeight: FontWeight.w600,
@@ -395,10 +393,20 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      checkWords(
-                                                                          listSessionValidationFlip[
-                                                                              index],
-                                                                          index),
+                                                                      FutureBuilder<
+                                                                              List<
+                                                                                  Word>>(
+                                                                          future: getWordsFromHash(
+                                                                              listSessionValidationFlip[index].hash,
+                                                                              widget.simulationMode),
+                                                                          builder: (BuildContext context, AsyncSnapshot<List<Word>> snapshot) {
+                                                                            if (snapshot.hasData ==
+                                                                                false) {
+                                                                              return Center(child: CircularProgressIndicator());
+                                                                            } else {
+                                                                              return checkWords(snapshot.data, index);
+                                                                            }
+                                                                          }),
                                                                       Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             top:
@@ -560,8 +568,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     );
   }
 
-  Widget checkWords(
-      ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+  Widget checkWords(List<Word> listWords, int index) {
     if (currentPeriod == EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       String word1Name = "";
@@ -569,21 +576,12 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       String word1Desc = "";
       String word2Desc = "";
 
-      if (validationSessionInfoFlips.listWords != null &&
-          validationSessionInfoFlips.listWords.length > 0) {
-        word1Name = validationSessionInfoFlips.listWords[0] != null
-            ? validationSessionInfoFlips.listWords[0].name
-            : "";
-        word1Desc = validationSessionInfoFlips.listWords[0] != null
-            ? validationSessionInfoFlips.listWords[0].desc
-            : "";
-        if (validationSessionInfoFlips.listWords.length > 1) {
-          word2Name = validationSessionInfoFlips.listWords[1] != null
-              ? validationSessionInfoFlips.listWords[1].name
-              : "";
-          word2Desc = validationSessionInfoFlips.listWords[1] != null
-              ? validationSessionInfoFlips.listWords[1].desc
-              : "";
+      if (listWords != null && listWords.length > 0) {
+        word1Name = listWords[0] != null ? listWords[0].name : "";
+        word1Desc = listWords[0] != null ? listWords[0].desc : "";
+        if (listWords.length > 1) {
+          word2Name = listWords[1] != null ? listWords[1].name : "";
+          word2Desc = listWords[1] != null ? listWords[1].desc : "";
         }
       }
       return LayoutBuilder(builder: (context, constraints) {

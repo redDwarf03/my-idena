@@ -27,10 +27,8 @@ class _TimeViewState extends State<TimeView> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(
-        Duration(milliseconds: 1000), (_) => getDifferenceTime());
-
     super.initState();
+    _timeUpdate();
   }
 
   @override
@@ -221,18 +219,6 @@ class _TimeViewState extends State<TimeView> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, top: 0, bottom: 0),
-                        child: Container(
-                          height: 2,
-                          decoration: BoxDecoration(
-                            color: MyIdenaAppTheme.background,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -242,20 +228,17 @@ class _TimeViewState extends State<TimeView> {
         });
   }
 
-  Future<void> getDifferenceTime() async {
-    if (_timer.isActive) {
+  _timeUpdate() {
+    _timer = Timer(const Duration(seconds: 1), () async {
       _myTime = await NTP.now();
-
-      try {
-        final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-        _ntpTime = _myTime.add(Duration(milliseconds: offset));
-
-        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-      } catch (e) {}
-
+      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
+      _ntpTime = _myTime.add(Duration(milliseconds: offset));
       if (!mounted) return;
-      setState(() {});
-    }
+      setState(() {
+        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
+      });
+      _timeUpdate();
+    });
   }
 
   Widget getDifferenceTimeMsg() {

@@ -290,70 +290,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
 
       validationSessionInfo.loadingFlipsOk = true;
 
-      // get Words
-      int nbWords = 0;
-      if (typeSession == EpochPeriod.LongSession) {
-        if (simulationMode) {
-          try {
-            String data = await loadAssets(
-                flipLongHashesResponse.result[i].hash + "_words");
-            flipWordsResponse = flipWordsResponseFromJson(data);
-          } catch (e) {
-            Map<String, dynamic> mapWords = {
-              "jsonrpc": "2.0",
-              "id": 51,
-              "result": {
-                "words": [0, 0]
-              }
-            };
-            flipWordsResponse = FlipWordsResponse.fromJson(mapWords);
-          }
-          nbWords = flipWordsResponse.result.words.length;
-        } else {
-          try {
-            HttpClientRequest requestWords = await httpClient
-                .postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-            requestWords.headers.set('content-type', 'application/json');
-            Map<String, dynamic> mapWords = {
-              'method': FlipWordsRequest.METHOD_NAME,
-              'params': [flipLongHashesResponse.result[i].hash],
-              'id': 101,
-              'key': idenaSharedPreferences.keyApp
-            };
-            FlipWordsRequest flipWordsRequest =
-                FlipWordsRequest.fromJson(mapWords);
-            requestWords
-                .add(utf8.encode(json.encode(flipWordsRequest.toJson())));
-            logger.i(new JsonEncoder.withIndent('  ').convert(requestWords));
-            HttpClientResponse responseWords = await requestWords.close();
-            if (responseWords.statusCode == 200) {
-              String replyWords =
-                  await responseWords.transform(utf8.decoder).join();
-              logger.i(replyWords);
-              flipWordsResponse = flipWordsResponseFromJson(replyWords);
-              nbWords = flipWordsResponse.result.words.length;
-            }
-          } catch (e) {
-            validationSessionInfo.loadingWordsOk = false;
-          }
-        }
-
-        validationSessionInfo.loadingWordsOk = true;
-
-        List<Word> listWords = new List(nbWords);
-        for (int j = 0; j < nbWords; j++) {
-          Word word;
-          if (flipWordsResponse.result.words[j] == 0) {
-            word = new Word(name: "", desc: "");
-          } else {
-            word = new Word(
-                name: wordsMap[flipWordsResponse.result.words[j]]["name"],
-                desc: wordsMap[flipWordsResponse.result.words[j]]["desc"]);
-          }
-          listWords[j] = word;
-        }
-        validationSessionInfoFlips.listWords = listWords;
-      }
       if (validationSessionInfoFlips.extra) {
         listSessionValidationFlipExtra.add(validationSessionInfoFlips);
       } else {
@@ -370,6 +306,66 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
   } finally {}
 
   return validationSessionInfo;
+}
+
+Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
+  HttpClient httpClient = new HttpClient();
+  IdenaSharedPreferences idenaSharedPreferences =
+      await SharedPreferencesHelper.getIdenaSharedPreferences();
+  FlipWordsResponse flipWordsResponse;
+  int nbWords = 0;
+  if (simulationMode) {
+    try {
+      String data = await loadAssets(hash + "_words");
+      flipWordsResponse = flipWordsResponseFromJson(data);
+    } catch (e) {
+      Map<String, dynamic> mapWords = {
+        "jsonrpc": "2.0",
+        "id": 51,
+        "result": {
+          "words": [0, 0]
+        }
+      };
+      flipWordsResponse = FlipWordsResponse.fromJson(mapWords);
+    }
+    nbWords = flipWordsResponse.result.words.length;
+  } else {
+    try {
+      HttpClientRequest requestWords =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      requestWords.headers.set('content-type', 'application/json');
+      Map<String, dynamic> mapWords = {
+        'method': FlipWordsRequest.METHOD_NAME,
+        'params': [hash],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      FlipWordsRequest flipWordsRequest = FlipWordsRequest.fromJson(mapWords);
+      requestWords.add(utf8.encode(json.encode(flipWordsRequest.toJson())));
+      logger.i(new JsonEncoder.withIndent('  ').convert(requestWords));
+      HttpClientResponse responseWords = await requestWords.close();
+      if (responseWords.statusCode == 200) {
+        String replyWords = await responseWords.transform(utf8.decoder).join();
+        logger.i(replyWords);
+        flipWordsResponse = flipWordsResponseFromJson(replyWords);
+        nbWords = flipWordsResponse.result.words.length;
+      }
+    } catch (e) {}
+  }
+  List<Word> listWords = new List(nbWords);
+  for (int j = 0; j < nbWords; j++) {
+    Word word;
+    if (flipWordsResponse.result.words[j] == 0) {
+      word = new Word(name: "", desc: "");
+    } else {
+      word = new Word(
+          name: wordsMap[flipWordsResponse.result.words[j]]["name"],
+          desc: wordsMap[flipWordsResponse.result.words[j]]["desc"]);
+    }
+    listWords[j] = word;
+  }
+
+  return listWords;
 }
 
 Future<String> loadAssets(String fileName) async {
