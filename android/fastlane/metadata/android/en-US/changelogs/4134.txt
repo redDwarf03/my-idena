@@ -1,0 +1,3 @@
+- Improved performance for displaying words during the validation session
+
+We recommend this update !
