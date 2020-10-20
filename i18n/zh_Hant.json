@@ -202,11 +202,16 @@
   "Start date": "Start date",
   "Start now": "Start now",
   "Show all": "Show all",
-  "Part of the optionsis hidden": "Part of the optionsis hidden",
+  "Part of the options is hidden": "Part of the options is hidden",
   "Name of options": "Name of options",
   "Option 1": "Option 1",
   "Option 2": "Option 2",
-  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters."
+  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters.",
+  "Current block": "Current block",
+  "Highest block": "Highest block",
+  "Peers are not found.": "Peers are not found.",
+  "Synchronizing blocks.": "Synchronizing blocks."
+  
 
   
 

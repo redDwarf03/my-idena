@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
@@ -24,16 +27,40 @@ class _MiningViewState extends State<MiningView> {
   bool firstStateForView;
   HttpService httpService = new HttpService();
   DnaAll dnaAll;
+  Timer _timer;
+  BcnSyncingResponse bcnSyncingResponse;
+  int initialCurrentBlock = 0;
 
   @override
   void initState() {
     firstStateForView = widget.firstState;
     super.initState();
+    _timeUpdate();
   }
 
   @override
   void dispose() {
+    _timer.cancel();
     super.dispose();
+  }
+
+  _timeUpdate() {
+    _timer = Timer(const Duration(seconds: 1), () async {
+      bcnSyncingResponse = await httpService.checkSync();
+      if (initialCurrentBlock == 0 &&
+          bcnSyncingResponse != null &&
+          bcnSyncingResponse.result.highestBlock == 0) {
+        initialCurrentBlock = bcnSyncingResponse.result.currentBlock;
+      }
+      if (initialCurrentBlock != 0 &&
+          bcnSyncingResponse != null && bcnSyncingResponse.result.highestBlock != 0 &&
+          bcnSyncingResponse.result.highestBlock == bcnSyncingResponse.result.currentBlock) {
+        initialCurrentBlock = 0;
+      }
+      if (!mounted) return;
+      setState(() {});
+      _timeUpdate();
+    });
   }
 
   @override
@@ -104,127 +131,343 @@ class _MiningViewState extends State<MiningView> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  UtilIdentity().canMine(
-                                                              dnaAll) ==
-                                                          true
-                                                      ? Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
+                                                  bcnSyncingResponse != null && bcnSyncingResponse.result.syncing
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 10,
+                                                                  right: 10,
+                                                                  top: 8,
+                                                                  bottom: 16),
+                                                          child: Column(
+                                                            children: <Widget>[
+                                                              Row(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    bcnSyncingResponse !=
+                                                                                null &&
+                                                                            bcnSyncingResponse.result.highestBlock ==
+                                                                                0
+                                                                        ? Text(
+                                                                            AppLocalizations.of(context).translate("Peers are not found."),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: MyIdenaAppTheme.fontName,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 14,
+                                                                              letterSpacing: -0.2,
+                                                                              color: MyIdenaAppTheme.darkText,
+                                                                            ),
+                                                                          )
+                                                                        : Text(
+                                                                            AppLocalizations.of(context).translate("Synchronizing blocks."),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: MyIdenaAppTheme.fontName,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 14,
+                                                                              letterSpacing: -0.2,
+                                                                              color: MyIdenaAppTheme.darkText,
+                                                                            ),
+                                                                          ),
+                                                                  ]),
+                                                              SizedBox(
+                                                                  height: 20),
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Expanded(
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Text(
+                                                                          AppLocalizations.of(context)
+                                                                              .translate("Current block"),
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontFamily:
+                                                                                MyIdenaAppTheme.fontName,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                14,
+                                                                            letterSpacing:
+                                                                                -0.2,
+                                                                            color:
+                                                                                MyIdenaAppTheme.darkText,
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(top: 4),
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                4,
+                                                                            width:
+                                                                                90,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: HexColor('#000000').withOpacity(0.2),
+                                                                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                            ),
+                                                                            child:
+                                                                                Row(
+                                                                              children: <Widget>[
+                                                                                Container(
+                                                                                  width: 90,
+                                                                                  height: 4,
+                                                                                  decoration: BoxDecoration(
+                                                                                    gradient: LinearGradient(colors: [
+                                                                                      HexColor('#000000').withOpacity(0.1),
+                                                                                      HexColor('#000000'),
+                                                                                    ]),
+                                                                                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(top: 6),
+                                                                          child:
+                                                                              Text(
+                                                                            bcnSyncingResponse.result.currentBlock.toString(),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: MyIdenaAppTheme.fontName,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontSize: 12,
+                                                                              color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Text(
+                                                                              AppLocalizations.of(context).translate("Highest block"),
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyle(
+                                                                                fontFamily: MyIdenaAppTheme.fontName,
+                                                                                fontWeight: FontWeight.w500,
+                                                                                fontSize: 14,
+                                                                                letterSpacing: -0.2,
+                                                                                color: MyIdenaAppTheme.darkText,
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(top: 4),
+                                                                              child: Container(
+                                                                                height: 4,
+                                                                                width: 90,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: HexColor('#000000').withOpacity(0.2),
+                                                                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                                ),
+                                                                                child: Row(
+                                                                                  children: <Widget>[
+                                                                                    Container(
+                                                                                      width: 90,
+                                                                                      height: 4,
+                                                                                      decoration: BoxDecoration(
+                                                                                        gradient: LinearGradient(colors: [
+                                                                                          HexColor('#000000').withOpacity(0.1),
+                                                                                          HexColor('#000000'),
+                                                                                        ]),
+                                                                                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(top: 6),
+                                                                              child: Text(
+                                                                                bcnSyncingResponse.result.highestBlock.toString(),
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(
+                                                                                  fontFamily: MyIdenaAppTheme.fontName,
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontSize: 12,
+                                                                                  color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  bcnSyncingResponse.result.highestBlock -
+                                                                              initialCurrentBlock <=
+                                                                          0
+                                                                      ? Center(
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                          valueColor:
+                                                                              AlwaysStoppedAnimation<Color>(Colors.red),
+                                                                          strokeWidth:
+                                                                              2,
+                                                                        ))
+                                                                      : Center(
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                          value:
+                                                                              
+                                                                              (100 - ((bcnSyncingResponse.result.highestBlock - bcnSyncingResponse.result.currentBlock) * 100 / (bcnSyncingResponse.result.highestBlock - initialCurrentBlock))) / 100,
+                                                                          valueColor:
+                                                                              AlwaysStoppedAnimation<Color>(Colors.green),
+                                                                          strokeWidth:
+                                                                              2,
+                                                                        )),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : UtilIdentity().canMine(
+                                                                  dnaAll) ==
+                                                              true
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: <
+                                                                  Widget>[
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
                                                                             .only(
                                                                         left: 0,
                                                                         bottom:
                                                                             2),
-                                                                child: Text(
-                                                                  AppLocalizations.of(
-                                                                          context)
-                                                                      .translate(
-                                                                          "Mining"),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      fontFamily: MyIdenaAppTheme
-                                                                          .fontName,
-                                                                      fontWeight:
-                                                                          FontWeight
+                                                                    child: Text(
+                                                                      AppLocalizations.of(
+                                                                              context)
+                                                                          .translate(
+                                                                              "Mining"),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          fontFamily: MyIdenaAppTheme
+                                                                              .fontName,
+                                                                          fontWeight: FontWeight
                                                                               .w500,
-                                                                      fontSize:
-                                                                          16,
-                                                                      letterSpacing:
-                                                                          -0.1,
-                                                                      color: MyIdenaAppTheme
-                                                                          .darkText),
-                                                                ),
-                                                              ),
-                                                              displayMiningSwitch(),
-                                                              displayPenalty(),
-                                                            ])
-                                                      : Row(children: <Widget>[
-                                                          Expanded(
-                                                              child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: <
-                                                                      Widget>[
-                                                                Text(
-                                                                  AppLocalizations.of(
-                                                                          context)
-                                                                      .translate(
-                                                                          "Your current status doesn't allow you to mine."),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontFamily:
-                                                                        MyIdenaAppTheme
-                                                                            .fontName,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontSize:
-                                                                        14,
-                                                                    letterSpacing:
-                                                                        -0.2,
-                                                                    color: MyIdenaAppTheme
-                                                                        .darkText,
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      top: 4),
-                                                                  child:
-                                                                      Container(
-                                                                    height: 4,
-                                                                    width: 90,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: HexColor(
-                                                                              '#000000')
-                                                                          .withOpacity(
-                                                                              0.2),
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(4.0)),
+                                                                          fontSize:
+                                                                              16,
+                                                                          letterSpacing:
+                                                                              -0.1,
+                                                                          color:
+                                                                              MyIdenaAppTheme.darkText),
                                                                     ),
-                                                                    child: Row(
-                                                                      children: <
-                                                                          Widget>[
-                                                                        Container(
-                                                                          width:
-                                                                              90,
-                                                                          height:
-                                                                              4,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            gradient:
-                                                                                LinearGradient(colors: [
-                                                                              HexColor('#000000').withOpacity(0.1),
-                                                                              HexColor('#000000'),
-                                                                            ]),
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(4.0)),
+                                                                  ),
+                                                                  displayMiningSwitch(),
+                                                                  displayPenalty(),
+                                                                ])
+                                                          : Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                  Expanded(
+                                                                      child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .center,
+                                                                          crossAxisAlignment: CrossAxisAlignment
+                                                                              .start,
+                                                                          children: <
+                                                                              Widget>[
+                                                                        Text(
+                                                                          AppLocalizations.of(context)
+                                                                              .translate("Your current status doesn't allow you to mine."),
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontFamily:
+                                                                                MyIdenaAppTheme.fontName,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontSize:
+                                                                                14,
+                                                                            letterSpacing:
+                                                                                -0.2,
+                                                                            color:
+                                                                                MyIdenaAppTheme.darkText,
                                                                           ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ]))
-                                                        ]),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(top: 4),
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                4,
+                                                                            width:
+                                                                                90,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: HexColor('#000000').withOpacity(0.2),
+                                                                              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                            ),
+                                                                            child:
+                                                                                Row(
+                                                                              children: <Widget>[
+                                                                                Container(
+                                                                                  width: 90,
+                                                                                  height: 4,
+                                                                                  decoration: BoxDecoration(
+                                                                                    gradient: LinearGradient(colors: [
+                                                                                      HexColor('#000000').withOpacity(0.1),
+                                                                                      HexColor('#000000'),
+                                                                                    ]),
+                                                                                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ]))
+                                                                ]),
                                                 ],
                                               ),
                                             ),
@@ -252,7 +495,11 @@ class _MiningViewState extends State<MiningView> {
     if (double.tryParse(dnaAll.dnaIdentityResponse.result.penalty) != null &&
         double.parse(dnaAll.dnaIdentityResponse.result.penalty) > 0) {
       return Text(
-        AppLocalizations.of(context).translate("Penalty: ") + double.parse(dnaAll.dnaIdentityResponse.result.penalty).toDouble().toStringAsFixed(4) + " iDNA",
+        AppLocalizations.of(context).translate("Penalty: ") +
+            double.parse(dnaAll.dnaIdentityResponse.result.penalty)
+                .toDouble()
+                .toStringAsFixed(4) +
+            " iDNA",
         style: TextStyle(
             fontFamily: MyIdenaAppTheme.fontName,
             fontWeight: FontWeight.w500,

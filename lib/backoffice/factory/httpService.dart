@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:logger/logger.dart';
+import 'package:my_idena/backoffice/bean/bcn_syncing_request.dart';
+import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_request.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
@@ -534,5 +536,40 @@ class HttpService {
       logger.e(e.toString());
     } finally {}
     return currentPeriod;
+  }
+
+  Future<BcnSyncingResponse> checkSync() async {
+    HttpClient httpClient = new HttpClient();
+    BcnSyncingRequest bcnSyncingRequest;
+    BcnSyncingResponse bcnSyncingResponse;
+    try {
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+      if (idenaSharedPreferences == null) {
+        return null;
+      }
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> map = {
+        'method': BcnSyncingRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      bcnSyncingRequest = BcnSyncingRequest.fromJson(map);
+      request.add(utf8.encode(json.encode(bcnSyncingRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        bcnSyncingResponse = bcnSyncingResponseFromJson(reply);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+    return bcnSyncingResponse;
   }
 }
