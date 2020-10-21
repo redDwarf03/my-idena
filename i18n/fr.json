@@ -210,7 +210,8 @@
   "Current block": "Bloc courant",
   "Highest block": "Bloc max",
   "Peers are not found.": "Les pairs ne sont pas trouvées.",
-  "Synchronizing blocks.": "Blocs en cours de synchronisation."
+  "Synchronizing blocks.": "Blocs en cours de synchronisation.",
+  "Open in blockchain explorer >": "Ouvrir l'explorateur de la blockchain >"
 
   
 
