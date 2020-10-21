@@ -5,6 +5,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends StatefulWidget {
   final AnimationController animationController;
@@ -73,6 +74,7 @@ class _ProfileViewState extends State<ProfileView> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
+                                            Row(children: <Widget>[
                                             Text(
                                               AppLocalizations.of(context)
                                                   .translate("Address"),
@@ -86,6 +88,13 @@ class _ProfileViewState extends State<ProfileView> {
                                                 color: MyIdenaAppTheme.darkText,
                                               ),
                                             ),
+                                            IconButton(icon: Icon(Icons.person_search, size: 8)
+                                            ,
+                                            onPressed: () async {
+                                              String url = 'https://scan.idena.io/address/' + dnaAll.dnaIdentityResponse.result.address;
+                                              await launch(url);
+                                            }),
+                                            ],),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 4),
@@ -128,7 +137,7 @@ class _ProfileViewState extends State<ProfileView> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
-                                              child: Text(
+                                              child: SelectableText(
                                                 dnaAll.dnaIdentityResponse
                                                     .result.address,
                                                 textAlign: TextAlign.center,
