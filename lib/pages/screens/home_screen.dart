@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
@@ -192,7 +194,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     children: <Widget>[
                       getMainListViewUI(scrollController, listViews,
                           widget.animationController),
-                      getAppBarUI(topBarAnimation, widget.animationController,
+                      getAppBarUI(
+                          topBarAnimation,
+                          widget.animationController,
                           topBarOpacity),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,

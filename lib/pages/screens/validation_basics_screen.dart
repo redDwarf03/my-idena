@@ -100,7 +100,9 @@ class _ValidationBasicsScreenState extends State<ValidationBasicsScreen>
             getMainListViewUI(
                 scrollController, listViews, widget.animationController),
             getAppBarUI(
-                topBarAnimation, widget.animationController, topBarOpacity),
+                topBarAnimation,
+                widget.animationController,
+                topBarOpacity),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

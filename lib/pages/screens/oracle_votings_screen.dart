@@ -75,7 +75,6 @@ class _OracleVotingsScreenState extends State<OracleVotingsScreen>
         animationController: widget.animationController,
       ),
     );
-
   }
 
   @override
@@ -89,7 +88,9 @@ class _OracleVotingsScreenState extends State<OracleVotingsScreen>
             getMainListViewUI(
                 scrollController, listViews, widget.animationController),
             getAppBarUI(
-                topBarAnimation, widget.animationController, topBarOpacity),
+                topBarAnimation,
+                widget.animationController,
+                topBarOpacity),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
@@ -98,5 +99,4 @@ class _OracleVotingsScreenState extends State<OracleVotingsScreen>
       ),
     );
   }
-
 }

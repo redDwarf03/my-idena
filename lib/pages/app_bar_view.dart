@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/views/sync_info_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
-Widget getAppBarUI(Animation<double> topBarAnimation,
-    AnimationController animationController, double topBarOpacity) {
+Widget getAppBarUI(
+    Animation<double> topBarAnimation,
+    AnimationController animationController,
+    double topBarOpacity) {
   return Column(
     children: <Widget>[
       AnimatedBuilder(
@@ -37,11 +42,11 @@ Widget getAppBarUI(Animation<double> topBarAnimation,
                     Padding(
                       padding: EdgeInsets.only(
                           left: 16,
-                          right: 16,
+                          right: 0,
                           top: 16 - 8.0 * topBarOpacity,
                           bottom: 12 - 8.0 * topBarOpacity),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Expanded(
                             child: Padding(
@@ -62,18 +67,10 @@ Widget getAppBarUI(Animation<double> topBarAnimation,
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Sync",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontFamily: MyIdenaAppTheme.fontName,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 22 + 6 - 6 * topBarOpacity,
-                                  letterSpacing: 1.2,
-                                  color: MyIdenaAppTheme.darkerText,
-                                ),
-                              ),
-                            ),
+                                padding: const EdgeInsets.all(0.0),
+                                child: Container(child: 
+                                SyncInfoView()
+                                ,)),
                           ),
                         ],
                       ),
@@ -121,4 +118,3 @@ Widget getMainListViewUI(ScrollController scrollController,
     },
   );
 }
-

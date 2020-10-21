@@ -97,7 +97,6 @@ class _ParametersScreenState extends State<ParametersScreen>
         animationController: widget.animationController,
       ),
     );
-
   }
 
   @override
@@ -111,7 +110,9 @@ class _ParametersScreenState extends State<ParametersScreen>
             getMainListViewUI(
                 scrollController, listViews, widget.animationController),
             getAppBarUI(
-                topBarAnimation, widget.animationController, topBarOpacity),
+                topBarAnimation,
+                widget.animationController,
+                topBarOpacity),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

@@ -72,7 +72,8 @@ class _CreateFlipScreenState extends State<CreateFlipScreen>
 
     listViews.add(
       FlipsCreatorView(
-        dnaAll: widget.dnaAll, step: 1,
+        dnaAll: widget.dnaAll,
+        step: 1,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -102,5 +103,4 @@ class _CreateFlipScreenState extends State<CreateFlipScreen>
       ),
     );
   }
-
 }
