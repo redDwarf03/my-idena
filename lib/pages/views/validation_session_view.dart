@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/pages/myIdena_home.dart';

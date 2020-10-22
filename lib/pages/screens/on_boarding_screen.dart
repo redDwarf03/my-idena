@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
@@ -11,15 +10,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
-import 'package:ntp/ntp.dart';
-
-DateTime _myTime;
-DateTime _ntpTime;
-int _differenceTime;
-bool timeOK;
 Timer _timerCheckNode;
-Timer _timerDifferenceTime;
-
 class OnBoardingScreen extends StatefulWidget {
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
@@ -48,7 +39,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     keyAppController.dispose();
     _nodeController.close();
     _timerCheckNode.cancel();
-    _timerDifferenceTime.cancel();
+
     super.dispose();
   }
 
@@ -58,7 +49,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    _timerCheckNode =
+     _timerCheckNode =
         Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
   }
 
@@ -97,9 +88,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 },
                 children: <Widget>[
                   _welcome(index: 1),
-                  _getTime(index: 2),
-                  _getPageUrlApi(index: 3, contextStream: context),
-                  _getPageKeyApp(index: 4, contextStream: context),
+                  _getPageUrlApi(index: 2, contextStream: context),
+                  _getPageKeyApp(index: 3, contextStream: context),
                 ],
               ),
             );
@@ -157,45 +147,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       fontFamily: MyIdenaAppTheme.fontName,
                       letterSpacing: -0.2),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _getTime({int index}) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Image.asset('assets/images/img_time.png'),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  AppLocalizations.of(context).translate("Always be on time"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35,
-                      fontFamily: MyIdenaAppTheme.fontName,
-                      letterSpacing: -0.2,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                _getPageIndicator(index, Colors.white54, Colors.white),
-                SizedBox(
-                  height: 20,
-                ),
-                new OnBoardingTimer(),
               ],
             ),
           ),
@@ -450,13 +401,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         SizedBox(
           width: 20,
         ),
-        Container(
-          width: index == 4 ? 16 : 6,
-          height: 6,
-          decoration: BoxDecoration(
-              color: index == 4 ? colorsByDefault : colorsSelected,
-              borderRadius: BorderRadius.circular(10)),
-        ),
       ],
     );
   }
@@ -467,7 +411,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
-            if (_checkNodeConnection && timeOK) {
+            if (_checkNodeConnection) {
               return IconButton(
                 icon: Icon(FlevaIcons.home_outline),
                 color: Colors.green,
@@ -530,123 +474,5 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             );
           }
         });
-  }
-}
-
-class OnBoardingTimer extends StatefulWidget {
-  @override
-  _OnBoardingTimerState createState() => _OnBoardingTimerState();
-}
-
-class _OnBoardingTimerState extends State<OnBoardingTimer> {
-  @override
-  void initState() {
-
-    super.initState();
-    _timeUpdate();
-  }
-
-  _timeUpdate() {
-    _timerDifferenceTime = Timer(const Duration(seconds: 1), () async {
-      _myTime = await NTP.now();
-      final int offset = await NTP.getNtpOffset(localTime: DateTime.now());
-      _ntpTime = _myTime.add(Duration(milliseconds: offset));
-      if (!mounted) return;
-      setState(() {
-        _differenceTime = _myTime.difference(_ntpTime).inMilliseconds;
-      });
-      _timeUpdate();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timerDifferenceTime.cancel();
-    super.dispose();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(AppLocalizations.of(context).translate("My set time: "),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: MyIdenaAppTheme.fontName,
-                letterSpacing: -0.2)),
-        Text(
-          _myTime != null
-              ? DateFormat.yMMMMEEEEd(
-                      Localizations.localeOf(context).languageCode)
-                  .add_Hms()
-                  .format(_myTime.toLocal())
-              : "",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: MyIdenaAppTheme.fontName,
-              letterSpacing: -0.2),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(AppLocalizations.of(context).translate("The current time: "),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: MyIdenaAppTheme.fontName,
-                letterSpacing: -0.2)),
-        Text(
-          _ntpTime != null
-              ? DateFormat.yMMMMEEEEd(
-                      Localizations.localeOf(context).languageCode)
-                  .add_Hms()
-                  .format(_ntpTime.toLocal())
-              : "",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontFamily: MyIdenaAppTheme.fontName,
-              letterSpacing: -0.2),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        getDifferenceTimeMsg(),
-      ],
-    );
-  }
-
-  Widget getDifferenceTimeMsg() {
-    if (_differenceTime == null || _differenceTime.abs() > 2000) {
-      timeOK = false;
-      return Text(
-        AppLocalizations.of(context).translate(
-            "Please check your local clock. The time must be synchronized with internet time"),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.red[400],
-            fontSize: 16,
-            fontFamily: MyIdenaAppTheme.fontName,
-            letterSpacing: -0.2),
-      );
-    } else {
-      timeOK = true;
-      return Text(
-        AppLocalizations.of(context).translate("Ok, you are on time !"),
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.green[400],
-            fontSize: 16,
-            fontFamily: MyIdenaAppTheme.fontName,
-            letterSpacing: -0.2),
-      );
-    }
   }
 }

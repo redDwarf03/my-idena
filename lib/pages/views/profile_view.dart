@@ -5,13 +5,13 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
 
-  const ProfileView(
-      {Key key, this.animationController, this.animation})
+  const ProfileView({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -128,7 +128,7 @@ class _ProfileViewState extends State<ProfileView> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
-                                              child: Text(
+                                              child: SelectableText(
                                                 dnaAll.dnaIdentityResponse
                                                     .result.address,
                                                 textAlign: TextAlign.center,
@@ -140,6 +140,32 @@ class _ProfileViewState extends State<ProfileView> {
                                                   color: MyIdenaAppTheme.grey
                                                       .withOpacity(0.5),
                                                 ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 6),
+                                              child: new GestureDetector(
+                                                onTap: () async {
+                                                  String url =
+                                                      'https://scan.idena.io/address/' +
+                                                          dnaAll
+                                                              .dnaIdentityResponse
+                                                              .result
+                                                              .address;
+                                                  await launch(url);
+                                                },
+                                                child: new Text(AppLocalizations.of(context)
+                                                  .translate("Open in blockchain explorer >"),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      MyIdenaAppTheme.fontName,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13,
+                                                  color: MyIdenaAppTheme.grey
+                                                      .withOpacity(0.5),
+                                                ),),
                                               ),
                                             ),
                                           ],

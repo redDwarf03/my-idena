@@ -42,8 +42,7 @@
   "Portofolio": "Portefeuille",
   "Parameters have been saved": "Les paramètres ont été sauvegardés",
   "Thanks for help": "Merci pour votre aide",
-  "Github url": "https://github.com/redDwarf03/my-idena/",
-  "Github": "Github",
+  "Created by": "Créé par",
   "Start checking keywords": "Démarrer la qualification des mots clés",
   "Your answers are not yet submitted": "Vos réponses ne sont pas encore envoyées",
   "Please qualify the keywords relevance and submit the answers.": "Veuillez qualifier la pertinence des mots clés et envoyez les réponses.",
@@ -202,11 +201,16 @@
   "Start date": "Start date",
   "Start now": "Start now",
   "Show all": "Show all",
-  "Part of the optionsis hidden": "Part of the optionsis hidden",
+  "Part of the options is hidden": "Part of the options is hidden",
   "Name of options": "Name of options",
   "Option 1": "Option 1",
   "Option 2": "Option 2",
-  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters."
+  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters.",
+  "Current block": "Bloc courant",
+  "Highest block": "Bloc max",
+  "Peers are not found.": "Les pairs ne sont pas trouvées.",
+  "Synchronizing blocks.": "Blocs en cours de synchronisation.",
+  "Open in blockchain explorer >": "Ouvrir l'explorateur de la blockchain >"
 
   
 

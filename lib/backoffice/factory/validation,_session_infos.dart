@@ -146,7 +146,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
     }
 
     FlipGetResponse flipGetResponse;
-    FlipWordsResponse flipWordsResponse;
     List<ValidationSessionInfoFlips> listSessionValidationFlip = new List();
     List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
         new List();

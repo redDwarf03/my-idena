@@ -153,8 +153,7 @@ class _DonationViewState extends State<DonationView> {
                                                 child: TextFormField(
                                                   controller: number,
                                                   inputFormatters: [
-                                                    WhitelistingTextInputFormatter
-                                                        .digitsOnly
+                                                    FilteringTextInputFormatter.digitsOnly
                                                   ],
                                                   validator: (val) => val
                                                           .isEmpty
@@ -198,7 +197,7 @@ class _DonationViewState extends State<DonationView> {
                                                     hintText: AppLocalizations
                                                             .of(context)
                                                         .translate(
-                                                            "Enter your amount"),
+                                                            "Enter your amount") + " (iDNA)",
                                                     suffix: Text(
                                                       "iDNA    ",
                                                       style: TextStyle(

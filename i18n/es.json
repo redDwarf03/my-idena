@@ -42,8 +42,7 @@
   "Portofolio": "Cartera",
   "Parameters have been saved": "Los parámetros se han guardado",
   "Thanks for help": "Gracias por su ayuda.",
-  "Github url": "https://github.com/redDwarf03/my-idena/",
-  "Github": "Github",
+  "Created by": "Created by",
   "Start checking keywords": "Empezar a comprobar las palabras claves",
   "Your answers are not yet submitted": "Sus respuestas aún no han sido enviadas",
   "Please qualify the keywords relevance and submit the answers.": "Por favor, califique la relevancia de las palabras clave y envíe las respuestas.",
@@ -202,11 +201,16 @@
   "Start date": "Start date",
   "Start now": "Start now",
   "Show all": "Show all",
-  "Part of the optionsis hidden": "Part of the optionsis hidden",
+  "Part of the options is hidden": "Part of the options is hidden",
   "Name of options": "Name of options",
   "Option 1": "Option 1",
   "Option 2": "Option 2",
-  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters."
+  "After publishing or launching, you will not be able to edit the voting parameters.": "After publishing or launching, you will not be able to edit the voting parameters.",
+  "Current block": "Current block",
+  "Highest block": "Highest block",
+  "Peers are not found.": "Peers are not found.",
+  "Synchronizing blocks.": "Synchronizing blocks.",
+  "Open in blockchain explorer >": "Open in blockchain explorer >"
 
   
 
