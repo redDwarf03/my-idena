@@ -6,10 +6,8 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/sync_info_view.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
-Widget getAppBarUI(
-    Animation<double> topBarAnimation,
-    AnimationController animationController,
-    double topBarOpacity) {
+Widget getAppBarUI(Animation<double> topBarAnimation,
+    AnimationController animationController, double topBarOpacity) {
   return Column(
     children: <Widget>[
       AnimatedBuilder(
@@ -68,9 +66,9 @@ Widget getAppBarUI(
                           Expanded(
                             child: Padding(
                                 padding: const EdgeInsets.all(0.0),
-                                child: Container(child: 
-                                SyncInfoView()
-                                ,)),
+                                child: Container(
+                                  child: SyncInfoView(),
+                                )),
                           ),
                         ],
                       ),
