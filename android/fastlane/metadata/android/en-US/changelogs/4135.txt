@@ -1,0 +1,3 @@
+- add synchronization status
+- add link to scan.idena.io
+- add copy/paste function for address in home page

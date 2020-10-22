@@ -155,7 +155,7 @@ class _AboutViewState extends State<AboutView> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 0, right: 0, top: 0, bottom: 0),
+                                        left: 10, right: 10, top: 0, bottom: 0),
                                     child: Container(
                                       height: 2,
                                       decoration: BoxDecoration(
@@ -298,7 +298,7 @@ class _AboutViewState extends State<AboutView> {
                                             children: <Widget>[
                                               Text(
                                                 AppLocalizations.of(context)
-                                                    .translate("Github"),
+                                                    .translate("Created by"),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily:
@@ -358,23 +358,6 @@ class _AboutViewState extends State<AboutView> {
                                                 child: Image.asset(
                                                     'assets/images/reddwarf.jpg',
                                                     width: 70),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 6),
-                                                child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate("Github url"),
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontFamily: MyIdenaAppTheme
-                                                        .fontName,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 13,
-                                                    color: MyIdenaAppTheme.grey
-                                                        .withOpacity(0.5),
-                                                  ),
-                                                ),
                                               ),
                                             ],
                                           ),

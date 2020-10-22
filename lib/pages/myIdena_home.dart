@@ -196,19 +196,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      ListTile(
-                        leading: Icon(FlevaIcons.settings_2_outline),
-                        title: Text(AppLocalizations.of(context)
-                            .translate("Parameters")),
-                        onTap: () {
-                          setState(() {
-                            initTabIconsList(2);
-                            tabBody = ParametersScreen(
-                                animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
                       /*ListTile(
                         leading: Icon(FlevaIcons.bulb_outline),
                         title: Text(
@@ -223,19 +210,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      ListTile(
-                        leading: Icon(Icons.info_outline),
-                        title: Text(
-                            AppLocalizations.of(context).translate("About")),
-                        onTap: () {
-                          setState(() {
-                            initTabIconsList(3);
-                            tabBody = AboutScreen(
-                                animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
                     ],
                   ),
                 ),

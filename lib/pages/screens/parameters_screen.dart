@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/paramRPC_view.dart';
-import 'package:my_idena/pages/views/time_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/app_bar_view.dart';
 
@@ -55,7 +54,7 @@ class _ParametersScreenState extends State<ParametersScreen>
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 4;
+    const int count = 2;
     listViews.add(
       TitleView(
         titleTxt: "Parameters",
@@ -73,27 +72,6 @@ class _ParametersScreenState extends State<ParametersScreen>
             parent: widget.animationController,
             curve:
                 Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: "Always be on time",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TimeView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );

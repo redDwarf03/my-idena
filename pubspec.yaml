@@ -64,8 +64,6 @@ dependencies:
   
   connectivity: ^0.4.9+5
 
-  ntp: ^1.0.7
-  
   rxdart: ^0.24.1
     
   image: ^2.1.18

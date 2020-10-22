@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:convert/convert.dart';
-import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/votings_list_response.dart';
 import 'package:my_idena/backoffice/factory/oracle_service.dart';
 
