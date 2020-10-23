@@ -65,3 +65,4 @@ ios/Runner.ipa
 ios/Runner.app.dSYM.zip
 ios/fastlane/report.xml
 ios/Flutter/.last_build_id
+pubspec.lock
