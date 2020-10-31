@@ -6,6 +6,7 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
 import 'package:my_idena/myIdena_app/tabIcon_data.dart';
+import 'package:my_idena/pages/screens/invite_screen.dart';
 import 'package:my_idena/pages/screens/market_screen.dart';
 import 'package:my_idena/pages/screens/oracle_votings_screen.dart';
 import 'package:my_idena/pages/screens/parameters_screen.dart';
@@ -183,6 +184,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),
+                      ListTile(
+                        leading: Icon(Icons.person_add),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Invite")),
+                        onTap: () {
+                          setState(() {
+                            initTabIconsList(0);
+                            tabBody = InviteScreen(
+                                animationController: animationController);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
                       /*ListTile(
                         leading: Icon(FlevaIcons.eye_outline),
                         title: Text(
@@ -196,7 +210,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      /*ListTile(
+                      ListTile(
                         leading: Icon(FlevaIcons.bulb_outline),
                         title: Text(
                             AppLocalizations.of(context).translate("Validation")),
@@ -209,7 +223,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           });
                           Navigator.of(context).pop();
                         },
-                      ),*/
+                      ),
                     ],
                   ),
                 ),
