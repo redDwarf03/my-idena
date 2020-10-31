@@ -210,7 +210,14 @@
   "Highest block": "Highest block",
   "Peers are not found.": "Peers are not found.",
   "Synchronizing blocks.": "Synchronizing blocks.",
-  "Open in blockchain explorer >": "Open in blockchain explorer >"
-  
+  "Open in blockchain explorer >": "Open in blockchain explorer >",
+  "Invite": "Invite",
+  "Invite new person": "Invite new person",
+  "Invitee address": "Invitee address",
+  "Create invitation": "Create invitation",
+  "You can issue the invitation to a specific identity address": "You can issue the invitation to a specific identity address"
+
+
+    
 
 }
