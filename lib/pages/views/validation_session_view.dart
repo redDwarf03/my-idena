@@ -141,7 +141,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       isLoading = true;
     });
     try {
-      validationSessionInfo = await getValidationSessionInfo(
+      validationSessionInfo = await getValidationSessionFlipsList(
           currentPeriod, null, widget.simulationMode);
     } catch (e) {} finally {
       setState(() => isLoading = false);
@@ -154,13 +154,14 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       return Center(child: CircularProgressIndicator());
     }
     return FutureBuilder(
-        future: getValidationSessionInfo(
+        future: getValidationSessionFlipsList(
             currentPeriod, validationSessionInfo, widget.simulationMode),
         builder: (BuildContext context,
             AsyncSnapshot<ValidationSessionInfo> snapshot) {
           if (snapshot.hasData) {
             validationSessionInfo = snapshot.data;
-            if (validationSessionInfo == null) {
+            if (validationSessionInfo == null ||
+                validationSessionInfo.listSessionValidationFlip == null) {
               return Column(
                 children: [
                   SizedBox(
@@ -189,327 +190,156 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                 ],
               );
             } else {
-              if (validationSessionInfo.listSessionValidationFlip == null) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      width: 10,
-                      height: 30,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate(
-                          "Hey oh! Idena ! Wake up !\nPlease refresh..."),
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    FloatingActionButton(
-                      onPressed: _refreshAction,
-                      backgroundColor: Colors.red,
-                      child: new Icon(Icons.refresh, color: Colors.white),
-                    ),
-                  ],
-                );
-              } else {
-                List<ValidationSessionInfoFlips> listSessionValidationFlip =
-                    validationSessionInfo.listSessionValidationFlip;
-                if (initStateOk) {
-                  if (checkFlipsQualityProcessForValidationSession == false) {
-                    selectionFlipList = new List();
-                    for (int i = 0;
-                        i <
-                            validationSessionInfo
-                                .listSessionValidationFlip.length;
-                        i++) {
-                      selectionFlipList.add(AnswerType.NONE);
-                      selectedIconList.add(0);
-                    }
-                  } else {
-                    for (int i = 0;
-                        i <
-                            validationSessionInfo
-                                .listSessionValidationFlip.length;
-                        i++) {
-                      relevantFlipList.add(RelevantType.RELEVANT);
-                      selectedIconList.add(0);
-                    }
+              List<ValidationSessionInfoFlips> listSessionValidationFlip = validationSessionInfo.listSessionValidationFlip;
+              if (initStateOk) {
+                if (checkFlipsQualityProcessForValidationSession == false) {
+                  selectionFlipList = new List();
+                  for (int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++) {
+                    selectionFlipList.add(AnswerType.NONE);
+                    selectedIconList.add(0);
                   }
-                  initStateOk = false;
+                } else {
+                  for (int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++) {
+                    relevantFlipList.add(RelevantType.RELEVANT);
+                    selectedIconList.add(0);
+                  }
                 }
-                return AnimatedBuilder(
-                    animation: widget.mainScreenAnimationController,
-                    builder: (BuildContext context, Widget child) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width - 25,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      FadeTransition(
-                                        opacity: widget.mainScreenAnimation,
-                                        child: Transform(
-                                            transform: Matrix4.translationValues(
-                                                0.0,
-                                                30 *
-                                                    (1.0 -
-                                                        widget
-                                                            .mainScreenAnimation
-                                                            .value),
-                                                0.0),
-                                            child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height -
-                                                  300,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  30,
-                                              child: ListView.builder(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 0,
-                                                          bottom: 0,
-                                                          right: 16,
-                                                          left: 16),
-                                                  itemCount:
-                                                      selectionFlipList.length,
-                                                  physics:
-                                                      BouncingScrollPhysics(),
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    final int count =
-                                                        selectionFlipList
-                                                                    .length >
-                                                                25
-                                                            ? 30
-                                                            : selectionFlipList
-                                                                .length;
-                                                    final Animation<
-                                                        double> animation = Tween<
-                                                                double>(
-                                                            begin: 0.0,
-                                                            end: 1.0)
-                                                        .animate(CurvedAnimation(
-                                                            parent:
-                                                                animationController,
-                                                            curve: Interval(
-                                                                (1 / count) *
-                                                                    index,
-                                                                1.0,
-                                                                curve: Curves
-                                                                    .fastOutSlowIn)));
-                                                    animationController
-                                                        .forward();
-                                                    return AnimatedBuilder(
-                                                        animation:
-                                                            animationController,
-                                                        builder: (BuildContext
-                                                                context,
-                                                            Widget child) {
-                                                          return FadeTransition(
-                                                              opacity:
-                                                                  animation,
-                                                              child: Transform(
-                                                                transform: Matrix4
-                                                                    .translationValues(
-                                                                        100 *
-                                                                            (1.0 -
-                                                                                animation.value),
-                                                                        0.0,
-                                                                        0.0),
-                                                                child: SizedBox(
-                                                                  width: 400,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Container(
-                                                                            height:
-                                                                                ((MediaQuery.of(context).size.height - 340)).toDouble(),
-                                                                            decoration: selectionFlipList[index] == AnswerType.LEFT
-                                                                                ? new BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10.0), border: new Border.all(color: Colors.green, width: 5))
-                                                                                : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                setState(() {
-                                                                                  selectedIconList[index] = 1;
-                                                                                  selectionFlipList[index] = AnswerType.LEFT;
-                                                                                });
-                                                                              },
-                                                                              child: Column(
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                children: [
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesLeft[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            height:
-                                                                                ((MediaQuery.of(context).size.height - 340)).toDouble(),
-                                                                            decoration: selectionFlipList[index] == AnswerType.RIGHT
-                                                                                ? new BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10.0), border: new Border.all(color: Colors.green, width: 5))
-                                                                                : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                setState(() {
-                                                                                  selectedIconList[index] = 1;
-                                                                                  selectionFlipList[index] = AnswerType.RIGHT;
-                                                                                });
-                                                                              },
-                                                                              child: Column(
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                children: [
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                  Image(image: ResizeImage(MemoryImage(listSessionValidationFlip[index].listImagesRight[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      FutureBuilder<
-                                                                              List<
-                                                                                  Word>>(
-                                                                          future: getWordsFromHash(
-                                                                              listSessionValidationFlip[index].hash,
-                                                                              widget.simulationMode),
-                                                                          builder: (BuildContext context, AsyncSnapshot<List<Word>> snapshot) {
-                                                                            if (snapshot.hasData ==
-                                                                                false) {
-                                                                              return Center(child: CircularProgressIndicator());
-                                                                            } else {
-                                                                              return checkWords(snapshot.data, index);
-                                                                            }
-                                                                          }),
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.only(
-                                                                            top:
-                                                                                5,
-                                                                            bottom:
-                                                                                15),
-                                                                        child:
+                initStateOk = false;
+              }
+              return AnimatedBuilder(
+                  animation: widget.mainScreenAnimationController,
+                  builder: (BuildContext context, Widget child) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width - 25,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    FadeTransition(opacity: widget.mainScreenAnimation,
+                                      child: Transform(transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.mainScreenAnimation.value), 0.0),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height -300,
+                                            width: MediaQuery.of(context).size.width - 30,
+                                            child: ListView.builder(
+                                                padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
+                                                itemCount: selectionFlipList.length,
+                                                physics: BouncingScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder: (BuildContext context, int index) {
+                                                  final int count = selectionFlipList.length > 25 ? 30 : selectionFlipList.length;
+                                                  final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0)
+                                                      .animate(CurvedAnimation(parent: animationController, curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn)));
+                                                  animationController.forward();
+                                                  return AnimatedBuilder(
+                                                      animation: animationController,
+                                                      builder: (BuildContext context, Widget child) {
+                                                        return FadeTransition(
+                                                            opacity: animation,
+                                                            child: Transform(transform: Matrix4.translationValues(100 * (1.0 - animation.value), 0.0, 0.0),
+                                                              child: SizedBox(width: 400,
+                                                                child: Column(
+                                                                  children: [
+                                                                    FutureBuilder<ValidationSessionInfoFlips>(
+                                                                        future: getValidationSessionFlipDetail(listSessionValidationFlip[index], widget.simulationMode),
+                                                                        builder: (BuildContext context, AsyncSnapshot<ValidationSessionInfoFlips> snapshotFlip) {
+                                                                          if (snapshotFlip.hasData == false) {
+                                                                            return Center(child: CircularProgressIndicator());
+                                                                          } else {
+                                                                            return displayFlips(snapshotFlip.data, index);
+                                                                          }
+                                                                        }
+                                                                    ),
+                                                                    (currentPeriod == EpochPeriod.LongSession && checkFlipsQualityProcessForValidationSession == true) ? 
+                                                                    FutureBuilder<List<Word>>(
+                                                                        future: getWordsFromHash(listSessionValidationFlip[index].hash, widget.simulationMode),
+                                                                        builder: (BuildContext context, AsyncSnapshot<List<Word>> snapshotWords) {
+                                                                          if (snapshotWords.hasData == false) {
+                                                                            return Center(child: CircularProgressIndicator());
+                                                                          } else {
+                                                                            return checkWords(snapshotWords.data, index);
+                                                                          }
+                                                                        }
+                                                                    ) : SizedBox(width: 1),
+                                                                    Padding(padding: const EdgeInsets.only(top: 5, bottom: 15),
+                                                                      child: Container(
+                                                                        height: 4,
+                                                                        width: MediaQuery.of(context).size.width - 80,
+                                                                        decoration: BoxDecoration(
+                                                                          color: HexColor('#000000').withOpacity(0.2),
+                                                                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                        ),
+                                                                        child: Row(
+                                                                          children: <Widget>[
                                                                             Container(
-                                                                          height:
-                                                                              4,
-                                                                          width:
-                                                                              MediaQuery.of(context).size.width - 80,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                HexColor('#000000').withOpacity(0.2),
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(4.0)),
-                                                                          ),
-                                                                          child:
-                                                                              Row(
-                                                                            children: <Widget>[
-                                                                              Container(
-                                                                                width: MediaQuery.of(context).size.width - 80,
-                                                                                height: 4,
-                                                                                decoration: BoxDecoration(
-                                                                                  gradient: LinearGradient(colors: [
-                                                                                    HexColor('#000000').withOpacity(0.1),
-                                                                                    HexColor('#000000'),
-                                                                                  ]),
-                                                                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                                                                                ),
-                                                                              )
-                                                                            ],
-                                                                          ),
+                                                                              width: MediaQuery.of(context).size.width - 80,
+                                                                              height: 4,
+                                                                              decoration: BoxDecoration(
+                                                                                gradient: LinearGradient(colors: [
+                                                                                  HexColor('#000000').withOpacity(0.1),
+                                                                                  HexColor('#000000'),]),
+                                                                                borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                              ),
+                                                                            )
+                                                                          ],
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                              ));
-                                                        });
-                                                  }),
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                new ValidationThumbnailsView(
-                                  iconList: iconList,
-                                  nbFlips: listSessionValidationFlip.length,
-                                  selectedIconList: selectedIconList,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    Container(child: getChrono()),
-                                    Container(
-                                        child:
-                                            ValidationStartCheckingKeywordsButtonView(
-                                      controllerChrono: controllerChrono,
-                                      selectionFlipList: selectionFlipList,
-                                      dnaAll: dnaAllForValidationSession,
-                                      currentPeriod: currentPeriod,
-                                      animationController: animationController,
-                                      checkFlipsQualityProcess:
-                                          checkFlipsQualityProcessForValidationSession,
-                                    )),
-                                    Container(
-                                        child: ValidationShortSessionButtonView(
-                                      selectedIconList: selectedIconList,
-                                      selectionFlipList: selectionFlipList,
-                                      currentPeriod: currentPeriod,
-                                      dnaAll: dnaAllForValidationSession,
-                                      animationController: animationController,
-                                      validationSessionInfo:
-                                          validationSessionInfo,
-                                    )),
-                                    Container(
-                                        child:
-                                            new ValidationLongSessionButtonView(
-                                      relevantFlipList: relevantFlipList,
-                                      selectedIconList: selectedIconList,
-                                      selectionFlipList: selectionFlipList,
-                                      currentPeriod: currentPeriod,
-                                      dnaAll: dnaAllForValidationSession,
-                                      checkFlipsQualityProcess:
-                                          checkFlipsQualityProcessForValidationSession,
-                                      validationSessionInfo:
-                                          validationSessionInfo,
-                                    )),
+                                                              ),
+                                                            ));
+                                                      });
+                                                }),
+                                          )),
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-              }
+                              ),
+                              new ValidationThumbnailsView(iconList: iconList, nbFlips: listSessionValidationFlip.length, selectedIconList: selectedIconList,),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Container(child: getChrono()),
+                                  Container(child: ValidationStartCheckingKeywordsButtonView(
+                                    controllerChrono: controllerChrono,
+                                    selectionFlipList: selectionFlipList,
+                                    dnaAll: dnaAllForValidationSession,
+                                    currentPeriod: currentPeriod,
+                                    animationController: animationController,
+                                    checkFlipsQualityProcess: checkFlipsQualityProcessForValidationSession,
+                                  )),
+                                  Container(child: ValidationShortSessionButtonView(
+                                    selectedIconList: selectedIconList,
+                                    selectionFlipList: selectionFlipList,
+                                    currentPeriod: currentPeriod,
+                                    dnaAll: dnaAllForValidationSession,
+                                    animationController: animationController,
+                                    validationSessionInfo: validationSessionInfo,
+                                  )),
+                                  Container(child: ValidationLongSessionButtonView(
+                                    relevantFlipList: relevantFlipList,
+                                    selectedIconList: selectedIconList,
+                                    selectionFlipList: selectionFlipList,
+                                    currentPeriod: currentPeriod,
+                                    dnaAll: dnaAllForValidationSession,
+                                    checkFlipsQualityProcess: checkFlipsQualityProcessForValidationSession,
+                                    validationSessionInfo: validationSessionInfo,
+                                  )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  });
             }
           } else {
             return Center(child: CircularProgressIndicator());
@@ -566,6 +396,60 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       ],
     );
   }
+
+  Widget displayFlips(ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+                                                                    return Row(mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: <Widget>[
+                                                                        Container(
+                                                                          height: ((MediaQuery.of(context).size.height - 340)).toDouble(),
+                                                                          decoration: selectionFlipList[index] == AnswerType.LEFT
+                                                                              ? new BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10.0), border: new Border.all(color: Colors.green, width: 5))
+                                                                              : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+                                                                          child: GestureDetector(
+                                                                            onTap: () {
+                                                                              setState(() {
+                                                                                selectedIconList[index] = 1;
+                                                                                selectionFlipList[index] = AnswerType.LEFT;
+                                                                              });
+                                                 
+                                                                            },
+                                                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesLeft[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesLeft[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesLeft[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesLeft[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Container(
+                                                                          height: ((MediaQuery.of(context).size.height - 340)).toDouble(),
+                                                                          decoration: selectionFlipList[index] == AnswerType.RIGHT
+                                                                              ? new BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10.0), border: new Border.all(color: Colors.green, width: 5))
+                                                                              : new BoxDecoration(border: new Border.all(color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
+                                                                          child: GestureDetector(
+                                                                            onTap: () {
+                                                                              setState(() {
+                                                                                selectedIconList[index] = 1;
+                                                                                selectionFlipList[index] = AnswerType.RIGHT;
+                                                                              });
+                                                                            },
+                                                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesRight[0]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesRight[1]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesRight[2]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                                Image(image: ResizeImage(MemoryImage(validationSessionInfoFlips.listImagesRight[3]), height: ((MediaQuery.of(context).size.height - 350) ~/ 4).toInt())),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+
+  }
+
 
   Widget checkWords(List<Word> listWords, int index) {
     if (currentPeriod == EpochPeriod.LongSession &&

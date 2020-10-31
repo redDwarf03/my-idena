@@ -59,7 +59,7 @@ class ValidationSessionInfo {
   List<ValidationSessionInfoFlips> listSessionValidationFlipExtra;
 }
 
-Future<ValidationSessionInfo> getValidationSessionInfo(
+Future<ValidationSessionInfo> getValidationSessionFlipsList(
     String typeSession,
     ValidationSessionInfo validationSessionInfoInput,
     bool simulationMode) async {
@@ -69,7 +69,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
 
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
   validationSessionInfo.loadingFlipsOk = false;
-  validationSessionInfo.loadingWordsOk = false;
 
   String method;
 
@@ -145,7 +144,6 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
       }
     }
 
-    FlipGetResponse flipGetResponse;
     List<ValidationSessionInfoFlips> listSessionValidationFlip = new List();
     List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
         new List();
@@ -180,121 +178,13 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
             flipLongHashesResponse.result[i].available;
       }
 
-      // get Flip
-      if (simulationMode) {
-        String data =
-            await loadAssets(validationSessionInfoFlips.hash + "_images");
-        flipGetResponse = flipGetResponseFromJson(data);
-      } else {
-        HttpClientRequest requestFlip =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        requestFlip.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> mapFlip = {
-          'method': FlipGetRequest.METHOD_NAME,
-          'params': [validationSessionInfoFlips.hash],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-
-        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapFlip);
-        requestFlip.add(utf8.encode(json.encode(flipGetRequest.toJson())));
-        HttpClientResponse responseFlip = await requestFlip.close();
-        if (responseFlip.statusCode == 200) {
-          String replyFlip = await responseFlip.transform(utf8.decoder).join();
-          logger.i(replyFlip);
-          flipGetResponse = flipGetResponseFromJson(replyFlip);
-        }
-      }
-
-      Uint8List imageUint8_1;
-      Uint8List imageUint8_2;
-      Uint8List imageUint8_3;
-      Uint8List imageUint8_4;
-
-      Decoded images;
-      Decoded privateImages;
-      List listImages = new List(4);
-      List orders = new List(2);
-      if (flipGetResponse.result.privateHex != null &&
-          flipGetResponse.result.privateHex != '0x') {
-        // ;[images] = decode(publicHex || hex)
-        if (flipGetResponse.result.publicHex != null) {
-          images = Rlp.decode(
-              Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
-              true);
-        } else {
-          if (flipGetResponse.result.hex != null) {
-            images = Rlp.decode(
-                Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-          }
-        }
-
-        // let privateImages
-        // ;[privateImages, orders] = decode(privateHex)
-        privateImages = Rlp.decode(
-            Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
-            true);
-
-        // images = images.concat(privateImages)
-        imageUint8_1 = images.data[0][0];
-        imageUint8_2 = images.data[0][1];
-        imageUint8_3 = privateImages.data[0][0];
-        imageUint8_4 = privateImages.data[0][1];
-        listImages[0] = imageUint8_1;
-        listImages[1] = imageUint8_2;
-        listImages[2] = imageUint8_3;
-        listImages[3] = imageUint8_4;
-        orders = privateImages.data[1];
-      } else {
-        // TODO: implement this case
-        // ;[images, orders] = decode(hex)
-        var images3;
-        images3 = Rlp.decode(
-            Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-      }
-
-      String order1 =
-          orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
-      String order2 =
-          orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
-      String order3 =
-          orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
-      String order4 =
-          orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
-      validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImagesLeft[0] =
-          listImages[int.tryParse(order1) ?? 0];
-      validationSessionInfoFlips.listImagesLeft[1] =
-          listImages[int.tryParse(order2) ?? 0];
-      validationSessionInfoFlips.listImagesLeft[2] =
-          listImages[int.tryParse(order3) ?? 0];
-      validationSessionInfoFlips.listImagesLeft[3] =
-          listImages[int.tryParse(order4) ?? 0];
-
-      // TODO .. dirty
-      order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
-      order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
-      order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
-      order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
-      validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
-      validationSessionInfoFlips.listImagesRight[0] =
-          listImages[int.tryParse(order1) ?? 0];
-      validationSessionInfoFlips.listImagesRight[1] =
-          listImages[int.tryParse(order2) ?? 0];
-      validationSessionInfoFlips.listImagesRight[2] =
-          listImages[int.tryParse(order3) ?? 0];
-      validationSessionInfoFlips.listImagesRight[3] =
-          listImages[int.tryParse(order4) ?? 0];
-
-      validationSessionInfo.loadingFlipsOk = true;
-
       if (validationSessionInfoFlips.extra) {
         listSessionValidationFlipExtra.add(validationSessionInfoFlips);
       } else {
         listSessionValidationFlip.add(validationSessionInfoFlips);
       }
     }
+    validationSessionInfo.loadingFlipsOk = true;
 
     validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
     validationSessionInfo.listSessionValidationFlipExtra =
@@ -305,6 +195,129 @@ Future<ValidationSessionInfo> getValidationSessionInfo(
   } finally {}
 
   return validationSessionInfo;
+}
+
+Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
+    ValidationSessionInfoFlips validationSessionInfoFlips,
+    bool simulationMode) async {
+  try {
+    HttpClient httpClient = new HttpClient();
+    IdenaSharedPreferences idenaSharedPreferences =
+        await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+    // get Flip
+    FlipGetResponse flipGetResponse;
+    if (simulationMode) {
+      String data =
+          await loadAssets(validationSessionInfoFlips.hash + "_images");
+      flipGetResponse = flipGetResponseFromJson(data);
+    } else {
+      HttpClientRequest requestFlip =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      requestFlip.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> mapFlip = {
+        'method': FlipGetRequest.METHOD_NAME,
+        'params': [validationSessionInfoFlips.hash],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+
+      FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapFlip);
+      requestFlip.add(utf8.encode(json.encode(flipGetRequest.toJson())));
+      HttpClientResponse responseFlip = await requestFlip.close();
+      if (responseFlip.statusCode == 200) {
+        String replyFlip = await responseFlip.transform(utf8.decoder).join();
+        logger.i(replyFlip);
+        flipGetResponse = flipGetResponseFromJson(replyFlip);
+      }
+    }
+
+    Uint8List imageUint8_1;
+    Uint8List imageUint8_2;
+    Uint8List imageUint8_3;
+    Uint8List imageUint8_4;
+
+    Decoded images;
+    Decoded privateImages;
+    List listImages = new List(4);
+    List orders = new List(2);
+    if (flipGetResponse.result.privateHex != null &&
+        flipGetResponse.result.privateHex != '0x') {
+      // ;[images] = decode(publicHex || hex)
+      if (flipGetResponse.result.publicHex != null) {
+        images = Rlp.decode(
+            Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
+            true);
+      } else {
+        if (flipGetResponse.result.hex != null) {
+          images = Rlp.decode(
+              Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+        }
+      }
+
+      // let privateImages
+      // ;[privateImages, orders] = decode(privateHex)
+      privateImages = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+          true);
+
+      // images = images.concat(privateImages)
+      imageUint8_1 = images.data[0][0];
+      imageUint8_2 = images.data[0][1];
+      imageUint8_3 = privateImages.data[0][0];
+      imageUint8_4 = privateImages.data[0][1];
+      listImages[0] = imageUint8_1;
+      listImages[1] = imageUint8_2;
+      listImages[2] = imageUint8_3;
+      listImages[3] = imageUint8_4;
+      orders = privateImages.data[1];
+    } else {
+      // TODO: implement this case
+      // ;[images, orders] = decode(hex)
+      var images3;
+      images3 = Rlp.decode(
+          Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+    }
+
+    String order1 =
+        orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
+    String order2 =
+        orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
+    String order3 =
+        orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
+    String order4 =
+        orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
+    validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
+    validationSessionInfoFlips.listImagesLeft[0] =
+        listImages[int.tryParse(order1) ?? 0];
+    validationSessionInfoFlips.listImagesLeft[1] =
+        listImages[int.tryParse(order2) ?? 0];
+    validationSessionInfoFlips.listImagesLeft[2] =
+        listImages[int.tryParse(order3) ?? 0];
+    validationSessionInfoFlips.listImagesLeft[3] =
+        listImages[int.tryParse(order4) ?? 0];
+
+    // TODO .. dirty
+    order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
+    order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
+    order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
+    order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
+    validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
+    validationSessionInfoFlips.listImagesRight[0] =
+        listImages[int.tryParse(order1) ?? 0];
+    validationSessionInfoFlips.listImagesRight[1] =
+        listImages[int.tryParse(order2) ?? 0];
+    validationSessionInfoFlips.listImagesRight[2] =
+        listImages[int.tryParse(order3) ?? 0];
+    validationSessionInfoFlips.listImagesRight[3] =
+        listImages[int.tryParse(order4) ?? 0];
+
+  } catch (e) {
+    logger.e(e.toString());
+  } finally {}
+
+  return validationSessionInfoFlips;
 }
 
 Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
