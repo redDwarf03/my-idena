@@ -89,48 +89,52 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: "Online mining status",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+      listViews.add(
+        TitleView(
+          titleTxt: "Online mining status",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 2, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
 
-    listViews.add(
-      MiningView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-        firstState: widget.firstState,
-      ),
-    );
+      listViews.add(
+        MiningView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 3, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+          firstState: widget.firstState,
+        ),
+      );
 
-    listViews.add(
-      TitleView(
-        titleTxt: "Validation",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+      listViews.add(
+        TitleView(
+          titleTxt: "Validation",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 4, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
 
-    listViews.add(
-      ValidationSessionInfosView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+      listViews.add(
+        ValidationSessionInfosView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 5, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
 
     listViews.add(
       TitleView(
@@ -153,27 +157,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: "Recent transactions",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
+      listViews.add(
+        TitleView(
+          titleTxt: "Recent transactions",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 8, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
 
-    listViews.add(
-      TransactionsView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 9, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-  }
+      listViews.add(
+        TransactionsView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 9, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
+    }
+  
 
   @override
   Widget build(BuildContext context) {
