@@ -4,7 +4,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
+import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 
 class ValidationLongSessionButtonView extends StatefulWidget {
   final List selectionFlipList;
@@ -55,7 +55,8 @@ class _ValidationLongSessionButtonViewState
       }
 
       if (nbIrrelevant != 0 && nbRelevant / nbIrrelevant < 3) {
-        return Text("The number of flips that can be reported\nshould be limited to 1/3",
+        return Text(
+            "The number of flips that can be reported\nshould be limited to 1/3",
             style: TextStyle(
                 fontFamily: MyIdenaAppTheme.fontName,
                 fontSize: 14,

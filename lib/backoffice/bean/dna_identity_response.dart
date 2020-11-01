@@ -19,13 +19,13 @@ class DnaIdentityResponse {
 
   String jsonrpc;
   int id;
-  Result result;
+  DnaIdentityResponseResult result;
 
   factory DnaIdentityResponse.fromJson(Map<String, dynamic> json) =>
       DnaIdentityResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: Result.fromJson(json["result"]),
+        result: DnaIdentityResponseResult.fromJson(json["result"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,8 +35,8 @@ class DnaIdentityResponse {
       };
 }
 
-class Result {
-  Result({
+class DnaIdentityResponseResult {
+  DnaIdentityResponseResult({
     this.address,
     this.profileHash,
     this.stake,
@@ -80,7 +80,8 @@ class Result {
   String penalty;
   dynamic lastValidationFlags;
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory DnaIdentityResponseResult.fromJson(Map<String, dynamic> json) =>
+      DnaIdentityResponseResult(
         address: json["address"],
         profileHash: json["profileHash"],
         stake: json["stake"],

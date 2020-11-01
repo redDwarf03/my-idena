@@ -10,6 +10,7 @@ import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/pages/views/validation_session_infos_view.dart';
 import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/utils/util_demo_mode.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.animationController, this.firstState})
@@ -192,9 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     children: <Widget>[
                       getMainListViewUI(scrollController, listViews,
                           widget.animationController),
-                      getAppBarUI(
-                          topBarAnimation,
-                          widget.animationController,
+                      getAppBarUI(topBarAnimation, widget.animationController,
                           topBarOpacity),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,

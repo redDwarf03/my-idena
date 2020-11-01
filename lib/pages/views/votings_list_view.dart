@@ -20,7 +20,6 @@ class VotingsListView extends StatefulWidget {
   _VotingsListViewState createState() => _VotingsListViewState();
 }
 
-
 class _VotingsListViewState extends State<VotingsListView> {
   int nbVotings = 30;
 
@@ -99,7 +98,8 @@ class _VotingsListViewState extends State<VotingsListView> {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    Result voting =
+                                                    VotingsListResponseResult
+                                                        voting =
                                                         votingsListResponse
                                                             .result[index];
                                                     return getVotingDisplay(
@@ -128,7 +128,7 @@ class _VotingsListViewState extends State<VotingsListView> {
         });
   }
 
-  Widget getVotingDisplay(Result voting) {
+  Widget getVotingDisplay(VotingsListResponseResult voting) {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(top: 10),

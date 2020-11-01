@@ -5,7 +5,7 @@ import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/enums/answer_type.dart' as AnswerType;
-import 'package:my_idena/backoffice/factory/validation,_session_infos.dart';
+import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 
 class ValidationShortSessionButtonView extends StatefulWidget {
   final List selectionFlipList;
@@ -14,7 +14,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
   final DnaAll dnaAll;
   final String currentPeriod;
   final AnimationController animationController;
-  
+
   const ValidationShortSessionButtonView(
       {Key key,
       this.selectionFlipList,
@@ -33,8 +33,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
 class _ValidationShortSessionButtonViewState
     extends State<ValidationShortSessionButtonView> {
   Widget build(BuildContext context) {
-    if (widget.currentPeriod ==
-        EpochPeriod.ShortSession) {
+    if (widget.currentPeriod == EpochPeriod.ShortSession) {
       for (int i = 0; i < widget.selectionFlipList.length; i++) {
         if (widget.selectionFlipList[i] == AnswerType.NONE) {
           return SizedBox();
@@ -52,9 +51,12 @@ class _ValidationShortSessionButtonViewState
               Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) =>
-                        ValidationSessionScreen(animationController: widget.animationController, dnaAll: widget.dnaAll, typeLaunchSession: EpochPeriod.LongSession, checkFlipsQualityProcess: false,),
-
+                    builder: (BuildContext context) => ValidationSessionScreen(
+                      animationController: widget.animationController,
+                      dnaAll: widget.dnaAll,
+                      typeLaunchSession: EpochPeriod.LongSession,
+                      checkFlipsQualityProcess: false,
+                    ),
                   ));
             },
             padding: EdgeInsets.all(5.0),

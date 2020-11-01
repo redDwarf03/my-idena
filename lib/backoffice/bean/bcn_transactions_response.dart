@@ -4,88 +4,93 @@
 
 import 'dart:convert';
 
-BcnTransactionsResponse bcnTransactionsResponseFromJson(String str) => BcnTransactionsResponse.fromJson(json.decode(str));
+BcnTransactionsResponse bcnTransactionsResponseFromJson(String str) =>
+    BcnTransactionsResponse.fromJson(json.decode(str));
 
-String bcnTransactionsResponseToJson(BcnTransactionsResponse data) => json.encode(data.toJson());
+String bcnTransactionsResponseToJson(BcnTransactionsResponse data) =>
+    json.encode(data.toJson());
 
 class BcnTransactionsResponse {
-    BcnTransactionsResponse({
-        this.jsonrpc,
-        this.id,
-        this.result,
-    });
+  BcnTransactionsResponse({
+    this.jsonrpc,
+    this.id,
+    this.result,
+  });
 
-    String jsonrpc;
-    int id;
-    Result result;
+  String jsonrpc;
+  int id;
+  BcnTransactionsResponseResult result;
 
-    factory BcnTransactionsResponse.fromJson(Map<String, dynamic> json) => BcnTransactionsResponse(
+  factory BcnTransactionsResponse.fromJson(Map<String, dynamic> json) =>
+      BcnTransactionsResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: Result.fromJson(json["result"]),
-    );
+        result: BcnTransactionsResponseResult.fromJson(json["result"]),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "result": result.toJson(),
-    };
+      };
 }
 
-class Result {
-    Result({
-        this.transactions,
-        this.token,
-    });
+class BcnTransactionsResponseResult {
+  BcnTransactionsResponseResult({
+    this.transactions,
+    this.token,
+  });
 
-    List<Transaction> transactions;
-    String token;
+  List<Transaction> transactions;
+  String token;
 
-    factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory BcnTransactionsResponseResult.fromJson(Map<String, dynamic> json) =>
+      BcnTransactionsResponseResult(
         transactions: json["transactions"] == null
             ? null
-            : List<Transaction>.from(json["transactions"].map((x) => Transaction.fromJson(x))),
+            : List<Transaction>.from(
+                json["transactions"].map((x) => Transaction.fromJson(x))),
         token: json["token"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
         "token": token,
-    };
+      };
 }
 
 class Transaction {
-    Transaction({
-        this.hash,
-        this.type,
-        this.from,
-        this.to,
-        this.amount,
-        this.tips,
-        this.maxFee,
-        this.nonce,
-        this.epoch,
-        this.payload,
-        this.blockHash,
-        this.usedFee,
-        this.timestamp,
-    });
+  Transaction({
+    this.hash,
+    this.type,
+    this.from,
+    this.to,
+    this.amount,
+    this.tips,
+    this.maxFee,
+    this.nonce,
+    this.epoch,
+    this.payload,
+    this.blockHash,
+    this.usedFee,
+    this.timestamp,
+  });
 
-    String hash;
-    String type;
-    String from;
-    dynamic to;
-    String amount;
-    String tips;
-    String maxFee;
-    int nonce;
-    int epoch;
-    String payload;
-    String blockHash;
-    String usedFee;
-    int timestamp;
+  String hash;
+  String type;
+  String from;
+  dynamic to;
+  String amount;
+  String tips;
+  String maxFee;
+  int nonce;
+  int epoch;
+  String payload;
+  String blockHash;
+  String usedFee;
+  int timestamp;
 
-    factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
         hash: json["hash"],
         type: json["type"],
         from: json["from"],
@@ -99,9 +104,9 @@ class Transaction {
         blockHash: json["blockHash"],
         usedFee: json["usedFee"],
         timestamp: json["timestamp"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "hash": hash,
         "type": type,
         "from": from,
@@ -115,5 +120,5 @@ class Transaction {
         "blockHash": blockHash,
         "usedFee": usedFee,
         "timestamp": timestamp,
-    };
+      };
 }

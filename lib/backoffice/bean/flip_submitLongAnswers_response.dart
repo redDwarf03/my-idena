@@ -4,70 +4,83 @@
 
 import 'dart:convert';
 
-FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponseFromJson(String str) => FlipSubmitLongAnswersResponse.fromJson(json.decode(str));
+FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponseFromJson(
+        String str) =>
+    FlipSubmitLongAnswersResponse.fromJson(json.decode(str));
 
-String flipSubmitLongAnswersResponseToJson(FlipSubmitLongAnswersResponse data) => json.encode(data.toJson());
+String flipSubmitLongAnswersResponseToJson(
+        FlipSubmitLongAnswersResponse data) =>
+    json.encode(data.toJson());
 
 class FlipSubmitLongAnswersResponse {
-    FlipSubmitLongAnswersResponse({
-        this.jsonrpc,
-        this.id,
-        this.result,
-        this.error,
-    });
+  FlipSubmitLongAnswersResponse({
+    this.jsonrpc,
+    this.id,
+    this.result,
+    this.error,
+  });
 
-    String jsonrpc;
-    int id;
-    Error error;
-    Result result;
+  String jsonrpc;
+  int id;
+  FlipSubmitLongAnswersResponseError error;
+  FlipSubmitLongAnswersResponseResult result;
 
-    factory FlipSubmitLongAnswersResponse.fromJson(Map<String, dynamic> json) => FlipSubmitLongAnswersResponse(
+  factory FlipSubmitLongAnswersResponse.fromJson(Map<String, dynamic> json) =>
+      FlipSubmitLongAnswersResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        error: json["error"] != null ? Error.fromJson(json["error"]) : null,
-        result: json["result"] != null ? Result.fromJson(json["result"]) : null,
-    );
+        error: json["error"] != null
+            ? FlipSubmitLongAnswersResponseError.fromJson(json["error"])
+            : null,
+        result: json["result"] != null
+            ? FlipSubmitLongAnswersResponseResult.fromJson(json["result"])
+            : null,
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "error": error.toJson(),
         "result": result.toJson(),
-    };
+      };
 }
 
-class Error {
-    Error({
-        this.code,
-        this.message,
-    });
+class FlipSubmitLongAnswersResponseError {
+  FlipSubmitLongAnswersResponseError({
+    this.code,
+    this.message,
+  });
 
-    int code;
-    String message;
+  int code;
+  String message;
 
-    factory Error.fromJson(Map<String, dynamic> json) => Error(
+  factory FlipSubmitLongAnswersResponseError.fromJson(
+          Map<String, dynamic> json) =>
+      FlipSubmitLongAnswersResponseError(
         code: json["code"],
         message: json["message"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "code": code,
         "message": message,
-    };
+      };
 }
 
-class Result {
-    Result({
-        this.txHash,
-    });
+class FlipSubmitLongAnswersResponseResult {
+  FlipSubmitLongAnswersResponseResult({
+    this.txHash,
+  });
 
-    String txHash;
+  String txHash;
 
-    factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory FlipSubmitLongAnswersResponseResult.fromJson(
+          Map<String, dynamic> json) =>
+      FlipSubmitLongAnswersResponseResult(
         txHash: json["txHash"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "txHash": txHash,
-    };    
+      };
 }
