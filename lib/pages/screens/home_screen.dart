@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
@@ -89,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
+    if (Platform.isIOS) {
       listViews.add(
         TitleView(
           titleTxt: "Online mining status",
@@ -112,29 +115,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           firstState: widget.firstState,
         ),
       );
+    }
 
-      listViews.add(
-        TitleView(
-          titleTxt: "Validation",
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 4, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+    listViews.add(
+      TitleView(
+        titleTxt: "Validation",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
 
-      listViews.add(
-        ValidationSessionInfosView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 5, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+    listViews.add(
+      ValidationSessionInfosView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
 
     listViews.add(
       TitleView(
@@ -157,31 +159,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
-      listViews.add(
-        TitleView(
-          titleTxt: "Recent transactions",
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 8, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+    listViews.add(
+      TitleView(
+        titleTxt: "Recent transactions",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
 
-      listViews.add(
-        TransactionsView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 9, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
-    }
-  
+    listViews.add(
+      TransactionsView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 9, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

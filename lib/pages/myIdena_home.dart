@@ -186,8 +186,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                       ListTile(
                         leading: Icon(Icons.person_add),
-                        title: Text(AppLocalizations.of(context)
-                            .translate("Invite")),
+                        title: Text(
+                            AppLocalizations.of(context).translate("Invite")),
                         onTap: () {
                           setState(() {
                             initTabIconsList(0);
@@ -212,13 +212,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),*/
                       ListTile(
                         leading: Icon(FlevaIcons.bulb_outline),
-                        title: Text(
-                            AppLocalizations.of(context).translate("Validation")),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Validation")),
                         onTap: () {
                           setState(() {
-                            tabBody = ValidationSessionScreen(dnaAll: dnaAll,
-                            checkFlipsQualityProcess: false,
-                            typeLaunchSession: EpochPeriod.ShortSession,
+                            tabBody = ValidationSessionScreen(
+                                dnaAll: dnaAll,
+                                checkFlipsQualityProcess: false,
+                                typeLaunchSession: EpochPeriod.ShortSession,
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();

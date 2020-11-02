@@ -212,7 +212,10 @@
   "Synchronizing blocks.": "Synchronizing blocks.",
   "Open in blockchain explorer >": "Open in blockchain explorer >",
   "Invite": "Invite",
-  "Invite new person": "Invite new person"
+  "Invite new person": "Invite new person",
+  "Create invitation": "Create invitation",
+  "You can issue the invitation to a specific identity address": "You can issue the invitation to a specific identity address"
+
   
 
   

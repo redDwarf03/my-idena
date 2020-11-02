@@ -126,6 +126,7 @@ class _ChartsPriceViewState extends State<ChartsPriceView> {
                                                               children: <
                                                                   Widget>[
                                                                 Expanded(
+                                                                  sleep(const Duration(seconds:1));
                                                                   child: charts.TimeSeriesChart(
                                                                       _seriesLineData,
                                                                       primaryMeasureAxis:

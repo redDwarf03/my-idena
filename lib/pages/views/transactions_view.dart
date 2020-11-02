@@ -42,7 +42,7 @@ class _TransactionsViewState extends State<TransactionsView> {
                     BcnTransactionsResponse bcnTransactionsResponse =
                         snapshot.data;
                     if (bcnTransactionsResponse.result.transactions == null) {
-                      return Container();
+                      bcnTransactionsResponse.result.transactions = new List(0);
                     }
                     List<Transaction> transactions =
                         bcnTransactionsResponse.result.transactions;
@@ -76,14 +76,27 @@ class _TransactionsViewState extends State<TransactionsView> {
                                   padding: const EdgeInsets.only(
                                       top: 0, left: 0, right: 0),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 4, bottom: 8, top: 16),
-                                        child: Row(
+                                            left: 4, bottom: 8, top: 14),
+                                        child: 
+                                        
+                                        transactions.length == 0 ?
+                                        Text(
+                                              "No transaction",
+                                              style: TextStyle(
+                                                  fontFamily:
+                                                      MyIdenaAppTheme.fontName,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16,
+                                                  letterSpacing: -0.1,
+                                                  color:
+                                                      MyIdenaAppTheme.darkText),
+                                            )
+                                        :  Row(
                                           children: [
                                             Text(
                                               AppLocalizations.of(context)
@@ -127,6 +140,8 @@ class _TransactionsViewState extends State<TransactionsView> {
                                           ],
                                         ),
                                       ),
+                                        transactions.length == 0 ? SizedBox(width: 1) :
+
                                       Row(
                                         children: <Widget>[
                                           Expanded(
