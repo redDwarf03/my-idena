@@ -31,7 +31,7 @@ class _TransactionsViewState extends State<TransactionsView> {
           if (snapshot.hasData) {
             dnaAll = snapshot.data;
             if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-              return Text("");
+              return Center(child: CircularProgressIndicator());
             } else {
               return FutureBuilder(
                   future: httpService.getTransactions(
@@ -82,103 +82,116 @@ class _TransactionsViewState extends State<TransactionsView> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4, bottom: 8, top: 14),
-                                        child: 
-                                        
-                                        transactions.length == 0 ?
-                                        Text(
-                                              "No transaction",
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.1,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText),
-                                            )
-                                        :  Row(
-                                          children: [
-                                            Text(
-                                              AppLocalizations.of(context)
-                                                  .translate("Last"),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.1,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText),
-                                            ),
-                                            Text(
-                                              transactions.length.toString() +
-                                                  " ",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.1,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText),
-                                            ),
-                                            Text(
-                                              AppLocalizations.of(context)
-                                                  .translate("transactions"),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.1,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                        transactions.length == 0 ? SizedBox(width: 1) :
-
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5, right: 5, top: 0),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  new Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height: 440,
-                                                    child: ListView.builder(
-                                                        physics:
-                                                            BouncingScrollPhysics(),
-                                                        itemCount:
-                                                            transactions.length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          Transaction
-                                                              transaction =
-                                                              transactions[
-                                                                  index];
-                                                          return getTransactionDisplay(
-                                                              transaction);
-                                                        }),
-                                                  )
+                                        child: transactions.length == 0
+                                            ? Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        "No transaction"),
+                                                style: TextStyle(
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16,
+                                                    letterSpacing: -0.1,
+                                                    color: MyIdenaAppTheme
+                                                        .darkText),
+                                              )
+                                            : Row(
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate("Last"),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            MyIdenaAppTheme
+                                                                .fontName,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 16,
+                                                        letterSpacing: -0.1,
+                                                        color: MyIdenaAppTheme
+                                                            .darkText),
+                                                  ),
+                                                  Text(
+                                                    transactions.length
+                                                            .toString() +
+                                                        " ",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            MyIdenaAppTheme
+                                                                .fontName,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 16,
+                                                        letterSpacing: -0.1,
+                                                        color: MyIdenaAppTheme
+                                                            .darkText),
+                                                  ),
+                                                  Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            "transactions"),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            MyIdenaAppTheme
+                                                                .fontName,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 16,
+                                                        letterSpacing: -0.1,
+                                                        color: MyIdenaAppTheme
+                                                            .darkText),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                          ),
-                                        ],
                                       ),
+                                      transactions.length == 0
+                                          ? SizedBox(width: 1)
+                                          : Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5,
+                                                            right: 5,
+                                                            top: 0),
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        new Container(
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          height: 440,
+                                                          child:
+                                                              ListView.builder(
+                                                                  physics:
+                                                                      BouncingScrollPhysics(),
+                                                                  itemCount:
+                                                                      transactions
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                              context,
+                                                                          int index) {
+                                                                    Transaction
+                                                                        transaction =
+                                                                        transactions[
+                                                                            index];
+                                                                    return getTransactionDisplay(
+                                                                        transaction);
+                                                                  }),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                     ],
                                   ),
                                 ),

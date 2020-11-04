@@ -292,6 +292,9 @@ class HttpService {
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
+      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+        return dnaBecomeOnlineResponse;
+      }
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
@@ -324,6 +327,9 @@ class HttpService {
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
 
+    if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+      return dnaBecomeOfflineResponse;
+    }
     try {
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));

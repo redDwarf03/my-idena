@@ -12,7 +12,6 @@ import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/pages/views/validation_session_infos_view.dart';
 import 'package:my_idena/pages/app_bar_view.dart';
-import 'package:my_idena/utils/util_demo_mode.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.animationController, this.firstState})
@@ -91,31 +90,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
 
-    if (Platform.isIOS) {
-      listViews.add(
-        TitleView(
-          titleTxt: "Online mining status",
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 2, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-        ),
-      );
+    listViews.add(
+      TitleView(
+        titleTxt: "Online mining status",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
 
-      listViews.add(
-        MiningView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 3, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-          firstState: widget.firstState,
-        ),
-      );
-    }
+    listViews.add(
+      MiningView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+        firstState: widget.firstState,
+      ),
+    );
 
     listViews.add(
       TitleView(
