@@ -9,14 +9,19 @@ import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 class ValidationLongSessionButtonView extends StatefulWidget {
   final List<ValidationItem> validationItemList;
   final ValidationSessionInfo validationSessionInfo;
+  final bool simulationMode;
 
-  const ValidationLongSessionButtonView({Key key, this.validationItemList, this.validationSessionInfo}) : super(key: key);
+  const ValidationLongSessionButtonView(
+      {Key key, this.validationItemList, this.validationSessionInfo, this.simulationMode})
+      : super(key: key);
 
   @override
-  _ValidationLongSessionButtonViewState createState() => _ValidationLongSessionButtonViewState();
+  _ValidationLongSessionButtonViewState createState() =>
+      _ValidationLongSessionButtonViewState();
 }
 
-class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionButtonView> {
+class _ValidationLongSessionButtonViewState
+    extends State<ValidationLongSessionButtonView> {
   Widget build(BuildContext context) {
     int nbIrrelevant = 0;
     int nbRelevant = 0;
@@ -24,14 +29,20 @@ class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionB
       if (widget.validationItemList[i].relevanceType == RelevantType.RELEVANT) {
         nbRelevant++;
       }
-      if (widget.validationItemList[i].relevanceType == RelevantType.IRRELEVANT) {
+      if (widget.validationItemList[i].relevanceType ==
+          RelevantType.IRRELEVANT) {
         nbIrrelevant++;
       }
     }
 
     if (nbIrrelevant != 0 && nbRelevant / nbIrrelevant < 3) {
-      return Text("The number of flips that can be reported\nshould be limited to 1/3",
-          style: TextStyle(fontFamily: MyIdenaAppTheme.fontName, fontSize: 14, letterSpacing: -0.1, color: Colors.red));
+      return Text(
+          "The number of flips that can be reported\nshould be limited to 1/3",
+          style: TextStyle(
+              fontFamily: MyIdenaAppTheme.fontName,
+              fontSize: 14,
+              letterSpacing: -0.1,
+              color: Colors.red));
     }
 
     return Column(
@@ -40,7 +51,10 @@ class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionB
         RaisedButton(
           elevation: 5.0,
           onPressed: () {
-            submitLongAnswers(widget.validationItemList, widget.validationSessionInfo);
+            if (widget.simulationMode == false) {
+              submitLongAnswers(
+                  widget.validationItemList, widget.validationSessionInfo);
+            }
             showDialog(
                 context: context,
                 builder: (context) => SimpleDialog(
@@ -51,7 +65,8 @@ class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionB
                           child: Column(
                             children: <Widget>[
                               Text(
-                                AppLocalizations.of(context).translate("Your answers for the validation session have been submitted successfully!"),
+                                AppLocalizations.of(context).translate(
+                                    "Your answers for the validation session have been submitted successfully!"),
                                 style: TextStyle(
                                     fontFamily: MyIdenaAppTheme.fontName,
                                     fontWeight: FontWeight.bold,
@@ -67,7 +82,8 @@ class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionB
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Home()),
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()),
                                   );
                                 },
                                 padding: EdgeInsets.all(5.0),
@@ -75,7 +91,9 @@ class _ValidationLongSessionButtonViewState extends State<ValidationLongSessionB
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
                                 color: Colors.white,
-                                child: Text(AppLocalizations.of(context).translate("Go home"),
+                                child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate("Go home"),
                                     style: TextStyle(
                                       color: Colors.black,
                                       letterSpacing: 1.5,

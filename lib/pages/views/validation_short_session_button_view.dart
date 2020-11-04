@@ -13,16 +13,25 @@ class ValidationShortSessionButtonView extends StatefulWidget {
   final DnaAll dnaAll;
   final String currentPeriod;
   final AnimationController animationController;
+  final bool simulationMode;
 
   const ValidationShortSessionButtonView(
-      {Key key, this.validationItemList, this.dnaAll, this.currentPeriod, this.animationController, this.validationSessionInfo})
+      {Key key,
+      this.validationItemList,
+      this.dnaAll,
+      this.currentPeriod,
+      this.animationController,
+      this.validationSessionInfo,
+      this.simulationMode})
       : super(key: key);
 
   @override
-  _ValidationShortSessionButtonViewState createState() => _ValidationShortSessionButtonViewState();
+  _ValidationShortSessionButtonViewState createState() =>
+      _ValidationShortSessionButtonViewState();
 }
 
-class _ValidationShortSessionButtonViewState extends State<ValidationShortSessionButtonView> {
+class _ValidationShortSessionButtonViewState
+    extends State<ValidationShortSessionButtonView> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -30,11 +39,15 @@ class _ValidationShortSessionButtonViewState extends State<ValidationShortSessio
         RaisedButton(
           elevation: 5.0,
           onPressed: () {
-            submitShortAnswers(widget.validationItemList, widget.validationSessionInfo);
+            if (widget.simulationMode == false) {
+              submitShortAnswers(
+                  widget.validationItemList, widget.validationSessionInfo);
+            }
             Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) => ValidationSessionScreen(
+                    simulationMode: widget.simulationMode,
                     animationController: widget.animationController,
                     dnaAll: widget.dnaAll,
                     typeLaunchSession: EpochPeriod.LongSession,

@@ -215,7 +215,11 @@
   "Invite new person": "Invite new person",
   "Invitee address": "Invitee address",
   "Create invitation": "Create invitation",
-  "You can issue the invitation to a specific identity address": "You can issue the invitation to a specific identity address"
+  "You can issue the invitation to a specific identity address": "You can issue the invitation to a specific identity address",
+  "Try a validation session": "Try a validation session",
+  "Not connected": "Not connected",
+  "Not synchronized": "Not synchronized",
+  "Synchronized": "Synchronized"
 
   
 

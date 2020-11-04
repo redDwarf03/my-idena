@@ -195,21 +195,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      /*ListTile(
+                      ListTile(
                         leading: Icon(FlevaIcons.bulb_outline),
-                        title: Text(AppLocalizations.of(context).translate("Validation")),
+                        title: Text(AppLocalizations.of(context).translate("Try a validation session")),
                         onTap: () {
                           setState(() {
                             dnaAll.dnaGetEpochResponse.result.nextValidation = DateTime.now();
                             tabBody = ValidationSessionScreen(
                                 dnaAll: dnaAll,
+                                simulationMode: true,
                                 checkFlipsQualityProcess: false,
                                 typeLaunchSession: EpochPeriod.ShortSession,
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();
                         },
-                      ),*/
+                      ),
                     ],
                   ),
                 ),

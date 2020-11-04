@@ -557,6 +557,7 @@ class _ValidationSessionCountdownTextState
         MaterialPageRoute(
             builder: (context) => ValidationSessionScreen(
                 typeLaunchSession: EpochPeriod.ShortSession,
+                simulationMode: false,
                 checkFlipsQualityProcess: false,
                 dnaAll: widget.dnaAll,
                 animationController: widget.animationController)));

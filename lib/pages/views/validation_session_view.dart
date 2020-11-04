@@ -45,10 +45,12 @@ class ValidationSessionView extends StatefulWidget {
       this.dnaAll})
       : super(key: key);
   @override
-  _ValidationSessionViewState createState() => new _ValidationSessionViewState();
+  _ValidationSessionViewState createState() =>
+      new _ValidationSessionViewState();
 }
 
-class _ValidationSessionViewState extends State<ValidationSessionView> with TickerProviderStateMixin {
+class _ValidationSessionViewState extends State<ValidationSessionView>
+    with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController controllerChrono;
   bool initStateOk;
@@ -64,11 +66,13 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
   void initState() {
     initStateOk = true;
 
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
 
     dnaAllForValidationSession = widget.dnaAll;
 
-    checkFlipsQualityProcessForValidationSession = widget.checkFlipsQualityProcess;
+    checkFlipsQualityProcessForValidationSession =
+        widget.checkFlipsQualityProcess;
     super.initState();
 
     currentPeriod = widget.typeLaunchSession;
@@ -78,23 +82,40 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
       validationSessionInfo = null;
       validationItemList = new List();
       checkFlipsQualityProcessForValidationSession = false;
-      Duration duree = (dnaAllForValidationSession.dnaGetEpochResponse.result.nextValidation
-              .add(new Duration(seconds: dnaAllForValidationSession.dnaCeremonyIntervalsResponse.result.shortSessionDuration)))
+      Duration duree = (dnaAllForValidationSession
+              .dnaGetEpochResponse.result.nextValidation
+              .add(new Duration(
+                  seconds: dnaAllForValidationSession
+                      .dnaCeremonyIntervalsResponse
+                      .result
+                      .shortSessionDuration)))
           .difference(DateTime.now());
-      controllerChrono = AnimationController(vsync: this, duration: Duration(seconds: duree.inSeconds));
+      controllerChrono = AnimationController(
+          vsync: this, duration: Duration(seconds: duree.inSeconds));
     }
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
         validationItemList = new List();
 
-        Duration duree = (dnaAllForValidationSession.dnaGetEpochResponse.result.nextValidation
-                .add(new Duration(seconds: dnaAllForValidationSession.dnaCeremonyIntervalsResponse.result.shortSessionDuration))
-                .add(new Duration(seconds: dnaAllForValidationSession.dnaCeremonyIntervalsResponse.result.longSessionDuration)))
+        Duration duree = (dnaAllForValidationSession
+                .dnaGetEpochResponse.result.nextValidation
+                .add(new Duration(
+                    seconds: dnaAllForValidationSession
+                        .dnaCeremonyIntervalsResponse
+                        .result
+                        .shortSessionDuration))
+                .add(new Duration(
+                    seconds: dnaAllForValidationSession
+                        .dnaCeremonyIntervalsResponse
+                        .result
+                        .longSessionDuration)))
             .difference(DateTime.now());
-        controllerChrono = AnimationController(vsync: this, duration: Duration(seconds: duree.inSeconds));
+        controllerChrono = AnimationController(
+            vsync: this, duration: Duration(seconds: duree.inSeconds));
       } else {
-        controllerChrono = AnimationController(vsync: this, duration: Duration(seconds: controllerChronoValue));
+        controllerChrono = AnimationController(
+            vsync: this, duration: Duration(seconds: controllerChronoValue));
       }
     }
   }
@@ -112,7 +133,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
       isLoading = true;
     });
     try {
-      validationSessionInfo = await getValidationSessionFlipsList(currentPeriod, null, widget.simulationMode);
+      validationSessionInfo = await getValidationSessionFlipsList(
+          currentPeriod, null, widget.simulationMode);
     } catch (e) {} finally {
       setState(() => isLoading = false);
     }
@@ -124,11 +146,14 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
       return Center(child: CircularProgressIndicator());
     }
     return FutureBuilder(
-        future: getValidationSessionFlipsList(currentPeriod, validationSessionInfo, widget.simulationMode),
-        builder: (BuildContext context, AsyncSnapshot<ValidationSessionInfo> snapshot) {
+        future: getValidationSessionFlipsList(
+            currentPeriod, validationSessionInfo, widget.simulationMode),
+        builder: (BuildContext context,
+            AsyncSnapshot<ValidationSessionInfo> snapshot) {
           if (snapshot.hasData) {
             validationSessionInfo = snapshot.data;
-            if (validationSessionInfo == null || validationSessionInfo.listSessionValidationFlip == null) {
+            if (validationSessionInfo == null ||
+                validationSessionInfo.listSessionValidationFlip == null) {
               return Column(
                 children: [
                   SizedBox(
@@ -136,7 +161,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                     height: 30,
                   ),
                   Text(
-                    AppLocalizations.of(context).translate("Hey oh! Idena ! Wake up !\nPlease refresh..."),
+                    AppLocalizations.of(context).translate(
+                        "Hey oh! Idena ! Wake up !\nPlease refresh..."),
                     style: TextStyle(
                       fontFamily: MyIdenaAppTheme.fontName,
                       fontWeight: FontWeight.w600,
@@ -156,15 +182,19 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                 ],
               );
             } else {
-              List<ValidationSessionInfoFlips> listSessionValidationFlip = validationSessionInfo.listSessionValidationFlip;
+              List<ValidationSessionInfoFlips> listSessionValidationFlip =
+                  validationSessionInfo.listSessionValidationFlip;
               if (initStateOk) {
                 if (checkFlipsQualityProcessForValidationSession == false) {
-                  for (int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++) {
-                    validationItemList.add(new ValidationItem(answerType: AnswerType.NONE, relevanceType: RelevantType.NO_INFO));
-                  }
-                } else {
-                  for (int i = 0; i < validationSessionInfo.listSessionValidationFlip.length; i++) {
-                    validationItemList[i].relevanceType = RelevantType.RELEVANT;
+                  validationItemList = new List();
+                  for (int i = 0;
+                      i <
+                          validationSessionInfo
+                              .listSessionValidationFlip.length;
+                      i++) {
+                    validationItemList.add(new ValidationItem(
+                        answerType: AnswerType.NONE,
+                        relevanceType: RelevantType.NO_INFO));
                   }
                 }
                 initStateOk = false;
@@ -173,7 +203,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                   animation: widget.mainScreenAnimationController,
                   builder: (BuildContext context, Widget child) {
                     return Container(
-                      width: MediaQuery.of(context).size.width - 25,
+                      width: MediaQuery.of(context).size.width - 50,
                       child: Column(
                         children: [
                           Row(
@@ -181,82 +211,171 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                               Expanded(
                                 child: Column(
                                   children: <Widget>[
+                                    widget.simulationMode
+                                        ? Chip(
+                                            backgroundColor: Colors.orange[600],
+                                            padding: EdgeInsets.all(0),
+                                            label: Text('Mode démo',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white)),
+                                          )
+                                        : SizedBox(
+                                            height: 1,
+                                          ),
                                     FadeTransition(
                                       opacity: widget.mainScreenAnimation,
                                       child: Transform(
-                                          transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.mainScreenAnimation.value), 0.0),
+                                          transform: Matrix4.translationValues(
+                                              0.0,
+                                              30 *
+                                                  (1.0 -
+                                                      widget.mainScreenAnimation
+                                                          .value),
+                                              0.0),
                                           child: Container(
-                                            height: MediaQuery.of(context).size.height - 300,
-                                            width: MediaQuery.of(context).size.width - 30,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height -
+                                                300,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                30,
                                             child: ListView.builder(
-                                                padding: const EdgeInsets.only(top: 0, bottom: 0, right: 16, left: 16),
-                                                itemCount: validationItemList.length,
-                                                physics: BouncingScrollPhysics(),
+                                                padding: const EdgeInsets.only(
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    right: 16,
+                                                    left: 16),
+                                                itemCount:
+                                                    validationItemList.length,
+                                                physics:
+                                                    BouncingScrollPhysics(),
                                                 scrollDirection: Axis.vertical,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final int count = validationItemList.length > 25 ? 30 : validationItemList.length;
-                                                  final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                                                      parent: animationController.view,
-                                                      curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn)));
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  final int count =
+                                                      validationItemList
+                                                                  .length >
+                                                              25
+                                                          ? 30
+                                                          : validationItemList
+                                                              .length;
+                                                  final Animation<
+                                                      double> animation = Tween<
+                                                              double>(
+                                                          begin: 0.0, end: 1.0)
+                                                      .animate(CurvedAnimation(
+                                                          parent:
+                                                              animationController
+                                                                  .view,
+                                                          curve: Interval(
+                                                              (1 / count) *
+                                                                  index,
+                                                              1.0,
+                                                              curve: Curves
+                                                                  .fastOutSlowIn)));
                                                   animationController.forward();
                                                   return AnimatedBuilder(
-                                                      animation: animationController,
-                                                      builder: (BuildContext context, Widget child) {
+                                                      animation:
+                                                          animationController,
+                                                      builder:
+                                                          (BuildContext context,
+                                                              Widget child) {
                                                         return FadeTransition(
                                                             opacity: animation,
                                                             child: Transform(
-                                                              transform: Matrix4.translationValues(100 * (1.0 - animation.value), 0.0, 0.0),
+                                                              transform: Matrix4
+                                                                  .translationValues(
+                                                                      100 *
+                                                                          (1.0 -
+                                                                              animation.value),
+                                                                      0.0,
+                                                                      0.0),
                                                               child: SizedBox(
                                                                 child: Column(
                                                                   children: [
-                                                                    FutureBuilder<ValidationSessionInfoFlips>(
+                                                                    FutureBuilder<
+                                                                            ValidationSessionInfoFlips>(
                                                                         future: getValidationSessionFlipDetail(
-                                                                            listSessionValidationFlip[index], widget.simulationMode),
-                                                                        builder: (BuildContext context,
-                                                                            AsyncSnapshot<ValidationSessionInfoFlips> snapshotFlip) {
-                                                                          if (snapshotFlip.hasData == false) {
-                                                                            return Center(child: CircularProgressIndicator());
+                                                                            listSessionValidationFlip[
+                                                                                index],
+                                                                            widget
+                                                                                .simulationMode),
+                                                                        builder: (BuildContext
+                                                                                context,
+                                                                            AsyncSnapshot<ValidationSessionInfoFlips>
+                                                                                snapshotFlip) {
+                                                                          if (snapshotFlip.hasData ==
+                                                                              false) {
+                                                                            return Center(
+                                                                                child: CircularProgressIndicator(
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                                                                            ));
                                                                           } else {
+                                                                            ValidationSessionInfoFlips
+                                                                                validationSessionInfoFlips =
+                                                                                snapshotFlip.data;
                                                                             if (currentPeriod == EpochPeriod.LongSession &&
                                                                                 checkFlipsQualityProcessForValidationSession == true) {
                                                                               FutureBuilder<List<Word>>(
-                                                                                  future:
-                                                                                      getWordsFromHash(snapshotFlip.data.hash, widget.simulationMode),
-                                                                                  builder: (BuildContext context,
-                                                                                      AsyncSnapshot<List<Word>> snapshotWords) {
+                                                                                  future: getWordsFromHash(validationSessionInfoFlips.hash, widget.simulationMode),
+                                                                                  builder: (BuildContext context, AsyncSnapshot<List<Word>> snapshotWords) {
                                                                                     if (snapshotWords.hasData == false) {
                                                                                       return Column(
                                                                                         children: [
-                                                                                          displayFlips(snapshotFlip.data, index),
-                                                                                          Center(child: CircularProgressIndicator())
+                                                                                          displayFlips(validationSessionInfoFlips, index),
+                                                                                          Center(
+                                                                                              child: CircularProgressIndicator(
+                                                                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                                                                          ))
                                                                                         ],
                                                                                       );
                                                                                     } else {
+                                                                                      List<Word> wordsList = snapshotWords.data;
                                                                                       return Column(
                                                                                         children: [
-                                                                                          displayFlips(snapshotFlip.data, index),
-                                                                                          checkWords(snapshotWords.data, index)
+                                                                                          displayFlips(validationSessionInfoFlips, index),
+                                                                                          checkWords(wordsList, index)
                                                                                         ],
                                                                                       );
                                                                                     }
                                                                                   });
                                                                             } else {
-                                                                              return displayFlips(snapshotFlip.data, index);
+                                                                              return displayFlips(validationSessionInfoFlips, index);
                                                                             }
-                                                                            return Center(child: CircularProgressIndicator());
+                                                                            return Center(
+                                                                                child: CircularProgressIndicator(
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow),
+                                                                            ));
                                                                           }
                                                                         }),
                                                                     Padding(
-                                                                      padding: const EdgeInsets.only(top: 5, bottom: 15),
-                                                                      child: Container(
-                                                                        height: 4,
-                                                                        width: MediaQuery.of(context).size.width - 80,
-                                                                        decoration: BoxDecoration(
-                                                                          color: HexColor('#000000').withOpacity(0.2),
-                                                                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          top:
+                                                                              5,
+                                                                          bottom:
+                                                                              15),
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            4,
+                                                                        width: MediaQuery.of(context).size.width -
+                                                                            80,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              HexColor('#000000').withOpacity(0.2),
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(4.0)),
                                                                         ),
-                                                                        child: Row(
-                                                                          children: <Widget>[
+                                                                        child:
+                                                                            Row(
+                                                                          children: <
+                                                                              Widget>[
                                                                             Container(
                                                                               width: MediaQuery.of(context).size.width - 80,
                                                                               height: 4,
@@ -294,9 +413,19 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                               Column(
                                 children: [
                                   Container(child: getChrono()),
-                                  Container(child: getCheckingKeywordsButton(currentPeriod, widget.checkFlipsQualityProcess, validationItemList)),
-                                  Container(child: getShortSessionButton(currentPeriod, validationItemList)),
-                                  Container(child: getLongSessionButton(currentPeriod, widget.checkFlipsQualityProcess, validationItemList)),
+                                  Container(
+                                      child: getCheckingKeywordsButton(
+                                          currentPeriod,
+                                          widget.checkFlipsQualityProcess,
+                                          validationItemList)),
+                                  Container(
+                                      child: getShortSessionButton(
+                                          currentPeriod, validationItemList)),
+                                  Container(
+                                      child: getLongSessionButton(
+                                          currentPeriod,
+                                          widget.checkFlipsQualityProcess,
+                                          validationItemList)),
                                 ],
                               ),
                             ],
@@ -307,19 +436,27 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                   });
             }
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
+            ));
           }
         });
   }
 
-  Widget getCheckingKeywordsButton(String _currentPeriod, bool _checkFlipsQualityProcess, List<ValidationItem> _validationItemList) {
-    if (_currentPeriod == EpochPeriod.LongSession && _checkFlipsQualityProcess == false) {
+  Widget getCheckingKeywordsButton(
+      String _currentPeriod,
+      bool _checkFlipsQualityProcess,
+      List<ValidationItem> _validationItemList) {
+    if (_currentPeriod == EpochPeriod.LongSession &&
+        _checkFlipsQualityProcess == false) {
       for (int i = 0; i < _validationItemList.length; i++) {
         if (_validationItemList[i].answerType == AnswerType.NONE) {
           return SizedBox();
         }
       }
       return ValidationStartCheckingKeywordsButtonView(
+        simulationMode: widget.simulationMode,
         controllerChrono: controllerChrono,
         dnaAll: dnaAllForValidationSession,
         animationController: animationController,
@@ -329,7 +466,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
     }
   }
 
-  Widget getShortSessionButton(String _currentPeriod, List<ValidationItem> _validationItemList) {
+  Widget getShortSessionButton(
+      String _currentPeriod, List<ValidationItem> _validationItemList) {
     if (_currentPeriod == EpochPeriod.ShortSession) {
       for (int i = 0; i < _validationItemList.length; i++) {
         if (_validationItemList[i].answerType == AnswerType.NONE) {
@@ -338,6 +476,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
       }
       return ValidationShortSessionButtonView(
         validationItemList: _validationItemList,
+        simulationMode: widget.simulationMode,
         currentPeriod: currentPeriod,
         dnaAll: dnaAllForValidationSession,
         animationController: animationController,
@@ -348,8 +487,12 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
     }
   }
 
-  Widget getLongSessionButton(String _currentPeriod, bool _checkFlipsQualityProcess, List<ValidationItem> _validationItemList) {
-    if (_currentPeriod == EpochPeriod.LongSession && _checkFlipsQualityProcess) {
+  Widget getLongSessionButton(
+      String _currentPeriod,
+      bool _checkFlipsQualityProcess,
+      List<ValidationItem> _validationItemList) {
+    if (_currentPeriod == EpochPeriod.LongSession &&
+        _checkFlipsQualityProcess) {
       for (int i = 0; i < _validationItemList.length; i++) {
         if (_validationItemList[i].relevanceType == RelevantType.NO_INFO) {
           return SizedBox();
@@ -358,6 +501,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
       return ValidationLongSessionButtonView(
         validationItemList: _validationItemList,
         validationSessionInfo: validationSessionInfo,
+        simulationMode: widget.simulationMode,
       );
     } else {
       return SizedBox();
@@ -368,11 +512,15 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
     controllerChrono.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         if (currentPeriod == EpochPeriod.ShortSession) {
-          submitShortAnswers(validationItemList, validationSessionInfo);
+          if (widget.simulationMode == false) {
+            submitShortAnswers(validationItemList, validationSessionInfo);
+          }
+
           Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
                 builder: (BuildContext context) => ValidationSessionScreen(
+                    simulationMode: widget.simulationMode,
                     animationController: animationController,
                     dnaAll: dnaAllForValidationSession,
                     checkFlipsQualityProcess: false,
@@ -380,7 +528,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
               ));
         }
         if (currentPeriod == EpochPeriod.LongSession) {
-          submitLongAnswers(validationItemList, validationSessionInfo);
+          if (widget.simulationMode == false) {
+            submitLongAnswers(validationItemList, validationSessionInfo);
+          }
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Home()),
@@ -388,7 +538,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
         }
       }
     });
-    controllerChrono.reverse(from: controllerChrono.value == 0.0 ? 1.0 : controllerChrono.value);
+    controllerChrono.reverse(
+        from: controllerChrono.value == 0.0 ? 1.0 : controllerChrono.value);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -412,7 +563,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
     );
   }
 
-  Widget displayFlips(ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+  Widget displayFlips(
+      ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
     return new ValidationDisplayFlipView(
         validationItem: validationItemList[index],
         validationSessionInfoFlips: validationSessionInfoFlips,
@@ -424,7 +576,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
   }
 
   Widget checkWords(List<Word> listWords, int index) {
-    if (currentPeriod == EpochPeriod.LongSession && widget.checkFlipsQualityProcess) {
+    if (currentPeriod == EpochPeriod.LongSession &&
+        widget.checkFlipsQualityProcess) {
       String word1Name = "";
       String word2Name = "";
       String word1Desc = "";
@@ -448,11 +601,15 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate("Are both keywords relevant to the flip ?"),
+                    AppLocalizations.of(context)
+                        .translate("Are both keywords relevant to the flip ?"),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    word1Name == "" ? AppLocalizations.of(context).translate("No keywords available") : word1Name,
+                    word1Name == ""
+                        ? AppLocalizations.of(context)
+                            .translate("No keywords available")
+                        : word1Name,
                     style: TextStyle(
                         fontFamily: MyIdenaAppTheme.fontName,
                         fontWeight: FontWeight.w500,
@@ -462,11 +619,18 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                   ),
                   Text(
                     word1Desc == "" ? "" : word1Desc,
-                    style: TextStyle(fontFamily: MyIdenaAppTheme.fontName, fontSize: 14, letterSpacing: -0.1, color: MyIdenaAppTheme.darkText),
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
                   ),
                   SizedBox(width: 1, height: 10),
                   Text(
-                    word2Name == "" ? AppLocalizations.of(context).translate("No keywords available") : word2Name,
+                    word2Name == ""
+                        ? AppLocalizations.of(context)
+                            .translate("No keywords available")
+                        : word2Name,
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: TextStyle(
@@ -480,7 +644,11 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                     word2Desc == "" ? "" : word2Desc,
                     softWrap: false,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(fontFamily: MyIdenaAppTheme.fontName, fontSize: 14, letterSpacing: -0.1, color: MyIdenaAppTheme.darkText),
+                    style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontSize: 14,
+                        letterSpacing: -0.1,
+                        color: MyIdenaAppTheme.darkText),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
@@ -491,17 +659,27 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              validationItemList[index].relevanceType = RelevantType.RELEVANT;
+                              validationItemList[index].relevanceType =
+                                  RelevantType.RELEVANT;
                             });
                           },
                           padding: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          color: validationItemList[index].relevanceType == RelevantType.RELEVANT ? Colors.blue : Colors.white,
-                          child: Text(AppLocalizations.of(context).translate("Both relevant"),
+                          color: validationItemList[index].relevanceType ==
+                                  RelevantType.RELEVANT
+                              ? Colors.blue
+                              : Colors.white,
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Both relevant"),
                               style: TextStyle(
-                                color: validationItemList[index].relevanceType == RelevantType.RELEVANT ? Colors.white : Colors.blue,
+                                color:
+                                    validationItemList[index].relevanceType ==
+                                            RelevantType.RELEVANT
+                                        ? Colors.white
+                                        : Colors.blue,
                                 letterSpacing: 1.5,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
@@ -516,17 +694,27 @@ class _ValidationSessionViewState extends State<ValidationSessionView> with Tick
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              validationItemList[index].relevanceType = RelevantType.IRRELEVANT;
+                              validationItemList[index].relevanceType =
+                                  RelevantType.IRRELEVANT;
                             });
                           },
                           padding: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          color: validationItemList[index].relevanceType == RelevantType.IRRELEVANT ? Colors.red : Colors.white,
-                          child: Text(AppLocalizations.of(context).translate("Irrelevant"),
+                          color: validationItemList[index].relevanceType ==
+                                  RelevantType.IRRELEVANT
+                              ? Colors.red
+                              : Colors.white,
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate("Irrelevant"),
                               style: TextStyle(
-                                color: validationItemList[index].relevanceType == RelevantType.IRRELEVANT ? Colors.white : Colors.red,
+                                color:
+                                    validationItemList[index].relevanceType ==
+                                            RelevantType.IRRELEVANT
+                                        ? Colors.white
+                                        : Colors.red,
                                 letterSpacing: 1.5,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,

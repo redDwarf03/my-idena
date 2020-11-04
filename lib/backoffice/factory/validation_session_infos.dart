@@ -29,7 +29,14 @@ var logger = Logger();
 
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
-      {this.hash, this.ready, this.extra, this.available, this.listWords, this.listImagesLeft, this.listImagesRight, this.listOk});
+      {this.hash,
+      this.ready,
+      this.extra,
+      this.available,
+      this.listWords,
+      this.listImagesLeft,
+      this.listImagesRight,
+      this.listOk});
 
   String hash;
   bool ready;
@@ -54,7 +61,9 @@ class ValidationSessionInfo {
 }
 
 Future<ValidationSessionInfo> getValidationSessionFlipsList(
-    String typeSession, ValidationSessionInfo validationSessionInfoInput, bool simulationMode) async {
+    String typeSession,
+    ValidationSessionInfo validationSessionInfoInput,
+    bool simulationMode) async {
   if (validationSessionInfoInput != null) {
     return validationSessionInfoInput;
   }
@@ -86,24 +95,34 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
 
   try {
     HttpClient httpClient = new HttpClient();
-    IdenaSharedPreferences idenaSharedPreferences = await SharedPreferencesHelper.getIdenaSharedPreferences();
+    IdenaSharedPreferences idenaSharedPreferences =
+        await SharedPreferencesHelper.getIdenaSharedPreferences();
 
     if (simulationMode) {
       if (typeSession == EpochPeriod.ShortSession) {
-        flipShortHashesResponse = FlipShortHashesResponse.fromJson(FlipExamples().getMapExample(typeSession));
+        flipShortHashesResponse = FlipShortHashesResponse.fromJson(
+            FlipExamples().getMapExample(typeSession));
       }
       if (typeSession == EpochPeriod.LongSession) {
-        flipLongHashesResponse = FlipLongHashesResponse.fromJson(FlipExamples().getMapExample(typeSession));
+        flipLongHashesResponse = FlipLongHashesResponse.fromJson(
+            FlipExamples().getMapExample(typeSession));
       }
     } else {
-      HttpClientRequest request = await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> map = {'method': method, "params": [], 'id': 101, 'key': idenaSharedPreferences.keyApp};
+      Map<String, dynamic> map = {
+        'method': method,
+        "params": [],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
 
       if (typeSession == EpochPeriod.ShortSession) {
         flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+        logger.i(
+            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
         request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -114,7 +133,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
       }
       if (typeSession == EpochPeriod.LongSession) {
         flipLongHashesRequest = FlipLongHashesRequest.fromJson(map);
-        logger.i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
+        logger
+            .i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
         request.add(utf8.encode(json.encode(flipLongHashesRequest.toJson())));
         HttpClientResponse response = await request.close();
         if (response.statusCode == 200) {
@@ -126,7 +146,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
     }
 
     List<ValidationSessionInfoFlips> listSessionValidationFlip = new List();
-    List<ValidationSessionInfoFlips> listSessionValidationFlipExtra = new List();
+    List<ValidationSessionInfoFlips> listSessionValidationFlipExtra =
+        new List();
     int nbFlips = 0;
     if (typeSession == EpochPeriod.ShortSession) {
       nbFlips = flipShortHashesResponse.result.length;
@@ -136,18 +157,26 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
     }
 
     for (int i = 0; i < nbFlips; i++) {
-      ValidationSessionInfoFlips validationSessionInfoFlips = new ValidationSessionInfoFlips();
+      ValidationSessionInfoFlips validationSessionInfoFlips =
+          new ValidationSessionInfoFlips();
       if (typeSession == EpochPeriod.ShortSession) {
-        validationSessionInfoFlips.hash = flipShortHashesResponse.result[i].hash;
-        validationSessionInfoFlips.ready = flipShortHashesResponse.result[i].ready;
-        validationSessionInfoFlips.extra = flipShortHashesResponse.result[i].extra;
-        validationSessionInfoFlips.available = flipShortHashesResponse.result[i].available;
+        validationSessionInfoFlips.hash =
+            flipShortHashesResponse.result[i].hash;
+        validationSessionInfoFlips.ready =
+            flipShortHashesResponse.result[i].ready;
+        validationSessionInfoFlips.extra =
+            flipShortHashesResponse.result[i].extra;
+        validationSessionInfoFlips.available =
+            flipShortHashesResponse.result[i].available;
       }
       if (typeSession == EpochPeriod.LongSession) {
         validationSessionInfoFlips.hash = flipLongHashesResponse.result[i].hash;
-        validationSessionInfoFlips.ready = flipLongHashesResponse.result[i].ready;
-        validationSessionInfoFlips.extra = flipLongHashesResponse.result[i].extra;
-        validationSessionInfoFlips.available = flipLongHashesResponse.result[i].available;
+        validationSessionInfoFlips.ready =
+            flipLongHashesResponse.result[i].ready;
+        validationSessionInfoFlips.extra =
+            flipLongHashesResponse.result[i].extra;
+        validationSessionInfoFlips.available =
+            flipLongHashesResponse.result[i].available;
       }
 
       if (validationSessionInfoFlips.extra) {
@@ -159,7 +188,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
     validationSessionInfo.loadingFlipsOk = true;
 
     validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
-    validationSessionInfo.listSessionValidationFlipExtra = listSessionValidationFlipExtra;
+    validationSessionInfo.listSessionValidationFlipExtra =
+        listSessionValidationFlipExtra;
   } catch (e) {
     validationSessionInfo.loadingFlipsOk = false;
     logger.e(e.toString());
@@ -168,107 +198,140 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
   return validationSessionInfo;
 }
 
-Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(ValidationSessionInfoFlips validationSessionInfoFlips, bool simulationMode) async {
-  try {
-    HttpClient httpClient = new HttpClient();
-    IdenaSharedPreferences idenaSharedPreferences = await SharedPreferencesHelper.getIdenaSharedPreferences();
+Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
+    ValidationSessionInfoFlips validationSessionInfoFlips,
+    bool simulationMode) async {
+  if (validationSessionInfoFlips != null &&
+      validationSessionInfoFlips.listImagesLeft != null &&
+      validationSessionInfoFlips.listImagesLeft.length == 4 &&
+      validationSessionInfoFlips.listImagesRight != null &&
+      validationSessionInfoFlips.listImagesRight.length == 4) {
+    return validationSessionInfoFlips;
+  } else {
+    try {
+      HttpClient httpClient = new HttpClient();
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
 
-    // get Flip
-    FlipGetResponse flipGetResponse;
-    if (simulationMode) {
-      String data = await loadAssets(validationSessionInfoFlips.hash + "_images");
-      flipGetResponse = flipGetResponseFromJson(data);
-    } else {
-      HttpClientRequest requestFlip = await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      requestFlip.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> mapFlip = {
-        'method': FlipGetRequest.METHOD_NAME,
-        'params': [validationSessionInfoFlips.hash],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
-
-      FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapFlip);
-      requestFlip.add(utf8.encode(json.encode(flipGetRequest.toJson())));
-      HttpClientResponse responseFlip = await requestFlip.close();
-      if (responseFlip.statusCode == 200) {
-        String replyFlip = await responseFlip.transform(utf8.decoder).join();
-        logger.i(replyFlip);
-        flipGetResponse = flipGetResponseFromJson(replyFlip);
-      }
-    }
-
-    Uint8List imageUint8_1;
-    Uint8List imageUint8_2;
-    Uint8List imageUint8_3;
-    Uint8List imageUint8_4;
-
-    Decoded images;
-    Decoded privateImages;
-    List listImages = new List(4);
-    List orders = new List(2);
-    if (flipGetResponse.result.privateHex != null && flipGetResponse.result.privateHex != '0x') {
-      // ;[images] = decode(publicHex || hex)
-      if (flipGetResponse.result.publicHex != null) {
-        images = Rlp.decode(Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)), true);
+      // get Flip
+      FlipGetResponse flipGetResponse;
+      if (simulationMode) {
+        String data =
+            await loadAssets(validationSessionInfoFlips.hash + "_images");
+        flipGetResponse = flipGetResponseFromJson(data);
       } else {
-        if (flipGetResponse.result.hex != null) {
-          images = Rlp.decode(Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+        HttpClientRequest requestFlip =
+            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+        requestFlip.headers.set('content-type', 'application/json');
+
+        Map<String, dynamic> mapFlip = {
+          'method': FlipGetRequest.METHOD_NAME,
+          'params': [validationSessionInfoFlips.hash],
+          'id': 101,
+          'key': idenaSharedPreferences.keyApp
+        };
+
+        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapFlip);
+        requestFlip.add(utf8.encode(json.encode(flipGetRequest.toJson())));
+        HttpClientResponse responseFlip = await requestFlip.close();
+        if (responseFlip.statusCode == 200) {
+          String replyFlip = await responseFlip.transform(utf8.decoder).join();
+          logger.i(replyFlip);
+          flipGetResponse = flipGetResponseFromJson(replyFlip);
         }
       }
 
-      // let privateImages
-      // ;[privateImages, orders] = decode(privateHex)
-      privateImages = Rlp.decode(Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)), true);
+      Uint8List imageUint8_1;
+      Uint8List imageUint8_2;
+      Uint8List imageUint8_3;
+      Uint8List imageUint8_4;
 
-      // images = images.concat(privateImages)
-      imageUint8_1 = images.data[0][0];
-      imageUint8_2 = images.data[0][1];
-      imageUint8_3 = privateImages.data[0][0];
-      imageUint8_4 = privateImages.data[0][1];
-      listImages[0] = imageUint8_1;
-      listImages[1] = imageUint8_2;
-      listImages[2] = imageUint8_3;
-      listImages[3] = imageUint8_4;
-      orders = privateImages.data[1];
-    } else {
-      // TODO: implement this case
-      // ;[images, orders] = decode(hex)
-      var images3;
-      images3 = Rlp.decode(Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
-    }
+      Decoded images;
+      Decoded privateImages;
+      List listImages = new List(4);
+      List orders = new List(2);
+      if (flipGetResponse.result.privateHex != null &&
+          flipGetResponse.result.privateHex != '0x') {
+        // ;[images] = decode(publicHex || hex)
+        if (flipGetResponse.result.publicHex != null) {
+          images = Rlp.decode(
+              Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
+              true);
+        } else {
+          if (flipGetResponse.result.hex != null) {
+            images = Rlp.decode(
+                Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+          }
+        }
 
-    String order1 = orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
-    String order2 = orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
-    String order3 = orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
-    String order4 = orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
-    validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
-    validationSessionInfoFlips.listImagesLeft[0] = listImages[int.tryParse(order1) ?? 0];
-    validationSessionInfoFlips.listImagesLeft[1] = listImages[int.tryParse(order2) ?? 0];
-    validationSessionInfoFlips.listImagesLeft[2] = listImages[int.tryParse(order3) ?? 0];
-    validationSessionInfoFlips.listImagesLeft[3] = listImages[int.tryParse(order4) ?? 0];
+        // let privateImages
+        // ;[privateImages, orders] = decode(privateHex)
+        privateImages = Rlp.decode(
+            Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+            true);
 
-    // TODO .. dirty
-    order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
-    order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
-    order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
-    order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
-    validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
-    validationSessionInfoFlips.listImagesRight[0] = listImages[int.tryParse(order1) ?? 0];
-    validationSessionInfoFlips.listImagesRight[1] = listImages[int.tryParse(order2) ?? 0];
-    validationSessionInfoFlips.listImagesRight[2] = listImages[int.tryParse(order3) ?? 0];
-    validationSessionInfoFlips.listImagesRight[3] = listImages[int.tryParse(order4) ?? 0];
-  } catch (e) {
-    logger.e(e.toString());
-  } finally {}
+        // images = images.concat(privateImages)
+        imageUint8_1 = images.data[0][0];
+        imageUint8_2 = images.data[0][1];
+        imageUint8_3 = privateImages.data[0][0];
+        imageUint8_4 = privateImages.data[0][1];
+        listImages[0] = imageUint8_1;
+        listImages[1] = imageUint8_2;
+        listImages[2] = imageUint8_3;
+        listImages[3] = imageUint8_4;
+        orders = privateImages.data[1];
+      } else {
+        // TODO: implement this case
+        // ;[images, orders] = decode(hex)
+        var images3;
+        images3 = Rlp.decode(
+            Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+      }
 
-  return validationSessionInfoFlips;
+      String order1 =
+          orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
+      String order2 =
+          orders[0][1].toString().replaceAll('[', '').replaceAll(']', '');
+      String order3 =
+          orders[0][2].toString().replaceAll('[', '').replaceAll(']', '');
+      String order4 =
+          orders[0][3].toString().replaceAll('[', '').replaceAll(']', '');
+      validationSessionInfoFlips.listImagesLeft = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImagesLeft[0] =
+          listImages[int.tryParse(order1) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[1] =
+          listImages[int.tryParse(order2) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[2] =
+          listImages[int.tryParse(order3) ?? 0];
+      validationSessionInfoFlips.listImagesLeft[3] =
+          listImages[int.tryParse(order4) ?? 0];
+
+      // TODO .. dirty
+      order1 = orders[1][0].toString().replaceAll('[', '').replaceAll(']', '');
+      order2 = orders[1][1].toString().replaceAll('[', '').replaceAll(']', '');
+      order3 = orders[1][2].toString().replaceAll('[', '').replaceAll(']', '');
+      order4 = orders[1][3].toString().replaceAll('[', '').replaceAll(']', '');
+      validationSessionInfoFlips.listImagesRight = new List<Uint8List>(4);
+      validationSessionInfoFlips.listImagesRight[0] =
+          listImages[int.tryParse(order1) ?? 0];
+      validationSessionInfoFlips.listImagesRight[1] =
+          listImages[int.tryParse(order2) ?? 0];
+      validationSessionInfoFlips.listImagesRight[2] =
+          listImages[int.tryParse(order3) ?? 0];
+      validationSessionInfoFlips.listImagesRight[3] =
+          listImages[int.tryParse(order4) ?? 0];
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {}
+
+    return validationSessionInfoFlips;
+  }
 }
 
 Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
   HttpClient httpClient = new HttpClient();
-  IdenaSharedPreferences idenaSharedPreferences = await SharedPreferencesHelper.getIdenaSharedPreferences();
+  IdenaSharedPreferences idenaSharedPreferences =
+      await SharedPreferencesHelper.getIdenaSharedPreferences();
   FlipWordsResponse flipWordsResponse;
   int nbWords = 0;
   if (simulationMode) {
@@ -288,7 +351,8 @@ Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
     nbWords = flipWordsResponse.result.words.length;
   } else {
     try {
-      HttpClientRequest requestWords = await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      HttpClientRequest requestWords =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       requestWords.headers.set('content-type', 'application/json');
       Map<String, dynamic> mapWords = {
         'method': FlipWordsRequest.METHOD_NAME,
@@ -314,7 +378,9 @@ Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
     if (flipWordsResponse.result.words[j] == 0) {
       word = new Word(name: "", desc: "");
     } else {
-      word = new Word(name: wordsMap[flipWordsResponse.result.words[j]]["name"], desc: wordsMap[flipWordsResponse.result.words[j]]["desc"]);
+      word = new Word(
+          name: wordsMap[flipWordsResponse.result.words[j]]["name"],
+          desc: wordsMap[flipWordsResponse.result.words[j]]["desc"]);
     }
     listWords[j] = word;
   }
@@ -331,24 +397,30 @@ Future<String> loadAssets(String fileName) async {
 }
 
 Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
-    List<ValidationItem> validationItemList, ValidationSessionInfo validationSessionInfo) async {
+    List<ValidationItem> validationItemList,
+    ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
   }
-  FlipSubmitShortAnswersRequest flipSubmitShortAnswersRequest = new FlipSubmitShortAnswersRequest();
+  FlipSubmitShortAnswersRequest flipSubmitShortAnswersRequest =
+      new FlipSubmitShortAnswersRequest();
   FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
 
   try {
     HttpClient httpClient = new HttpClient();
-    IdenaSharedPreferences idenaSharedPreferences = await SharedPreferencesHelper.getIdenaSharedPreferences();
+    IdenaSharedPreferences idenaSharedPreferences =
+        await SharedPreferencesHelper.getIdenaSharedPreferences();
 
-    HttpClientRequest request = await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+    HttpClientRequest request =
+        await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
     request.headers.set('content-type', 'application/json');
 
     ParamShortAnswer answers = new ParamShortAnswer();
     List<ShortAnswer> listAnswers = new List();
     for (int i = 0; i < validationItemList.length; i++) {
-      ShortAnswer answer = new ShortAnswer(answer: validationItemList[i].answerType, hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+      ShortAnswer answer = new ShortAnswer(
+          answer: validationItemList[i].answerType,
+          hash: validationSessionInfo.listSessionValidationFlip[i].hash);
       listAnswers.add(answer);
     }
 
@@ -358,19 +430,23 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
     List<ParamShortAnswer> params = new List();
     params.add(answers);
-    flipSubmitShortAnswersRequest.method = FlipSubmitShortAnswersRequest.METHOD_NAME;
+    flipSubmitShortAnswersRequest.method =
+        FlipSubmitShortAnswersRequest.METHOD_NAME;
     flipSubmitShortAnswersRequest.params = params;
     flipSubmitShortAnswersRequest.id = 101;
     flipSubmitShortAnswersRequest.key = idenaSharedPreferences.keyApp;
 
-    request.add(utf8.encode(json.encode(flipSubmitShortAnswersRequest.toJson())));
+    request
+        .add(utf8.encode(json.encode(flipSubmitShortAnswersRequest.toJson())));
 
-    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitShortAnswersRequest));
+    logger.i(new JsonEncoder.withIndent('  ')
+        .convert(flipSubmitShortAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
       logger.i(reply);
-      flipSubmitShortAnswersResponse = flipSubmitShortAnswersResponseFromJson(reply);
+      flipSubmitShortAnswersResponse =
+          flipSubmitShortAnswersResponseFromJson(reply);
     }
   } catch (e) {
     logger.e(e.toString());
@@ -378,29 +454,37 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
   return flipSubmitShortAnswersResponse;
 }
 
-Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List<ValidationItem> validationItemList, ValidationSessionInfo validationSessionInfo) async {
+Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
+    List<ValidationItem> validationItemList,
+    ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
   }
-  FlipSubmitLongAnswersRequest flipSubmitLongAnswersRequest = new FlipSubmitLongAnswersRequest();
+  FlipSubmitLongAnswersRequest flipSubmitLongAnswersRequest =
+      new FlipSubmitLongAnswersRequest();
   FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponse;
   bool wrongWordsBool;
   try {
     HttpClient httpClient = new HttpClient();
-    IdenaSharedPreferences idenaSharedPreferences = await SharedPreferencesHelper.getIdenaSharedPreferences();
+    IdenaSharedPreferences idenaSharedPreferences =
+        await SharedPreferencesHelper.getIdenaSharedPreferences();
 
-    HttpClientRequest request = await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+    HttpClientRequest request =
+        await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
     request.headers.set('content-type', 'application/json');
 
     ParamLongAnswer answers = new ParamLongAnswer();
     List<LongAnswer> listAnswers = new List();
     for (int i = 0; i < validationItemList.length; i++) {
       wrongWordsBool = false;
-      if (validationItemList[i] != null && validationItemList[i].relevanceType == RelevantType.IRRELEVANT) {
+      if (validationItemList[i] != null &&
+          validationItemList[i].relevanceType == RelevantType.IRRELEVANT) {
         wrongWordsBool = true;
       }
       LongAnswer answer = new LongAnswer(
-          answer: validationItemList[i].answerType, wrongWords: wrongWordsBool, hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+          answer: validationItemList[i].answerType,
+          wrongWords: wrongWordsBool,
+          hash: validationSessionInfo.listSessionValidationFlip[i].hash);
       listAnswers.add(answer);
     }
 
@@ -410,18 +494,22 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(List<ValidationItem> val
 
     List<ParamLongAnswer> params = new List();
     params.add(answers);
-    flipSubmitLongAnswersRequest.method = FlipSubmitLongAnswersRequest.METHOD_NAME;
+    flipSubmitLongAnswersRequest.method =
+        FlipSubmitLongAnswersRequest.METHOD_NAME;
     flipSubmitLongAnswersRequest.params = params;
     flipSubmitLongAnswersRequest.id = 101;
     flipSubmitLongAnswersRequest.key = idenaSharedPreferences.keyApp;
 
-    request.add(utf8.encode(json.encode(flipSubmitLongAnswersRequest.toJson())));
-    logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitLongAnswersRequest));
+    request
+        .add(utf8.encode(json.encode(flipSubmitLongAnswersRequest.toJson())));
+    logger.i(
+        new JsonEncoder.withIndent('  ').convert(flipSubmitLongAnswersRequest));
     HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
       String reply = await response.transform(utf8.decoder).join();
       logger.i(reply);
-      flipSubmitLongAnswersResponse = flipSubmitLongAnswersResponseFromJson(reply);
+      flipSubmitLongAnswersResponse =
+          flipSubmitLongAnswersResponseFromJson(reply);
     }
   } catch (e) {
     logger.e(e.toString());

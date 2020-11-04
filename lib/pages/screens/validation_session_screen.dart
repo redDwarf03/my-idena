@@ -6,13 +6,14 @@ import 'package:my_idena/pages/views/validation_session_view.dart';
 import 'package:my_idena/pages/app_bar_view.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
-  const ValidationSessionScreen({Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess, this.dnaAll})
+  const ValidationSessionScreen({Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess, this.dnaAll, this.simulationMode})
       : super(key: key);
 
   final AnimationController animationController;
   final String typeLaunchSession;
   final bool checkFlipsQualityProcess;
   final DnaAll dnaAll;
+  final bool simulationMode;
 
   @override
   _ValidationSessionScreenState createState() => _ValidationSessionScreenState();
@@ -69,7 +70,7 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
     listViews.add(
       ValidationSessionView(
         typeLaunchSession: widget.typeLaunchSession,
-        simulationMode: false,
+        simulationMode: widget.simulationMode,
         dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0)

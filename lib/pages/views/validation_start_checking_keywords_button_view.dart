@@ -10,8 +10,9 @@ class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
   final AnimationController controllerChrono;
   final DnaAll dnaAll;
   final AnimationController animationController;
+  final bool simulationMode;
 
-  const ValidationStartCheckingKeywordsButtonView({Key key, this.controllerChrono, this.dnaAll, this.animationController}) : super(key: key);
+  const ValidationStartCheckingKeywordsButtonView({Key key, this.controllerChrono, this.dnaAll, this.animationController, this.simulationMode}) : super(key: key);
 
   @override
   _ValidationStartCheckingKeywordsButtonViewState createState() => _ValidationStartCheckingKeywordsButtonViewState();
@@ -76,6 +77,7 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                                       context,
                                       MaterialPageRoute<dynamic>(
                                         builder: (BuildContext context) => ValidationSessionScreen(
+                                          simulationMode: widget.simulationMode,
                                           animationController: widget.animationController,
                                           dnaAll: widget.dnaAll,
                                           typeLaunchSession: EpochPeriod.LongSession,
