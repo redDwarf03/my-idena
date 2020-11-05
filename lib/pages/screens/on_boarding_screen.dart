@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
@@ -10,7 +11,9 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+
 Timer _timerCheckNode;
+
 class OnBoardingScreen extends StatefulWidget {
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
@@ -49,7 +52,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-     _timerCheckNode =
+    _timerCheckNode =
         Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
   }
 
@@ -249,7 +252,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   ),
                 ),
                 checkNodeConnection(),
-                goHome(),
               ],
             ),
           ),
@@ -359,7 +361,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     ),
                   ),
                   checkNodeConnection(),
-                  goHome(),
                 ],
               ),
             ),
@@ -405,33 +406,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     );
   }
 
-  Widget goHome() {
-    return new StreamBuilder(
-        stream: _nodeController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            _checkNodeConnection = snapshot.data;
-            if (_checkNodeConnection) {
-              return IconButton(
-                icon: Icon(FlevaIcons.home_outline),
-                color: Colors.green,
-                iconSize: 40,
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  );
-                },
-              );
-            } else {
-              return SizedBox(width: 1, height: 1);
-            }
-          } else {
-            return SizedBox(width: 1, height: 1);
-          }
-        });
-  }
-
   Widget checkNodeConnection() {
     return new StreamBuilder(
         stream: _nodeController.stream,
@@ -439,15 +413,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection) {
-              return Text(
-                AppLocalizations.of(context).translate("Connection to node ok"),
-                style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                    fontFamily: MyIdenaAppTheme.fontName,
-                    letterSpacing: -0.2,
-                    fontWeight: FontWeight.w500),
-              );
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              });
+              return Container();
             } else {
               return Text(
                 AppLocalizations.of(context).translate(
