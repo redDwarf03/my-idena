@@ -10,9 +10,8 @@ class OracleService {
 
   Future<VotingsListResponse> getVotingsListResponse(int nbVotings) async {
     VotingsListResponse votingsListResponse;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
           "http://195.201.2.44:18888/api/OracleVotingContracts?limit=" +
               nbVotings.toString() +
@@ -27,20 +26,21 @@ class OracleService {
     } catch (e, s) {
       logger.e("pb votingsListResponse exception : " + e.toString());
       logger.e("pb votingsListResponse stack : " + s.toString());
+    } finally {
+      httpClient.close();
     }
     return votingsListResponse;
   }
 
   createContractDataReader() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -59,30 +59,31 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
 
   contractReadonlyCall() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -97,30 +98,31 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
 
   contractCall() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -132,30 +134,31 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
 
   contractEstimateCall() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -167,30 +170,31 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
 
   sendVoteProof() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -202,31 +206,31 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
 
-
   sendVote() async {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
         return null;
       }
-      
+
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -238,18 +242,19 @@ class OracleService {
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
-        logger.i(
-            new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
+      flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+      logger
+          .i(new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
+      request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
+      HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
         print(reply);
       }
     } catch (e) {
       logger.e(e.toString());
+    } finally {
+      httpClient.close();
     }
   }
-  
 }

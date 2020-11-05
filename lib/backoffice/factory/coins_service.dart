@@ -9,9 +9,8 @@ class CoinsService {
 
   Future<CoinsResponse> getCoinsResponse() async {
     CoinsResponse coinsResponse;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       HttpClientRequest request = await httpClient
           .getUrl(Uri.parse("https://api.coingecko.com/api/v3/coins/idena"));
       request.headers.set('content-type', 'application/json');
@@ -23,20 +22,23 @@ class CoinsService {
     } catch (e, s) {
       print("pb coin exception : " + e.toString());
       print("pb coin stack : " + s.toString());
+    } finally {
+      httpClient.close();
     }
     return coinsResponse;
   }
 
   Future<CoinsPriceResponse> getCoinsChart(String currency, int nbDays) async {
     CoinsPriceResponse coinsPriceResponse;
-
+    HttpClient httpClient = new HttpClient();
     nbDays = 10;
     currency = "eur";
     try {
-      HttpClient httpClient = new HttpClient();
-
-      HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://api.coingecko.com/api/v3/coins/idena/market_chart?vs_currency="+currency+"&days=" + nbDays.toString()));
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
+          "https://api.coingecko.com/api/v3/coins/idena/market_chart?vs_currency=" +
+              currency +
+              "&days=" +
+              nbDays.toString()));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -46,8 +48,9 @@ class CoinsService {
     } catch (e, s) {
       print(e.toString());
       print(s.toString());
+    } finally {
+      httpClient.close();
     }
     return coinsPriceResponse;
   }
-
 }

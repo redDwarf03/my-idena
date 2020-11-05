@@ -40,6 +40,7 @@ class HttpService {
       return true;
     }
 
+    HttpClient httpClient = new HttpClient();
     try {
       if (apiUrl == null || keyApp == null || apiUrl == "" || keyApp == "") {
         return false;
@@ -53,7 +54,7 @@ class HttpService {
       if (responseHttp == null || responseHttp.statusCode != 200) {
         return false;
       } else {*/
-      HttpClient httpClient = new HttpClient();
+
       // get CoinBase Address
       HttpClientRequest request = await httpClient
           .postUrl(Uri.parse(apiUrl))
@@ -86,6 +87,8 @@ class HttpService {
 
     } catch (e) {
       return false;
+    } finally {
+      httpClient.close();
     }
   }
 
@@ -101,9 +104,8 @@ class HttpService {
     DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
     DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
     DnaAll dnaAll = new DnaAll();
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
@@ -270,7 +272,9 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
 
     dnaAll.dnaGetCoinbaseAddrRequest = dnaGetCoinbaseAddrRequest;
     dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
@@ -287,8 +291,8 @@ class HttpService {
 
   Future<DnaBecomeOnlineResponse> becomeOnline() async {
     DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -317,7 +321,9 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return dnaBecomeOnlineResponse;
   }
 
@@ -353,15 +359,16 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return dnaBecomeOfflineResponse;
   }
 
   Future<GetFlipRawResponse> getFlipRaw(String hash) async {
     GetFlipRawResponse getFlipRawResponse;
-
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -386,7 +393,9 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return getFlipRawResponse;
   }
 
@@ -396,8 +405,9 @@ class HttpService {
     if (amount <= 0) {
       return null;
     }
+
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -427,15 +437,17 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return dnaSendTransactionResponse;
   }
 
   Future<BcnTransactionsResponse> getTransactions(
       String address, int count) async {
     BcnTransactionsResponse bcnTransactionsResponse;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -469,14 +481,16 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return bcnTransactionsResponse;
   }
 
   Future<DeepLinkParam> signin(deepLinkParam) async {
     DnaSignInResponse dnaSignInResponse;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -500,7 +514,9 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return deepLinkParam;
   }
 
@@ -510,10 +526,8 @@ class HttpService {
     DnaIdentityRequest dnaIdentityRequest;
     DnaIdentityResponse dnaIdentityResponse;
     bool miningStatus;
-
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
-
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
       if (idenaSharedPreferences == null) {
@@ -570,14 +584,16 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return miningStatus;
   }
 
   Future<String> getCurrentPeriod() async {
     String currentPeriod;
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       DnaGetEpochRequest dnaGetEpochRequest;
       DnaGetEpochResponse dnaGetEpochResponse;
 
@@ -613,12 +629,15 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return currentPeriod;
   }
 
   Future<BcnSyncingResponse> checkSync() async {
     HttpClient httpClient = new HttpClient();
+
     BcnSyncingRequest bcnSyncingRequest;
     BcnSyncingResponse bcnSyncingResponse;
     try {
@@ -657,7 +676,9 @@ class HttpService {
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
     return bcnSyncingResponse;
   }
 }
