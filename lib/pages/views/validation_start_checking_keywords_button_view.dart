@@ -4,15 +4,13 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/pages/views/validation_session_view.dart';
 
 class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
-  final AnimationController controllerChrono;
   final DnaAll dnaAll;
   final AnimationController animationController;
   final bool simulationMode;
 
-  const ValidationStartCheckingKeywordsButtonView({Key key, this.controllerChrono, this.dnaAll, this.animationController, this.simulationMode}) : super(key: key);
+  const ValidationStartCheckingKeywordsButtonView({Key key, this.dnaAll, this.animationController, this.simulationMode}) : super(key: key);
 
   @override
   _ValidationStartCheckingKeywordsButtonViewState createState() => _ValidationStartCheckingKeywordsButtonViewState();
@@ -71,8 +69,6 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                               RaisedButton(
                                 elevation: 5.0,
                                 onPressed: () {
-                                  Duration durationChrono = widget.controllerChrono.duration * widget.controllerChrono.value;
-                                  controllerChronoValue = durationChrono.inSeconds;
                                   Navigator.push<dynamic>(
                                       context,
                                       MaterialPageRoute<dynamic>(

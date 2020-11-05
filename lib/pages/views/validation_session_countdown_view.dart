@@ -10,9 +10,9 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/utils/util_date.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
   final DateTime nextValidation;
@@ -37,19 +37,34 @@ class _ValidationSessionCountdownTextState
   bool sendIdna = false;
   bool sessionAlert = false;
   bool afterLongSession = false;
-  int timeCounter = 0;
   HttpService httpService = new HttpService();
-  Timer _timer;
   String currentPeriod = "";
+  int endTime;
+  int endTimeBeforeFlipSession;
+  Timer _timer;
+
   @override
   void initState() {
     super.initState();
 
-    DateTime now = DateTime.now();
     if (widget.nextValidation != null) {
-      timeCounter = widget.nextValidation.difference(now).inSeconds;
+      endTime = widget.nextValidation.millisecondsSinceEpoch;
+      endTimeBeforeFlipSession = widget.nextValidation.millisecondsSinceEpoch -
+          (widget.dnaAll.dnaCeremonyIntervalsResponse.result
+                  .flipLotteryDuration) *
+              1000;
     }
+
     _timerUpdate();
+  }
+
+  _timerUpdate() {
+    _timer = Timer(const Duration(seconds: 1), () async {
+      currentPeriod = await httpService.getCurrentPeriod();
+      if (!mounted) return;
+      setState(() {});
+      _timerUpdate();
+    });
   }
 
   @override
@@ -58,15 +73,9 @@ class _ValidationSessionCountdownTextState
     super.dispose();
   }
 
-  _timerUpdate() {
-    _timer = Timer(const Duration(seconds: 1), () async {
-      currentPeriod = await httpService.getCurrentPeriod();
-      if (!mounted) return;
-      setState(() {
-        timeCounter--;
-      });
-      _timerUpdate();
-    });
+  @override
+  Widget build(BuildContext context) {
+    return _buildChild();
   }
 
   _buildChild() {
@@ -151,8 +160,6 @@ class _ValidationSessionCountdownTextState
                       Text(
                         AppLocalizations.of(context)
                                 .translate("Idena validation will start soon") +
-                            " : " +
-                            "${printDuration(Duration(seconds: timeCounter))}" +
                             "\n" +
                             AppLocalizations.of(context).translate(
                                 "Please, stay on this page until launch."),
@@ -164,40 +171,49 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Container(
-                          height: 4,
-                          width: 90,
-                          decoration: BoxDecoration(
-                            color: HexColor('#000000').withOpacity(0.2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 90,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    HexColor('#000000').withOpacity(0.1),
-                                    HexColor('#000000'),
-                                  ]),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                      CountdownTimer(
+                        endTime: endTime,
+                        onEnd: () {
+                          launchSession();
+                        },
+                        widgetBuilder: (_, CurrentRemainingTime time) {
+                          if (time == null) {
+                            return Text("");
+                          } else {
+                            return Row(
+                              children: [
+                                Text(
+                                    time.min != null
+                                        ? "${time.min} m "
+                                        : "0 m ",
+                                    style: TextStyle(
+                                      fontFamily: MyIdenaAppTheme.fontName,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      letterSpacing: -0.2,
+                                      color: Colors.red,
+                                    )),
+                                Text(
+                                    time.sec != null
+                                        ? "${time.sec} s "
+                                        : "0 s ",
+                                    style: TextStyle(
+                                      fontFamily: MyIdenaAppTheme.fontName,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      letterSpacing: -0.2,
+                                      color: Colors.red,
+                                    )),
+                              ],
+                            );
+                          }
+                        },
                       ),
                     ]))
               ])));
         }
       case EpochPeriod.ShortSession:
         {
-          WidgetsBinding.instance.addPostFrameCallback((_) => launchSession());
           return Padding(
               padding:
                   const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
@@ -217,34 +233,6 @@ class _ValidationSessionCountdownTextState
                           fontSize: 14,
                           letterSpacing: -0.2,
                           color: Colors.red,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Container(
-                          height: 4,
-                          width: 90,
-                          decoration: BoxDecoration(
-                            color: HexColor('#000000').withOpacity(0.2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 90,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    HexColor('#000000').withOpacity(0.1),
-                                    HexColor('#000000'),
-                                  ]),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
-                                ),
-                              )
-                            ],
-                          ),
                         ),
                       ),
                     ]))
@@ -365,11 +353,6 @@ class _ValidationSessionCountdownTextState
           return displayNextValidationDate(widget.nextValidation);
         }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildChild();
   }
 
   Widget gift(BuildContext context) {
@@ -624,71 +607,55 @@ class _ValidationSessionCountdownTextState
               ),
             ),
           ),
+          CountdownTimer(
+            endTime: endTime,
+            widgetBuilder: (_, CurrentRemainingTime time) {
+              if (time == null) {
+                return Text("");
+              } else {
+                return Row(
+                  children: [
+                    Text(time.days != null ? "${time.days} d " : "0 d ",
+                        style: TextStyle(
+                          fontFamily: MyIdenaAppTheme.fontName,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          letterSpacing: -0.2,
+                          color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                        )),
+                    Text(time.hours != null ? "${time.hours} h " : "0 h ",
+                        style: TextStyle(
+                          fontFamily: MyIdenaAppTheme.fontName,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          letterSpacing: -0.2,
+                          color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                        )),
+                    Text(time.min != null ? "${time.min} m " : "0 m ",
+                        style: TextStyle(
+                          fontFamily: MyIdenaAppTheme.fontName,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          letterSpacing: -0.2,
+                          color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                        )),
+                    Text(time.sec != null ? "${time.sec} s " : "0 s ",
+                        style: TextStyle(
+                          fontFamily: MyIdenaAppTheme.fontName,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          letterSpacing: -0.2,
+                          color: MyIdenaAppTheme.grey.withOpacity(0.5),
+                        )),
+                  ],
+                );
+              }
+            },
+          ),
         ],
       );
     } else {
       return Center(child: CircularProgressIndicator());
     }
-  }
-
-  Widget displayCurrentPeriod() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(width: 1, height: 10),
-        Text(
-          AppLocalizations.of(context).translate("Current period"),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: MyIdenaAppTheme.fontName,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-            letterSpacing: -0.2,
-            color: MyIdenaAppTheme.darkText,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Container(
-            height: 4,
-            width: 90,
-            decoration: BoxDecoration(
-              color: HexColor('#000000').withOpacity(0.2),
-              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-            ),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 90,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      HexColor('#000000').withOpacity(0.1),
-                      HexColor('#000000'),
-                    ]),
-                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Text(
-            currentPeriod != null ? currentPeriod : "",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: MyIdenaAppTheme.fontName,
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              letterSpacing: 0.0,
-              color: MyIdenaAppTheme.grey.withOpacity(0.5),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

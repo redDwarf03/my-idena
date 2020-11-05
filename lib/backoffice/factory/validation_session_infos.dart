@@ -93,8 +93,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
   FlipLongHashesRequest flipLongHashesRequest;
   FlipLongHashesResponse flipLongHashesResponse;
 
+  HttpClient httpClient = new HttpClient();
   try {
-    HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -193,7 +193,9 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
   } catch (e) {
     validationSessionInfo.loadingFlipsOk = false;
     logger.e(e.toString());
-  } finally {}
+  } finally {
+    httpClient.close();
+  }
 
   return validationSessionInfo;
 }
@@ -208,8 +210,8 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       validationSessionInfoFlips.listImagesRight.length == 4) {
     return validationSessionInfoFlips;
   } else {
+    HttpClient httpClient = new HttpClient();
     try {
-      HttpClient httpClient = new HttpClient();
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -322,14 +324,15 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
           listImages[int.tryParse(order4) ?? 0];
     } catch (e) {
       logger.e(e.toString());
-    } finally {}
+    } finally {
+      httpClient.close();
+    }
 
     return validationSessionInfoFlips;
   }
 }
 
 Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
-  HttpClient httpClient = new HttpClient();
   IdenaSharedPreferences idenaSharedPreferences =
       await SharedPreferencesHelper.getIdenaSharedPreferences();
   FlipWordsResponse flipWordsResponse;
@@ -350,6 +353,7 @@ Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
     }
     nbWords = flipWordsResponse.result.words.length;
   } else {
+    HttpClient httpClient = new HttpClient();
     try {
       HttpClientRequest requestWords =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -370,7 +374,9 @@ Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
         flipWordsResponse = flipWordsResponseFromJson(replyWords);
         nbWords = flipWordsResponse.result.words.length;
       }
-    } catch (e) {}
+    } catch (e) {} finally {
+      httpClient.close();
+    }
   }
   List<Word> listWords = new List(nbWords);
   for (int j = 0; j < nbWords; j++) {
@@ -405,9 +411,8 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
   FlipSubmitShortAnswersRequest flipSubmitShortAnswersRequest =
       new FlipSubmitShortAnswersRequest();
   FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
-
+  HttpClient httpClient = new HttpClient();
   try {
-    HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -450,7 +455,9 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
     }
   } catch (e) {
     logger.e(e.toString());
-  } finally {}
+  } finally {
+    httpClient.close();
+  }
   return flipSubmitShortAnswersResponse;
 }
 
@@ -464,8 +471,8 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
       new FlipSubmitLongAnswersRequest();
   FlipSubmitLongAnswersResponse flipSubmitLongAnswersResponse;
   bool wrongWordsBool;
+  HttpClient httpClient = new HttpClient();
   try {
-    HttpClient httpClient = new HttpClient();
     IdenaSharedPreferences idenaSharedPreferences =
         await SharedPreferencesHelper.getIdenaSharedPreferences();
 
@@ -513,6 +520,8 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
     }
   } catch (e) {
     logger.e(e.toString());
-  } finally {}
+  } finally {
+    httpClient.close();
+  }
   return flipSubmitLongAnswersResponse;
 }

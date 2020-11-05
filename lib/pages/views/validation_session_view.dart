@@ -17,6 +17,7 @@ import 'package:my_idena/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 int controllerChronoValue;
 HttpService httpService = HttpService();
@@ -52,14 +53,9 @@ class ValidationSessionView extends StatefulWidget {
 class _ValidationSessionViewState extends State<ValidationSessionView>
     with TickerProviderStateMixin {
   AnimationController animationController;
-  AnimationController controllerChrono;
   bool initStateOk;
+  int endTime;
   String currentPeriod;
-  String get timerString {
-    Duration duration = controllerChrono.duration * controllerChrono.value;
-    return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
-  }
-
   int index = 0;
 
   @override
@@ -82,50 +78,27 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       validationSessionInfo = null;
       validationItemList = new List();
       checkFlipsQualityProcessForValidationSession = false;
-      Duration duree = (dnaAllForValidationSession
-              .dnaGetEpochResponse.result.nextValidation
-              .add(new Duration(
-                  seconds: dnaAllForValidationSession
-                      .dnaCeremonyIntervalsResponse
-                      .result
-                      .shortSessionDuration)))
-          .difference(DateTime.now());
-      controllerChrono = AnimationController(
-          vsync: this, duration: Duration(seconds: duree.inSeconds));
+      endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
+              .nextValidation.millisecondsSinceEpoch +
+          (dnaAllForValidationSession
+                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration *
+              1000);
     }
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
         validationItemList = new List();
-
-        Duration duree = (dnaAllForValidationSession
-                .dnaGetEpochResponse.result.nextValidation
-                .add(new Duration(
-                    seconds: dnaAllForValidationSession
-                        .dnaCeremonyIntervalsResponse
-                        .result
-                        .shortSessionDuration))
-                .add(new Duration(
-                    seconds: dnaAllForValidationSession
-                        .dnaCeremonyIntervalsResponse
-                        .result
-                        .longSessionDuration)))
-            .difference(DateTime.now());
-        controllerChrono = AnimationController(
-            vsync: this, duration: Duration(seconds: duree.inSeconds));
-      } else {
-        controllerChrono = AnimationController(
-            vsync: this, duration: Duration(seconds: controllerChronoValue));
       }
-    }
-  }
 
-  @override
-  void dispose() {
-    if (controllerChrono != null) {
-      controllerChrono.dispose();
+      endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
+              .nextValidation.millisecondsSinceEpoch +
+          (dnaAllForValidationSession
+                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration *
+              1000) +
+          (dnaAllForValidationSession
+                  .dnaCeremonyIntervalsResponse.result.longSessionDuration *
+              1000);
     }
-    super.dispose();
   }
 
   _refreshAction() async {
@@ -215,7 +188,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                         ? Chip(
                                             backgroundColor: Colors.orange[600],
                                             padding: EdgeInsets.all(0),
-                                            label: Text('Mode démo',
+                                            label: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate("Demo mode"),
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.white)),
@@ -320,7 +295,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                                                                 snapshotFlip.data;
                                                                             if (currentPeriod == EpochPeriod.LongSession &&
                                                                                 checkFlipsQualityProcessForValidationSession == true) {
-                                                                              FutureBuilder<List<Word>>(
+                                                                              return FutureBuilder<List<Word>>(
                                                                                   future: getWordsFromHash(validationSessionInfoFlips.hash, widget.simulationMode),
                                                                                   builder: (BuildContext context, AsyncSnapshot<List<Word>> snapshotWords) {
                                                                                     if (snapshotWords.hasData == false) {
@@ -346,10 +321,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                                                             } else {
                                                                               return displayFlips(validationSessionInfoFlips, index);
                                                                             }
-                                                                            return Center(
-                                                                                child: CircularProgressIndicator(
-                                                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.yellow),
-                                                                            ));
                                                                           }
                                                                         }),
                                                                     Padding(
@@ -457,7 +428,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       }
       return ValidationStartCheckingKeywordsButtonView(
         simulationMode: widget.simulationMode,
-        controllerChrono: controllerChrono,
         dnaAll: dnaAllForValidationSession,
         animationController: animationController,
       );
@@ -509,56 +479,76 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   }
 
   Widget getChrono() {
-    controllerChrono.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) {
-        if (currentPeriod == EpochPeriod.ShortSession) {
-          if (widget.simulationMode == false) {
-            submitShortAnswers(validationItemList, validationSessionInfo);
-          }
-
-          Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) => ValidationSessionScreen(
-                    simulationMode: widget.simulationMode,
-                    animationController: animationController,
-                    dnaAll: dnaAllForValidationSession,
-                    checkFlipsQualityProcess: false,
-                    typeLaunchSession: EpochPeriod.LongSession),
-              ));
-        }
-        if (currentPeriod == EpochPeriod.LongSession) {
-          if (widget.simulationMode == false) {
-            submitLongAnswers(validationItemList, validationSessionInfo);
-          }
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-          );
-        }
-      }
-    });
-    controllerChrono.reverse(
-        from: controllerChrono.value == 0.0 ? 1.0 : controllerChrono.value);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(Icons.access_time, color: Colors.red),
-        AnimatedBuilder(
-            animation: controllerChrono,
-            builder: (BuildContext context, Widget child) {
-              return Text(
-                timerString,
-                style: TextStyle(
-                  fontFamily: MyIdenaAppTheme.fontName,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  letterSpacing: -0.1,
-                  color: Colors.red,
-                ),
+        CountdownTimer(
+          endTime: endTime,
+          widgetBuilder: (_, CurrentRemainingTime time) {
+            if (time == null) {
+              return Text("");
+            } else {
+              return Row(
+                children: [
+                  Text(time.min != null ? "${time.min} m " : "0 m ",
+                      style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        letterSpacing: -0.2,
+                        color: Colors.red,
+                      )),
+                  Text(time.sec != null ? "${time.sec} s " : "0 s ",
+                      style: TextStyle(
+                        fontFamily: MyIdenaAppTheme.fontName,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        letterSpacing: -0.2,
+                        color: Colors.red,
+                      )),
+                ],
               );
-            }),
+            }
+          },
+          onEnd: () {
+            if (currentPeriod == EpochPeriod.ShortSession) {
+              if (widget.simulationMode == false) {
+                submitShortAnswers(validationItemList, validationSessionInfo);
+              }
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) =>
+                          ValidationSessionScreen(
+                              simulationMode: widget.simulationMode,
+                              animationController: animationController,
+                              dnaAll: dnaAllForValidationSession,
+                              checkFlipsQualityProcess: false,
+                              typeLaunchSession: EpochPeriod.LongSession),
+                    ));
+              });
+            }
+            if (currentPeriod == EpochPeriod.LongSession) {
+              if (widget.simulationMode == false && checkFlipsQualityProcessForValidationSession == true) {
+                submitLongAnswers(validationItemList, validationSessionInfo);
+              }
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              });
+            }
+          },
+        ),
       ],
     );
   }
