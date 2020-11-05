@@ -216,10 +216,11 @@
   "Invitee address": "Invitee address",
   "Create invitation": "Create invitation",
   "You can issue the invitation to a specific identity address": "You can issue the invitation to a specific identity address",
-  "Try a validation session": "Try a validation session",
+  "Try a validation session": "Essayer une session de validation",
   "Not connected": "Non connecté",
   "Not synchronized": "Non synchronisé",
-  "Synchronized": "Synchronisé"
+  "Synchronized": "Synchronisé",
+  "Demo mode": "Mode démo"
 
   
 
