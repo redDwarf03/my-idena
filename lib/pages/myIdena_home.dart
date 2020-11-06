@@ -95,7 +95,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage('https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
+                                backgroundImage: NetworkImage('https://robohash.idena.io/${dnaAll.dnaIdentityResponse.result.address}'),
                                 radius: 50.0,
                               ),
                             ),

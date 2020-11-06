@@ -217,7 +217,7 @@ class _TransactionsViewState extends State<TransactionsView> {
           height: 10,
         ),
         Image.network(
-          'https://robohash.org/${transaction.from}',
+          'https://robohash.idena.io/${transaction.from}',
           width: 60,
           height: 60,
         ),
