@@ -7,6 +7,8 @@ import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
+import 'package:my_idena/pages/widgets/line_widget.dart';
+import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/orderable_stack.dart';
 import 'package:my_idena/utils/util_flip.dart';
@@ -147,58 +149,12 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Text(
-                                              AppLocalizations.of(context)
-                                                  .translate(
-                                                      "Think up a story"),
-                                              style: TextStyle(
-                                                fontFamily:
-                                                    MyIdenaAppTheme.fontName,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16,
-                                                letterSpacing: -0.2,
-                                                color: MyIdenaAppTheme.darkText,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Container(
-                                                height: 4,
-                                                width: 70,
-                                                decoration: BoxDecoration(
-                                                  color: HexColor('#000000')
-                                                      .withOpacity(0.2),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4.0)),
-                                                ),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Container(
-                                                      width: 70,
-                                                      height: 4,
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                                colors: [
-                                                              HexColor(
-                                                                      '#000000')
-                                                                  .withOpacity(
-                                                                      0.1),
-                                                              HexColor(
-                                                                  '#000000'),
-                                                            ]),
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    4.0)),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                            textAboveLineWidget(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        "Think up a story"),
+                                                14),
+                                            lineWidget(70),
                                             SizedBox(height: 10.0),
                                             Text(
                                               AppLocalizations.of(context)
@@ -474,47 +430,11 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context).translate(
-                                      "Select 4 images to tell your story"),
-                                  style: TextStyle(
-                                    fontFamily: MyIdenaAppTheme.fontName,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    letterSpacing: -0.2,
-                                    color: MyIdenaAppTheme.darkText,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Container(
-                                    height: 4,
-                                    width: 70,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          HexColor('#000000').withOpacity(0.2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          width: 70,
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor('#000000')
-                                                  .withOpacity(0.1),
-                                              HexColor('#000000'),
-                                            ]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4.0)),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                textAboveLineWidget(
+                                    AppLocalizations.of(context).translate(
+                                        "Select 4 images to tell your story"),
+                                    16),
+                                lineWidget(70),
                                 SizedBox(height: 10.0),
                                 Text(
                                   AppLocalizations.of(context).translate(
@@ -808,47 +728,11 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate("Shuffle images"),
-                                  style: TextStyle(
-                                    fontFamily: MyIdenaAppTheme.fontName,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    letterSpacing: -0.2,
-                                    color: MyIdenaAppTheme.darkText,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Container(
-                                    height: 4,
-                                    width: 70,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          HexColor('#000000').withOpacity(0.2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          width: 70,
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor('#000000')
-                                                  .withOpacity(0.1),
-                                              HexColor('#000000'),
-                                            ]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4.0)),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                textAboveLineWidget(
+                                    AppLocalizations.of(context)
+                                        .translate("Shuffle images"),
+                                    16),
+                                lineWidget(70),
                                 SizedBox(height: 10.0),
                                 Text(
                                   AppLocalizations.of(context).translate(
@@ -1057,47 +941,11 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate("Submit flip"),
-                                  style: TextStyle(
-                                    fontFamily: MyIdenaAppTheme.fontName,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    letterSpacing: -0.2,
-                                    color: MyIdenaAppTheme.darkText,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: Container(
-                                    height: 4,
-                                    width: 70,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          HexColor('#000000').withOpacity(0.2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                          width: 70,
-                                          height: 4,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor('#000000')
-                                                  .withOpacity(0.1),
-                                              HexColor('#000000'),
-                                            ]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4.0)),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                textAboveLineWidget(
+                                    AppLocalizations.of(context)
+                                        .translate("Submit flip"),
+                                    16),
+                                lineWidget(70),
                                 SizedBox(height: 10.0),
                                 Text(
                                   AppLocalizations.of(context).translate(

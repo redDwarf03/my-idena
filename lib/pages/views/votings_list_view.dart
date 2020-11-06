@@ -3,6 +3,8 @@ import 'package:my_idena/backoffice/bean/votings_list_response.dart';
 import 'package:my_idena/backoffice/factory/oracle_service.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/widgets/line_widget.dart';
+import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 
@@ -162,44 +164,10 @@ class _VotingsListViewState extends State<VotingsListView> {
               children: [
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Total prize"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context).translate("Total prize"),
+                        14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
@@ -217,44 +185,9 @@ class _VotingsListViewState extends State<VotingsListView> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Deadline"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context).translate("Deadline"), 14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
@@ -272,44 +205,11 @@ class _VotingsListViewState extends State<VotingsListView> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Quorum required"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context)
+                            .translate("Quorum required"),
+                        14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
@@ -333,44 +233,9 @@ class _VotingsListViewState extends State<VotingsListView> {
               children: [
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Vote"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context).translate("Vote"), 14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
@@ -389,44 +254,10 @@ class _VotingsListViewState extends State<VotingsListView> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Free voting"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context).translate("Free voting"),
+                        14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
@@ -444,44 +275,10 @@ class _VotingsListViewState extends State<VotingsListView> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate("Your reward"),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.2,
-                        color: MyIdenaAppTheme.darkText,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        height: 4,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: HexColor('#000000').withOpacity(0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 4,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor('#000000').withOpacity(0.1),
-                                  HexColor('#000000'),
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    textAboveLineWidget(
+                        AppLocalizations.of(context).translate("Your reward"),
+                        14),
+                    lineWidget(100),
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(

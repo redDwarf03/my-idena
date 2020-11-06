@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/widgets/line_widget.dart';
+import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:flutter/services.dart';
@@ -74,63 +76,11 @@ class _AboutViewState extends State<AboutView> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        "Thanks for help"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.2,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4),
-                                                child: Container(
-                                                  height: 4,
-                                                  width: 70,
-                                                  decoration: BoxDecoration(
-                                                    color: HexColor('#000000')
-                                                        .withOpacity(0.2),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                4.0)),
-                                                  ),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 70,
-                                                        height: 4,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              LinearGradient(
-                                                                  colors: [
-                                                                HexColor(
-                                                                        '#000000')
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                HexColor(
-                                                                    '#000000'),
-                                                              ]),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                              textAboveLineWidget(
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          "Thanks for help"), 14),
+                                              lineWidget(70),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
@@ -177,62 +127,10 @@ class _AboutViewState extends State<AboutView> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate("Release"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.2,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4),
-                                                child: Container(
-                                                  height: 4,
-                                                  width: 70,
-                                                  decoration: BoxDecoration(
-                                                    color: HexColor('#000000')
-                                                        .withOpacity(0.2),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                4.0)),
-                                                  ),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 70,
-                                                        height: 4,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              LinearGradient(
-                                                                  colors: [
-                                                                HexColor(
-                                                                        '#000000')
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                HexColor(
-                                                                    '#000000'),
-                                                              ]),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                              textAboveLineWidget(
+                                                  AppLocalizations.of(context)
+                                                      .translate("Release"), 14),
+                                              lineWidget(70),
                                               FutureBuilder(
                                                   future: rootBundle.loadString(
                                                       "pubspec.yaml"),
@@ -296,62 +194,10 @@ class _AboutViewState extends State<AboutView> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate("Created by"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.2,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4),
-                                                child: Container(
-                                                  height: 4,
-                                                  width: 70,
-                                                  decoration: BoxDecoration(
-                                                    color: HexColor('#000000')
-                                                        .withOpacity(0.2),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                4.0)),
-                                                  ),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 70,
-                                                        height: 4,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              LinearGradient(
-                                                                  colors: [
-                                                                HexColor(
-                                                                        '#000000')
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                HexColor(
-                                                                    '#000000'),
-                                                              ]),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                              textAboveLineWidget(
+                                                  AppLocalizations.of(context)
+                                                      .translate("Created by"), 14),
+                                              lineWidget(70),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6),

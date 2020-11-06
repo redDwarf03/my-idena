@@ -8,6 +8,8 @@ import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
+import 'package:my_idena/pages/widgets/line_widget.dart';
+import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/utils/util_hexcolor.dart';
@@ -91,55 +93,15 @@ class _ValidationSessionCountdownTextState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                   canValidate == 1
-                      ? Text(
+                      ? textAboveLineWidget(
                           AppLocalizations.of(context).translate(
                               "Your status doesn't allow you to participate in the validation session"),
-                          style: TextStyle(
-                            fontFamily: MyIdenaAppTheme.fontName,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            letterSpacing: -0.2,
-                            color: MyIdenaAppTheme.darkText,
-                          ),
-                        )
-                      : Text(
+                          14)
+                      : textAboveLineWidget(
                           AppLocalizations.of(context).translate(
                               "To participate in the validation session, you must provide your flips"),
-                          style: TextStyle(
-                            fontFamily: MyIdenaAppTheme.fontName,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            letterSpacing: -0.2,
-                            color: MyIdenaAppTheme.darkText,
-                          ),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Container(
-                      height: 4,
-                      width: 90,
-                      decoration: BoxDecoration(
-                        color: HexColor('#000000').withOpacity(0.2),
-                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 90,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                HexColor('#000000').withOpacity(0.1),
-                                HexColor('#000000'),
-                              ]),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                          14),
+                  lineWidget(90),
                 ]))
           ])));
     }
@@ -261,34 +223,7 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Container(
-                          height: 4,
-                          width: 90,
-                          decoration: BoxDecoration(
-                            color: HexColor('#000000').withOpacity(0.2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 90,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    HexColor('#000000').withOpacity(0.1),
-                                    HexColor('#000000'),
-                                  ]),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      lineWidget(90),
                       sendIdna ? Container() : gift(context)
                     ]))
               ])));
@@ -316,34 +251,7 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Container(
-                          height: 4,
-                          width: 90,
-                          decoration: BoxDecoration(
-                            color: HexColor('#000000').withOpacity(0.2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                width: 90,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    HexColor('#000000').withOpacity(0.1),
-                                    HexColor('#000000'),
-                                  ]),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4.0)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      lineWidget(90),
                       sendIdna ? Container() : gift(context)
                     ]))
               ])));
@@ -552,43 +460,9 @@ class _ValidationSessionCountdownTextState
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            AppLocalizations.of(context).translate("Next validation"),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: MyIdenaAppTheme.fontName,
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              letterSpacing: -0.2,
-              color: MyIdenaAppTheme.darkText,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Container(
-              height: 4,
-              width: 90,
-              decoration: BoxDecoration(
-                color: HexColor('#000000').withOpacity(0.2),
-                borderRadius: BorderRadius.all(Radius.circular(4.0)),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 90,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        HexColor('#000000').withOpacity(0.1),
-                        HexColor('#000000'),
-                      ]),
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          textAboveLineWidget(
+              AppLocalizations.of(context).translate("Next validation"), 14),
+          lineWidget(90),
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: Text(

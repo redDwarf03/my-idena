@@ -4,9 +4,10 @@ import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/widgets/line_widget.dart';
+import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_hexcolor.dart';
-
 
 class InviteView extends StatefulWidget {
   final AnimationController animationController;
@@ -90,63 +91,12 @@ class _InviteViewState extends State<InviteView> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        "You can issue the invitation to a specific identity address"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily:
-                                                      MyIdenaAppTheme.fontName,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                  letterSpacing: -0.2,
-                                                  color:
-                                                      MyIdenaAppTheme.darkText,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4),
-                                                child: Container(
-                                                  height: 4,
-                                                  width: 70,
-                                                  decoration: BoxDecoration(
-                                                    color: HexColor('#000000')
-                                                        .withOpacity(0.2),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                4.0)),
-                                                  ),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 70,
-                                                        height: 4,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              LinearGradient(
-                                                                  colors: [
-                                                                HexColor(
-                                                                        '#000000')
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                HexColor(
-                                                                    '#000000'),
-                                                              ]),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0)),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                              textAboveLineWidget(
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          "You can issue the invitation to a specific identity address"),
+                                                  16),
+                                              lineWidget(70),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6),
