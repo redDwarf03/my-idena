@@ -9,7 +9,7 @@ import 'package:my_idena/pages/views/profile_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/pages/views/validation_session_infos_view.dart';
-import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.animationController, this.firstState})

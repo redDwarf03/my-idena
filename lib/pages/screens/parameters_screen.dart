@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/paramRPC_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
-import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 
 class ParametersScreen extends StatefulWidget {
   const ParametersScreen({Key key, this.animationController}) : super(key: key);

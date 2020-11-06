@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 import 'package:my_idena/pages/views/about_view.dart';
 import 'package:my_idena/pages/views/donation_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';

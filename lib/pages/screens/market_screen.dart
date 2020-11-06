@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 import 'package:my_idena/pages/views/charts_volume_view.dart';
 import 'package:my_idena/pages/views/price_view.dart';
 import 'package:my_idena/pages/views/charts_price_view.dart';

@@ -3,7 +3,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/bad_flip_view.dart';
 import 'package:my_idena/pages/views/good_flip_view.dart';
 import 'package:my_idena/pages/views/title_view.dart';
-import 'package:my_idena/pages/app_bar_view.dart';
+import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 
 class ValidationBasicsScreen extends StatefulWidget {
   const ValidationBasicsScreen({Key key, this.animationController})
