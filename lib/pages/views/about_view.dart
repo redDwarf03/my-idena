@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
+import 'package:my_idena/pages/widgets/line_small_widget.dart';
 import 'package:my_idena/pages/widgets/line_widget.dart';
 import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
@@ -78,7 +79,8 @@ class _AboutViewState extends State<AboutView> {
                                               textAboveLineWidget(
                                                   AppLocalizations.of(context)
                                                       .translate(
-                                                          "Thanks for help"), 14),
+                                                          "Thanks for help"),
+                                                  14),
                                               lineWidget(70),
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -102,18 +104,7 @@ class _AboutViewState extends State<AboutView> {
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10, top: 0, bottom: 0),
-                                    child: Container(
-                                      height: 2,
-                                      decoration: BoxDecoration(
-                                        color: MyIdenaAppTheme.background,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0)),
-                                      ),
-                                    ),
-                                  ),
+                                  smallLineWidget(),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 24, right: 24, top: 8, bottom: 5),
@@ -128,7 +119,8 @@ class _AboutViewState extends State<AboutView> {
                                             children: <Widget>[
                                               textAboveLineWidget(
                                                   AppLocalizations.of(context)
-                                                      .translate("Release"), 14),
+                                                      .translate("Release"),
+                                                  14),
                                               lineWidget(70),
                                               FutureBuilder(
                                                   future: rootBundle.loadString(
@@ -169,18 +161,7 @@ class _AboutViewState extends State<AboutView> {
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10, top: 0, bottom: 0),
-                                    child: Container(
-                                      height: 2,
-                                      decoration: BoxDecoration(
-                                        color: MyIdenaAppTheme.background,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0)),
-                                      ),
-                                    ),
-                                  ),
+                                  smallLineWidget(),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 24, right: 24, top: 8, bottom: 5),
@@ -195,7 +176,8 @@ class _AboutViewState extends State<AboutView> {
                                             children: <Widget>[
                                               textAboveLineWidget(
                                                   AppLocalizations.of(context)
-                                                      .translate("Created by"), 14),
+                                                      .translate("Created by"),
+                                                  14),
                                               lineWidget(70),
                                               Padding(
                                                 padding: const EdgeInsets.only(
