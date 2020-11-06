@@ -12,7 +12,6 @@ import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/orderable_stack.dart';
 import 'package:my_idena/utils/util_flip.dart';
-import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_img.dart';
 
 class FlipsCreatorView extends StatefulWidget {

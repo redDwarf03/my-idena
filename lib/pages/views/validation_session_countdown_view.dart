@@ -12,7 +12,6 @@ import 'package:my_idena/pages/widgets/line_widget.dart';
 import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:my_idena/utils/util_identity.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 

@@ -6,7 +6,6 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/widgets/line_widget.dart';
 import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/utils/util_hexcolor.dart';
 
 OracleService oracleService = OracleService();
 VotingsListResponse votingsListResponse;

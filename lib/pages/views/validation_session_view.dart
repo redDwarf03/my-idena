@@ -17,7 +17,6 @@ import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/utils/util_hexcolor.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 int controllerChronoValue;
@@ -198,9 +197,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                           scrollDirection: Axis.vertical,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            final int count =
-                                                validationItemList.length;
-
                                             return SizedBox(
                                               child: Column(
                                                 children: [
