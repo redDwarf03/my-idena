@@ -150,7 +150,7 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                             ),
                                           ),
                                           Image.network(
-                                            'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}',
+                                            'https://robohash.idena.io/${dnaAll.dnaIdentityResponse.result.address}',
                                             width: 50,
                                             height: 50,
                                           ),
