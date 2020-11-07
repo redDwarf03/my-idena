@@ -44,7 +44,7 @@ dependencies:
   
   intl: ^0.16.1
  
-  shared_preferences: ^0.5.12+2
+  shared_preferences: ^0.5.12+4
 
   ethereum_util: ^1.3.0
 
@@ -52,17 +52,15 @@ dependencies:
   
   flutter_launcher_icons: ^0.8.1
 
-  introduction_screen: ^1.0.9
-
   logger: ^0.9.4
   
   uni_links: ^0.4.0
   
-  url_launcher: ^5.7.5
+  url_launcher: ^5.7.10
   
   fleva_icons: ^1.0.2
   
-  connectivity: ^0.4.9+5
+  connectivity: ^2.0.1
 
   rxdart: ^0.24.1
     
@@ -74,9 +72,9 @@ dependencies:
 
   carousel_slider: ^2.3.1
   
-  badges: ^1.1.3
+  badges: ^1.1.4
 
-  flutter_countdown_timer: ^1.3.0
+  flutter_countdown_timer: ^1.4.0
 
 dev_dependencies:
   flutter_test:
