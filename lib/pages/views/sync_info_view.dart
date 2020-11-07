@@ -30,7 +30,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   }
 
   _timeSyncUpdate() {
-    _timerSync = Timer(const Duration(seconds: 1), () async {
+    _timerSync = Timer(const Duration(milliseconds: 200), () async {
       bcnSyncingResponse = await httpService.checkSync();
       if (!mounted) return;
       setState(() {});

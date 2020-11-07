@@ -216,11 +216,11 @@ class _TransactionsViewState extends State<TransactionsView> {
         SizedBox(
           height: 10,
         ),
-        Image.network(
-          'https://robohash.idena.io/${transaction.from}',
+        /*Image.network(
+          'https://robohash.org/${transaction.from}',
           width: 60,
           height: 60,
-        ),
+        ),*/
         SizedBox(
           height: 10,
         )

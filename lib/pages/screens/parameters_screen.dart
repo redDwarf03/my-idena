@@ -90,7 +90,7 @@ class _ParametersScreenState extends State<ParametersScreen>
             getAppBarUI(
                 topBarAnimation,
                 widget.animationController,
-                topBarOpacity),
+                topBarOpacity, false),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

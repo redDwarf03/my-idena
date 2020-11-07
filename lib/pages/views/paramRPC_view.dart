@@ -40,7 +40,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
     _keyAppVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
-    _timer = Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
+    _timer = Timer.periodic(Duration(milliseconds: 500), (_) => checkNode());
   }
 
   Future checkNode() async {
@@ -140,8 +140,19 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                         .translate(
                                                             "Enter your API url")
                                                     : null,
-                                                onChanged: (val) =>
-                                                    apiUrl = val,
+                                                onChanged: (val) {
+                                                  try {
+                                                    SharedPreferencesHelper
+                                                        .setIdenaSharedPreferences(
+                                                            IdenaSharedPreferences(
+                                                                apiUrlController
+                                                                    .text,
+                                                                keyAppController
+                                                                    .text));
+                                                  } catch (e) {
+                                                    logger.e(e.toString());
+                                                  }
+                                                },
                                                 keyboardType:
                                                     TextInputType.text,
                                                 style: TextStyle(
@@ -189,8 +200,19 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                         .translate(
                                                             "Enter your key app")
                                                     : null,
-                                                onChanged: (val) =>
-                                                    keyApp = val,
+                                                onChanged: (val) {
+                                                  try {
+                                                    SharedPreferencesHelper
+                                                        .setIdenaSharedPreferences(
+                                                            IdenaSharedPreferences(
+                                                                apiUrlController
+                                                                    .text,
+                                                                keyAppController
+                                                                    .text));
+                                                  } catch (e) {
+                                                    logger.e(e.toString());
+                                                  }
+                                                },
                                                 keyboardType:
                                                     TextInputType.text,
                                                 obscureText: !_keyAppVisible,
@@ -248,81 +270,6 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                               height: 5,
                                             ),
                                             checkNodeConnection(),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 6),
-                                              child: RaisedButton(
-                                                elevation: 5.0,
-                                                onPressed: () async {
-                                                  if (_keyFormParamRPC
-                                                      .currentState
-                                                      .validate()) {
-                                                    try {
-                                                      await SharedPreferencesHelper
-                                                          .setIdenaSharedPreferences(
-                                                              IdenaSharedPreferences(
-                                                                  apiUrl,
-                                                                  keyApp));
-                                                    } catch (e) {
-                                                      logger.e(e.toString());
-                                                    }
-                                                    showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (context) =>
-                                                                SimpleDialog(
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Column(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Text(
-                                                                            AppLocalizations.of(context).translate("Parameters have been saved"),
-                                                                            style: TextStyle(
-                                                                                fontFamily: MyIdenaAppTheme.fontName,
-                                                                                fontWeight: FontWeight.w500,
-                                                                                fontSize: 16,
-                                                                                letterSpacing: -0.1,
-                                                                                color: MyIdenaAppTheme.darkText),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ));
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                padding: EdgeInsets.all(15.0),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30.0),
-                                                ),
-                                                color: Colors.white,
-                                                child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate("Save"),
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      letterSpacing: 1.5,
-                                                      fontSize: 12.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          MyIdenaAppTheme
-                                                              .fontName,
-                                                    )),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),

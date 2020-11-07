@@ -6,7 +6,13 @@ import 'package:my_idena/pages/views/validation_session_view.dart';
 import 'package:my_idena/pages/widgets/app_bar_widget.dart';
 
 class ValidationSessionScreen extends StatefulWidget {
-  const ValidationSessionScreen({Key key, this.animationController, this.typeLaunchSession, this.checkFlipsQualityProcess, this.dnaAll, this.simulationMode})
+  const ValidationSessionScreen(
+      {Key key,
+      this.animationController,
+      this.typeLaunchSession,
+      this.checkFlipsQualityProcess,
+      this.dnaAll,
+      this.simulationMode})
       : super(key: key);
 
   final AnimationController animationController;
@@ -16,10 +22,12 @@ class ValidationSessionScreen extends StatefulWidget {
   final bool simulationMode;
 
   @override
-  _ValidationSessionScreenState createState() => _ValidationSessionScreenState();
+  _ValidationSessionScreenState createState() =>
+      _ValidationSessionScreenState();
 }
 
-class _ValidationSessionScreenState extends State<ValidationSessionScreen> with TickerProviderStateMixin {
+class _ValidationSessionScreenState extends State<ValidationSessionScreen>
+    with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
   List<Widget> listViews = <Widget>[];
@@ -28,8 +36,10 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
 
   @override
   void initState() {
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: widget.animationController, curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
+    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: widget.animationController,
+            curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData(context);
 
     scrollController.addListener(() {
@@ -39,7 +49,8 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
             topBarOpacity = 1.0;
           });
         }
-      } else if (scrollController.offset <= 24 && scrollController.offset >= 0) {
+      } else if (scrollController.offset <= 24 &&
+          scrollController.offset >= 0) {
         if (topBarOpacity != scrollController.offset / 24) {
           setState(() {
             topBarOpacity = scrollController.offset / 24;
@@ -57,12 +68,16 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 8;
+    const int count = 2;
     listViews.add(
       TitleView(
-        titleTxt: widget.checkFlipsQualityProcess ? "Check flips quality" : "Select meaningful story: left or right",
-        animation: Tween<double>(begin: 0.0, end: 1.0)
-            .animate(CurvedAnimation(parent: widget.animationController, curve: Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+        titleTxt: widget.checkFlipsQualityProcess
+            ? "Check flips quality"
+            : "Select meaningful story: left or right",
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
@@ -73,9 +88,11 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
         simulationMode: widget.simulationMode,
         dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0)
-            .animate(CurvedAnimation(parent: widget.animationController, curve: Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController,
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
       ),
     );
   }
@@ -88,8 +105,10 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> with 
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
-            getMainListViewUI(scrollController, listViews, widget.animationController),
-            getAppBarUI(topBarAnimation, widget.animationController, topBarOpacity),
+            getMainListViewUI(
+                scrollController, listViews, widget.animationController),
+            getAppBarUI(topBarAnimation, widget.animationController,
+                topBarOpacity, widget.simulationMode),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

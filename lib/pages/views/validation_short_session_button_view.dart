@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/beans/validation_item.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
@@ -8,7 +7,6 @@ import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 
 class ValidationShortSessionButtonView extends StatefulWidget {
-  final List<ValidationItem> validationItemList;
   final ValidationSessionInfo validationSessionInfo;
   final DnaAll dnaAll;
   final String currentPeriod;
@@ -17,7 +15,6 @@ class ValidationShortSessionButtonView extends StatefulWidget {
 
   const ValidationShortSessionButtonView(
       {Key key,
-      this.validationItemList,
       this.dnaAll,
       this.currentPeriod,
       this.animationController,
@@ -40,9 +37,9 @@ class _ValidationShortSessionButtonViewState
           elevation: 5.0,
           onPressed: () {
             if (widget.simulationMode == false) {
-              submitShortAnswers(
-                  widget.validationItemList, widget.validationSessionInfo);
+              submitShortAnswers(widget.validationSessionInfo);
             }
+
             Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(

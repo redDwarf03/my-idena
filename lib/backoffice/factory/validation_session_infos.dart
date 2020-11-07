@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/beans/validation_item.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/backoffice/bean/flip_examples.dart';
 import 'package:my_idena/backoffice/bean/flip_get_request.dart';
@@ -22,6 +21,7 @@ import 'package:my_idena/backoffice/bean/flip_words_response.dart';
 import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
+import 'package:my_idena/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
@@ -36,7 +36,8 @@ class ValidationSessionInfoFlips {
       this.listWords,
       this.listImagesLeft,
       this.listImagesRight,
-      this.listOk});
+      this.answerType,
+      this.relevanceType});
 
   String hash;
   bool ready;
@@ -45,19 +46,27 @@ class ValidationSessionInfoFlips {
   List<Word> listWords;
   List<Uint8List> listImagesLeft;
   List<Uint8List> listImagesRight;
-  int listOk;
+  int answerType;
+  int relevanceType;
+}
+
+class ValidationSessionInfoContext {
+  ValidationSessionInfoContext(
+      {this.simulationMode,
+      this.epochPeriod,
+      this.checkFlipsQualityProcess});
+
+  String epochPeriod;
+  bool simulationMode;
+  bool checkFlipsQualityProcess;
 }
 
 class ValidationSessionInfo {
-  ValidationSessionInfo({this.typeSession, this.listSessionValidationFlip});
+  ValidationSessionInfo({this.typeSession, this.listSessionValidationFlips});
 
   String typeSession;
-  bool loadingFlipsOk;
-  bool loadingWordsOk;
-  String loadingFlipsError;
-  String loadingWordsError;
-  List<ValidationSessionInfoFlips> listSessionValidationFlip;
-  List<ValidationSessionInfoFlips> listSessionValidationFlipExtra;
+  List<ValidationSessionInfoFlips> listSessionValidationFlips;
+  List<ValidationSessionInfoFlips> listSessionValidationFlipsExtra;
 }
 
 Future<ValidationSessionInfo> getValidationSessionFlipsList(
@@ -69,7 +78,6 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
   }
 
   ValidationSessionInfo validationSessionInfo = new ValidationSessionInfo();
-  validationSessionInfo.loadingFlipsOk = false;
 
   String method;
 
@@ -168,6 +176,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
             flipShortHashesResponse.result[i].extra;
         validationSessionInfoFlips.available =
             flipShortHashesResponse.result[i].available;
+        validationSessionInfoFlips.answerType = AnswerType.NONE;
+        validationSessionInfoFlips.relevanceType = RelevantType.NO_INFO;
       }
       if (typeSession == EpochPeriod.LongSession) {
         validationSessionInfoFlips.hash = flipLongHashesResponse.result[i].hash;
@@ -177,6 +187,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
             flipLongHashesResponse.result[i].extra;
         validationSessionInfoFlips.available =
             flipLongHashesResponse.result[i].available;
+        validationSessionInfoFlips.answerType = AnswerType.NONE;
+        validationSessionInfoFlips.relevanceType = RelevantType.NO_INFO;            
       }
 
       if (validationSessionInfoFlips.extra) {
@@ -185,13 +197,11 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
         listSessionValidationFlip.add(validationSessionInfoFlips);
       }
     }
-    validationSessionInfo.loadingFlipsOk = true;
 
-    validationSessionInfo.listSessionValidationFlip = listSessionValidationFlip;
-    validationSessionInfo.listSessionValidationFlipExtra =
+    validationSessionInfo.listSessionValidationFlips = listSessionValidationFlip;
+    validationSessionInfo.listSessionValidationFlipsExtra =
         listSessionValidationFlipExtra;
   } catch (e) {
-    validationSessionInfo.loadingFlipsOk = false;
     logger.e(e.toString());
   } finally {
     httpClient.close();
@@ -403,7 +413,6 @@ Future<String> loadAssets(String fileName) async {
 }
 
 Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
-    List<ValidationItem> validationItemList,
     ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
@@ -422,10 +431,10 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
     ParamShortAnswer answers = new ParamShortAnswer();
     List<ShortAnswer> listAnswers = new List();
-    for (int i = 0; i < validationItemList.length; i++) {
+    for (int i = 0; i < validationSessionInfo.listSessionValidationFlips.length; i++) {
       ShortAnswer answer = new ShortAnswer(
-          answer: validationItemList[i].answerType,
-          hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+          answer: validationSessionInfo.listSessionValidationFlips[i].answerType,
+          hash: validationSessionInfo.listSessionValidationFlips[i].hash);
       listAnswers.add(answer);
     }
 
@@ -462,7 +471,6 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 }
 
 Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
-    List<ValidationItem> validationItemList,
     ValidationSessionInfo validationSessionInfo) async {
   if (validationSessionInfo == null) {
     return null;
@@ -482,16 +490,16 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
 
     ParamLongAnswer answers = new ParamLongAnswer();
     List<LongAnswer> listAnswers = new List();
-    for (int i = 0; i < validationItemList.length; i++) {
+    for (int i = 0; i < validationSessionInfo.listSessionValidationFlips.length; i++) {
       wrongWordsBool = false;
-      if (validationItemList[i] != null &&
-          validationItemList[i].relevanceType == RelevantType.IRRELEVANT) {
+      if (validationSessionInfo.listSessionValidationFlips[i] != null &&
+          validationSessionInfo.listSessionValidationFlips[i].relevanceType == RelevantType.IRRELEVANT) {
         wrongWordsBool = true;
       }
       LongAnswer answer = new LongAnswer(
-          answer: validationItemList[i].answerType,
+          answer: validationSessionInfo.listSessionValidationFlips[i].answerType,
           wrongWords: wrongWordsBool,
-          hash: validationSessionInfo.listSessionValidationFlip[i].hash);
+          hash: validationSessionInfo.listSessionValidationFlips[i].hash);
       listAnswers.add(answer);
     }
 

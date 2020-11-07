@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       getMainListViewUI(scrollController, listViews,
                           widget.animationController),
                       getAppBarUI(topBarAnimation, widget.animationController,
-                          topBarOpacity),
+                          topBarOpacity, false),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,
                       ),

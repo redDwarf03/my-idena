@@ -90,7 +90,7 @@ class _OracleVotingsScreenState extends State<OracleVotingsScreen>
             getAppBarUI(
                 topBarAnimation,
                 widget.animationController,
-                topBarOpacity),
+                topBarOpacity, false),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

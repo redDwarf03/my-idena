@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/sync_info_view.dart';
+import 'package:my_idena/pages/widgets/demo_mode_clip_widget.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 Widget getAppBarUI(Animation<double> topBarAnimation,
-    AnimationController animationController, double topBarOpacity) {
+    AnimationController animationController, double topBarOpacity, bool simulationMode) {
   return Column(
     children: <Widget>[
       AnimatedBuilder(
@@ -67,7 +68,13 @@ Widget getAppBarUI(Animation<double> topBarAnimation,
                             child: Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: Container(
-                                  child: SyncInfoView(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                    demoModeClipWidget(context, simulationMode),
+                                    SyncInfoView(),
+                                  ],)
+                                  
                                 )),
                           ),
                         ],

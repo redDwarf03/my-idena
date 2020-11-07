@@ -116,7 +116,7 @@ class _AboutScreenState extends State<AboutScreen>
             getMainListViewUI(
                 scrollController, listViews, widget.animationController),
             getAppBarUI(
-                topBarAnimation, widget.animationController, topBarOpacity),
+                topBarAnimation, widget.animationController, topBarOpacity, false),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

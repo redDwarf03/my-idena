@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/beans/validation_item.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
@@ -7,12 +6,11 @@ import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 
 class ValidationLongSessionButtonView extends StatefulWidget {
-  final List<ValidationItem> validationItemList;
   final ValidationSessionInfo validationSessionInfo;
   final bool simulationMode;
 
   const ValidationLongSessionButtonView(
-      {Key key, this.validationItemList, this.validationSessionInfo, this.simulationMode})
+      {Key key, this.validationSessionInfo, this.simulationMode})
       : super(key: key);
 
   @override
@@ -25,11 +23,11 @@ class _ValidationLongSessionButtonViewState
   Widget build(BuildContext context) {
     int nbIrrelevant = 0;
     int nbRelevant = 0;
-    for (int i = 0; i < widget.validationItemList.length; i++) {
-      if (widget.validationItemList[i].relevanceType == RelevantType.RELEVANT) {
+    for (int i = 0; i < widget.validationSessionInfo.listSessionValidationFlips.length; i++) {
+      if (widget.validationSessionInfo.listSessionValidationFlips[i].relevanceType == RelevantType.RELEVANT) {
         nbRelevant++;
       }
-      if (widget.validationItemList[i].relevanceType ==
+      if (widget.validationSessionInfo.listSessionValidationFlips[i].relevanceType ==
           RelevantType.IRRELEVANT) {
         nbIrrelevant++;
       }
@@ -53,7 +51,7 @@ class _ValidationLongSessionButtonViewState
           onPressed: () {
             if (widget.simulationMode == false) {
               submitLongAnswers(
-                  widget.validationItemList, widget.validationSessionInfo);
+                widget.validationSessionInfo);
             }
             showDialog(
                 context: context,

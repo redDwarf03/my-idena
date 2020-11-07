@@ -92,17 +92,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                         child: Stack(
                           children: <Widget>[
+                            /* dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? SizedBox() :
                             Align(
                               alignment: Alignment.centerLeft,
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage('https://robohash.idena.io/${dnaAll.dnaIdentityResponse.result.address}'),
+                                backgroundImage: NetworkImage('https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
                                 radius: 50.0,
                               ),
-                            ),
+                            ),*/
                             Align(
                               alignment: Alignment.centerRight + Alignment(0, .3),
                               child: Text(
-                                dnaAll.dnaIdentityResponse.result.address.substring(0, 20) + "...",
+                                dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? "?" : dnaAll.dnaIdentityResponse.result.address.substring(0, 20) + "...",
                                 style: TextStyle(
                                   fontFamily: MyIdenaAppTheme.fontName,
                                   fontSize: 12,
@@ -120,7 +121,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 child: Padding(
                                   padding: EdgeInsets.all(5.0),
                                   child: Text(
-                                    new UtilIdentity().mapToFriendlyStatus(dnaAll.dnaIdentityResponse.result.state),
+                                    dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? "?" : new UtilIdentity().mapToFriendlyStatus(dnaAll.dnaIdentityResponse.result.state),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: MyIdenaAppTheme.fontName,

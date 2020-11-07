@@ -123,7 +123,7 @@ class _MarketScreenState extends State<MarketScreen>
             getAppBarUI(
                 topBarAnimation,
                 widget.animationController,
-                topBarOpacity),
+                topBarOpacity, false),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )

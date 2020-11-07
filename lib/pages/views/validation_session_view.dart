@@ -1,12 +1,11 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/beans/dictWords.dart';
-import 'package:my_idena/beans/validation_item.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
-import 'package:my_idena/pages/views/validation_display_flip.dart';
+import 'package:my_idena/pages/views/validation_display_flip_view.dart';
 import 'package:my_idena/pages/views/validation_long_session_button_view.dart';
 import 'package:my_idena/pages/views/validation_short_session_button_view.dart';
 import 'package:my_idena/pages/views/validation_start_checking_keywords_button_view.dart';
@@ -24,13 +23,12 @@ HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 DnaAll dnaAllForValidationSession;
 bool checkFlipsQualityProcessForValidationSession;
-List<ValidationItem> validationItemList;
 
 bool isLoading = false;
 
 class ValidationSessionView extends StatefulWidget {
-  final AnimationController mainScreenAnimationController;
-  final Animation<dynamic> mainScreenAnimation;
+  final AnimationController animationController;
+  final Animation<dynamic> animation;
   final DnaAll dnaAll;
   final bool simulationMode;
   final String typeLaunchSession;
@@ -38,8 +36,8 @@ class ValidationSessionView extends StatefulWidget {
 
   const ValidationSessionView(
       {Key key,
-      this.mainScreenAnimationController,
-      this.mainScreenAnimation,
+      this.animationController,
+      this.animation,
       this.simulationMode,
       this.typeLaunchSession,
       this.checkFlipsQualityProcess,
@@ -52,25 +50,13 @@ class ValidationSessionView extends StatefulWidget {
 
 class _ValidationSessionViewState extends State<ValidationSessionView>
     with TickerProviderStateMixin {
-  AnimationController animationController;
   bool initStateOk;
   int endTime;
   String currentPeriod;
   int index = 0;
 
   @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
-    initStateOk = true;
-
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
-
     dnaAllForValidationSession = widget.dnaAll;
 
     checkFlipsQualityProcessForValidationSession =
@@ -82,7 +68,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     // Init choice
     if (currentPeriod == EpochPeriod.ShortSession) {
       validationSessionInfo = null;
-      validationItemList = new List();
+
       checkFlipsQualityProcessForValidationSession = false;
       endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
               .nextValidation.millisecondsSinceEpoch +
@@ -93,7 +79,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
-        validationItemList = new List();
       }
 
       endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
@@ -132,196 +117,176 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
           if (snapshot.hasData) {
             validationSessionInfo = snapshot.data;
             if (validationSessionInfo == null ||
-                validationSessionInfo.listSessionValidationFlip == null) {
+                validationSessionInfo.listSessionValidationFlips == null) {
               return wakeUp();
             } else {
               List<ValidationSessionInfoFlips> listSessionValidationFlip =
-                  validationSessionInfo.listSessionValidationFlip;
-              if (initStateOk) {
-                if (checkFlipsQualityProcessForValidationSession == false) {
-                  validationItemList = new List();
-                  for (int i = 0;
-                      i <
-                          validationSessionInfo
-                              .listSessionValidationFlip.length;
-                      i++) {
-                    validationItemList.add(new ValidationItem(
-                        answerType: AnswerType.NONE,
-                        relevanceType: RelevantType.NO_INFO));
-                  }
-                }
-                initStateOk = false;
-              }
+                  validationSessionInfo.listSessionValidationFlips;
+
               return AnimatedBuilder(
-                  animation: widget.mainScreenAnimationController,
+                  animation: widget.animationController,
                   builder: (BuildContext context, Widget child) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width - 50,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    widget.simulationMode
-                                        ? Chip(
-                                            backgroundColor: Colors.orange[600],
-                                            padding: EdgeInsets.all(0),
-                                            label: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate("Demo mode"),
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.white)),
-                                          )
-                                        : SizedBox(
-                                            height: 1,
+                    return FadeTransition(
+                      opacity: widget.animation,
+                      child: new Transform(
+                        transform: new Matrix4.translationValues(
+                            0.0, 30 * (1.0 - widget.animation.value), 0.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 16, bottom: 18),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width - 50,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height -
+                                                300,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                30,
+                                            child: ListView.builder(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    right: 16,
+                                                    left: 16),
+                                                itemCount:
+                                                    listSessionValidationFlip
+                                                        .length,
+                                                physics:
+                                                    BouncingScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return SizedBox(
+                                                    child: Column(
+                                                      children: [
+                                                        FutureBuilder<
+                                                                ValidationSessionInfoFlips>(
+                                                            future: getValidationSessionFlipDetail(
+                                                                listSessionValidationFlip[
+                                                                    index],
+                                                                widget
+                                                                    .simulationMode),
+                                                            builder: (BuildContext
+                                                                    context,
+                                                                AsyncSnapshot<
+                                                                        ValidationSessionInfoFlips>
+                                                                    snapshotFlip) {
+                                                              if (snapshotFlip
+                                                                      .hasData ==
+                                                                  false) {
+                                                                return Center(
+                                                                    child:
+                                                                        CircularProgressIndicator());
+                                                              } else {
+                                                                ValidationSessionInfoFlips
+                                                                    validationSessionInfoFlips =
+                                                                    snapshotFlip
+                                                                        .data;
+                                                                if (currentPeriod ==
+                                                                        EpochPeriod
+                                                                            .LongSession &&
+                                                                    checkFlipsQualityProcessForValidationSession ==
+                                                                        true) {
+                                                                  return FutureBuilder<
+                                                                          List<
+                                                                              Word>>(
+                                                                      future: getWordsFromHash(
+                                                                          validationSessionInfoFlips
+                                                                              .hash,
+                                                                          widget
+                                                                              .simulationMode),
+                                                                      builder: (BuildContext
+                                                                              context,
+                                                                          AsyncSnapshot<List<Word>>
+                                                                              snapshotWords) {
+                                                                        if (snapshotWords.hasData ==
+                                                                            false) {
+                                                                          return Column(
+                                                                            children: [
+                                                                              displayFlips(validationSessionInfoFlips),
+                                                                              Center(
+                                                                                  child: CircularProgressIndicator(
+                                                                                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                                                              ))
+                                                                            ],
+                                                                          );
+                                                                        } else {
+                                                                          List<Word>
+                                                                              wordsList =
+                                                                              snapshotWords.data;
+                                                                          return Column(
+                                                                            children: [
+                                                                              displayFlips(validationSessionInfoFlips),
+                                                                              checkWords(validationSessionInfoFlips, wordsList)
+                                                                            ],
+                                                                          );
+                                                                        }
+                                                                      });
+                                                                } else {
+                                                                  return displayFlips(
+                                                                      validationSessionInfoFlips);
+                                                                }
+                                                              }
+                                                            }),
+                                                        lineWidget(
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                80),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
                                           ),
-                                    Container(
-                                      height: widget.simulationMode
-                                          ? MediaQuery.of(context).size.height -
-                                              400
-                                          : MediaQuery.of(context).size.height -
-                                              300,
-                                      width: MediaQuery.of(context).size.width -
-                                          30,
-                                      child: ListView.builder(
-                                          padding: const EdgeInsets.only(
-                                              top: 0,
-                                              bottom: 0,
-                                              right: 16,
-                                              left: 16),
-                                          itemCount: validationItemList.length,
-                                          physics: BouncingScrollPhysics(),
-                                          scrollDirection: Axis.vertical,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return SizedBox(
-                                              child: Column(
-                                                children: [
-                                                  FutureBuilder<
-                                                          ValidationSessionInfoFlips>(
-                                                      future: getValidationSessionFlipDetail(
-                                                          listSessionValidationFlip[
-                                                              index],
-                                                          widget
-                                                              .simulationMode),
-                                                      builder: (BuildContext
-                                                              context,
-                                                          AsyncSnapshot<
-                                                                  ValidationSessionInfoFlips>
-                                                              snapshotFlip) {
-                                                        if (snapshotFlip
-                                                                .hasData ==
-                                                            false) {
-                                                          return Center(
-                                                              child:
-                                                                  CircularProgressIndicator(
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                        Color>(
-                                                                    Colors.red),
-                                                          ));
-                                                        } else {
-                                                          ValidationSessionInfoFlips
-                                                              validationSessionInfoFlips =
-                                                              snapshotFlip.data;
-                                                          if (currentPeriod ==
-                                                                  EpochPeriod
-                                                                      .LongSession &&
-                                                              checkFlipsQualityProcessForValidationSession ==
-                                                                  true) {
-                                                            return FutureBuilder<
-                                                                    List<Word>>(
-                                                                future: getWordsFromHash(
-                                                                    validationSessionInfoFlips
-                                                                        .hash,
-                                                                    widget
-                                                                        .simulationMode),
-                                                                builder: (BuildContext
-                                                                        context,
-                                                                    AsyncSnapshot<
-                                                                            List<Word>>
-                                                                        snapshotWords) {
-                                                                  if (snapshotWords
-                                                                          .hasData ==
-                                                                      false) {
-                                                                    return Column(
-                                                                      children: [
-                                                                        displayFlips(
-                                                                            validationSessionInfoFlips,
-                                                                            index),
-                                                                        Center(
-                                                                            child:
-                                                                                CircularProgressIndicator(
-                                                                          valueColor:
-                                                                              AlwaysStoppedAnimation<Color>(Colors.green),
-                                                                        ))
-                                                                      ],
-                                                                    );
-                                                                  } else {
-                                                                    List<Word>
-                                                                        wordsList =
-                                                                        snapshotWords
-                                                                            .data;
-                                                                    return Column(
-                                                                      children: [
-                                                                        displayFlips(
-                                                                            validationSessionInfoFlips,
-                                                                            index),
-                                                                        checkWords(
-                                                                            wordsList,
-                                                                            index)
-                                                                      ],
-                                                                    );
-                                                                  }
-                                                                });
-                                                          } else {
-                                                            return displayFlips(
-                                                                validationSessionInfoFlips,
-                                                                index);
-                                                          }
-                                                        }
-                                                      }),
-                                                  lineWidget(MediaQuery.of(context).size.width - 80),
-                                                ],
-                                              ),
-                                            );
-                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                    new ValidationThumbnailsView(
+                                      listSessionValidationFlip:
+                                          listSessionValidationFlip,
                                     ),
                                   ],
                                 ),
-                              ),
-                              new ValidationThumbnailsView(
-                                validationItemList: validationItemList,
-                              ),
-                            ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(child: getChrono()),
+                                        Container(
+                                            child: getCheckingKeywordsButton(
+                                                currentPeriod,
+                                                widget.checkFlipsQualityProcess,
+                                                listSessionValidationFlip)),
+                                        Container(
+                                            child: getShortSessionButton(
+                                                currentPeriod,
+                                                listSessionValidationFlip)),
+                                        Container(
+                                            child: getLongSessionButton(
+                                                currentPeriod,
+                                                widget.checkFlipsQualityProcess,
+                                                listSessionValidationFlip)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Container(child: getChrono()),
-                                  Container(
-                                      child: getCheckingKeywordsButton(
-                                          currentPeriod,
-                                          widget.checkFlipsQualityProcess,
-                                          validationItemList)),
-                                  Container(
-                                      child: getShortSessionButton(
-                                          currentPeriod, validationItemList)),
-                                  Container(
-                                      child: getLongSessionButton(
-                                          currentPeriod,
-                                          widget.checkFlipsQualityProcess,
-                                          validationItemList)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   });
@@ -338,38 +303,37 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget getCheckingKeywordsButton(
       String _currentPeriod,
       bool _checkFlipsQualityProcess,
-      List<ValidationItem> _validationItemList) {
+      List<ValidationSessionInfoFlips> _listSessionValidationFlip) {
     if (_currentPeriod == EpochPeriod.LongSession &&
         _checkFlipsQualityProcess == false) {
-      for (int i = 0; i < _validationItemList.length; i++) {
-        if (_validationItemList[i].answerType == AnswerType.NONE) {
+      for (int i = 0; i < _listSessionValidationFlip.length; i++) {
+        if (_listSessionValidationFlip[i].answerType == AnswerType.NONE) {
           return SizedBox();
         }
       }
       return ValidationStartCheckingKeywordsButtonView(
         simulationMode: widget.simulationMode,
         dnaAll: dnaAllForValidationSession,
-        animationController: animationController,
+        animationController: widget.animationController,
       );
     } else {
       return SizedBox();
     }
   }
 
-  Widget getShortSessionButton(
-      String _currentPeriod, List<ValidationItem> _validationItemList) {
+  Widget getShortSessionButton(String _currentPeriod,
+      List<ValidationSessionInfoFlips> _listSessionValidationFlip) {
     if (_currentPeriod == EpochPeriod.ShortSession) {
-      for (int i = 0; i < _validationItemList.length; i++) {
-        if (_validationItemList[i].answerType == AnswerType.NONE) {
+      for (int i = 0; i < _listSessionValidationFlip.length; i++) {
+        if (_listSessionValidationFlip[i].answerType == AnswerType.NONE) {
           return SizedBox();
         }
       }
       return ValidationShortSessionButtonView(
-        validationItemList: _validationItemList,
         simulationMode: widget.simulationMode,
         currentPeriod: currentPeriod,
         dnaAll: dnaAllForValidationSession,
-        animationController: animationController,
+        animationController: widget.animationController,
         validationSessionInfo: validationSessionInfo,
       );
     } else {
@@ -380,16 +344,16 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
   Widget getLongSessionButton(
       String _currentPeriod,
       bool _checkFlipsQualityProcess,
-      List<ValidationItem> _validationItemList) {
+      List<ValidationSessionInfoFlips> _listSessionValidationFlip) {
     if (_currentPeriod == EpochPeriod.LongSession &&
         _checkFlipsQualityProcess) {
-      for (int i = 0; i < _validationItemList.length; i++) {
-        if (_validationItemList[i].relevanceType == RelevantType.NO_INFO) {
+      for (int i = 0; i < _listSessionValidationFlip.length; i++) {
+        if (_listSessionValidationFlip[i].relevanceType ==
+            RelevantType.NO_INFO) {
           return SizedBox();
         }
       }
       return ValidationLongSessionButtonView(
-        validationItemList: _validationItemList,
         validationSessionInfo: validationSessionInfo,
         simulationMode: widget.simulationMode,
       );
@@ -434,39 +398,29 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
           onEnd: () {
             if (currentPeriod == EpochPeriod.ShortSession) {
               if (widget.simulationMode == false) {
-                submitShortAnswers(validationItemList, validationSessionInfo);
+                submitShortAnswers(validationSessionInfo);
               }
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                Navigator.push<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) =>
-                          ValidationSessionScreen(
-                              simulationMode: widget.simulationMode,
-                              animationController: animationController,
-                              dnaAll: dnaAllForValidationSession,
-                              checkFlipsQualityProcess: false,
-                              typeLaunchSession: EpochPeriod.LongSession),
-                    ));
-              });
+
+              Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => ValidationSessionScreen(
+                        simulationMode: widget.simulationMode,
+                        animationController: widget.animationController,
+                        dnaAll: dnaAllForValidationSession,
+                        checkFlipsQualityProcess: false,
+                        typeLaunchSession: EpochPeriod.LongSession),
+                  ));
             }
             if (currentPeriod == EpochPeriod.LongSession) {
               if (widget.simulationMode == false &&
                   checkFlipsQualityProcessForValidationSession == true) {
-                submitLongAnswers(validationItemList, validationSessionInfo);
+                submitLongAnswers(validationSessionInfo);
               }
-              animationController.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                );
-              });
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
             }
           },
         ),
@@ -474,14 +428,12 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     );
   }
 
-  Widget displayFlips(
-      ValidationSessionInfoFlips validationSessionInfoFlips, int index) {
+  Widget displayFlips(ValidationSessionInfoFlips validationSessionInfoFlips) {
     return new ValidationDisplayFlipView(
-        validationItem: validationItemList[index],
         validationSessionInfoFlips: validationSessionInfoFlips,
-        onSelectFlip: (ValidationItem _validationItem) {
+        onSelectFlip: (ValidationSessionInfoFlips _validationSessionInfoFlips) {
           setState(() {
-            validationItemList[index] = _validationItem;
+            validationSessionInfoFlips = _validationSessionInfoFlips;
           });
         });
   }
@@ -516,7 +468,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     );
   }
 
-  Widget checkWords(List<Word> listWords, int index) {
+  Widget checkWords(ValidationSessionInfoFlips validationSessionInfoFlips,
+      List<Word> listWords) {
     if (currentPeriod == EpochPeriod.LongSession &&
         widget.checkFlipsQualityProcess) {
       String word1Name = "";
@@ -600,7 +553,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              validationItemList[index].relevanceType =
+                              validationSessionInfoFlips.relevanceType =
                                   RelevantType.RELEVANT;
                             });
                           },
@@ -608,7 +561,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          color: validationItemList[index].relevanceType ==
+                          color: validationSessionInfoFlips.relevanceType ==
                                   RelevantType.RELEVANT
                               ? Colors.blue
                               : Colors.white,
@@ -617,7 +570,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                   .translate("Both relevant"),
                               style: TextStyle(
                                 color:
-                                    validationItemList[index].relevanceType ==
+                                    validationSessionInfoFlips.relevanceType ==
                                             RelevantType.RELEVANT
                                         ? Colors.white
                                         : Colors.blue,
@@ -635,7 +588,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           elevation: 5.0,
                           onPressed: () {
                             setState(() {
-                              validationItemList[index].relevanceType =
+                              validationSessionInfoFlips.relevanceType =
                                   RelevantType.IRRELEVANT;
                             });
                           },
@@ -643,7 +596,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          color: validationItemList[index].relevanceType ==
+                          color: validationSessionInfoFlips.relevanceType ==
                                   RelevantType.IRRELEVANT
                               ? Colors.red
                               : Colors.white,
@@ -652,7 +605,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                                   .translate("Irrelevant"),
                               style: TextStyle(
                                 color:
-                                    validationItemList[index].relevanceType ==
+                                    validationSessionInfoFlips.relevanceType ==
                                             RelevantType.IRRELEVANT
                                         ? Colors.white
                                         : Colors.red,

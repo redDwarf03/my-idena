@@ -102,7 +102,7 @@ class _ValidationBasicsScreenState extends State<ValidationBasicsScreen>
             getAppBarUI(
                 topBarAnimation,
                 widget.animationController,
-                topBarOpacity),
+                topBarOpacity, false),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
             )
