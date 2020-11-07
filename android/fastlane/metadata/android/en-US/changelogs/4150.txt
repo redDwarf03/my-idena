@@ -1,0 +1,2 @@
+- add feature to train for validation sessions
+- fix minor bugs
