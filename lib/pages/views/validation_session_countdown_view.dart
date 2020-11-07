@@ -287,7 +287,7 @@ class _ValidationSessionCountdownTextState
           children: [
             Badge(
               shape: BadgeShape.square,
-              borderRadius: 20,
+              borderRadius: BorderRadius.circular(20),
               badgeContent: Text('1 iDNA',
                   style: TextStyle(color: Colors.white, fontSize: 10)),
               badgeColor: Colors.green[300],
@@ -337,7 +337,7 @@ class _ValidationSessionCountdownTextState
             ),
             Badge(
               shape: BadgeShape.square,
-              borderRadius: 20,
+              borderRadius: BorderRadius.circular(20),
               badgeContent: Text('10 iDNA',
                   style: TextStyle(color: Colors.white, fontSize: 10)),
               badgeColor: Colors.green[300],
@@ -387,7 +387,7 @@ class _ValidationSessionCountdownTextState
             ),
             Badge(
               shape: BadgeShape.square,
-              borderRadius: 20,
+              borderRadius: BorderRadius.circular(20),
               badgeContent: Text('50 iDNA',
                   style: TextStyle(color: Colors.white, fontSize: 10)),
               badgeColor: Colors.green[300],
