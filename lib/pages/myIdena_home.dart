@@ -56,7 +56,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    animationController.dispose();
+    //animationController.dispose();
     super.dispose();
   }
 
@@ -92,14 +92,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         ),
                         child: Stack(
                           children: <Widget>[
-                            /* dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? SizedBox() :
+                            dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? SizedBox() :
                             Align(
                               alignment: Alignment.centerLeft,
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage('https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
                                 radius: 50.0,
                               ),
-                            ),*/
+                            ),
                             Align(
                               alignment: Alignment.centerRight + Alignment(0, .3),
                               child: Text(
