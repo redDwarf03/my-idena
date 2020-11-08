@@ -18,12 +18,13 @@ import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
-int controllerChronoValue;
+
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
 DnaAll dnaAllForValidationSession;
 bool checkFlipsQualityProcessForValidationSession;
-
+// 1 = Short Session, 2 = Long session, 3 = Long session + check words, 0 = No sessions
+int sessionStep;
 bool isLoading = false;
 
 class ValidationSessionView extends StatefulWidget {
@@ -57,6 +58,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   void initState() {
+    print("initState session view");
+
+
     dnaAllForValidationSession = widget.dnaAll;
 
     checkFlipsQualityProcessForValidationSession =
@@ -69,6 +73,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     if (currentPeriod == EpochPeriod.ShortSession) {
       validationSessionInfo = null;
 
+      sessionStep = 1;
       checkFlipsQualityProcessForValidationSession = false;
       endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
               .nextValidation.millisecondsSinceEpoch +
@@ -79,6 +84,9 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
         validationSessionInfo = null;
+        sessionStep = 2;
+      } else {
+        sessionStep = 3;
       }
 
       endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
@@ -106,6 +114,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   Widget build(BuildContext context) {
+    print("build session view");
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }
@@ -132,8 +141,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                         transform: new Matrix4.translationValues(
                             0.0, 30 * (1.0 - widget.animation.value), 0.0),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 16, bottom: 18),
+                          padding: const EdgeInsets.only(top: 16, bottom: 18),
                           child: Container(
                             width: MediaQuery.of(context).size.width - 50,
                             child: Column(
@@ -330,12 +338,26 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         }
       }
       return ValidationShortSessionButtonView(
-        simulationMode: widget.simulationMode,
-        currentPeriod: currentPeriod,
-        dnaAll: dnaAllForValidationSession,
-        animationController: widget.animationController,
-        validationSessionInfo: validationSessionInfo,
-      );
+          simulationMode: widget.simulationMode,
+          currentPeriod: currentPeriod,
+          dnaAll: dnaAllForValidationSession,
+          animationController: widget.animationController,
+          validationSessionInfo: validationSessionInfo,
+          goLongSession: (bool goLongSession) {
+            if (goLongSession) {
+              Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => ValidationSessionScreen(
+                      simulationMode: widget.simulationMode,
+                      animationController: widget.animationController,
+                      dnaAll: widget.dnaAll,
+                      typeLaunchSession: EpochPeriod.LongSession,
+                      checkFlipsQualityProcess: false,
+                    ),
+                  ));
+            }
+          });
     } else {
       return SizedBox();
     }
@@ -354,9 +376,15 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         }
       }
       return ValidationLongSessionButtonView(
-        validationSessionInfo: validationSessionInfo,
-        simulationMode: widget.simulationMode,
-      );
+          validationSessionInfo: validationSessionInfo,
+          simulationMode: widget.simulationMode,
+          goHome: (bool goHome) {
+            if (goHome) {
+              sessionStep = 0;
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Home()));
+            }
+          });
     } else {
       return SizedBox();
     }
@@ -396,31 +424,35 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
             }
           },
           onEnd: () {
-            if (currentPeriod == EpochPeriod.ShortSession) {
-              if (widget.simulationMode == false) {
-                submitShortAnswers(validationSessionInfo);
-              }
+            print("end");
+            if (sessionStep != 0) {
+              if (currentPeriod == EpochPeriod.ShortSession) {
+                if (widget.simulationMode == false) {
+                  submitShortAnswers(validationSessionInfo);
+                }
 
-              Navigator.push<dynamic>(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => ValidationSessionScreen(
-                        simulationMode: widget.simulationMode,
-                        animationController: widget.animationController,
-                        dnaAll: dnaAllForValidationSession,
-                        checkFlipsQualityProcess: false,
-                        typeLaunchSession: EpochPeriod.LongSession),
-                  ));
-            }
-            if (currentPeriod == EpochPeriod.LongSession) {
-              if (widget.simulationMode == false &&
-                  checkFlipsQualityProcessForValidationSession == true) {
-                submitLongAnswers(validationSessionInfo);
+                Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) =>
+                          ValidationSessionScreen(
+                              simulationMode: widget.simulationMode,
+                              animationController: widget.animationController,
+                              dnaAll: dnaAllForValidationSession,
+                              checkFlipsQualityProcess: false,
+                              typeLaunchSession: EpochPeriod.LongSession),
+                    ));
               }
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-              );
+              if (currentPeriod == EpochPeriod.LongSession) {
+                if (widget.simulationMode == false &&
+                    checkFlipsQualityProcessForValidationSession == true) {
+                  submitLongAnswers(validationSessionInfo);
+                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              }
             }
           },
         ),
@@ -552,10 +584,13 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                         RaisedButton(
                           elevation: 5.0,
                           onPressed: () {
-                            setState(() {
-                              validationSessionInfoFlips.relevanceType =
-                                  RelevantType.RELEVANT;
-                            });
+                            if (validationSessionInfoFlips.relevanceType !=
+                                RelevantType.RELEVANT) {
+                              setState(() {
+                                validationSessionInfoFlips.relevanceType =
+                                    RelevantType.RELEVANT;
+                              });
+                            }
                           },
                           padding: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(
@@ -587,10 +622,13 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                         RaisedButton(
                           elevation: 5.0,
                           onPressed: () {
-                            setState(() {
-                              validationSessionInfoFlips.relevanceType =
-                                  RelevantType.IRRELEVANT;
-                            });
+                            if (validationSessionInfoFlips.relevanceType !=
+                                RelevantType.IRRELEVANT) {
+                              setState(() {
+                                validationSessionInfoFlips.relevanceType =
+                                    RelevantType.IRRELEVANT;
+                              });
+                            }
                           },
                           padding: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(

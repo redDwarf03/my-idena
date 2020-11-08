@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
-import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 
 class ValidationShortSessionButtonView extends StatefulWidget {
@@ -12,6 +10,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
   final String currentPeriod;
   final AnimationController animationController;
   final bool simulationMode;
+  final Function goLongSession;
 
   const ValidationShortSessionButtonView(
       {Key key,
@@ -19,6 +18,7 @@ class ValidationShortSessionButtonView extends StatefulWidget {
       this.currentPeriod,
       this.animationController,
       this.validationSessionInfo,
+      this.goLongSession,
       this.simulationMode})
       : super(key: key);
 
@@ -39,8 +39,8 @@ class _ValidationShortSessionButtonViewState
             if (widget.simulationMode == false) {
               submitShortAnswers(widget.validationSessionInfo);
             }
-
-            Navigator.push<dynamic>(
+            widget.goLongSession(true);
+           /* Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) => ValidationSessionScreen(
@@ -50,7 +50,7 @@ class _ValidationShortSessionButtonViewState
                     typeLaunchSession: EpochPeriod.LongSession,
                     checkFlipsQualityProcess: false,
                   ),
-                ));
+                ));*/
           },
           padding: EdgeInsets.all(5.0),
           shape: RoundedRectangleBorder(

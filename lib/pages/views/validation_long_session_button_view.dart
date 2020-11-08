@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
@@ -8,9 +7,10 @@ import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 class ValidationLongSessionButtonView extends StatefulWidget {
   final ValidationSessionInfo validationSessionInfo;
   final bool simulationMode;
+  final Function goHome;
 
   const ValidationLongSessionButtonView(
-      {Key key, this.validationSessionInfo, this.simulationMode})
+      {Key key, this.validationSessionInfo, this.simulationMode, this.goHome})
       : super(key: key);
 
   @override
@@ -78,11 +78,12 @@ class _ValidationLongSessionButtonViewState
                               RaisedButton(
                                 elevation: 5.0,
                                 onPressed: () {
-                                  Navigator.pushReplacement(
+                                  widget.goHome(true);
+                                  /*Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Home()),
-                                  );
+                                  );*/
                                 },
                                 padding: EdgeInsets.all(5.0),
                                 shape: RoundedRectangleBorder(
