@@ -44,10 +44,13 @@ class _ValidationDisplayFlipViewState extends State<ValidationDisplayFlipView> {
                           color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _validationSessionInfoFlips.answerType = AnswerType.LEFT;
-                  });
-                  widget.onSelectFlip(_validationSessionInfoFlips);
+                  if (_validationSessionInfoFlips.answerType !=
+                      AnswerType.LEFT) {
+                    setState(() {
+                      _validationSessionInfoFlips.answerType = AnswerType.LEFT;
+                    });
+                    widget.onSelectFlip(_validationSessionInfoFlips);
+                  }
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +59,7 @@ class _ValidationDisplayFlipViewState extends State<ValidationDisplayFlipView> {
                         image: ResizeImage(
                             MemoryImage(widget
                                 .validationSessionInfoFlips.listImagesLeft[0]),
-                            width: 
+                            width:
                                 (((MediaQuery.of(context).size.width) - 82) ~/
                                         2)
                                     .toInt())),
@@ -106,10 +109,13 @@ class _ValidationDisplayFlipViewState extends State<ValidationDisplayFlipView> {
                             color: Color.fromRGBO(255, 255, 255, 0), width: 5)),
             child: GestureDetector(
               onTap: () {
-                setState(() {
-                  _validationSessionInfoFlips.answerType = AnswerType.RIGHT;
-                });
-                widget.onSelectFlip(_validationSessionInfoFlips);
+                if (_validationSessionInfoFlips.answerType !=
+                    AnswerType.RIGHT) {
+                  setState(() {
+                    _validationSessionInfoFlips.answerType = AnswerType.RIGHT;
+                  });
+                  widget.onSelectFlip(_validationSessionInfoFlips);
+                }
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
