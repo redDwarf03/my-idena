@@ -350,11 +350,11 @@ class PortofolioView extends StatelessWidget {
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: <Widget>[
-                                                      /*Image.network(
+                                                      Image.network(
                                                         'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}',
                                                         width: 50,
                                                         height: 50,
-                                                      ),*/
+                                                      ),
                                                       Text(
                                                         '${((double.parse(dnaAll.dnaGetBalanceResponse.result.balance) + double.parse(dnaAll.dnaGetBalanceResponse.result.stake)) * animation.value).toInt()}',
                                                         textAlign:

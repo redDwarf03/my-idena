@@ -149,11 +149,11 @@ class _DeepLinkScreenState extends State<DeepLinkScreen> {
                                               color: MyIdenaAppTheme.white,
                                             ),
                                           ),
-                                          /*Image.network(
+                                          Image.network(
                                             'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}',
                                             width: 50,
                                             height: 50,
-                                          ),*/
+                                          ),
                                           SizedBox(
                                             height: 20,
                                           ),
