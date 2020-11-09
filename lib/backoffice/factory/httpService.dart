@@ -158,6 +158,11 @@ class HttpService {
             DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
         dnaIdentityResponse.result.totalShortFlipPoints =
             DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
+        List<int> listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
+        dnaIdentityResponse.result.flipKeyWordPairs = new List<FlipKeyWordPair>();
+        dnaIdentityResponse.result.flipKeyWordPairs.add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
+        List<int> listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
+        dnaIdentityResponse.result.flipKeyWordPairs.add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
 
         dnaGetBalanceResponse = new DnaGetBalanceResponse();
         dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();

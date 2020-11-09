@@ -26,6 +26,11 @@ const bool DM_SYNC_SYNCING = false;
 const int DM_SYNC_CURRENT_BLOCK = 1;
 const int DM_SYNC_HIGHEST_BLOCK = 1;
 
+const int DM_IDENTITY_KEYWORD_1 = 23;
+const int DM_IDENTITY_KEYWORD_2 = 15;
+const int DM_IDENTITY_KEYWORD_3 = 10;
+const int DM_IDENTITY_KEYWORD_4 = 4;
+
 Future<bool> getDemoModeStatus(String keyApp) async {
   if (keyApp == null) {
     IdenaSharedPreferences idenaSharedPreferences =

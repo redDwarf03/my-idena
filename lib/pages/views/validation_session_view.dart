@@ -425,7 +425,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
           },
           onEnd: () {
             print("end");
-            if (sessionStep != 0) {
+            if (sessionStep == 1) {
               if (currentPeriod == EpochPeriod.ShortSession) {
                 if (widget.simulationMode == false) {
                   submitShortAnswers(validationSessionInfo);
@@ -443,6 +443,8 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                               typeLaunchSession: EpochPeriod.LongSession),
                     ));
               }
+            }
+             if (sessionStep == 2 || sessionStep == 3) {
               if (currentPeriod == EpochPeriod.LongSession) {
                 if (widget.simulationMode == false &&
                     checkFlipsQualityProcessForValidationSession == true) {
@@ -453,7 +455,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                   MaterialPageRoute(builder: (context) => Home()),
                 );
               }
-            }
+             }
           },
         ),
       ],

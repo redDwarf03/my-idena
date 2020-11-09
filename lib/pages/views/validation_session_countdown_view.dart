@@ -178,7 +178,7 @@ class _ValidationSessionCountdownTextState
           return Padding(
               padding:
                   const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(
+              child: Container(       
                   child: Row(children: <Widget>[
                 Expanded(
                     child: Column(
@@ -196,7 +196,9 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                    ]))
+                      
+                    ])),
+                    
               ])));
         }
       case EpochPeriod.LongSession:

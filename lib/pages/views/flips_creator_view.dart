@@ -33,16 +33,19 @@ class FlipsCreatorView extends StatefulWidget {
 }
 
 class _FlipsCreatorViewState extends State<FlipsCreatorView> {
+
+  String _error = 'No Error Dectected';
+
   HttpService httpService = HttpService();
   DnaIdentityResponse dnaIdentityResponse;
   int flipKeyWordPairsNumber;
   DnaAll dnaAll;
   UtilFlip utilFlip = new UtilFlip();
   int step;
-  File imgFile_1;
-  File imgFile_2;
-  File imgFile_3;
-  File imgFile_4;
+  PickedFile imgFile_1;
+  PickedFile imgFile_2;
+  PickedFile imgFile_3;
+  PickedFile imgFile_4;
   Image imgToDisplay_1;
   Image imgToDisplay_2;
   Image imgToDisplay_3;
@@ -76,7 +79,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
         break;
       case 2:
         {
-          return buildStep2(context);
+          return buildStep2bis(context);
         }
         break;
       case 3:
@@ -388,6 +391,64 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  Widget buildStep2bis(BuildContext context) {
+    return AnimatedBuilder(
+      animation: widget.animationController,
+      builder: (BuildContext context, Widget child) {
+        return FadeTransition(
+          opacity: widget.animation,
+          child: new Transform(
+            transform: new Matrix4.translationValues(
+                0.0, 30 * (1.0 - widget.animation.value), 0.0),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 24, right: 24, top: 16, bottom: 18),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: MyIdenaAppTheme.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                      topRight: Radius.circular(68.0)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: MyIdenaAppTheme.grey.withOpacity(0.2),
+                        offset: Offset(1.1, 1.1),
+                        blurRadius: 10.0),
+                  ],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 0, right: 0, top: 4),
+                              child: Column(
+                                children: <Widget>[
+                                  Center(child: Text('Error: $_error')),
+                                 
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget buildStep2(BuildContext context) {
@@ -1092,30 +1153,30 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
   }
 
   Future getImage_1() async {
-    imgFile_1 = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imgFile_1 = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      imgToDisplay_1 = resizeImg(imgFile_1);
+      imgToDisplay_1 = resizeImg(File(imgFile_1.path));
     });
   }
 
   Future getImage_2() async {
-    imgFile_2 = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imgFile_2 = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      imgToDisplay_2 = resizeImg(imgFile_2);
+      imgToDisplay_2 = resizeImg(File(imgFile_2.path));
     });
   }
 
   Future getImage_3() async {
-    imgFile_3 = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imgFile_3 = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      imgToDisplay_3 = resizeImg(imgFile_3);
+      imgToDisplay_3 = resizeImg(File(imgFile_3.path));
     });
   }
 
   Future getImage_4() async {
-    imgFile_4 = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imgFile_4 = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      imgToDisplay_4 = resizeImg(imgFile_4);
+      imgToDisplay_4 = resizeImg(File(imgFile_4.path));
     });
   }
 
