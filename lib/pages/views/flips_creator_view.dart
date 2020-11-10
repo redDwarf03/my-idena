@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
@@ -33,8 +35,7 @@ class FlipsCreatorView extends StatefulWidget {
 }
 
 class _FlipsCreatorViewState extends State<FlipsCreatorView> {
-
-  String _error = 'No Error Dectected';
+  List<Asset> images = List<Asset>();
 
   HttpService httpService = HttpService();
   DnaIdentityResponse dnaIdentityResponse;
@@ -42,17 +43,17 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
   DnaAll dnaAll;
   UtilFlip utilFlip = new UtilFlip();
   int step;
-  PickedFile imgFile_1;
-  PickedFile imgFile_2;
-  PickedFile imgFile_3;
-  PickedFile imgFile_4;
   Image imgToDisplay_1;
   Image imgToDisplay_2;
   Image imgToDisplay_3;
   Image imgToDisplay_4;
   List<Img> imgs;
-  File galleryFile;
-  ValueNotifier<String> orderNotifier = ValueNotifier<String>('');
+
+  ValueNotifier<List<Img>> orderNotifier = ValueNotifier<List<Img>>(null);
+  Image imgToDisplayMix_1;
+  Image imgToDisplayMix_2;
+  Image imgToDisplayMix_3;
+  Image imgToDisplayMix_4;
 
   @override
   void initState() {
@@ -74,16 +75,28 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
     switch (step) {
       case 1:
         {
+          imgToDisplay_1 = null;
+          imgToDisplay_2 = null;
+          imgToDisplay_3 = null;
+          imgToDisplay_4 = null;
           return buildStep1(context);
         }
         break;
       case 2:
         {
-          return buildStep2bis(context);
+          imgToDisplay_1 = null;
+          imgToDisplay_2 = null;
+          imgToDisplay_3 = null;
+          imgToDisplay_4 = null;
+          return buildStep2(context);
         }
         break;
       case 3:
         {
+          imgToDisplayMix_1 = imgToDisplay_1;
+          imgToDisplayMix_2 = imgToDisplay_2;
+          imgToDisplayMix_3 = imgToDisplay_3;
+          imgToDisplayMix_4 = imgToDisplay_4;
           return buildStep3(context);
         }
         break;
@@ -175,6 +188,8 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                             new Container(
                                               height: 200,
                                               child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Flexible(
                                                     flex: 3,
@@ -393,64 +408,6 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
         });
   }
 
-  Widget buildStep2bis(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.animationController,
-      builder: (BuildContext context, Widget child) {
-        return FadeTransition(
-          opacity: widget.animation,
-          child: new Transform(
-            transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - widget.animation.value), 0.0),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 16, bottom: 18),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyIdenaAppTheme.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(8.0),
-                      bottomRight: Radius.circular(8.0),
-                      topRight: Radius.circular(68.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: MyIdenaAppTheme.grey.withOpacity(0.2),
-                        offset: Offset(1.1, 1.1),
-                        blurRadius: 10.0),
-                  ],
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0, left: 0, right: 0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 0, right: 0, top: 4),
-                              child: Column(
-                                children: <Widget>[
-                                  Center(child: Text('Error: $_error')),
-                                 
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Widget buildStep2(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.animationController,
@@ -535,6 +492,32 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                         MyIdenaAppTheme.grey.withOpacity(0.5),
                                   ),
                                 ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: RaisedButton(
+                                    elevation: 5.0,
+                                    onPressed: loadAssets,
+                                    padding: EdgeInsets.all(15.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    color: Colors.white,
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Pick images"),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        letterSpacing: 1.5,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: MyIdenaAppTheme.fontName,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                               ],
                             ),
                           ),
@@ -545,6 +528,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                       padding:
                           const EdgeInsets.only(top: 0, left: 16, right: 16),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
                             child: Padding(
@@ -552,123 +536,85 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                   left: 8, right: 8, top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
-                                    height: 500,
-                                    child: ListView(
+                                    height: 405,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 0.0),
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.camera_enhance,
-                                                  size: 30.0,
-                                                ),
-                                                onPressed: () {
-                                                  getImage_1();
-                                                },
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: new SizedBox(
-                                                  height: 120.0,
-                                                  child:
-                                                      (imgToDisplay_1 != null)
-                                                          ? imgToDisplay_1
-                                                          : Icon(Icons.image,
-                                                              size: 70.0)),
-                                            ),
-                                          ],
+                                        new SizedBox(
+                                          child: FutureBuilder<Widget>(
+                                              future: getImage(1),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.hasData == false) {
+                                                  return Center(
+                                                      child: Container(
+                                                          child: Icon(Icons
+                                                              .add_a_photo_outlined)));
+                                                } else {
+                                                  return snapshot.data;
+                                                }
+                                              }),
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 0.0),
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.camera_enhance,
-                                                  size: 30.0,
-                                                ),
-                                                onPressed: () {
-                                                  getImage_2();
-                                                },
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: new SizedBox(
-                                                  height: 120.0,
-                                                  child:
-                                                      (imgToDisplay_2 != null)
-                                                          ? imgToDisplay_2
-                                                          : Icon(Icons.image,
-                                                              size: 70.0)),
-                                            ),
-                                          ],
+                                        SizedBox(height: 5.0),
+                                        new SizedBox(
+                                          child: FutureBuilder<Widget>(
+                                              future: getImage(2),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.hasData == false) {
+                                                  return Center(
+                                                      child: Container(
+                                                          child: Icon(Icons
+                                                              .add_a_photo_outlined)));
+                                                } else {
+                                                  return snapshot.data;
+                                                }
+                                              }),
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 0.0),
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.camera_enhance,
-                                                  size: 30.0,
-                                                ),
-                                                onPressed: () {
-                                                  getImage_3();
-                                                },
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: new SizedBox(
-                                                  height: 120.0,
-                                                  child:
-                                                      (imgToDisplay_3 != null)
-                                                          ? imgToDisplay_3
-                                                          : Icon(Icons.image,
-                                                              size: 70.0)),
-                                            ),
-                                          ],
+                                        SizedBox(height: 5.0),
+                                        new SizedBox(
+                                          child: FutureBuilder<Widget>(
+                                              future: getImage(3),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.hasData == false) {
+                                                  return Center(
+                                                      child: Container(
+                                                          child: Icon(Icons
+                                                              .add_a_photo_outlined)));
+                                                } else {
+                                                  return snapshot.data;
+                                                }
+                                              }),
                                         ),
-                                        Row(
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 0.0),
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.camera_enhance,
-                                                  size: 30.0,
-                                                ),
-                                                onPressed: () {
-                                                  getImage_4();
-                                                },
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: new SizedBox(
-                                                  height: 120.0,
-                                                  child:
-                                                      (imgToDisplay_4 != null)
-                                                          ? imgToDisplay_4
-                                                          : Icon(Icons.image,
-                                                              size: 70.0)),
-                                            ),
-                                          ],
+                                        SizedBox(height: 5.0),
+                                        new SizedBox(
+                                          child: FutureBuilder<Widget>(
+                                              future: getImage(4),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<Widget>
+                                                      snapshot) {
+                                                if (snapshot.hasData == false) {
+                                                  return Center(
+                                                      child: Container(
+                                                          child: Icon(Icons
+                                                              .add_a_photo_outlined)));
+                                                } else {
+                                                  return snapshot.data;
+                                                }
+                                              }),
                                         ),
                                       ],
                                     ),
                                   ),
+                                  SizedBox(height: 10.0),
                                   Container(
                                     width: double.infinity,
                                     child: Row(
@@ -701,33 +647,38 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                             ),
                                           ),
                                         ),
-                                        RaisedButton(
-                                          elevation: 5.0,
-                                          onPressed: () async {
-                                            uploadPic(context);
-                                            setState(() {
-                                              step = 3;
-                                            });
-                                          },
-                                          padding: EdgeInsets.all(15.0),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                          ),
-                                          color: Colors.white,
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate("Next step"),
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              letterSpacing: 1.5,
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily:
-                                                  MyIdenaAppTheme.fontName,
-                                            ),
-                                          ),
-                                        ),
+                                        images != null && images.length == 4
+                                            ? RaisedButton(
+                                                elevation: 5.0,
+                                                onPressed: () async {
+                                                  uploadPic(context);
+                                                  setState(() {
+                                                    step = 3;
+                                                  });
+                                                },
+                                                padding: EdgeInsets.all(15.0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.0),
+                                                ),
+                                                color: Colors.white,
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate("Next step"),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    letterSpacing: 1.5,
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox(
+                                                height: 1,
+                                              ),
                                       ],
                                     ),
                                   ),
@@ -777,6 +728,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                   ],
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Row(
                       children: <Widget>[
@@ -812,41 +764,32 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                       ],
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 0, left: 16, right: 16),
+                      padding: const EdgeInsets.only(top: 0),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
                                     height: 390,
-                                    child: ListView(
+                                    child: Column(
                                       children: <Widget>[
-                                        Column(
-                                          children: <Widget>[
-                                            Opacity(
-                                                opacity: 0.5,
-                                                child: imgToDisplay_1),
-                                            SizedBox(height: 5.0),
-                                            Opacity(
-                                                opacity: 0.5,
-                                                child: imgToDisplay_2),
-                                            SizedBox(height: 5.0),
-                                            Opacity(
-                                                opacity: 0.5,
-                                                child: imgToDisplay_3),
-                                            SizedBox(height: 5.0),
-                                            Opacity(
-                                                opacity: 0.5,
-                                                child: imgToDisplay_4),
-                                          ],
-                                        ),
+                                        Opacity(
+                                            opacity: 0.5,
+                                            child: imgToDisplay_1),
+                                        Opacity(
+                                            opacity: 0.5,
+                                            child: imgToDisplay_2),
+                                        Opacity(
+                                            opacity: 0.5,
+                                            child: imgToDisplay_3),
+                                        Opacity(
+                                            opacity: 0.5,
+                                            child: imgToDisplay_4),
                                       ],
                                     ),
                                   ),
@@ -857,33 +800,24 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
                                     height: 390,
-                                    child: ListView(
+                                    child: Column(
                                       children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Center(
-                                                child: OrderableStack<Img>(
-                                                    items: imgs,
-                                                    itemSize: Size(135, 102),
-                                                    margin: 0.0,
-                                                    direction:
-                                                        Direction.Vertical,
-                                                    itemBuilder: imgItemBuilder,
-                                                    onChange: (List<Object>
-                                                            orderedList) =>
-                                                        orderNotifier.value =
-                                                            orderedList
-                                                                .toString())),
-                                          ],
-                                        ),
+                                        OrderableStack<Img>(
+                                            items: imgs,
+                                            itemSize: Size(130, 97.5),
+                                            margin: 0.0,
+                                            direction: Direction.Vertical,
+                                            itemBuilder: imgItemBuilder,
+                                            onChange: (List<Img> orderedList) =>
+                                                orderNotifier.value =
+                                                    orderedList),
                                       ],
                                     ),
                                   ),
@@ -927,9 +861,63 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                           RaisedButton(
                             elevation: 5.0,
                             onPressed: () async {
-                              setState(() {
-                                step = 4;
-                              });
+                              if (isMixed(orderNotifier.value)) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => SimpleDialog(
+                                          contentPadding: EdgeInsets.zero,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Text("Please, mix your images",
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                            MyIdenaAppTheme
+                                                                .fontName,
+                                                        fontSize: 20.0,
+                                                      )),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  SizedBox(height: 10.0),
+                                                  new Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: <Widget>[
+                                                      FlatButton(
+                                                          child: Text(
+                                                            "Ok",
+                                                          ),
+                                                          color:
+                                                              Colors.grey[200],
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0)),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            });
+                                                          })
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ));
+                              } else {
+                                setState(() {
+                                  setImgToDisplayMix(orderNotifier.value);
+                                  step = 4;
+                                });
+                              }
                             },
                             padding: EdgeInsets.all(15.0),
                             shape: RoundedRectangleBorder(
@@ -1025,33 +1013,24 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                       ],
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 0, left: 16, right: 16),
+                      padding: const EdgeInsets.only(top: 0),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
                                     height: 390,
-                                    child: ListView(
+                                    child: Column(
                                       children: <Widget>[
-                                        Column(
-                                          children: <Widget>[
-                                            imgToDisplay_1,
-                                            SizedBox(height: 5.0),
-                                            imgToDisplay_2,
-                                            SizedBox(height: 5.0),
-                                            imgToDisplay_3,
-                                            SizedBox(height: 5.0),
-                                            imgToDisplay_4,
-                                          ],
-                                        ),
+                                        imgToDisplay_1,
+                                        imgToDisplay_2,
+                                        imgToDisplay_3,
+                                        imgToDisplay_4,
                                       ],
                                     ),
                                   ),
@@ -1062,16 +1041,20 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
                                     height: 390,
-                                    child: ListView(
-                                      children: <Widget>[],
+                                    child: Column(
+                                      children: <Widget>[
+                                        imgToDisplayMix_1,
+                                        imgToDisplayMix_2,
+                                        imgToDisplayMix_3,
+                                        imgToDisplayMix_4,
+                                      ],
                                     ),
                                   ),
                                   SizedBox(height: 10.0),
@@ -1152,42 +1135,156 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
     );
   }
 
-  Future getImage_1() async {
-    imgFile_1 = await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      imgToDisplay_1 = resizeImg(File(imgFile_1.path));
-    });
-  }
+  Future<Widget> getImage(int numImage) async {
+    Image imgToDisplay;
+    if (images.length > 0 && images[numImage - 1] != null) {
+      ByteData byteData = await images[numImage - 1].getByteData();
+      imgToDisplay = resizeImgByteData(byteData);
+      if (numImage == 1) {
+        imgToDisplay_1 = imgToDisplay;
+      } else {
+        if (numImage == 2) {
+          imgToDisplay_2 = imgToDisplay;
+        } else {
+          if (numImage == 3) {
+            imgToDisplay_3 = imgToDisplay;
+          } else {
+            if (numImage == 4) {
+              imgToDisplay_4 = imgToDisplay;
+            }
+          }
+        }
+      }
 
-  Future getImage_2() async {
-    imgFile_2 = await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      imgToDisplay_2 = resizeImg(File(imgFile_2.path));
-    });
-  }
-
-  Future getImage_3() async {
-    imgFile_3 = await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      imgToDisplay_3 = resizeImg(File(imgFile_3.path));
-    });
-  }
-
-  Future getImage_4() async {
-    imgFile_4 = await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      imgToDisplay_4 = resizeImg(File(imgFile_4.path));
-    });
+      return Container(child: imgToDisplay);
+    } else {
+      return Container();
+    }
   }
 
   Future uploadPic(BuildContext context) async {
     setState(() {
       imgs = [
-        Img(imgToDisplay_1, "1"),
-        Img(imgToDisplay_2, "2"),
-        Img(imgToDisplay_3, "3"),
-        Img(imgToDisplay_4, "4"),
+        Img(imgToDisplay_1, 1),
+        Img(imgToDisplay_2, 2),
+        Img(imgToDisplay_3, 3),
+        Img(imgToDisplay_4, 4),
       ];
+    });
+  }
+
+  bool isMixed(List<Img> orderedList) {
+    bool isMixed;
+    (orderedList[0].image == imgToDisplayMix_1 &&
+            orderedList[1].image == imgToDisplayMix_2 &&
+            orderedList[2].image == imgToDisplayMix_3 &&
+            orderedList[3].image == imgToDisplayMix_4)
+        ? isMixed = true
+        : isMixed = false;
+    return isMixed;
+  }
+
+  void setImgToDisplayMix(List<Img> orderedList) {
+    if (orderedList != null) {
+      for (int i = 0; i < orderedList.length; i++) {
+        if (i == 0) {
+          if (orderedList[i].numOrder == 1) {
+            imgToDisplayMix_1 = orderedList[i].image;
+          } else {
+            if (orderedList[i].numOrder == 2) {
+              imgToDisplayMix_1 = orderedList[i].image;
+            } else {
+              if (orderedList[i].numOrder == 3) {
+                imgToDisplayMix_1 = orderedList[i].image;
+              } else {
+                if (orderedList[i].numOrder == 4) {
+                  imgToDisplayMix_1 = orderedList[i].image;
+                }
+              }
+            }
+          }
+        }
+        if (i == 1) {
+          if (orderedList[i].numOrder == 1) {
+            imgToDisplayMix_2 = orderedList[i].image;
+          } else {
+            if (orderedList[i].numOrder == 2) {
+              imgToDisplayMix_2 = orderedList[i].image;
+            } else {
+              if (orderedList[i].numOrder == 3) {
+                imgToDisplayMix_2 = orderedList[i].image;
+              } else {
+                if (orderedList[i].numOrder == 4) {
+                  imgToDisplayMix_2 = orderedList[i].image;
+                }
+              }
+            }
+          }
+        }
+        if (i == 2) {
+          if (orderedList[i].numOrder == 1) {
+            imgToDisplayMix_3 = orderedList[i].image;
+          } else {
+            if (orderedList[i].numOrder == 2) {
+              imgToDisplayMix_3 = orderedList[i].image;
+            } else {
+              if (orderedList[i].numOrder == 3) {
+                imgToDisplayMix_3 = orderedList[i].image;
+              } else {
+                if (orderedList[i].numOrder == 4) {
+                  imgToDisplayMix_3 = orderedList[i].image;
+                }
+              }
+            }
+          }
+        }
+        if (i == 3) {
+          if (orderedList[i].numOrder == 1) {
+            imgToDisplayMix_4 = orderedList[i].image;
+          } else {
+            if (orderedList[i].numOrder == 2) {
+              imgToDisplayMix_4 = orderedList[i].image;
+            } else {
+              if (orderedList[i].numOrder == 3) {
+                imgToDisplayMix_4 = orderedList[i].image;
+              } else {
+                if (orderedList[i].numOrder == 4) {
+                  imgToDisplayMix_4 = orderedList[i].image;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> loadAssets() async {
+    List<Asset> resultList = List<Asset>();
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "my Idena",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {}
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
     });
   }
 

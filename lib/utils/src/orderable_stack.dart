@@ -6,7 +6,7 @@ import 'package:quiver/iterables.dart';
 /// Widget factory method
 typedef Widget WidgetFactory<T>({Orderable<T> data, Size itemSize});
 
-const kMargin = 20.0;
+const kMargin = 0.0;
 
 const kMinSize = 50.0;
 const kMaxHeight = 600.0;
@@ -94,7 +94,7 @@ class _OrderableStackState<T> extends State<OrderableStack<T>> {
                   direction: widget.direction,
                   uiItems: _updateZIndexes(_buildOrderableWidgets()),
                   itemSize: widget.itemSize,
-                  margin: kMargin))
+                  margin: kMargin)),
         ],
       );
 

@@ -38,8 +38,6 @@ dependencies:
 
   web_socket_channel: ^1.1.0
 
-  image_picker: ^0.6.7+12
-
   mime: ^0.9.7
   
   intl: ^0.16.1
@@ -76,6 +74,8 @@ dependencies:
 
   flutter_countdown_timer: ^1.4.0
 
+  multi_image_picker: ^4.7.14
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
