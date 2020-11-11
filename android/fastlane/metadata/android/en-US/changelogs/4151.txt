@@ -1,0 +1,5 @@
+- add feature to train for validation sessions
+- add explainations to configure the app with your node
+- fix an issue with timer while validation session
+- fix minor bugs
+- perofrmances improvement
