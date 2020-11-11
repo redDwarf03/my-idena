@@ -257,6 +257,7 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       Uint8List imageUint8_3;
       Uint8List imageUint8_4;
 
+  
       Decoded images;
       Decoded privateImages;
       List listImages = new List(4);

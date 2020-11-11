@@ -224,7 +224,10 @@
   "Pick images": "Choisir les images",
   "Please, mix your images": "Svp, mélangez vos images",
   "Ok": "Ok",
-  "Idena validation started. Please, click the button": "La session de validation Idena a débuté. svp, cliquez sur le bouton"
+  "Idena validation started. Please, click the button": "La session de validation Idena a débuté. svp, cliquez sur le bouton",
+  "Are you sure that you want to submit this flip ?": "Etes-vous sûr(e)s de vouloir soumettre votre flip ?",
+  "If you make BAD flip, you will lose all iDNA rewards !": "Dans le cas où vous créez un MAUVAIS flip, vous perdrez toutes les récompenses en iDNA !",
+  "The cost of deleting a flip is about 8 iDNA": "Le coût de la suppression ultérieure d'un flip est de +/- 8 iDNA"
 
   
 

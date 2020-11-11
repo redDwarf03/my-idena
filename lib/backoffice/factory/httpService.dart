@@ -26,6 +26,8 @@ import 'package:my_idena/backoffice/bean/dna_sendTransaction_request.dart';
 import 'package:my_idena/backoffice/bean/dna_sendTransaction_response.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_request.dart';
 import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
+import 'package:my_idena/backoffice/bean/flip_submit_request.dart';
+import 'package:my_idena/backoffice/bean/flip_submit_response.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
@@ -685,5 +687,48 @@ class HttpService {
       httpClient.close();
     }
     return bcnSyncingResponse;
+  }
+
+
+
+    Future<FlipSubmitResponse> submitFlip(
+      String publicHex, String privateHex) async {
+    FlipSubmitResponse flipSubmitResponse;
+
+    HttpClient httpClient = new HttpClient();
+    try {
+      IdenaSharedPreferences idenaSharedPreferences =
+          await SharedPreferencesHelper.getIdenaSharedPreferences();
+
+      HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
+
+      Map<String, dynamic> map = {
+        'method': DnaSendTransactionRequest.METHOD_NAME,
+        "params": [
+          {
+            "publicHex": publicHex,
+            "privateHex": privateHex,
+            "pairId": 1
+          }
+        ],
+        'id': 101,
+        'key': idenaSharedPreferences.keyApp
+      };
+      FlipSubmitRequest flipSubmitRequest =
+          FlipSubmitRequest.fromJson(map);
+      request.add(utf8.encode(json.encode(flipSubmitRequest.toJson())));
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        flipSubmitResponse = flipSubmitResponseFromJson(reply);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    } finally {
+      httpClient.close();
+    }
+    return flipSubmitResponse;
   }
 }
