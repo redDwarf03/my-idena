@@ -178,7 +178,7 @@ class _ValidationSessionCountdownTextState
           return Padding(
               padding:
                   const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(       
+              child: Container(
                   child: Row(children: <Widget>[
                 Expanded(
                     child: Column(
@@ -187,7 +187,7 @@ class _ValidationSessionCountdownTextState
                         children: <Widget>[
                       Text(
                         AppLocalizations.of(context)
-                            .translate("Idena validation will start soon"),
+                            .translate("Idena validation started. Please, click the button"),
                         style: TextStyle(
                           fontFamily: MyIdenaAppTheme.fontName,
                           fontWeight: FontWeight.w500,
@@ -196,9 +196,12 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                      
+                      FloatingActionButton(
+                        onPressed: () => launchSession(),
+                        backgroundColor: Colors.red,
+                        child: new Icon(Icons.refresh, color: Colors.white),
+                      ),
                     ])),
-                    
               ])));
         }
       case EpochPeriod.LongSession:
@@ -443,7 +446,7 @@ class _ValidationSessionCountdownTextState
     );
   }
 
-  void launchSession() {
+  Future launchSession() async {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(

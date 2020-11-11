@@ -134,7 +134,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      ListTile(
+                      /*ListTile(
                         leading: Icon(FlevaIcons.color_palette_outline),
                         title: Text(
                             AppLocalizations.of(context).translate("My flips")),
@@ -147,7 +147,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           });
                           Navigator.of(context).pop();
                         },
-                      ),
+                      ),*/
                       ListTile(
                         leading: Icon(Icons.show_chart),
                         title: Text(AppLocalizations.of(context).translate("Market")),

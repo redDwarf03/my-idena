@@ -52,9 +52,7 @@ class ValidationSessionInfoFlips {
 
 class ValidationSessionInfoContext {
   ValidationSessionInfoContext(
-      {this.simulationMode,
-      this.epochPeriod,
-      this.checkFlipsQualityProcess});
+      {this.simulationMode, this.epochPeriod, this.checkFlipsQualityProcess});
 
   String epochPeriod;
   bool simulationMode;
@@ -188,7 +186,7 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
         validationSessionInfoFlips.available =
             flipLongHashesResponse.result[i].available;
         validationSessionInfoFlips.answerType = AnswerType.NONE;
-        validationSessionInfoFlips.relevanceType = RelevantType.NO_INFO;            
+        validationSessionInfoFlips.relevanceType = RelevantType.NO_INFO;
       }
 
       if (validationSessionInfoFlips.extra) {
@@ -198,7 +196,8 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
       }
     }
 
-    validationSessionInfo.listSessionValidationFlips = listSessionValidationFlip;
+    validationSessionInfo.listSessionValidationFlips =
+        listSessionValidationFlip;
     validationSessionInfo.listSessionValidationFlipsExtra =
         listSessionValidationFlipExtra;
   } catch (e) {
@@ -431,9 +430,12 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
 
     ParamShortAnswer answers = new ParamShortAnswer();
     List<ShortAnswer> listAnswers = new List();
-    for (int i = 0; i < validationSessionInfo.listSessionValidationFlips.length; i++) {
+    for (int i = 0;
+        i < validationSessionInfo.listSessionValidationFlips.length;
+        i++) {
       ShortAnswer answer = new ShortAnswer(
-          answer: validationSessionInfo.listSessionValidationFlips[i].answerType,
+          answer:
+              validationSessionInfo.listSessionValidationFlips[i].answerType,
           hash: validationSessionInfo.listSessionValidationFlips[i].hash);
       listAnswers.add(answer);
     }
@@ -490,14 +492,18 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
 
     ParamLongAnswer answers = new ParamLongAnswer();
     List<LongAnswer> listAnswers = new List();
-    for (int i = 0; i < validationSessionInfo.listSessionValidationFlips.length; i++) {
+    for (int i = 0;
+        i < validationSessionInfo.listSessionValidationFlips.length;
+        i++) {
       wrongWordsBool = false;
       if (validationSessionInfo.listSessionValidationFlips[i] != null &&
-          validationSessionInfo.listSessionValidationFlips[i].relevanceType == RelevantType.IRRELEVANT) {
+          validationSessionInfo.listSessionValidationFlips[i].relevanceType ==
+              RelevantType.IRRELEVANT) {
         wrongWordsBool = true;
       }
       LongAnswer answer = new LongAnswer(
-          answer: validationSessionInfo.listSessionValidationFlips[i].answerType,
+          answer:
+              validationSessionInfo.listSessionValidationFlips[i].answerType,
           wrongWords: wrongWordsBool,
           hash: validationSessionInfo.listSessionValidationFlips[i].hash);
       listAnswers.add(answer);
