@@ -1108,7 +1108,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                             elevation: 5.0,
                             onPressed: () async {
                               if (dnaAll.dnaIdentityResponse.result.state ==
-                                  IdentityStatus.Human) {
+                                  IdentityStatus.Newbie) {
                                 showDialog(
                                     context: context,
                                     builder: (context) => SimpleDialog(
