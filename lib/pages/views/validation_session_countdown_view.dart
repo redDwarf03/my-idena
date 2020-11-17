@@ -43,6 +43,7 @@ class _ValidationSessionCountdownTextState
   int endTime;
   int endTimeBeforeFlipSession;
   Timer _timer;
+  bool wait = false;
 
   @override
   void initState() {
@@ -135,7 +136,11 @@ class _ValidationSessionCountdownTextState
                       CountdownTimer(
                         endTime: endTime,
                         onEnd: () {
-                          launchSession();
+                          wait = true;
+                          Future.delayed(const Duration(seconds: 5), () {                          
+                            launchSession();
+                            wait = false;
+                          });
                         },
                         widgetBuilder: (_, CurrentRemainingTime time) {
                           if (time == null) {
@@ -185,9 +190,10 @@ class _ValidationSessionCountdownTextState
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context)
-                            .translate("Idena validation started. Please, click the button"),
+                          
+                      wait ? Text("") : Text(
+                        AppLocalizations.of(context).translate(
+                            "Idena validation started. Please, click the button"),
                         style: TextStyle(
                           fontFamily: MyIdenaAppTheme.fontName,
                           fontWeight: FontWeight.w500,
@@ -196,7 +202,7 @@ class _ValidationSessionCountdownTextState
                           color: Colors.red,
                         ),
                       ),
-                      FloatingActionButton(
+                      wait ? Text("") : FloatingActionButton(
                         onPressed: () => launchSession(),
                         backgroundColor: Colors.red,
                         child: new Icon(Icons.refresh, color: Colors.white),

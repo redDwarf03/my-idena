@@ -79,7 +79,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
               .nextValidation.millisecondsSinceEpoch +
           (dnaAllForValidationSession
                   .dnaCeremonyIntervalsResponse.result.shortSessionDuration *
-              1000);
+              1000) - 5000;
     }
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
@@ -96,7 +96,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
               1000) +
           (dnaAllForValidationSession
                   .dnaCeremonyIntervalsResponse.result.longSessionDuration *
-              1000);
+              1000) - 5000;
     }
   }
 
