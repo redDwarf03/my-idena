@@ -46,7 +46,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     initTabIconsList(1);
 
-    animationController = AnimationController(duration: const Duration(milliseconds: 600), vsync: this);
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
     tabBody = HomeScreen(
       animationController: animationController,
       firstState: true,
@@ -69,6 +70,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             return Center(child: CircularProgressIndicator());
           } else {
             dnaAll = snapshot.data;
+
             return Container(
               color: MyIdenaAppTheme.background,
               child: Scaffold(
@@ -87,23 +89,38 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               bottomRight: Radius.circular(48.0),
                               topRight: Radius.circular(0.0)),
                           boxShadow: <BoxShadow>[
-                            BoxShadow(color: MyIdenaAppTheme.grey.withOpacity(0.7), offset: Offset(1.1, 1.1), blurRadius: 10.0),
+                            BoxShadow(
+                                color: MyIdenaAppTheme.grey.withOpacity(0.7),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
                           ],
                         ),
                         child: Stack(
                           children: <Widget>[
-                            dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? SizedBox() :
+                            dnaAll == null ||
+                                    dnaAll.dnaIdentityResponse == null ||
+                                    dnaAll.dnaIdentityResponse.result == null
+                                ? SizedBox()
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
+                                      radius: 50.0,
+                                    ),
+                                  ),
                             Align(
-                              alignment: Alignment.centerLeft,
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage('https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
-                                radius: 50.0,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight + Alignment(0, .3),
+                              alignment:
+                                  Alignment.centerRight + Alignment(0, .3),
                               child: Text(
-                                dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? "?" : dnaAll.dnaIdentityResponse.result.address.substring(0, 20) + "...",
+                                dnaAll == null ||
+                                        dnaAll.dnaIdentityResponse == null ||
+                                        dnaAll.dnaIdentityResponse.result ==
+                                            null
+                                    ? "?"
+                                    : dnaAll.dnaIdentityResponse.result.address
+                                            .substring(0, 20) +
+                                        "...",
                                 style: TextStyle(
                                   fontFamily: MyIdenaAppTheme.fontName,
                                   fontSize: 12,
@@ -112,7 +129,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               ),
                             ),
                             Align(
-                              alignment: Alignment.centerRight + Alignment(0, .8),
+                              alignment:
+                                  Alignment.centerRight + Alignment(0, .8),
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.white),
@@ -121,7 +139,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 child: Padding(
                                   padding: EdgeInsets.all(5.0),
                                   child: Text(
-                                    dnaAll == null || dnaAll.dnaIdentityResponse == null || dnaAll.dnaIdentityResponse.result == null ? "?" : new UtilIdentity().mapToFriendlyStatus(dnaAll.dnaIdentityResponse.result.state),
+                                    dnaAll == null ||
+                                            dnaAll.dnaIdentityResponse ==
+                                                null ||
+                                            dnaAll.dnaIdentityResponse.result ==
+                                                null
+                                        ? "?"
+                                        : new UtilIdentity()
+                                            .mapToFriendlyStatus(dnaAll
+                                                .dnaIdentityResponse
+                                                .result
+                                                .state),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: MyIdenaAppTheme.fontName,
@@ -134,38 +162,43 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
+                      /*if (UtilIdentity().canSubmitFlip(dnaAll))
+                        ListTile(
+                          leading: Icon(FlevaIcons.color_palette_outline),
+                          title: Text(AppLocalizations.of(context)
+                              .translate("My flips")),
+                          onTap: () {
+                            setState(() {
+                              initTabIconsList(0);
+                              tabBody = CreateFlipScreen(
+                                  dnaAll: dnaAll,
+                                  animationController: animationController);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),*/
                       ListTile(
-                        leading: Icon(FlevaIcons.color_palette_outline),
+                        leading: Icon(Icons.show_chart),
                         title: Text(
-                            AppLocalizations.of(context).translate("My flips")),
+                            AppLocalizations.of(context).translate("Market")),
                         onTap: () {
                           setState(() {
                             initTabIconsList(0);
-                            tabBody = CreateFlipScreen(
-                                dnaAll: dnaAll,
+                            tabBody = MarketScreen(
                                 animationController: animationController);
                           });
                           Navigator.of(context).pop();
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.show_chart),
-                        title: Text(AppLocalizations.of(context).translate("Market")),
-                        onTap: () {
-                          setState(() {
-                            initTabIconsList(0);
-                            tabBody = MarketScreen(animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ListTile(
                         leading: Icon(FlevaIcons.checkmark_square_2_outline),
-                        title: Text(AppLocalizations.of(context).translate("Validation Basics")),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Validation Basics")),
                         onTap: () {
                           setState(() {
                             initTabIconsList(0);
-                            tabBody = ValidationBasicsScreen(animationController: animationController);
+                            tabBody = ValidationBasicsScreen(
+                                animationController: animationController);
                           });
                           Navigator.of(context).pop();
                         },
@@ -198,10 +231,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),*/
                       ListTile(
                         leading: Icon(FlevaIcons.bulb_outline),
-                        title: Text(AppLocalizations.of(context).translate("Try a validation session")),
+                        title: Text(AppLocalizations.of(context)
+                            .translate("Try a validation session")),
                         onTap: () {
                           setState(() {
-                            dnaAll.dnaGetEpochResponse.result.nextValidation = DateTime.now();
+                            dnaAll.dnaGetEpochResponse.result.nextValidation =
+                                DateTime.now();
                             tabBody = ValidationSessionScreen(
                                 dnaAll: dnaAll,
                                 simulationMode: true,
@@ -217,7 +252,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
                 body: FutureBuilder<bool>(
                   future: getData(),
-                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
                     if (!snapshot.hasData) {
                       return const SizedBox();
                     } else {
@@ -278,7 +314,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = HomeScreen(animationController: animationController, firstState: true);
+                          tabBody = HomeScreen(
+                              animationController: animationController,
+                              firstState: true);
                         });
                       });
                     } else if (index == 2) {
@@ -287,7 +325,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = ParametersScreen(animationController: animationController);
+                          tabBody = ParametersScreen(
+                              animationController: animationController);
                         });
                       });
                     } else if (index == 3) {
@@ -296,7 +335,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = AboutScreen(animationController: animationController);
+                          tabBody = AboutScreen(
+                              animationController: animationController);
                         });
                       });
                     }
@@ -320,7 +360,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = HomeScreen(animationController: animationController, firstState: true);
+                          tabBody = HomeScreen(
+                              animationController: animationController,
+                              firstState: true);
                         });
                       });
                     } else if (index == 1) {
@@ -336,7 +378,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = ParametersScreen(animationController: animationController);
+                          tabBody = ParametersScreen(
+                              animationController: animationController);
                         });
                       });
                     } else if (index == 3) {
@@ -345,7 +388,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           return;
                         }
                         setState(() {
-                          tabBody = AboutScreen(animationController: animationController);
+                          tabBody = AboutScreen(
+                              animationController: animationController);
                         });
                       });
                     }
