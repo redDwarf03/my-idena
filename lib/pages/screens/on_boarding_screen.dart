@@ -59,6 +59,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         Timer.periodic(Duration(milliseconds: 1000), (_) => checkNode());
 
     Platform.isAndroid ? nbPages = 4 : nbPages = 3;
+
+    
+    /*AuthenticationMethod authenticationMethod = new AuthenticationMethod.password(password: "1Qt%gQQS-QS5,G}_");
+    authenticationMethod.password = "1Qt%gQQS-QS5,G}_";
+    SSHClientConfiguration sshClientConfiguration = new SSHClientConfiguration(user: "root", authenticationMethod: authenticationMethod);
+    SSHTunnel sshTunnel = new SSHTunnel(clientConfiguration: sshClientConfiguration, server: new Endpoint(host: "192.248.182.223", port: 22),
+    tunnel: new Endpoint(host: "9999:localhost", port: 9009), remote: new Endpoint(host: "192.248.182.223", port: 22));
+    sshTunnel.start().then((value) => print("value = " + value));
+    print("dddd");
+    */
+
+
   }
 
   Future checkNode() async {
