@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:convert/convert.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
@@ -16,7 +14,6 @@ import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/orderable_stack.dart';
 import 'package:my_idena/utils/util_flip.dart';
 import 'package:my_idena/utils/util_img.dart';
-import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:my_idena/enums/identity_status.dart' as IdentityStatus;
 
 class FlipsCreatorView extends StatefulWidget {
@@ -1175,6 +1172,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                                                           20.0)),
                                                           onPressed: () {
                                                             setState(() {
+                                                              httpService.submitFlip(images);
                                                               Navigator
                                                                   .pushReplacement(
                                                                 context,
@@ -1212,6 +1210,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                         ));
                               } else {
                                 setState(() {
+                                  httpService.submitFlip(images);
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -1401,50 +1400,6 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
     setState(() {
       images = resultList;
     });
-  }
-
-  Future encodeImages() async {
-    List imagesShuffle = images;
-    imagesShuffle = images;
-    var random = new Random();
-
-    for (var i = imagesShuffle.length - 1; i > 0; i--) {
-      var n = random.nextInt(i + 1);
-
-      var temp = imagesShuffle[i];
-      imagesShuffle[i] = imagesShuffle[n];
-      imagesShuffle[n] = temp;
-    }
-    ByteData byteData_1 = await images[0].getByteData();
-    Uint8List imageUint8_1 = byteData_1.buffer.asUint8List();
-    ByteData byteData_2 = await images[1].getByteData();
-    Uint8List imageUint8_2 = byteData_2.buffer.asUint8List();
-    ByteData byteData_3 = await images[2].getByteData();
-    Uint8List imageUint8_3 = byteData_3.buffer.asUint8List();
-    ByteData byteData_4 = await images[3].getByteData();
-    Uint8List imageUint8_4 = byteData_4.buffer.asUint8List();
-
-    //
-    ByteData byteData_1_shuffle = await imagesShuffle[0].getByteData();
-    Uint8List imageUint8_1_shuffle = byteData_1_shuffle.buffer.asUint8List();
-    ByteData byteData_2_shuffle = await imagesShuffle[1].getByteData();
-    Uint8List imageUint8_2_shuffle = byteData_2_shuffle.buffer.asUint8List();
-    ByteData byteData_3_shuffle = await imagesShuffle[2].getByteData();
-    Uint8List imageUint8_3_shuffle = byteData_3_shuffle.buffer.asUint8List();
-    ByteData byteData_4_shuffle = await imagesShuffle[3].getByteData();
-    Uint8List imageUint8_4_shuffle = byteData_4_shuffle.buffer.asUint8List();
-    Uint8List image1_2_Uint8 =
-        Rlp.encode([imageUint8_1_shuffle, imageUint8_2_shuffle]);
-    String publicHex = hex.encode(image1_2_Uint8);
-
-    Uint8List image3_4_Uint8 = Rlp.encode([
-      [imageUint8_3_shuffle, imageUint8_4_shuffle],
-      "[], [3], [1], [2]",
-      "[1], [2], [3], []"
-    ]);
-    String privateHex = hex.encode(image3_4_Uint8);
-
-    httpService.submitFlip(publicHex, privateHex);
   }
 
   Widget imgItemBuilder({Orderable<Img> data, Size itemSize}) => Container(

@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
+import 'package:convert/convert.dart';
 import 'package:my_idena/backoffice/bean/bcn_syncing_request.dart';
 import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_request.dart';
@@ -32,6 +36,7 @@ import 'package:my_idena/beans/deepLinkParam.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
+import 'package:ethereum_util/src/rlp.dart' as Rlp;
 
 class HttpService {
   var logger = Logger();
@@ -161,10 +166,13 @@ class HttpService {
         dnaIdentityResponse.result.totalShortFlipPoints =
             DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
         List<int> listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
-        dnaIdentityResponse.result.flipKeyWordPairs = new List<FlipKeyWordPair>();
-        dnaIdentityResponse.result.flipKeyWordPairs.add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
+        dnaIdentityResponse.result.flipKeyWordPairs =
+            new List<FlipKeyWordPair>();
+        dnaIdentityResponse.result.flipKeyWordPairs
+            .add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
         List<int> listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
-        dnaIdentityResponse.result.flipKeyWordPairs.add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
+        dnaIdentityResponse.result.flipKeyWordPairs
+            .add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
 
         dnaGetBalanceResponse = new DnaGetBalanceResponse();
         dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
@@ -365,7 +373,6 @@ class HttpService {
         dnaBecomeOfflineResponse = dnaBecomeOfflineResponseFromJson(reply);
       }
     } catch (e) {
-      logger.e(e.toString());
     } finally {
       httpClient.close();
     }
@@ -682,42 +689,76 @@ class HttpService {
         bcnSyncingResponse = bcnSyncingResponseFromJson(reply);
       }
     } catch (e) {
-      logger.e(e.toString());
     } finally {
       httpClient.close();
     }
     return bcnSyncingResponse;
   }
 
-
-
-    Future<FlipSubmitResponse> submitFlip(
-      String publicHex, String privateHex) async {
+  Future<FlipSubmitResponse> submitFlip(List images) async {
     FlipSubmitResponse flipSubmitResponse;
+    String publicHex;
+    String privateHex;
+
+    List imagesShuffle = images;
+    imagesShuffle = images;
+    var random = new Random();
+
+    for (var i = imagesShuffle.length - 1; i > 0; i--) {
+      var n = random.nextInt(i + 1);
+
+      var temp = imagesShuffle[i];
+      imagesShuffle[i] = imagesShuffle[n];
+      imagesShuffle[n] = temp;
+    }
+    ByteData byteData_1 = await images[0].getByteData();
+    Uint8List imageUint8_1 = byteData_1.buffer.asUint8List();
+    ByteData byteData_2 = await images[1].getByteData();
+    Uint8List imageUint8_2 = byteData_2.buffer.asUint8List();
+    ByteData byteData_3 = await images[2].getByteData();
+    Uint8List imageUint8_3 = byteData_3.buffer.asUint8List();
+    ByteData byteData_4 = await images[3].getByteData();
+    Uint8List imageUint8_4 = byteData_4.buffer.asUint8List();
+
+    //
+    ByteData byteData_1_shuffle = await imagesShuffle[0].getByteData();
+    Uint8List imageUint8_1_shuffle = byteData_1_shuffle.buffer.asUint8List();
+    ByteData byteData_2_shuffle = await imagesShuffle[1].getByteData();
+    Uint8List imageUint8_2_shuffle = byteData_2_shuffle.buffer.asUint8List();
+    ByteData byteData_3_shuffle = await imagesShuffle[2].getByteData();
+    Uint8List imageUint8_3_shuffle = byteData_3_shuffle.buffer.asUint8List();
+    ByteData byteData_4_shuffle = await imagesShuffle[3].getByteData();
+    Uint8List imageUint8_4_shuffle = byteData_4_shuffle.buffer.asUint8List();
+    Uint8List image1_2_Uint8 =
+        Rlp.encode([imageUint8_1_shuffle, imageUint8_2_shuffle]);
+    publicHex = hex.encode(image1_2_Uint8);
+
+    Uint8List image3_4_Uint8 = Rlp.encode([
+      [imageUint8_3_shuffle, imageUint8_4_shuffle],
+      "[], [3], [1], [2]",
+      "[1], [2], [3], []"
+    ]);
+    privateHex = hex.encode(image3_4_Uint8);
 
     HttpClient httpClient = new HttpClient();
     try {
       IdenaSharedPreferences idenaSharedPreferences =
           await SharedPreferencesHelper.getIdenaSharedPreferences();
 
-      HttpClientRequest request =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request.headers.set('content-type', 'application/json');
-
       Map<String, dynamic> map = {
         'method': DnaSendTransactionRequest.METHOD_NAME,
         "params": [
-          {
-            "publicHex": publicHex,
-            "privateHex": privateHex,
-            "pairId": 1
-          }
+          {"publicHex": publicHex, "privateHex": privateHex, "pairId": 1}
         ],
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      FlipSubmitRequest flipSubmitRequest =
-          FlipSubmitRequest.fromJson(map);
+      FlipSubmitRequest flipSubmitRequest = FlipSubmitRequest.fromJson(map);
+      logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitRequest));
+
+       HttpClientRequest request =
+          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+      request.headers.set('content-type', 'application/json');
       request.add(utf8.encode(json.encode(flipSubmitRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
