@@ -23,7 +23,7 @@ DeepLinkParam deepLinkParam;
 HttpService httpService = HttpService();
 List wordsMap;
 DictWords dictWords;
-
+bool publicNode;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
