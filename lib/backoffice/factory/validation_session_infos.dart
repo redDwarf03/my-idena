@@ -192,7 +192,9 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
       if (validationSessionInfoFlips.extra) {
         listSessionValidationFlipExtra.add(validationSessionInfoFlips);
       } else {
-        listSessionValidationFlip.add(validationSessionInfoFlips);
+        if (validationSessionInfoFlips.ready) {
+          listSessionValidationFlip.add(validationSessionInfoFlips);
+        }
       }
     }
 
@@ -257,7 +259,6 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       Uint8List imageUint8_3;
       Uint8List imageUint8_4;
 
-  
       Decoded images;
       Decoded privateImages;
       List listImages = new List(4);
