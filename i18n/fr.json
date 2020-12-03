@@ -228,7 +228,11 @@
   "Are you sure that you want to submit this flip ?": "Etes-vous sûr(e)s de vouloir soumettre votre flip ?",
   "If you make BAD flip, you will lose all iDNA rewards !": "Dans le cas où vous créez un MAUVAIS flip, vous perdrez toutes les récompenses en iDNA !",
   "The cost of deleting a flip is about 8 iDNA": "Le coût de la suppression ultérieure d'un flip est de +/- 8 iDNA",
-  "Public Node": "Noeud public"
+  "Public Node": "Noeud public",
+  "Confirmation": "Confirmation",
+  "Are you sure you want to send a donation ?": "Etes-vous sûr(e)s de vouloir envoyer une donation ?",
+  "No, sorry": "Non, désolé",
+  "Yes with pleasure": "Oui avec plaisir"
 
   
 

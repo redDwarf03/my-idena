@@ -137,7 +137,7 @@ class _ValidationSessionCountdownTextState
                         endTime: endTime,
                         onEnd: () {
                           wait = true;
-                          Future.delayed(const Duration(seconds: 5), () {                          
+                          Future.delayed(const Duration(seconds: 5), () {
                             launchSession();
                             wait = false;
                           });
@@ -190,27 +190,31 @@ class _ValidationSessionCountdownTextState
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          
-                      wait ? Text("") : Text(
-                        AppLocalizations.of(context).translate(
-                            "Idena validation started. Please, click the button"),
-                        style: TextStyle(
-                          fontFamily: MyIdenaAppTheme.fontName,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          letterSpacing: -0.2,
-                          color: Colors.red,
-                        ),
-                      ),
-                      wait ? Text("") : FloatingActionButton(
-                        onPressed: () => launchSession(),
-                        backgroundColor: Colors.red,
-                        child: new Icon(Icons.refresh, color: Colors.white),
-                      ),
+                      wait
+                          ? Text("")
+                          : Text(
+                              AppLocalizations.of(context).translate(
+                                  "Idena validation started. Please, click the button"),
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.2,
+                                color: Colors.red,
+                              ),
+                            ),
+                      wait
+                          ? Text("")
+                          : FloatingActionButton(
+                              onPressed: () => launchSession(),
+                              backgroundColor: Colors.red,
+                              child:
+                                  new Icon(Icons.refresh, color: Colors.white),
+                            ),
                     ])),
               ])));
         }
-      case EpochPeriod.LongSession:
+        case EpochPeriod.LongSession:
         {
           return Padding(
               padding:
@@ -310,39 +314,42 @@ class _ValidationSessionCountdownTextState
                 ),
                 tooltip: 'Send 1 iDNA',
                 onPressed: () {
-                  try {
-                    httpService.sendTransaction(
-                        widget.dnaAll.dnaIdentityResponse.result.address, 1);
-                  } catch (e) {
-                    logger.e(e.toString());
-                  }
                   showDialog(
-                      context: context,
-                      builder: (context) => SimpleDialog(
-                            contentPadding: EdgeInsets.zero,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Thank you !!! :)"),
-                                      style: TextStyle(
-                                          fontFamily: MyIdenaAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          letterSpacing: -0.1,
-                                          color: MyIdenaAppTheme.darkText),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ));
-                  setState(() {
-                    sendIdna = true;
-                  });
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)
+                          .translate("Confirmation")),
+                      content: Text(AppLocalizations.of(context).translate(
+                          "Are you sure you want to send a donation ?")),
+                      actions: [
+                        FlatButton(
+                          child: Text(AppLocalizations.of(context)
+                              .translate("No, sorry")),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                            child: Text(AppLocalizations.of(context)
+                                .translate("Yes with pleasure")),
+                            onPressed: () {
+                              try {
+                                httpService.sendTransaction(
+                                    widget.dnaAll.dnaIdentityResponse.result
+                                        .address,
+                                    1);
+                              } catch (e) {
+                                logger.e(e.toString());
+                              }
+
+                              setState(() {
+                                sendIdna = true;
+                                Navigator.of(context).pop();
+                              });
+                            }),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
@@ -360,39 +367,42 @@ class _ValidationSessionCountdownTextState
                 ),
                 tooltip: 'Send 10 iDNA',
                 onPressed: () {
-                  try {
-                    httpService.sendTransaction(
-                        widget.dnaAll.dnaIdentityResponse.result.address, 10);
-                  } catch (e) {
-                    logger.e(e.toString());
-                  }
                   showDialog(
-                      context: context,
-                      builder: (context) => SimpleDialog(
-                            contentPadding: EdgeInsets.zero,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Thank you !!! :)"),
-                                      style: TextStyle(
-                                          fontFamily: MyIdenaAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          letterSpacing: -0.1,
-                                          color: MyIdenaAppTheme.darkText),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ));
-                  setState(() {
-                    sendIdna = true;
-                  });
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)
+                          .translate("Confirmation")),
+                      content: Text(AppLocalizations.of(context).translate(
+                          "Are you sure you want to send a donation ?")),
+                      actions: [
+                        FlatButton(
+                          child: Text(AppLocalizations.of(context)
+                              .translate("No, sorry")),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                            child: Text(AppLocalizations.of(context)
+                                .translate("Yes with pleasure")),
+                            onPressed: () {
+                              try {
+                                httpService.sendTransaction(
+                                    widget.dnaAll.dnaIdentityResponse.result
+                                        .address,
+                                    10);
+                              } catch (e) {
+                                logger.e(e.toString());
+                              }
+
+                              setState(() {
+                                sendIdna = true;
+                                Navigator.of(context).pop();
+                              });
+                            }),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
@@ -410,39 +420,42 @@ class _ValidationSessionCountdownTextState
                 ),
                 tooltip: 'Send 50 iDNA',
                 onPressed: () {
-                  try {
-                    httpService.sendTransaction(
-                        widget.dnaAll.dnaIdentityResponse.result.address, 50);
-                  } catch (e) {
-                    logger.e(e.toString());
-                  }
                   showDialog(
-                      context: context,
-                      builder: (context) => SimpleDialog(
-                            contentPadding: EdgeInsets.zero,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate("Thank you !!! :)"),
-                                      style: TextStyle(
-                                          fontFamily: MyIdenaAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          letterSpacing: -0.1,
-                                          color: MyIdenaAppTheme.darkText),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ));
-                  setState(() {
-                    sendIdna = true;
-                  });
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)
+                          .translate("Confirmation")),
+                      content: Text(AppLocalizations.of(context).translate(
+                          "Are you sure you want to send a donation ?")),
+                      actions: [
+                        FlatButton(
+                          child: Text(AppLocalizations.of(context)
+                              .translate("No, sorry")),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                            child: Text(AppLocalizations.of(context)
+                                .translate("Yes with pleasure")),
+                            onPressed: () {
+                              try {
+                                httpService.sendTransaction(
+                                    widget.dnaAll.dnaIdentityResponse.result
+                                        .address,
+                                    50);
+                              } catch (e) {
+                                logger.e(e.toString());
+                              }
+
+                              setState(() {
+                                sendIdna = true;
+                                Navigator.of(context).pop();
+                              });
+                            }),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),

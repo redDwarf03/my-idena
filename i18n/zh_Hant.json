@@ -227,7 +227,11 @@
   "Are you sure that you want to submit this flip ?": "Are you sure that you want to submit this flip ?",
   "If you make BAD flip, you will lose all iDNA rewards !": "If you make BAD flip, you will lose all iDNA rewards !",
   "The cost of deleting a flip is about 8 iDNA": "The cost of deleting a flip is about 8 iDNA",
-  "Public Node": "Public Node"
+  "Public Node": "Public Node",
+  "Confirmation": "Confirmation",
+  "Are you sure you want to send a donation ?": "Are you sure you want to send a donation ?",
+  "No, sorry": "No, sorry",
+  "Yes with pleasure": "Yes with pleasure"
 
   
 
