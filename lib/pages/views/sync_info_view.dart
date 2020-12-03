@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/app_localizations.dart';
+import 'package:my_idena/utils/util_public_node.dart';
 
 class SyncInfoView extends StatefulWidget {
   const SyncInfoView({Key key}) : super(key: key);
@@ -31,6 +33,10 @@ class _SyncInfoViewState extends State<SyncInfoView> {
 
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(milliseconds: 200), () async {
+      publicNode = await getPublicNode(null);
+      if (publicNode == null) {
+        publicNode = false;
+      }
       bcnSyncingResponse = await httpService.checkSync();
       if (!mounted) return;
       setState(() {});
@@ -44,25 +50,47 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   }
 
   Widget _buildChild() {
-    return bcnSyncingResponse == null
+    return publicNode == null
         ? Chip(
             backgroundColor: Colors.red,
             padding: EdgeInsets.all(0),
             label: Text(AppLocalizations.of(context).translate("Not connected"),
                 style: TextStyle(fontSize: 12, color: Colors.white)),
           )
-        : bcnSyncingResponse.result.syncing
+        : publicNode
             ? Chip(
-                backgroundColor: Colors.orange[600],
+                backgroundColor: Colors.blue[800],
                 padding: EdgeInsets.all(0),
-                label: Text(AppLocalizations.of(context).translate("Not synchronized"),
+                label: Text(
+                    AppLocalizations.of(context).translate("Public Node"),
                     style: TextStyle(fontSize: 12, color: Colors.white)),
               )
-            : Chip(
-                backgroundColor: Colors.green,
-                padding: EdgeInsets.all(0),
-                label: Text(AppLocalizations.of(context).translate("Synchronized"),
-                    style: TextStyle(fontSize: 12, color: Colors.white)),
-              );
+            : bcnSyncingResponse == null
+                ? Chip(
+                    backgroundColor: Colors.red,
+                    padding: EdgeInsets.all(0),
+                    label: Text(
+                        AppLocalizations.of(context).translate("Not connected"),
+                        style: TextStyle(fontSize: 12, color: Colors.white)),
+                  )
+                : bcnSyncingResponse.result.syncing
+                    ? Chip(
+                        backgroundColor: Colors.orange[600],
+                        padding: EdgeInsets.all(0),
+                        label: Text(
+                            AppLocalizations.of(context)
+                                .translate("Not synchronized"),
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.white)),
+                      )
+                    : Chip(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.all(0),
+                        label: Text(
+                            AppLocalizations.of(context)
+                                .translate("Synchronized"),
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.white)),
+                      );
   }
 }

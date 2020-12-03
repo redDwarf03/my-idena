@@ -37,6 +37,7 @@ import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
 import 'package:ethereum_util/src/rlp.dart' as Rlp;
+import 'package:my_idena/utils/util_public_node.dart';
 
 class HttpService {
   var logger = Logger();
@@ -56,13 +57,6 @@ class HttpService {
       if (!_validURL) {
         return false;
       }
-/*      final responseHttp = await http
-          .get(Uri.encodeFull(apiUrl), headers: {"accept": "application/json"}).timeout(const Duration(seconds: 5), onTimeout: () {return null;});
-      if (responseHttp == null || responseHttp.statusCode != 200) {
-        return false;
-      } else {*/
-
-      // get CoinBase Address
       HttpClientRequest request = await httpClient
           .postUrl(Uri.parse(apiUrl))
           .timeout(const Duration(seconds: 5), onTimeout: () {
@@ -70,19 +64,20 @@ class HttpService {
       });
       request.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapGetCoinBaseAddress = {
-        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+      Map<String, dynamic> mapGetIdentity = {
+        'method': DnaIdentityRequest.METHOD_NAME,
         'params': [],
         'id': 101,
         'key': keyApp
       };
-      DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest =
-          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-      request.add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+
+      DnaIdentityRequest dnaIdentityRequest =
+          DnaIdentityRequest.fromJson(mapGetIdentity);
+      request.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
-        if (dnaGetCoinbaseAddrResponseFromJson(reply).result == null) {
+        if (dnaIdentityResponseFromJson(reply).result == null) {
           return false;
         } else {
           return true;
@@ -90,8 +85,6 @@ class HttpService {
       } else {
         return false;
       }
-      /*}*/
-
     } catch (e) {
       return false;
     } finally {
@@ -121,86 +114,92 @@ class HttpService {
 
       HttpClientResponse response;
 
-      // get CoinBase Address
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
-        dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
-        dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
-      } else {
-        HttpClientRequest request1 =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        request1.headers.set('content-type', 'application/json');
+      if (await getPublicNode(idenaSharedPreferences.apiUrl) == false) {
+        // get CoinBase Address
+        if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+          dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
+          dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
+        } else {
+          HttpClientRequest request1 = await httpClient
+              .postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
+          request1.headers.set('content-type', 'application/json');
 
-        Map<String, dynamic> mapGetCoinBaseAddress = {
-          'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-        dnaGetCoinbaseAddrRequest =
-            DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-        request1
-            .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
-        response = await request1.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          dnaGetCoinbaseAddrResponse =
-              dnaGetCoinbaseAddrResponseFromJson(reply);
+          Map<String, dynamic> mapGetCoinBaseAddress = {
+            'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+            'params': [],
+            'id': 101,
+            'key': idenaSharedPreferences.keyApp
+          };
+          dnaGetCoinbaseAddrRequest =
+              DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
+          request1.add(
+              utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
+          response = await request1.close();
+          if (response.statusCode == 200) {
+            String reply = await response.transform(utf8.decoder).join();
+            dnaGetCoinbaseAddrResponse =
+                dnaGetCoinbaseAddrResponseFromJson(reply);
+          }
         }
-      }
 
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
-        dnaIdentityResponse = new DnaIdentityResponse();
-        dnaIdentityResponse.result = DnaIdentityResponseResult();
-        dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
-        dnaIdentityResponse.result.age = DM_IDENTITY_AGE;
-        dnaIdentityResponse.result.state = DM_IDENTITY_STATE;
-        dnaIdentityResponse.result.online = DM_IDENTITY_ONLINE;
-        dnaIdentityResponse.result.flips = new List(DM_IDENTITY_MADE_FLIPS);
-        dnaIdentityResponse.result.availableFlips =
-            DM_IDENTITY_REQUIRED_FLIPS - DM_IDENTITY_MADE_FLIPS;
-        dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
-        dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
-        dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
-        dnaIdentityResponse.result.totalQualifiedFlips =
-            DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
-        dnaIdentityResponse.result.totalShortFlipPoints =
-            DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
-        List<int> listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
-        dnaIdentityResponse.result.flipKeyWordPairs =
-            new List<FlipKeyWordPair>();
-        dnaIdentityResponse.result.flipKeyWordPairs
-            .add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
-        List<int> listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
-        dnaIdentityResponse.result.flipKeyWordPairs
-            .add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
+        if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+          dnaIdentityResponse = new DnaIdentityResponse();
+          dnaIdentityResponse.result = DnaIdentityResponseResult();
+          dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
+          dnaIdentityResponse.result.age = DM_IDENTITY_AGE;
+          dnaIdentityResponse.result.state = DM_IDENTITY_STATE;
+          dnaIdentityResponse.result.online = DM_IDENTITY_ONLINE;
+          dnaIdentityResponse.result.flips = new List(DM_IDENTITY_MADE_FLIPS);
+          dnaIdentityResponse.result.availableFlips =
+              DM_IDENTITY_REQUIRED_FLIPS - DM_IDENTITY_MADE_FLIPS;
+          dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
+          dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
+          dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
+          dnaIdentityResponse.result.totalQualifiedFlips =
+              DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
+          dnaIdentityResponse.result.totalShortFlipPoints =
+              DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
+          List<int> listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
+          dnaIdentityResponse.result.flipKeyWordPairs =
+              new List<FlipKeyWordPair>();
+          dnaIdentityResponse.result.flipKeyWordPairs
+              .add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
+          List<int> listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
+          dnaIdentityResponse.result.flipKeyWordPairs
+              .add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
 
-        dnaGetBalanceResponse = new DnaGetBalanceResponse();
-        dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
-        dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
-        dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
+          dnaGetBalanceResponse = new DnaGetBalanceResponse();
+          dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
+          dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
+          dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
 
-        dnaGetEpochResponse = new DnaGetEpochResponse();
-        dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
-        dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
-        dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
-        dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
+          dnaGetEpochResponse = new DnaGetEpochResponse();
+          dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
+          dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
+          dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
+          dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
 
-        dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
-        dnaCeremonyIntervalsResponse.result =
-            new DnaCeremonyIntervalsResponseResult();
-        dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
-            DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
-        dnaCeremonyIntervalsResponse.result.longSessionDuration =
-            DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
-        dnaCeremonyIntervalsResponse.result.shortSessionDuration =
-            DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+          dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
+          dnaCeremonyIntervalsResponse.result =
+              new DnaCeremonyIntervalsResponseResult();
+          dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+              DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+          dnaCeremonyIntervalsResponse.result.longSessionDuration =
+              DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+          dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+              DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
 
+          dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
+          dnaAll.dnaIdentityResponse = dnaIdentityResponse;
+          dnaAll.dnaGetBalanceResponse = dnaGetBalanceResponse;
+          dnaAll.dnaGetEpochResponse = dnaGetEpochResponse;
+          dnaAll.dnaCeremonyIntervalsResponse = dnaCeremonyIntervalsResponse;
+          return dnaAll;
+        }
+      } else {
+        dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
+        dnaGetCoinbaseAddrResponse.result = "";
         dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
-        dnaAll.dnaIdentityResponse = dnaIdentityResponse;
-        dnaAll.dnaGetBalanceResponse = dnaGetBalanceResponse;
-        dnaAll.dnaGetEpochResponse = dnaGetEpochResponse;
-        dnaAll.dnaCeremonyIntervalsResponse = dnaCeremonyIntervalsResponse;
-        return dnaAll;
       }
 
       // get Identity
@@ -208,18 +207,29 @@ class HttpService {
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request2.headers.set('content-type', 'application/json');
 
-      Map<String, dynamic> mapGetIdentity = {
-        'method': DnaIdentityRequest.METHOD_NAME,
-        'params': [dnaGetCoinbaseAddrResponse.result],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
+      Map<String, dynamic> mapGetIdentity;
+      if (await getPublicNode(idenaSharedPreferences.apiUrl) == false) {
+        mapGetIdentity = {
+          'method': DnaIdentityRequest.METHOD_NAME,
+          'params': [dnaGetCoinbaseAddrResponse.result],
+          'id': 101,
+          'key': idenaSharedPreferences.keyApp
+        };
+      } else {
+        mapGetIdentity = {
+          'method': DnaIdentityRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+          'key': idenaSharedPreferences.keyApp
+        };
+      }
 
       dnaIdentityRequest = DnaIdentityRequest.fromJson(mapGetIdentity);
       request2.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
       response = await request2.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
+        print(reply);
         dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
 
         // get Balance
@@ -372,8 +382,7 @@ class HttpService {
         String reply = await response.transform(utf8.decoder).join();
         dnaBecomeOfflineResponse = dnaBecomeOfflineResponseFromJson(reply);
       }
-    } catch (e) {
-    } finally {
+    } catch (e) {} finally {
       httpClient.close();
     }
     return dnaBecomeOfflineResponse;
@@ -688,8 +697,7 @@ class HttpService {
         String reply = await response.transform(utf8.decoder).join();
         bcnSyncingResponse = bcnSyncingResponseFromJson(reply);
       }
-    } catch (e) {
-    } finally {
+    } catch (e) {} finally {
       httpClient.close();
     }
     return bcnSyncingResponse;
@@ -756,7 +764,7 @@ class HttpService {
       FlipSubmitRequest flipSubmitRequest = FlipSubmitRequest.fromJson(map);
       logger.i(new JsonEncoder.withIndent('  ').convert(flipSubmitRequest));
 
-       HttpClientRequest request =
+      HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
       request.add(utf8.encode(json.encode(flipSubmitRequest.toJson())));
