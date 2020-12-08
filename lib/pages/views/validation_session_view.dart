@@ -114,7 +114,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   Widget build(BuildContext context) {
-    print("build session view");
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }
@@ -424,7 +423,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
             }
           },
           onEnd: () {
-            print("end");
             if (sessionStep == 1) {
               if (currentPeriod == EpochPeriod.ShortSession) {
                 if (widget.simulationMode == false) {

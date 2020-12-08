@@ -1,0 +1,4 @@
+- Fix the bug when the node sent you a flip who is out of network while the session validation (eq.: the flip appears in gray and should not)
+- Add confirmation before sending gift
+- Change of the validation date on the demo profile
+ 
