@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:ethereum_util/ethereum_util.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/main.dart';
@@ -22,10 +21,18 @@ import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/enums/answer_type.dart' as AnswerType;
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
-import 'package:ethereum_util/src/rlp.dart' as Rlp;
+import 'package:http/http.dart' as http;
+import 'package:my_idena/utils/crypto/rlp.dart';
+import 'package:my_idena/utils/crypto/utils_crypto.dart';
 
 var logger = Logger();
+
+Map<String, String> requestHeaders = {
+  'Content-type': 'application/json',
+};
+String body;
+http.Response responseHttp;
+Map<String, dynamic> mapParams;
 
 class ValidationSessionInfoFlips {
   ValidationSessionInfoFlips(
@@ -99,11 +106,7 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
   FlipLongHashesRequest flipLongHashesRequest;
   FlipLongHashesResponse flipLongHashesResponse;
 
-  HttpClient httpClient = new HttpClient();
   try {
-    IdenaSharedPreferences idenaSharedPreferences =
-        await SharedPreferencesHelper.getIdenaSharedPreferences();
-
     if (simulationMode) {
       if (typeSession == EpochPeriod.ShortSession) {
         flipShortHashesResponse = FlipShortHashesResponse.fromJson(
@@ -114,11 +117,7 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
             FlipExamples().getMapExample(typeSession));
       }
     } else {
-      HttpClientRequest request =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> map = {
+      mapParams = {
         'method': method,
         "params": [],
         'id': 101,
@@ -126,27 +125,27 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
       };
 
       if (typeSession == EpochPeriod.ShortSession) {
-        flipShortHashesRequest = FlipShortHashesRequest.fromJson(map);
+        flipShortHashesRequest = FlipShortHashesRequest.fromJson(mapParams);
         logger.i(
             new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-        request.add(utf8.encode(json.encode(flipShortHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          logger.i(reply);
-          flipShortHashesResponse = flipShortHashesResponseFromJson(reply);
+        body = json.encode(flipShortHashesRequest.toJson());
+        responseHttp = await http.post(Uri.parse(idenaSharedPreferences.apiUrl),
+            body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipShortHashesResponse =
+              flipShortHashesResponseFromJson(responseHttp.body);
         }
       }
       if (typeSession == EpochPeriod.LongSession) {
-        flipLongHashesRequest = FlipLongHashesRequest.fromJson(map);
+        flipLongHashesRequest = FlipLongHashesRequest.fromJson(mapParams);
         logger
             .i(new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
-        request.add(utf8.encode(json.encode(flipLongHashesRequest.toJson())));
-        HttpClientResponse response = await request.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          logger.i(reply);
-          flipLongHashesResponse = flipLongHashesResponseFromJson(reply);
+        body = json.encode(flipLongHashesRequest.toJson());
+        responseHttp = await http.post(Uri.parse(idenaSharedPreferences.apiUrl),
+            body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipLongHashesResponse =
+              flipLongHashesResponseFromJson(responseHttp.body);
         }
       }
     }
@@ -204,8 +203,6 @@ Future<ValidationSessionInfo> getValidationSessionFlipsList(
         listSessionValidationFlipExtra;
   } catch (e) {
     logger.e(e.toString());
-  } finally {
-    httpClient.close();
   }
 
   return validationSessionInfo;
@@ -221,11 +218,7 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       validationSessionInfoFlips.listImagesRight.length == 4) {
     return validationSessionInfoFlips;
   } else {
-    HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
       // get Flip
       FlipGetResponse flipGetResponse;
       if (simulationMode) {
@@ -233,24 +226,19 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
             await loadAssets(validationSessionInfoFlips.hash + "_images");
         flipGetResponse = flipGetResponseFromJson(data);
       } else {
-        HttpClientRequest requestFlip =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        requestFlip.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> mapFlip = {
+        mapParams = {
           'method': FlipGetRequest.METHOD_NAME,
           'params': [validationSessionInfoFlips.hash],
           'id': 101,
           'key': idenaSharedPreferences.keyApp
         };
 
-        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapFlip);
-        requestFlip.add(utf8.encode(json.encode(flipGetRequest.toJson())));
-        HttpClientResponse responseFlip = await requestFlip.close();
-        if (responseFlip.statusCode == 200) {
-          String replyFlip = await responseFlip.transform(utf8.decoder).join();
-          logger.i(replyFlip);
-          flipGetResponse = flipGetResponseFromJson(replyFlip);
+        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapParams);
+        body = json.encode(flipGetRequest.toJson());
+        responseHttp = await http.post(Uri.parse(idenaSharedPreferences.apiUrl),
+            body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipGetResponse = flipGetResponseFromJson(responseHttp.body);
         }
       }
 
@@ -267,19 +255,19 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
           flipGetResponse.result.privateHex != '0x') {
         // ;[images] = decode(publicHex || hex)
         if (flipGetResponse.result.publicHex != null) {
-          images = Rlp.decode(
+          images = decodeRlp(
               Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
               true);
         } else {
           if (flipGetResponse.result.hex != null) {
-            images = Rlp.decode(
+            images = decodeRlp(
                 Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
           }
         }
 
         // let privateImages
         // ;[privateImages, orders] = decode(privateHex)
-        privateImages = Rlp.decode(
+        privateImages = decodeRlp(
             Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
             true);
 
@@ -296,8 +284,7 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       } else {
         // TODO: implement this case
         // ;[images, orders] = decode(hex)
-        var images3;
-        images3 = Rlp.decode(
+        var images3 = decodeRlp(
             Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
       }
 
@@ -335,8 +322,6 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
           listImages[int.tryParse(order4) ?? 0];
     } catch (e) {
       logger.e(e.toString());
-    } finally {
-      httpClient.close();
     }
 
     return validationSessionInfoFlips;
@@ -344,8 +329,6 @@ Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
 }
 
 Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
-  IdenaSharedPreferences idenaSharedPreferences =
-      await SharedPreferencesHelper.getIdenaSharedPreferences();
   FlipWordsResponse flipWordsResponse;
   int nbWords = 0;
   if (simulationMode) {
@@ -364,30 +347,25 @@ Future<List<Word>> getWordsFromHash(String hash, bool simulationMode) async {
     }
     nbWords = flipWordsResponse.result.words.length;
   } else {
-    HttpClient httpClient = new HttpClient();
+
     try {
-      HttpClientRequest requestWords =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      requestWords.headers.set('content-type', 'application/json');
-      Map<String, dynamic> mapWords = {
+
+      mapParams = {
         'method': FlipWordsRequest.METHOD_NAME,
         'params': [hash],
         'id': 101,
         'key': idenaSharedPreferences.keyApp
       };
-      FlipWordsRequest flipWordsRequest = FlipWordsRequest.fromJson(mapWords);
-      requestWords.add(utf8.encode(json.encode(flipWordsRequest.toJson())));
-      logger.i(new JsonEncoder.withIndent('  ').convert(requestWords));
-      HttpClientResponse responseWords = await requestWords.close();
-      if (responseWords.statusCode == 200) {
-        String replyWords = await responseWords.transform(utf8.decoder).join();
-        logger.i(replyWords);
-        flipWordsResponse = flipWordsResponseFromJson(replyWords);
+
+      FlipWordsRequest flipWordsRequest = FlipWordsRequest.fromJson(mapParams);
+      body = json.encode(flipWordsRequest.toJson());
+      responseHttp = await http.post(Uri.parse(idenaSharedPreferences.apiUrl),
+            body: body, headers: requestHeaders);
+      if (responseHttp.statusCode == 200) {
+        flipWordsResponse = flipWordsResponseFromJson(responseHttp.body);
         nbWords = flipWordsResponse.result.words.length;
       }
-    } catch (e) {} finally {
-      httpClient.close();
-    }
+    } catch (e) {} 
   }
   List<Word> listWords = new List(nbWords);
   for (int j = 0; j < nbWords; j++) {
@@ -423,9 +401,6 @@ Future<FlipSubmitShortAnswersResponse> submitShortAnswers(
   FlipSubmitShortAnswersResponse flipSubmitShortAnswersResponse;
   HttpClient httpClient = new HttpClient();
   try {
-    IdenaSharedPreferences idenaSharedPreferences =
-        await SharedPreferencesHelper.getIdenaSharedPreferences();
-
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
     request.headers.set('content-type', 'application/json');
@@ -485,9 +460,6 @@ Future<FlipSubmitLongAnswersResponse> submitLongAnswers(
   bool wrongWordsBool;
   HttpClient httpClient = new HttpClient();
   try {
-    IdenaSharedPreferences idenaSharedPreferences =
-        await SharedPreferencesHelper.getIdenaSharedPreferences();
-
     HttpClientRequest request =
         await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
     request.headers.set('content-type', 'application/json');

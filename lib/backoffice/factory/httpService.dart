@@ -33,18 +33,25 @@ import 'package:my_idena/backoffice/bean/dna_signin_response.dart';
 import 'package:my_idena/backoffice/bean/flip_submit_request.dart';
 import 'package:my_idena/backoffice/bean/flip_submit_response.dart';
 import 'package:my_idena/beans/deepLinkParam.dart';
+import 'package:my_idena/main.dart';
+import 'package:my_idena/utils/crypto/rlp.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:http/http.dart' as http;
-import 'package:ethereum_util/src/rlp.dart' as Rlp;
 import 'package:my_idena/utils/util_public_node.dart';
+
+Map<String, String> requestHeaders = {
+  'Content-type': 'application/json',
+};
+String body;
+http.Response responseHttp;
+Map<String, dynamic> mapParams;
 
 class HttpService {
   var logger = Logger();
   bool demoMode = false;
 
   Future<bool> checkConnection(apiUrl, keyApp) async {
-    if (await getDemoModeStatus(keyApp)) {
+    if (getDemoModeStatus()) {
       return true;
     }
 
@@ -92,236 +99,211 @@ class HttpService {
     }
   }
 
-  Future<DnaAll> getDnaAll() async {
-    DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
-    DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
-    DnaIdentityRequest dnaIdentityRequest;
-    DnaIdentityResponse dnaIdentityResponse;
+  Future<DnaGetBalanceResponse> getDnaGetBalance(
+      Uri url, String keyApp) async {
     DnaGetBalanceRequest dnaGetBalanceRequest;
     DnaGetBalanceResponse dnaGetBalanceResponse;
+
+      mapParams = {
+        'method': DnaGetBalanceRequest.METHOD_NAME,
+        'params': [idenaAddress],
+        'id': 101,
+        'key': keyApp
+      };
+
+      try {
+        dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapParams);
+        body = json.encode(dnaGetBalanceRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaGetBalanceResponse =
+              dnaGetBalanceResponseFromJson(responseHttp.body);
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    
+
+    return dnaGetBalanceResponse;
+  }
+
+  Future<DnaIdentityResponse> getDnaIdentity(
+      Uri url, String keyApp) async {
+    DnaIdentityRequest dnaIdentityRequest;
+    DnaIdentityResponse dnaIdentityResponse;
+  
+      mapParams = {
+        'method': DnaIdentityRequest.METHOD_NAME,
+        'params': [idenaAddress],
+        'id': 101,
+        'key': keyApp
+      };
+
+      try {
+        dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
+        body = json.encode(dnaIdentityRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaIdentityResponse = dnaIdentityResponseFromJson(responseHttp.body);
+        }
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    
+
+    return dnaIdentityResponse;
+  }
+
+  Future<DnaGetEpochResponse> getDnaGetEpoch(Uri url, String keyApp) async {
     DnaGetEpochRequest dnaGetEpochRequest;
     DnaGetEpochResponse dnaGetEpochResponse;
-    DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
-    DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
-    DnaAll dnaAll = new DnaAll();
-    HttpClient httpClient = new HttpClient();
+
+    mapParams = {
+      'method': DnaGetEpochRequest.METHOD_NAME,
+      'params': [],
+      'id': 101,
+      'key': keyApp
+    };
+
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
-      HttpClientResponse response;
-
-      if (await getPublicNode(idenaSharedPreferences.apiUrl) == false) {
-        // get CoinBase Address
-        if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
-          dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
-          dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
-        } else {
-          HttpClientRequest request1 = await httpClient
-              .postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-          request1.headers.set('content-type', 'application/json');
-
-          Map<String, dynamic> mapGetCoinBaseAddress = {
-            'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-            'params': [],
-            'id': 101,
-            'key': idenaSharedPreferences.keyApp
-          };
-          dnaGetCoinbaseAddrRequest =
-              DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-          request1.add(
-              utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
-          response = await request1.close();
-          if (response.statusCode == 200) {
-            String reply = await response.transform(utf8.decoder).join();
-            dnaGetCoinbaseAddrResponse =
-                dnaGetCoinbaseAddrResponseFromJson(reply);
-          }
-        }
-
-        if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
-          dnaIdentityResponse = new DnaIdentityResponse();
-          dnaIdentityResponse.result = DnaIdentityResponseResult();
-          dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
-          dnaIdentityResponse.result.age = DM_IDENTITY_AGE;
-          dnaIdentityResponse.result.state = DM_IDENTITY_STATE;
-          dnaIdentityResponse.result.online = DM_IDENTITY_ONLINE;
-          dnaIdentityResponse.result.flips = new List(DM_IDENTITY_MADE_FLIPS);
-          dnaIdentityResponse.result.availableFlips =
-              DM_IDENTITY_REQUIRED_FLIPS - DM_IDENTITY_MADE_FLIPS;
-          dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
-          dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
-          dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
-          dnaIdentityResponse.result.totalQualifiedFlips =
-              DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
-          dnaIdentityResponse.result.totalShortFlipPoints =
-              DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
-          List<int> listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
-          dnaIdentityResponse.result.flipKeyWordPairs =
-              new List<FlipKeyWordPair>();
-          dnaIdentityResponse.result.flipKeyWordPairs
-              .add(new FlipKeyWordPair(id: 1, words: listWords1, used: false));
-          List<int> listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
-          dnaIdentityResponse.result.flipKeyWordPairs
-              .add(new FlipKeyWordPair(id: 1, words: listWords2, used: false));
-
-          dnaGetBalanceResponse = new DnaGetBalanceResponse();
-          dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
-          dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
-          dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
-
-          dnaGetEpochResponse = new DnaGetEpochResponse();
-          dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
-          dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
-          dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
-          dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
-
-          dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
-          dnaCeremonyIntervalsResponse.result =
-              new DnaCeremonyIntervalsResponseResult();
-          dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
-              DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
-          dnaCeremonyIntervalsResponse.result.longSessionDuration =
-              DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
-          dnaCeremonyIntervalsResponse.result.shortSessionDuration =
-              DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
-
-          dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
-          dnaAll.dnaIdentityResponse = dnaIdentityResponse;
-          dnaAll.dnaGetBalanceResponse = dnaGetBalanceResponse;
-          dnaAll.dnaGetEpochResponse = dnaGetEpochResponse;
-          dnaAll.dnaCeremonyIntervalsResponse = dnaCeremonyIntervalsResponse;
-          return dnaAll;
-        }
-      } else {
-        dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
-        dnaGetCoinbaseAddrResponse.result = "";
-        dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
-      }
-
-      // get Identity
-      HttpClientRequest request2 =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request2.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> mapGetIdentity;
-      if (await getPublicNode(idenaSharedPreferences.apiUrl) == false) {
-        mapGetIdentity = {
-          'method': DnaIdentityRequest.METHOD_NAME,
-          'params': [dnaGetCoinbaseAddrResponse.result],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-      } else {
-        mapGetIdentity = {
-          'method': DnaIdentityRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-      }
-
-      dnaIdentityRequest = DnaIdentityRequest.fromJson(mapGetIdentity);
-      request2.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
-      response = await request2.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        print(reply);
-        dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
-
-        // get Balance
-        HttpClientRequest request3 =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        request3.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> mapGetBalance = {
-          'method': DnaGetBalanceRequest.METHOD_NAME,
-          'params': [dnaIdentityResponse.result.address],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-
-        dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapGetBalance);
-        request3.add(utf8.encode(json.encode(dnaGetBalanceRequest.toJson())));
-        response = await request3.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          dnaGetBalanceResponse = dnaGetBalanceResponseFromJson(reply);
-        }
-
-        // get Epoch
-        HttpClientRequest request4 =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        request4.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> mapGetEpoch = {
-          'method': DnaGetEpochRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-
-        dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapGetEpoch);
-        request4.add(utf8.encode(json.encode(dnaGetEpochRequest.toJson())));
-        response = await request4.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          dnaGetEpochResponse = dnaGetEpochResponseFromJson(reply);
-        }
-
-        // get Ceremony intervals
-        HttpClientRequest request5 =
-            await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-        request5.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> mapGetCeremonyIntervals = {
-          'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': idenaSharedPreferences.keyApp
-        };
-
-        dnaCeremonyIntervalsRequest =
-            DnaCeremonyIntervalsRequest.fromJson(mapGetCeremonyIntervals);
-        request5.add(
-            utf8.encode(json.encode(dnaCeremonyIntervalsRequest.toJson())));
-        response = await request5.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-          dnaCeremonyIntervalsResponse =
-              dnaCeremonyIntervalsResponseFromJson(reply);
-        }
+      dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
+      body = json.encode(dnaGetEpochRequest.toJson());
+      responseHttp = await http.post(url, body: body, headers: requestHeaders);
+      if (responseHttp.statusCode == 200) {
+        dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
       }
     } catch (e) {
       logger.e(e.toString());
-    } finally {
-      httpClient.close();
     }
 
-    dnaAll.dnaGetCoinbaseAddrRequest = dnaGetCoinbaseAddrRequest;
-    dnaAll.dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponse;
-    dnaAll.dnaIdentityRequest = dnaIdentityRequest;
-    dnaAll.dnaIdentityResponse = dnaIdentityResponse;
-    dnaAll.dnaGetBalanceRequest = dnaGetBalanceRequest;
-    dnaAll.dnaGetBalanceResponse = dnaGetBalanceResponse;
-    dnaAll.dnaGetEpochRequest = dnaGetEpochRequest;
-    dnaAll.dnaGetEpochResponse = dnaGetEpochResponse;
-    dnaAll.dnaCeremonyIntervalsRequest = dnaCeremonyIntervalsRequest;
-    dnaAll.dnaCeremonyIntervalsResponse = dnaCeremonyIntervalsResponse;
-    return dnaAll;
+    return dnaGetEpochResponse;
+  }
+
+  Future<DnaCeremonyIntervalsResponse> getDnaCeremonyIntervals(
+      Uri url, String keyApp) async {
+    DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
+    DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
+
+    mapParams = {
+      'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
+      'params': [],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      dnaCeremonyIntervalsRequest =
+          DnaCeremonyIntervalsRequest.fromJson(mapParams);
+      body = json.encode(dnaCeremonyIntervalsRequest.toJson());
+      responseHttp = await http.post(url, body: body, headers: requestHeaders);
+      if (responseHttp.statusCode == 200) {
+        dnaCeremonyIntervalsResponse =
+            dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    return dnaCeremonyIntervalsResponse;
+  }
+
+  Future<DnaGetCoinbaseAddrResponse> getDnaGetCoinbaseAddr(
+      Uri url, String keyApp) async {
+    DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
+    DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
+
+    mapParams = {
+      'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+      'params': [],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      dnaGetCoinbaseAddrRequest = DnaGetCoinbaseAddrRequest.fromJson(mapParams);
+      body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
+      responseHttp = await http.post(url, body: body, headers: requestHeaders);
+      if (responseHttp.statusCode == 200) {
+        dnaGetCoinbaseAddrResponse =
+            dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    return dnaGetCoinbaseAddrResponse;
+  }
+
+  DnaAll populateDemo() {
+    DnaAll _dnaAll = new DnaAll();
+    DnaGetCoinbaseAddrResponse _dnaGetCoinbaseAddrResponse;
+    DnaIdentityResponse _dnaIdentityResponse;
+    DnaGetBalanceResponse _dnaGetBalanceResponse;
+    DnaGetEpochResponse _dnaGetEpochResponse;
+    DnaCeremonyIntervalsResponse _dnaCeremonyIntervalsResponse;
+    _dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
+    _dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
+    _dnaIdentityResponse = new DnaIdentityResponse();
+    _dnaIdentityResponse.result = DnaIdentityResponseResult();
+    _dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
+    _dnaIdentityResponse.result.age = DM_IDENTITY_AGE;
+    _dnaIdentityResponse.result.state = DM_IDENTITY_STATE;
+    _dnaIdentityResponse.result.online = DM_IDENTITY_ONLINE;
+    _dnaIdentityResponse.result.flips = new List(DM_IDENTITY_MADE_FLIPS);
+    _dnaIdentityResponse.result.availableFlips =
+        DM_IDENTITY_REQUIRED_FLIPS - DM_IDENTITY_MADE_FLIPS;
+    _dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
+    _dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
+    _dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
+    _dnaIdentityResponse.result.totalQualifiedFlips =
+        DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
+    _dnaIdentityResponse.result.totalShortFlipPoints =
+        DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
+    List<int> _listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
+    _dnaIdentityResponse.result.flipKeyWordPairs = new List<FlipKeyWordPair>();
+    _dnaIdentityResponse.result.flipKeyWordPairs
+        .add(new FlipKeyWordPair(id: 1, words: _listWords1, used: false));
+    List<int> _listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
+    _dnaIdentityResponse.result.flipKeyWordPairs
+        .add(new FlipKeyWordPair(id: 1, words: _listWords2, used: false));
+
+    _dnaGetBalanceResponse = new DnaGetBalanceResponse();
+    _dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
+    _dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
+    _dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
+
+    _dnaGetEpochResponse = new DnaGetEpochResponse();
+    _dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
+    _dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
+    _dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
+    _dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
+
+    _dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
+    _dnaCeremonyIntervalsResponse.result =
+        new DnaCeremonyIntervalsResponseResult();
+    _dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+        DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+    _dnaCeremonyIntervalsResponse.result.longSessionDuration =
+        DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+    _dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+        DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+
+    _dnaAll.dnaGetCoinbaseAddrResponse = _dnaGetCoinbaseAddrResponse;
+    _dnaAll.dnaIdentityResponse = _dnaIdentityResponse;
+    _dnaAll.dnaGetBalanceResponse = _dnaGetBalanceResponse;
+    _dnaAll.dnaGetEpochResponse = _dnaGetEpochResponse;
+    _dnaAll.dnaCeremonyIntervalsResponse = _dnaCeremonyIntervalsResponse;
+
+    return _dnaAll;
   }
 
   Future<DnaBecomeOnlineResponse> becomeOnline() async {
     DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+      if (getDemoModeStatus()) {
         return dnaBecomeOnlineResponse;
       }
       HttpClientRequest request =
@@ -355,10 +337,8 @@ class HttpService {
   Future<DnaBecomeOfflineResponse> becomeOffline() async {
     DnaBecomeOfflineResponse dnaBecomeOfflineResponse;
     HttpClient httpClient = new HttpClient();
-    IdenaSharedPreferences idenaSharedPreferences =
-        await SharedPreferencesHelper.getIdenaSharedPreferences();
 
-    if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+    if (getDemoModeStatus()) {
       return dnaBecomeOfflineResponse;
     }
     try {
@@ -392,9 +372,6 @@ class HttpService {
     GetFlipRawResponse getFlipRawResponse;
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
       // get Flip Raw
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -431,9 +408,7 @@ class HttpService {
 
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
+    
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
@@ -471,10 +446,7 @@ class HttpService {
     BcnTransactionsResponse bcnTransactionsResponse;
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+      if (getDemoModeStatus()) {
         bcnTransactionsResponse = new BcnTransactionsResponse();
         bcnTransactionsResponse.result = new BcnTransactionsResponseResult();
 
@@ -514,9 +486,6 @@ class HttpService {
     DnaSignInResponse dnaSignInResponse;
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
@@ -543,90 +512,13 @@ class HttpService {
     return deepLinkParam;
   }
 
-  Future<bool> getMiningStatus(int waitForMiningStatus) async {
-    DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
-    DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
-    DnaIdentityRequest dnaIdentityRequest;
-    DnaIdentityResponse dnaIdentityResponse;
-    bool miningStatus;
-    HttpClient httpClient = new HttpClient();
-    try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
-      // get CoinBase Address
-      HttpClientRequest request1 =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request1.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> mapGetCoinBaseAddress = {
-        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-        'params': [],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
-      dnaGetCoinbaseAddrRequest =
-          DnaGetCoinbaseAddrRequest.fromJson(mapGetCoinBaseAddress);
-      request1
-          .add(utf8.encode(json.encode(dnaGetCoinbaseAddrRequest.toJson())));
-      HttpClientResponse response = await request1.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        dnaGetCoinbaseAddrResponse = dnaGetCoinbaseAddrResponseFromJson(reply);
-      }
-
-      // get Identity
-      HttpClientRequest request2 =
-          await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
-      request2.headers.set('content-type', 'application/json');
-
-      Map<String, dynamic> mapGetIdentity = {
-        'method': DnaIdentityRequest.METHOD_NAME,
-        'params': [dnaGetCoinbaseAddrResponse.result],
-        'id': 101,
-        'key': idenaSharedPreferences.keyApp
-      };
-
-      dnaIdentityRequest = DnaIdentityRequest.fromJson(mapGetIdentity);
-      request2.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
-      response = await request2.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        dnaIdentityResponse = dnaIdentityResponseFromJson(reply);
-        miningStatus = dnaIdentityResponse.result.online;
-        // waitForMiningStatus.value : 1 = wait for become offline, 2 = wait for become online
-        if (miningStatus && waitForMiningStatus == 1) {
-          return null;
-        }
-        if (!miningStatus && waitForMiningStatus == 2) {
-          return null;
-        }
-      }
-    } catch (e) {
-      logger.e(e.toString());
-    } finally {
-      httpClient.close();
-    }
-    return miningStatus;
-  }
-
   Future<String> getCurrentPeriod() async {
     String currentPeriod;
     HttpClient httpClient = new HttpClient();
     try {
       DnaGetEpochRequest dnaGetEpochRequest;
       DnaGetEpochResponse dnaGetEpochResponse;
-
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+      if (getDemoModeStatus()) {
         currentPeriod = DM_EPOCH_CURRENT_PERIOD;
         return currentPeriod;
       }
@@ -664,13 +556,8 @@ class HttpService {
     BcnSyncingRequest bcnSyncingRequest;
     BcnSyncingResponse bcnSyncingResponse;
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
-      if (await getDemoModeStatus(idenaSharedPreferences.keyApp)) {
+      if (getDemoModeStatus() ||
+          getPublicNode()) {
         bcnSyncingResponse = new BcnSyncingResponse();
         bcnSyncingResponse.result = new BcnSyncingResponseResult();
         bcnSyncingResponse.result.syncing = DM_SYNC_SYNCING;
@@ -738,10 +625,10 @@ class HttpService {
     ByteData byteData_4_shuffle = await imagesShuffle[3].getByteData();
     Uint8List imageUint8_4_shuffle = byteData_4_shuffle.buffer.asUint8List();
     Uint8List image1_2_Uint8 =
-        Rlp.encode([imageUint8_1_shuffle, imageUint8_2_shuffle]);
+        encodeRlp([imageUint8_1_shuffle, imageUint8_2_shuffle]);
     publicHex = hex.encode(image1_2_Uint8);
 
-    Uint8List image3_4_Uint8 = Rlp.encode([
+    Uint8List image3_4_Uint8 = encodeRlp([
       [imageUint8_3_shuffle, imageUint8_4_shuffle],
       "[], [3], [1], [2]",
       "[1], [2], [3], []"
@@ -750,9 +637,6 @@ class HttpService {
 
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-
       Map<String, dynamic> map = {
         'method': DnaSendTransactionRequest.METHOD_NAME,
         "params": [

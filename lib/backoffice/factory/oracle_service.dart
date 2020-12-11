@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/votings_list_response.dart';
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 import 'package:my_idena/backoffice/bean/flip_shortHashes_request.dart';
+import 'package:my_idena/main.dart';
 
 class OracleService {
   var logger = Logger();
@@ -35,12 +35,6 @@ class OracleService {
   createContractDataReader() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -78,12 +72,6 @@ class OracleService {
   contractReadonlyCall() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -117,11 +105,6 @@ class OracleService {
   contractCall() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
 
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
@@ -153,12 +136,6 @@ class OracleService {
   contractEstimateCall() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -189,12 +166,6 @@ class OracleService {
   sendVoteProof() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
@@ -225,12 +196,6 @@ class OracleService {
   sendVote() async {
     HttpClient httpClient = new HttpClient();
     try {
-      IdenaSharedPreferences idenaSharedPreferences =
-          await SharedPreferencesHelper.getIdenaSharedPreferences();
-      if (idenaSharedPreferences == null) {
-        return null;
-      }
-
       FlipShortHashesRequest flipShortHashesRequest;
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
