@@ -232,8 +232,9 @@
   "Confirmation": "Confirmation",
   "Are you sure you want to send a donation ?": "Etes-vous sûr(e)s de vouloir envoyer une donation ?",
   "No, sorry": "Non, désolé",
-  "Yes with pleasure": "Oui avec plaisir"
-
-  
+  "Yes with pleasure": "Oui avec plaisir",
+  "Public node ?": "Noeud public ?",
+  "Or, you can use the public node": "Or, you can use the public node",
+  "You are not connected.\nPlease, go to the settings tab": "Vous n'êtes pas connecté.\nSvp, veuillez aller dans l'onglet de paramétrage"
 
 }
