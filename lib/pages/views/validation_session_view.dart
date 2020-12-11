@@ -1,4 +1,4 @@
-import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:flutter/rendering.dart';
 import 'package:my_idena/beans/dictWords.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,8 @@ import 'package:my_idena/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
-
 HttpService httpService = HttpService();
 ValidationSessionInfo validationSessionInfo;
-DnaAll dnaAllForValidationSession;
 bool checkFlipsQualityProcessForValidationSession;
 // 1 = Short Session, 2 = Long session, 3 = Long session + check words, 0 = No sessions
 int sessionStep;
@@ -30,10 +28,12 @@ bool isLoading = false;
 class ValidationSessionView extends StatefulWidget {
   final AnimationController animationController;
   final Animation<dynamic> animation;
-  final DnaAll dnaAll;
   final bool simulationMode;
   final String typeLaunchSession;
   final bool checkFlipsQualityProcess;
+  final int millisecondsSinceEpoch;
+  final int shortSessionDuration;
+  final int longSessionDuration;
 
   const ValidationSessionView(
       {Key key,
@@ -42,7 +42,9 @@ class ValidationSessionView extends StatefulWidget {
       this.simulationMode,
       this.typeLaunchSession,
       this.checkFlipsQualityProcess,
-      this.dnaAll})
+      this.millisecondsSinceEpoch,
+      this.shortSessionDuration,
+      this.longSessionDuration})
       : super(key: key);
   @override
   _ValidationSessionViewState createState() =>
@@ -58,28 +60,26 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
 
   @override
   void initState() {
-    print("initState session view");
-
-
-    dnaAllForValidationSession = widget.dnaAll;
-
     checkFlipsQualityProcessForValidationSession =
         widget.checkFlipsQualityProcess;
     super.initState();
 
     currentPeriod = widget.typeLaunchSession;
 
+    int _millisecondsSinceEpoch = widget.millisecondsSinceEpoch;
+
     // Init choice
     if (currentPeriod == EpochPeriod.ShortSession) {
       validationSessionInfo = null;
 
+      if (widget.simulationMode) {
+        _millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
+      }
+
       sessionStep = 1;
       checkFlipsQualityProcessForValidationSession = false;
-      endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
-              .nextValidation.millisecondsSinceEpoch +
-          (dnaAllForValidationSession
-                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration *
-              1000) - 5000;
+      endTime =
+          _millisecondsSinceEpoch + (widget.shortSessionDuration * 1000) - 5000;
     }
     if (currentPeriod == EpochPeriod.LongSession) {
       if (checkFlipsQualityProcessForValidationSession == false) {
@@ -89,14 +89,10 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         sessionStep = 3;
       }
 
-      endTime = dnaAllForValidationSession.dnaGetEpochResponse.result
-              .nextValidation.millisecondsSinceEpoch +
-          (dnaAllForValidationSession
-                  .dnaCeremonyIntervalsResponse.result.shortSessionDuration *
-              1000) +
-          (dnaAllForValidationSession
-                  .dnaCeremonyIntervalsResponse.result.longSessionDuration *
-              1000) - 5000;
+      endTime = _millisecondsSinceEpoch +
+          (widget.shortSessionDuration * 1000) +
+          (widget.longSessionDuration * 1000) -
+          5000;
     }
   }
 
@@ -319,8 +315,10 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
         }
       }
       return ValidationStartCheckingKeywordsButtonView(
+        longSessionDuration: widget.longSessionDuration,
+        shortSessionDuration: widget.shortSessionDuration,
+        millisecondsSinceEpoch: widget.millisecondsSinceEpoch,
         simulationMode: widget.simulationMode,
-        dnaAll: dnaAllForValidationSession,
         animationController: widget.animationController,
       );
     } else {
@@ -339,7 +337,6 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
       return ValidationShortSessionButtonView(
           simulationMode: widget.simulationMode,
           currentPeriod: currentPeriod,
-          dnaAll: dnaAllForValidationSession,
           animationController: widget.animationController,
           validationSessionInfo: validationSessionInfo,
           goLongSession: (bool goLongSession) {
@@ -348,9 +345,11 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                   context,
                   MaterialPageRoute<dynamic>(
                     builder: (BuildContext context) => ValidationSessionScreen(
+                      longSessionDuration: widget.longSessionDuration,
+                      shortSessionDuration: widget.shortSessionDuration,
+                      millisecondsSinceEpoch: widget.millisecondsSinceEpoch,
                       simulationMode: widget.simulationMode,
                       animationController: widget.animationController,
-                      dnaAll: widget.dnaAll,
                       typeLaunchSession: EpochPeriod.LongSession,
                       checkFlipsQualityProcess: false,
                     ),
@@ -434,15 +433,18 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                     MaterialPageRoute<dynamic>(
                       builder: (BuildContext context) =>
                           ValidationSessionScreen(
+                              longSessionDuration: widget.longSessionDuration,
+                              shortSessionDuration: widget.shortSessionDuration,
+                              millisecondsSinceEpoch:
+                                  widget.millisecondsSinceEpoch,
                               simulationMode: widget.simulationMode,
                               animationController: widget.animationController,
-                              dnaAll: dnaAllForValidationSession,
                               checkFlipsQualityProcess: false,
                               typeLaunchSession: EpochPeriod.LongSession),
                     ));
               }
             }
-             if (sessionStep == 2 || sessionStep == 3) {
+            if (sessionStep == 2 || sessionStep == 3) {
               if (currentPeriod == EpochPeriod.LongSession) {
                 if (widget.simulationMode == false &&
                     checkFlipsQualityProcessForValidationSession == true) {
@@ -453,7 +455,7 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
                   MaterialPageRoute(builder: (context) => Home()),
                 );
               }
-             }
+            }
           },
         ),
       ],
@@ -523,140 +525,165 @@ class _ValidationSessionViewState extends State<ValidationSessionView>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate("Are both keywords relevant to the flip ?"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    word1Name == ""
-                        ? AppLocalizations.of(context)
-                            .translate("No keywords available")
-                        : word1Name,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Text(
-                    word1Desc == "" ? "" : word1Desc,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  SizedBox(width: 1, height: 10),
-                  Text(
-                    word2Name == ""
-                        ? AppLocalizations.of(context)
-                            .translate("No keywords available")
-                        : word2Name,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Text(
-                    word2Desc == "" ? "" : word2Desc,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                        fontFamily: MyIdenaAppTheme.fontName,
-                        fontSize: 14,
-                        letterSpacing: -0.1,
-                        color: MyIdenaAppTheme.darkText),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Expanded(
+              
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RaisedButton(
-                          elevation: 5.0,
-                          onPressed: () {
-                            if (validationSessionInfoFlips.relevanceType !=
-                                RelevantType.RELEVANT) {
-                              setState(() {
-                                validationSessionInfoFlips.relevanceType =
-                                    RelevantType.RELEVANT;
-                              });
-                            }
-                          },
-                          padding: EdgeInsets.all(5.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          color: validationSessionInfoFlips.relevanceType ==
-                                  RelevantType.RELEVANT
-                              ? Colors.blue
-                              : Colors.white,
+                        Center(
                           child: Text(
-                              AppLocalizations.of(context)
-                                  .translate("Both relevant"),
-                              style: TextStyle(
-                                color:
-                                    validationSessionInfoFlips.relevanceType ==
-                                            RelevantType.RELEVANT
-                                        ? Colors.white
-                                        : Colors.blue,
-                                letterSpacing: 1.5,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: MyIdenaAppTheme.fontName,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 30,
-                          height: 1,
-                        ),
-                        RaisedButton(
-                          elevation: 5.0,
-                          onPressed: () {
-                            if (validationSessionInfoFlips.relevanceType !=
-                                RelevantType.IRRELEVANT) {
-                              setState(() {
-                                validationSessionInfoFlips.relevanceType =
-                                    RelevantType.IRRELEVANT;
-                              });
-                            }
-                          },
-                          padding: EdgeInsets.all(5.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            AppLocalizations.of(context).translate(
+                                "Are both keywords relevant to the flip ?"),
                           ),
-                          color: validationSessionInfoFlips.relevanceType ==
-                                  RelevantType.IRRELEVANT
-                              ? Colors.red
-                              : Colors.white,
+                        ),
+                        SizedBox(height: 10),
+                        Center(
                           child: Text(
-                              AppLocalizations.of(context)
-                                  .translate("Irrelevant"),
-                              style: TextStyle(
-                                color:
-                                    validationSessionInfoFlips.relevanceType ==
-                                            RelevantType.IRRELEVANT
-                                        ? Colors.white
-                                        : Colors.red,
-                                letterSpacing: 1.5,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
+                            word1Name == ""
+                                ? AppLocalizations.of(context)
+                                    .translate("No keywords available")
+                                : word1Name,
+                            style: TextStyle(
                                 fontFamily: MyIdenaAppTheme.fontName,
-                              )),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                color: MyIdenaAppTheme.darkText),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            word1Desc == "" ? "" : word1Desc,
+                            style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                color: MyIdenaAppTheme.darkText),
+                          ),
+                        ),
+                        SizedBox(width: 1, height: 10),
+                        Center(
+                          child: Text(
+                            word2Name == ""
+                                ? AppLocalizations.of(context)
+                                    .translate("No keywords available")
+                                : word2Name,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                color: MyIdenaAppTheme.darkText),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            word2Desc == "" ? "" : word2Desc,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                color: MyIdenaAppTheme.darkText),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                RaisedButton(
+                                  elevation: 5.0,
+                                  onPressed: () {
+                                    if (validationSessionInfoFlips
+                                            .relevanceType !=
+                                        RelevantType.RELEVANT) {
+                                      setState(() {
+                                        validationSessionInfoFlips
+                                                .relevanceType =
+                                            RelevantType.RELEVANT;
+                                      });
+                                    }
+                                  },
+                                  padding: EdgeInsets.all(5.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  color: validationSessionInfoFlips
+                                              .relevanceType ==
+                                          RelevantType.RELEVANT
+                                      ? Colors.blue
+                                      : Colors.white,
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Both relevant"),
+                                      style: TextStyle(
+                                        color: validationSessionInfoFlips
+                                                    .relevanceType ==
+                                                RelevantType.RELEVANT
+                                            ? Colors.white
+                                            : Colors.blue,
+                                        letterSpacing: 1.5,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: MyIdenaAppTheme.fontName,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                  height: 1,
+                                ),
+                                RaisedButton(
+                                  elevation: 5.0,
+                                  onPressed: () {
+                                    if (validationSessionInfoFlips
+                                            .relevanceType !=
+                                        RelevantType.IRRELEVANT) {
+                                      setState(() {
+                                        validationSessionInfoFlips
+                                                .relevanceType =
+                                            RelevantType.IRRELEVANT;
+                                      });
+                                    }
+                                  },
+                                  padding: EdgeInsets.all(5.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  color: validationSessionInfoFlips
+                                              .relevanceType ==
+                                          RelevantType.IRRELEVANT
+                                      ? Colors.red
+                                      : Colors.white,
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate("Irrelevant"),
+                                      style: TextStyle(
+                                        color: validationSessionInfoFlips
+                                                    .relevanceType ==
+                                                RelevantType.IRRELEVANT
+                                            ? Colors.white
+                                            : Colors.red,
+                                        letterSpacing: 1.5,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: MyIdenaAppTheme.fontName,
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
+                
               ),
             ],
           ),

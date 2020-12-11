@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena/backoffice/bean/bcn_transactions_response.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 
 HttpService httpService = HttpService();
-DnaAll dnaAll;
 
 class TransactionsView extends StatefulWidget {
   final AnimationController animationController;
@@ -25,20 +24,13 @@ class _TransactionsViewState extends State<TransactionsView> {
   int nbTransactions = 30;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-              return Center(child: CircularProgressIndicator());
-            } else {
+
               return FutureBuilder(
                   future: httpService.getTransactions(
-                      dnaAll.dnaIdentityResponse.result.address,
+                      idenaAddress,
                       nbTransactions),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) return Container();
+                    if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
                     BcnTransactionsResponse bcnTransactionsResponse =
                         snapshot.data;
                     if (bcnTransactionsResponse.result.transactions == null) {
@@ -202,16 +194,12 @@ class _TransactionsViewState extends State<TransactionsView> {
                       ),
                     );
                   });
-            }
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        });
+           
   }
 
   Widget getImageTo(Transaction transaction) {
     if (transaction.from != null &&
-        transaction.from != dnaAll.dnaIdentityResponse.result.address) {
+        transaction.from != idenaAddress) {
       return Column(children: [
         SizedBox(
           height: 10,
@@ -253,7 +241,7 @@ class _TransactionsViewState extends State<TransactionsView> {
   Widget getAmount(Transaction transaction) {
     if (double.parse(transaction.amount) > 0) {
       if (transaction.from != null &&
-          transaction.from != dnaAll.dnaIdentityResponse.result.address) {
+          transaction.from != idenaAddress) {
         return Text(
           transaction.amount == null
               ? ""
@@ -291,7 +279,7 @@ class _TransactionsViewState extends State<TransactionsView> {
 
   Widget getDirection(Transaction transaction) {
     if (transaction.from != null &&
-        transaction.from != dnaAll.dnaIdentityResponse.result.address) {
+        transaction.from != idenaAddress) {
       return new Image.asset(
         'assets/images/Download-256.png',
         height: 32,
@@ -306,7 +294,7 @@ class _TransactionsViewState extends State<TransactionsView> {
 
   Widget getFrom(Transaction transaction) {
     if (transaction.from != null &&
-        transaction.from != dnaAll.dnaIdentityResponse.result.address) {
+        transaction.from != idenaAddress) {
       return Text(
         AppLocalizations.of(context).translate("From: ") +
             transaction.from.substring(0, 15) +
@@ -437,7 +425,7 @@ class _TransactionsViewState extends State<TransactionsView> {
     String text;
     if (type == 'send') {
       if (transaction.from != null &&
-          transaction.from != dnaAll.dnaIdentityResponse.result.address) {
+          transaction.from != idenaAddress) {
         text = "Received";
       } else {
         text = "Sent";

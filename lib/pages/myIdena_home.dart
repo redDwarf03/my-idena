@@ -1,7 +1,9 @@
 import 'package:fleva_icons/fleva_icons.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_response.dart';
+import 'package:my_idena/backoffice/bean/dna_getEpoch_response.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 import 'package:flutter/material.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/create_flip_screen.dart';
@@ -63,106 +65,202 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            dnaAll = snapshot.data;
-
-            return Container(
-              color: MyIdenaAppTheme.background,
-              child: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.transparent,
-                drawer: Drawer(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      DrawerHeader(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0.0),
-                              bottomLeft: Radius.circular(48.0),
-                              bottomRight: Radius.circular(48.0),
-                              topRight: Radius.circular(0.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: MyIdenaAppTheme.grey.withOpacity(0.7),
-                                offset: Offset(1.1, 1.1),
-                                blurRadius: 10.0),
-                          ],
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            dnaAll == null ||
-                                    dnaAll.dnaIdentityResponse == null ||
-                                    dnaAll.dnaIdentityResponse.result == null
-                                ? SizedBox()
-                                : Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          'https://robohash.org/${dnaAll.dnaIdentityResponse.result.address}'),
-                                      radius: 50.0,
-                                    ),
-                                  ),
-                            Align(
-                              alignment:
-                                  Alignment.centerRight + Alignment(0, .3),
-                              child: Text(
-                                dnaAll == null ||
-                                        dnaAll.dnaIdentityResponse == null ||
-                                        dnaAll.dnaIdentityResponse.result ==
-                                            null
-                                    ? "?"
-                                    : dnaAll.dnaIdentityResponse.result.address
-                                            .substring(0, 20) +
-                                        "...",
-                                style: TextStyle(
-                                  fontFamily: MyIdenaAppTheme.fontName,
-                                  fontSize: 12,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment:
-                                  Alignment.centerRight + Alignment(0, .8),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    dnaAll == null ||
-                                            dnaAll.dnaIdentityResponse ==
-                                                null ||
-                                            dnaAll.dnaIdentityResponse.result ==
-                                                null
-                                        ? "?"
-                                        : new UtilIdentity()
-                                            .mapToFriendlyStatus(dnaAll
-                                                .dnaIdentityResponse
-                                                .result
-                                                .state),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+    return idenaAddress.isEmpty
+        ? Container(
+            color: MyIdenaAppTheme.background,
+            child: Scaffold(
+              key: _scaffoldKey,
+              backgroundColor: Colors.transparent,
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(0.0),
+                            bottomLeft: Radius.circular(48.0),
+                            bottomRight: Radius.circular(48.0),
+                            topRight: Radius.circular(0.0)),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: MyIdenaAppTheme.grey.withOpacity(0.7),
+                              offset: Offset(1.1, 1.1),
+                              blurRadius: 10.0),
+                        ],
                       ),
-                      /*if (UtilIdentity().canSubmitFlip(dnaAll))
+                      child: Stack(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 50.0,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight + Alignment(0, .3),
+                            child: Text(
+                              "",
+                              style: TextStyle(
+                                fontFamily: MyIdenaAppTheme.fontName,
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.show_chart),
+                      title: Text(
+                          AppLocalizations.of(context).translate("Market")),
+                      onTap: () {
+                        setState(() {
+                          initTabIconsList(0);
+                          tabBody = MarketScreen(
+                              animationController: animationController);
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(FlevaIcons.checkmark_square_2_outline),
+                      title: Text(AppLocalizations.of(context)
+                          .translate("Validation Basics")),
+                      onTap: () {
+                        setState(() {
+                          initTabIconsList(0);
+                          tabBody = ValidationBasicsScreen(
+                              animationController: animationController);
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(FlevaIcons.bulb_outline),
+                      title: Text(AppLocalizations.of(context)
+                          .translate("Try a validation session")),
+                      onTap: () {
+                        setState(() {
+                          tabBody = ValidationSessionScreen(
+                              longSessionDuration: 1800,
+                              shortSessionDuration: 120,
+                              millisecondsSinceEpoch:
+                                  DateTime.now().millisecondsSinceEpoch,
+                              simulationMode: true,
+                              checkFlipsQualityProcess: false,
+                              typeLaunchSession: EpochPeriod.ShortSession,
+                              animationController: animationController);
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              body: FutureBuilder<bool>(
+                future: getData(),
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox();
+                  } else {
+                    return Stack(
+                      children: <Widget>[
+                        tabBody,
+                        bottomBar(),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ),
+          )
+        : FutureBuilder(
+            future: httpService.getDnaIdentity(
+                Uri.parse(idenaSharedPreferences.apiUrl),
+                idenaSharedPreferences.keyApp),
+            builder: (BuildContext context,
+                AsyncSnapshot<DnaIdentityResponse> _dnaIdentityResponse) {
+              if (!_dnaIdentityResponse.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Container(
+                  color: MyIdenaAppTheme.background,
+                  child: Scaffold(
+                    key: _scaffoldKey,
+                    backgroundColor: Colors.transparent,
+                    drawer: Drawer(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: <Widget>[
+                          DrawerHeader(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0.0),
+                                  bottomLeft: Radius.circular(48.0),
+                                  bottomRight: Radius.circular(48.0),
+                                  topRight: Radius.circular(0.0)),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color:
+                                        MyIdenaAppTheme.grey.withOpacity(0.7),
+                                    offset: Offset(1.1, 1.1),
+                                    blurRadius: 10.0),
+                              ],
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        'https://robohash.org/' + idenaAddress),
+                                    radius: 50.0,
+                                  ),
+                                ),
+                                Align(
+                                  alignment:
+                                      Alignment.centerRight + Alignment(0, .3),
+                                  child: Text(
+                                    idenaAddress.substring(0, 20) + "...",
+                                    style: TextStyle(
+                                      fontFamily: MyIdenaAppTheme.fontName,
+                                      fontSize: 12,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment:
+                                      Alignment.centerRight + Alignment(0, .8),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Text(
+                                        new UtilIdentity().mapToFriendlyStatus(
+                                            _dnaIdentityResponse
+                                                .data.result.state),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: MyIdenaAppTheme.fontName,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /*if (UtilIdentity().canSubmitFlip(dnaAll))
                         ListTile(
                           leading: Icon(FlevaIcons.color_palette_outline),
                           title: Text(AppLocalizations.of(context)
@@ -177,33 +275,34 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             Navigator.of(context).pop();
                           },
                         ),*/
-                      ListTile(
-                        leading: Icon(Icons.show_chart),
-                        title: Text(
-                            AppLocalizations.of(context).translate("Market")),
-                        onTap: () {
-                          setState(() {
-                            initTabIconsList(0);
-                            tabBody = MarketScreen(
-                                animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(FlevaIcons.checkmark_square_2_outline),
-                        title: Text(AppLocalizations.of(context)
-                            .translate("Validation Basics")),
-                        onTap: () {
-                          setState(() {
-                            initTabIconsList(0);
-                            tabBody = ValidationBasicsScreen(
-                                animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      /*ListTile(
+                          ListTile(
+                            leading: Icon(Icons.show_chart),
+                            title: Text(AppLocalizations.of(context)
+                                .translate("Market")),
+                            onTap: () {
+                              setState(() {
+                                initTabIconsList(0);
+                                tabBody = MarketScreen(
+                                    animationController: animationController);
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ListTile(
+                            leading:
+                                Icon(FlevaIcons.checkmark_square_2_outline),
+                            title: Text(AppLocalizations.of(context)
+                                .translate("Validation Basics")),
+                            onTap: () {
+                              setState(() {
+                                initTabIconsList(0);
+                                tabBody = ValidationBasicsScreen(
+                                    animationController: animationController);
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          /*ListTile(
                         leading: Icon(Icons.person_add),
                         title: Text(
                             AppLocalizations.of(context).translate("Invite")),
@@ -216,7 +315,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      /*ListTile(
+                          /*ListTile(
                         leading: Icon(FlevaIcons.eye_outline),
                         title: Text(
                             AppLocalizations.of(context).translate("Oracles")),
@@ -229,47 +328,98 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Navigator.of(context).pop();
                         },
                       ),*/
-                      ListTile(
-                        leading: Icon(FlevaIcons.bulb_outline),
-                        title: Text(AppLocalizations.of(context)
-                            .translate("Try a validation session")),
-                        onTap: () {
-                          setState(() {
-                            dnaAll.dnaGetEpochResponse.result.nextValidation =
-                                DateTime.now();
-                            tabBody = ValidationSessionScreen(
-                                dnaAll: dnaAll,
-                                simulationMode: true,
-                                checkFlipsQualityProcess: false,
-                                typeLaunchSession: EpochPeriod.ShortSession,
-                                animationController: animationController);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                body: FutureBuilder<bool>(
-                  future: getData(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox();
-                    } else {
-                      return Stack(
-                        children: <Widget>[
-                          tabBody,
-                          bottomBar(dnaAll),
+                          FutureBuilder(
+                              future: httpService.getDnaGetEpoch(
+                                  Uri.parse(idenaSharedPreferences.apiUrl),
+                                  idenaSharedPreferences.keyApp),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<DnaGetEpochResponse>
+                                      _dnaGetEpochResponse) {
+                                if (_dnaGetEpochResponse.hasData) {
+                                  return FutureBuilder(
+                                      future:
+                                          httpService.getDnaCeremonyIntervals(
+                                              Uri.parse(idenaSharedPreferences
+                                                  .apiUrl),
+                                              idenaSharedPreferences.keyApp),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<
+                                                  DnaCeremonyIntervalsResponse>
+                                              _dnaCeremonyIntervalsResponse) {
+                                        if (_dnaCeremonyIntervalsResponse
+                                            .hasData) {
+                                          return ListTile(
+                                            leading:
+                                                Icon(FlevaIcons.bulb_outline),
+                                            title: Text(AppLocalizations.of(
+                                                    context)
+                                                .translate(
+                                                    "Try a validation session")),
+                                            onTap: () {
+                                              setState(() {
+                                                tabBody = ValidationSessionScreen(
+                                                    longSessionDuration:
+                                                        _dnaCeremonyIntervalsResponse
+                                                            .data
+                                                            .result
+                                                            .longSessionDuration,
+                                                    shortSessionDuration:
+                                                        _dnaCeremonyIntervalsResponse
+                                                            .data
+                                                            .result
+                                                            .shortSessionDuration,
+                                                    millisecondsSinceEpoch:
+                                                        _dnaGetEpochResponse
+                                                            .data
+                                                            .result
+                                                            .nextValidation
+                                                            .millisecondsSinceEpoch,
+                                                    simulationMode: true,
+                                                    checkFlipsQualityProcess:
+                                                        false,
+                                                    typeLaunchSession:
+                                                        EpochPeriod
+                                                            .ShortSession,
+                                                    animationController:
+                                                        animationController);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          );
+                                        } else {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                      });
+                                } else {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              }),
                         ],
-                      );
-                    }
-                  },
-                ),
-              ),
-            );
-          }
-        });
+                      ),
+                    ),
+                    body: FutureBuilder<bool>(
+                      future: getData(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox();
+                        } else {
+                          return Stack(
+                            children: <Widget>[
+                              tabBody,
+                              bottomBar(),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                );
+              }
+            });
   }
 
   Future<bool> getData() async {
@@ -277,127 +427,60 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return true;
   }
 
-  Widget bottomBar(DnaAll dnaAll) {
-    bool displayAll = false;
-    return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll != null && dnaAll.dnaIdentityResponse != null) {
-              displayAll = true;
+  Widget bottomBar() {
+    return Column(
+      children: <Widget>[
+        const Expanded(
+          child: SizedBox(),
+        ),
+        BottomBarView(
+          tabIconsList: tabIconsList,
+          addClick: () {},
+          changeIndex: (int index) {
+            if (index == 0) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  _scaffoldKey.currentState.openDrawer();
+                });
+              });
+            } else if (index == 1) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = HomeScreen(
+                      animationController: animationController,
+                      firstState: true);
+                });
+              });
+            } else if (index == 2) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = ParametersScreen(
+                      animationController: animationController);
+                });
+              });
+            } else if (index == 3) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      AboutScreen(animationController: animationController);
+                });
+              });
             }
-          }
-
-          if (displayAll) {
-            return Column(
-              children: <Widget>[
-                const Expanded(
-                  child: SizedBox(),
-                ),
-                BottomBarView(
-                  tabIconsList: tabIconsList,
-                  addClick: () {},
-                  changeIndex: (int index) {
-                    if (index == 0) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          _scaffoldKey.currentState.openDrawer();
-                        });
-                      });
-                    } else if (index == 1) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = HomeScreen(
-                              animationController: animationController,
-                              firstState: true);
-                        });
-                      });
-                    } else if (index == 2) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = ParametersScreen(
-                              animationController: animationController);
-                        });
-                      });
-                    } else if (index == 3) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = AboutScreen(
-                              animationController: animationController);
-                        });
-                      });
-                    }
-                  },
-                ),
-              ],
-            );
-          } else {
-            return Column(
-              children: <Widget>[
-                const Expanded(
-                  child: SizedBox(),
-                ),
-                BottomBarView(
-                  tabIconsList: tabIconsList,
-                  addClick: () {},
-                  changeIndex: (int index) {
-                    if (index == 0) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = HomeScreen(
-                              animationController: animationController,
-                              firstState: true);
-                        });
-                      });
-                    } else if (index == 1) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {});
-                      });
-                    } else if (index == 2) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = ParametersScreen(
-                              animationController: animationController);
-                        });
-                      });
-                    } else if (index == 3) {
-                      animationController.reverse().then<dynamic>((data) {
-                        if (!mounted) {
-                          return;
-                        }
-                        setState(() {
-                          tabBody = AboutScreen(
-                              animationController: animationController);
-                        });
-                      });
-                    }
-                  },
-                ),
-              ],
-            );
-          }
-        });
+          },
+        ),
+      ],
+    );
   }
 }

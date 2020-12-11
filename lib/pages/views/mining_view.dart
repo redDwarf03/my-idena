@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/widgets/line_widget.dart';
 import 'package:my_idena/pages/widgets/text_above_line_widget.dart';
@@ -26,8 +26,6 @@ class MiningView extends StatefulWidget {
 class _MiningViewState extends State<MiningView> {
   bool miningSwitchValue;
   bool firstStateForView;
-  HttpService httpService = new HttpService();
-  DnaAll dnaAll;
   Timer _timer;
   BcnSyncingResponse bcnSyncingResponse;
   int initialCurrentBlock = 0;
@@ -69,15 +67,14 @@ class _MiningViewState extends State<MiningView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-              return Text("");
-            } else {
+        future: httpService.getDnaIdentity(Uri.parse(idenaSharedPreferences.apiUrl),
+            idenaSharedPreferences.keyApp),
+        builder: (BuildContext context, AsyncSnapshot<DnaIdentityResponse> _dnaIdentityResponse) {
+          if (_dnaIdentityResponse.hasData) {
+
+        
               if (firstStateForView) {
-                miningSwitchValue = dnaAll.dnaIdentityResponse.result.online;
+                miningSwitchValue = _dnaIdentityResponse.data.result.online;
                 firstStateForView = false;
               }
 
@@ -287,7 +284,7 @@ class _MiningViewState extends State<MiningView> {
                                                           ),
                                                         )
                                                       : UtilIdentity().canMine(
-                                                                  dnaAll) ==
+                                                                  _dnaIdentityResponse.data.result.state) ==
                                                               true
                                                           ? Row(
                                                               mainAxisAlignment:
@@ -326,7 +323,7 @@ class _MiningViewState extends State<MiningView> {
                                                                     ),
                                                                   ),
                                                                   displayMiningSwitch(),
-                                                                  displayPenalty(),
+                                                                  displayPenalty(_dnaIdentityResponse.data),
                                                                 ])
                                                           : Row(
                                                               children: <
@@ -362,19 +359,19 @@ class _MiningViewState extends State<MiningView> {
                       ),
                     );
                   });
-            }
+            
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
   }
 
-  Widget displayPenalty() {
-    if (double.tryParse(dnaAll.dnaIdentityResponse.result.penalty) != null &&
-        double.parse(dnaAll.dnaIdentityResponse.result.penalty) > 0) {
+  Widget displayPenalty(DnaIdentityResponse dnaIdentityResponse) {
+    if (double.tryParse(dnaIdentityResponse.result.penalty) != null &&
+        double.parse(dnaIdentityResponse.result.penalty) > 0) {
       return Text(
         AppLocalizations.of(context).translate("Penalty: ") +
-            double.parse(dnaAll.dnaIdentityResponse.result.penalty)
+            double.parse(dnaIdentityResponse.result.penalty)
                 .toDouble()
                 .toStringAsFixed(4) +
             " iDNA",

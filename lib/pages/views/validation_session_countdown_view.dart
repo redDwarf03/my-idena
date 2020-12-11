@@ -4,8 +4,10 @@ import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_response.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/pages/widgets/line_widget.dart';
@@ -18,12 +20,12 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 class ValidationSessionCountdownText extends StatefulWidget {
   final DateTime nextValidation;
   final AnimationController animationController;
-  final DnaAll dnaAll;
+  final DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
   const ValidationSessionCountdownText({
     Key key,
     @required this.nextValidation,
+    @required this.dnaCeremonyIntervalsResponse,
     this.animationController,
-    this.dnaAll,
   }) : super(key: key);
 
   @override
@@ -49,10 +51,11 @@ class _ValidationSessionCountdownTextState
   void initState() {
     super.initState();
 
-    if (widget.nextValidation != null) {
+    if (widget.nextValidation != null &&
+        widget.dnaCeremonyIntervalsResponse != null) {
       endTime = widget.nextValidation.millisecondsSinceEpoch;
       endTimeBeforeFlipSession = widget.nextValidation.millisecondsSinceEpoch -
-          (widget.dnaAll.dnaCeremonyIntervalsResponse.result
+          (widget.dnaCeremonyIntervalsResponse.result
                   .flipLotteryDuration) *
               1000;
     }
@@ -81,203 +84,219 @@ class _ValidationSessionCountdownTextState
   }
 
   _buildChild() {
-    int canValidate = UtilIdentity().canValidate(widget.dnaAll);
-    if (canValidate > 0) {
-      return Padding(
-          padding: const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-          child: Container(
-              child: Row(children: <Widget>[
-            Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                  canValidate == 1
-                      ? textAboveLineWidget(
-                          AppLocalizations.of(context).translate(
-                              "Your status doesn't allow you to participate in the validation session"),
-                          14)
-                      : textAboveLineWidget(
-                          AppLocalizations.of(context).translate(
-                              "To participate in the validation session, you must provide your flips"),
-                          14),
-                  lineWidget(90),
-                ]))
-          ])));
-    }
-    if (currentPeriod == null) currentPeriod = EpochPeriod.None;
-    switch (currentPeriod) {
-      case EpochPeriod.FlipLottery:
-        {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(
-                  child: Row(children: <Widget>[
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context)
-                                .translate("Idena validation will start soon") +
-                            "\n" +
-                            AppLocalizations.of(context).translate(
-                                "Please, stay on this page until launch."),
-                        style: TextStyle(
-                          fontFamily: MyIdenaAppTheme.fontName,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          letterSpacing: -0.2,
-                          color: Colors.red,
-                        ),
-                      ),
-                      CountdownTimer(
-                        endTime: endTime,
-                        onEnd: () {
-                          wait = true;
-                          Future.delayed(const Duration(seconds: 5), () {
-                            launchSession();
-                            wait = false;
-                          });
-                        },
-                        widgetBuilder: (_, CurrentRemainingTime time) {
-                          if (time == null) {
-                            return Text("");
-                          } else {
-                            return Row(
-                              children: [
-                                Text(
-                                    time.min != null
-                                        ? "${time.min} m "
-                                        : "0 m ",
-                                    style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      letterSpacing: -0.2,
-                                      color: Colors.red,
-                                    )),
-                                Text(
-                                    time.sec != null
-                                        ? "${time.sec} s "
-                                        : "0 s ",
-                                    style: TextStyle(
-                                      fontFamily: MyIdenaAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      letterSpacing: -0.2,
-                                      color: Colors.red,
-                                    )),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                    ]))
-              ])));
-        }
-      case EpochPeriod.ShortSession:
-        {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(
-                  child: Row(children: <Widget>[
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      wait
-                          ? Text("")
-                          : Text(
-                              AppLocalizations.of(context).translate(
-                                  "Idena validation started. Please, click the button"),
-                              style: TextStyle(
-                                fontFamily: MyIdenaAppTheme.fontName,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                letterSpacing: -0.2,
-                                color: Colors.red,
+    return FutureBuilder(
+        future: httpService.getDnaIdentity(
+            Uri.parse(idenaSharedPreferences.apiUrl),
+            idenaSharedPreferences.keyApp),
+        builder: (BuildContext context,
+            AsyncSnapshot<DnaIdentityResponse> _dnaIdentityResponse) {
+          if (!_dnaIdentityResponse.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            int canValidate =
+                UtilIdentity().canValidate(_dnaIdentityResponse.data);
+            if (canValidate > 0) {
+              return Padding(
+                  padding: const EdgeInsets.only(
+                      left: 0, right: 10, top: 0, bottom: 8),
+                  child: Container(
+                      child: Row(children: <Widget>[
+                    Expanded(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                          canValidate == 1
+                              ? textAboveLineWidget(
+                                  AppLocalizations.of(context).translate(
+                                      "Your status doesn't allow you to participate in the validation session"),
+                                  14)
+                              : textAboveLineWidget(
+                                  AppLocalizations.of(context).translate(
+                                      "To participate in the validation session, you must provide your flips"),
+                                  14),
+                          lineWidget(90),
+                        ]))
+                  ])));
+            }
+            if (currentPeriod == null) currentPeriod = EpochPeriod.None;
+            switch (currentPeriod) {
+              case EpochPeriod.FlipLottery:
+                {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 0, right: 10, top: 0, bottom: 8),
+                      child: Container(
+                          child: Row(children: <Widget>[
+                        Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context).translate(
+                                        "Idena validation will start soon") +
+                                    "\n" +
+                                    AppLocalizations.of(context).translate(
+                                        "Please, stay on this page until launch."),
+                                style: TextStyle(
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  letterSpacing: -0.2,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                      wait
-                          ? Text("")
-                          : FloatingActionButton(
-                              onPressed: () => launchSession(),
-                              backgroundColor: Colors.red,
-                              child:
-                                  new Icon(Icons.refresh, color: Colors.white),
-                            ),
-                    ])),
-              ])));
-        }
-        case EpochPeriod.LongSession:
-        {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(
-                  child: Row(children: <Widget>[
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context)
-                            .translate("Waiting for the end of long session"),
-                        style: TextStyle(
-                          fontFamily: MyIdenaAppTheme.fontName,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          letterSpacing: -0.2,
-                          color: Colors.red,
-                        ),
-                      ),
-                      lineWidget(90),
-                      sendIdna ? Container() : gift(context)
-                    ]))
-              ])));
-        }
-      case EpochPeriod.AfterLongSession:
-        {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 8),
-              child: Container(
-                  child: Row(children: <Widget>[
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context).translate(
-                            "Please wait. The network is reaching consensus about validated identities"),
-                        style: TextStyle(
-                          fontFamily: MyIdenaAppTheme.fontName,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          letterSpacing: -0.2,
-                          color: Colors.red,
-                        ),
-                      ),
-                      lineWidget(90),
-                      sendIdna ? Container() : gift(context)
-                    ]))
-              ])));
-        }
-      default:
-        {
-          return displayNextValidationDate(widget.nextValidation);
-        }
-    }
+                              CountdownTimer(
+                                endTime: endTime,
+                                onEnd: () {
+                                  wait = true;
+                                  Future.delayed(const Duration(seconds: 5),
+                                      () {
+                                    launchSession();
+                                    wait = false;
+                                  });
+                                },
+                                widgetBuilder: (_, CurrentRemainingTime time) {
+                                  if (time == null) {
+                                    return Text("");
+                                  } else {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                            time.min != null
+                                                ? "${time.min} m "
+                                                : "0 m ",
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  MyIdenaAppTheme.fontName,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              letterSpacing: -0.2,
+                                              color: Colors.red,
+                                            )),
+                                        Text(
+                                            time.sec != null
+                                                ? "${time.sec} s "
+                                                : "0 s ",
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  MyIdenaAppTheme.fontName,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              letterSpacing: -0.2,
+                                              color: Colors.red,
+                                            )),
+                                      ],
+                                    );
+                                  }
+                                },
+                              ),
+                            ]))
+                      ])));
+                }
+              case EpochPeriod.ShortSession:
+                {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 0, right: 10, top: 0, bottom: 8),
+                      child: Container(
+                          child: Row(children: <Widget>[
+                        Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                              wait
+                                  ? Text("")
+                                  : Text(
+                                      AppLocalizations.of(context).translate(
+                                          "Idena validation started. Please, click the button"),
+                                      style: TextStyle(
+                                        fontFamily: MyIdenaAppTheme.fontName,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        letterSpacing: -0.2,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                              wait
+                                  ? Text("")
+                                  : FloatingActionButton(
+                                      onPressed: () => launchSession(),
+                                      backgroundColor: Colors.red,
+                                      child: new Icon(Icons.refresh,
+                                          color: Colors.white),
+                                    ),
+                            ])),
+                      ])));
+                }
+              case EpochPeriod.LongSession:
+                {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 0, right: 10, top: 0, bottom: 8),
+                      child: Container(
+                          child: Row(children: <Widget>[
+                        Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context).translate(
+                                    "Waiting for the end of long session"),
+                                style: TextStyle(
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  letterSpacing: -0.2,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              lineWidget(90),
+                              sendIdna ? Container() : gift(context, _dnaIdentityResponse.data)
+                            ]))
+                      ])));
+                }
+              case EpochPeriod.AfterLongSession:
+                {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 0, right: 10, top: 0, bottom: 8),
+                      child: Container(
+                          child: Row(children: <Widget>[
+                        Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context).translate(
+                                    "Please wait. The network is reaching consensus about validated identities"),
+                                style: TextStyle(
+                                  fontFamily: MyIdenaAppTheme.fontName,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  letterSpacing: -0.2,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              lineWidget(90),
+                              sendIdna ? Container() : gift(context, _dnaIdentityResponse.data)
+                            ]))
+                      ])));
+                }
+              default:
+                {
+                  return displayNextValidationDate(widget.nextValidation);
+                }
+            }
+          }
+        });
   }
 
-  Widget gift(BuildContext context) {
+  Widget gift(BuildContext context, DnaIdentityResponse dnaIdentityResponse) {
     return Column(
       children: [
         SizedBox(
@@ -335,7 +354,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    widget.dnaAll.dnaIdentityResponse.result
+                                    dnaIdentityResponse.result
                                         .address,
                                     1);
                               } catch (e) {
@@ -388,7 +407,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    widget.dnaAll.dnaIdentityResponse.result
+                                    dnaIdentityResponse.result
                                         .address,
                                     10);
                               } catch (e) {
@@ -441,7 +460,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    widget.dnaAll.dnaIdentityResponse.result
+                                    dnaIdentityResponse.result
                                         .address,
                                     50);
                               } catch (e) {
@@ -466,14 +485,30 @@ class _ValidationSessionCountdownTextState
   }
 
   Future launchSession() async {
+    Uri url = Uri.parse(idenaSharedPreferences.apiUrl);
+    String keyApp = idenaSharedPreferences.keyApp;
+
+    httpService.getDnaGetEpoch(url, keyApp).then((_dnaGetEpochResponse) {
+      dnaAll.dnaGetEpochResponse = _dnaGetEpochResponse;
+      dnaAll.dnaGetEpochResponse.result.nextValidation = DateTime.now();
+      httpService.getDnaCeremonyIntervals(url, keyApp).then(
+          (_dnaCeremonyIntervalsResponse) => dnaAll
+              .dnaCeremonyIntervalsResponse = _dnaCeremonyIntervalsResponse);
+    });
+
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => ValidationSessionScreen(
+                longSessionDuration: dnaAll
+                    .dnaCeremonyIntervalsResponse.result.longSessionDuration,
+                shortSessionDuration: dnaAll
+                    .dnaCeremonyIntervalsResponse.result.shortSessionDuration,
+                millisecondsSinceEpoch: dnaAll.dnaGetEpochResponse.result
+                    .nextValidation.millisecondsSinceEpoch,
                 typeLaunchSession: EpochPeriod.ShortSession,
                 simulationMode: false,
                 checkFlipsQualityProcess: false,
-                dnaAll: widget.dnaAll,
                 animationController: widget.animationController)));
   }
 

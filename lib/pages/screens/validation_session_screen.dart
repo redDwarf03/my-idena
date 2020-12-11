@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/validation_session_view.dart';
@@ -11,15 +10,19 @@ class ValidationSessionScreen extends StatefulWidget {
       this.animationController,
       this.typeLaunchSession,
       this.checkFlipsQualityProcess,
-      this.dnaAll,
-      this.simulationMode})
+      this.simulationMode,
+      this.millisecondsSinceEpoch,
+      this.shortSessionDuration,
+      this.longSessionDuration})
       : super(key: key);
 
   final AnimationController animationController;
   final String typeLaunchSession;
   final bool checkFlipsQualityProcess;
-  final DnaAll dnaAll;
   final bool simulationMode;
+  final int millisecondsSinceEpoch;
+  final int shortSessionDuration;
+  final int longSessionDuration;
 
   @override
   _ValidationSessionScreenState createState() =>
@@ -86,8 +89,10 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen>
       ValidationSessionView(
         typeLaunchSession: widget.typeLaunchSession,
         simulationMode: widget.simulationMode,
-        dnaAll: widget.dnaAll,
         checkFlipsQualityProcess: widget.checkFlipsQualityProcess,
+        longSessionDuration: widget.longSessionDuration,
+        shortSessionDuration: widget.shortSessionDuration,
+        millisecondsSinceEpoch: widget.millisecondsSinceEpoch,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:

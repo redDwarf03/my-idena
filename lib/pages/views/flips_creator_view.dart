@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
@@ -19,15 +18,10 @@ import 'package:my_idena/enums/identity_status.dart' as IdentityStatus;
 class FlipsCreatorView extends StatefulWidget {
   final AnimationController animationController;
   final Animation animation;
-  final DnaAll dnaAll;
   final int step;
 
   FlipsCreatorView(
-      {Key key,
-      this.animationController,
-      this.animation,
-      this.dnaAll,
-      this.step})
+      {Key key, this.animationController, this.animation, this.step})
       : super(key: key);
 
   @override
@@ -40,7 +34,6 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
   HttpService httpService = HttpService();
   DnaIdentityResponse dnaIdentityResponse;
   int flipKeyWordPairsNumber;
-  DnaAll dnaAll;
   UtilFlip utilFlip = new UtilFlip();
   int step;
   Image imgToDisplay_1;
@@ -63,8 +56,12 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
     switch (step) {
       case 1:
         {
-          flipKeyWordPairsNumber =
-              utilFlip.getFirstFlipKeyWordPairsNotUsed(widget.dnaAll);
+          httpService
+              .getDnaIdentity(Uri.parse(idenaSharedPreferences.apiUrl),
+                  idenaSharedPreferences.keyApp)
+              .then((dnaIdentityResponse) => flipKeyWordPairsNumber =
+                  utilFlip.getFirstFlipKeyWordPairsNotUsed(
+                      dnaIdentityResponse.result.flipKeyWordPairs));
         }
         break;
     }
@@ -114,294 +111,292 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
 
   Widget buildStep1(BuildContext context) {
     return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return AnimatedBuilder(
-                animation: widget.animationController,
-                builder: (BuildContext context, Widget child) {
-                  return FadeTransition(
-                    opacity: widget.animation,
-                    child: new Transform(
-                      transform: new Matrix4.translationValues(
-                          0.0, 30 * (1.0 - widget.animation.value), 0.0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 24, right: 24, top: 16, bottom: 18),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: MyIdenaAppTheme.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.0),
-                                bottomLeft: Radius.circular(8.0),
-                                bottomRight: Radius.circular(8.0),
-                                topRight: Radius.circular(68.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: MyIdenaAppTheme.grey.withOpacity(0.2),
-                                  offset: Offset(1.1, 1.1),
-                                  blurRadius: 10.0),
-                            ],
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 16, left: 16, right: 16),
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8, right: 8, top: 4),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            textAboveLineWidget(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        "Think up a story"),
-                                                14),
-                                            lineWidget(70),
-                                            SizedBox(height: 10.0),
-                                            Text(
+        future: httpService.getDnaIdentity(
+            Uri.parse(idenaSharedPreferences.apiUrl),
+            idenaSharedPreferences.keyApp),
+        builder: (BuildContext context,
+            AsyncSnapshot<DnaIdentityResponse> _dnaIdentityResponse) {
+          if (_dnaIdentityResponse.hasData) {
+            return AnimatedBuilder(
+              animation: widget.animationController,
+              builder: (BuildContext context, Widget child) {
+                return FadeTransition(
+                  opacity: widget.animation,
+                  child: new Transform(
+                    transform: new Matrix4.translationValues(
+                        0.0, 30 * (1.0 - widget.animation.value), 0.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 24, right: 24, top: 16, bottom: 18),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: MyIdenaAppTheme.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                              topRight: Radius.circular(68.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: MyIdenaAppTheme.grey.withOpacity(0.2),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16, left: 16, right: 16),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, right: 8, top: 4),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          textAboveLineWidget(
                                               AppLocalizations.of(context)
                                                   .translate(
-                                                      "Think up a short story about someone/something related to the two key words below according to the template"),
-                                              style: TextStyle(
-                                                fontFamily:
-                                                    MyIdenaAppTheme.fontName,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 13,
-                                                color: MyIdenaAppTheme.grey
-                                                    .withOpacity(0.5),
-                                              ),
+                                                      "Think up a story"),
+                                              14),
+                                          lineWidget(70),
+                                          SizedBox(height: 10.0),
+                                          Text(
+                                            AppLocalizations.of(context).translate(
+                                                "Think up a short story about someone/something related to the two key words below according to the template"),
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  MyIdenaAppTheme.fontName,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13,
+                                              color: MyIdenaAppTheme.grey
+                                                  .withOpacity(0.5),
                                             ),
-                                            SizedBox(height: 10.0),
-                                            new Container(
-                                              height: 200,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Flexible(
-                                                    flex: 3,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              dictWords
-                                                                      .words[dnaAll
-                                                                          .dnaIdentityResponse
-                                                                          .result
-                                                                          .flipKeyWordPairs
-                                                                          .elementAt(
-                                                                              flipKeyWordPairsNumber)
-                                                                          .words[0]]
-                                                                      .name +
-                                                                  " : ",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      MyIdenaAppTheme
-                                                                          .fontName,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontSize: 14,
-                                                                  letterSpacing:
-                                                                      -0.1,
-                                                                  color: MyIdenaAppTheme
-                                                                      .darkText),
-                                                            ),
-                                                            Text(
-                                                              dictWords
-                                                                  .words[dnaAll
-                                                                      .dnaIdentityResponse
-                                                                      .result
-                                                                      .flipKeyWordPairs
-                                                                      .elementAt(
-                                                                          flipKeyWordPairsNumber)
-                                                                      .words[0]]
-                                                                  .desc,
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      MyIdenaAppTheme
-                                                                          .fontName,
-                                                                  fontSize: 14,
-                                                                  letterSpacing:
-                                                                      -0.1,
-                                                                  color: MyIdenaAppTheme
-                                                                      .darkText),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              dictWords
-                                                                      .words[dnaAll
-                                                                          .dnaIdentityResponse
-                                                                          .result
-                                                                          .flipKeyWordPairs
-                                                                          .elementAt(
-                                                                              flipKeyWordPairsNumber)
-                                                                          .words[1]]
-                                                                      .name +
-                                                                  " : ",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      MyIdenaAppTheme
-                                                                          .fontName,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontSize: 14,
-                                                                  letterSpacing:
-                                                                      -0.1,
-                                                                  color: MyIdenaAppTheme
-                                                                      .darkText),
-                                                            ),
-                                                            Text(
-                                                              dictWords
-                                                                  .words[dnaAll
-                                                                      .dnaIdentityResponse
-                                                                      .result
-                                                                      .flipKeyWordPairs
-                                                                      .elementAt(
-                                                                          flipKeyWordPairsNumber)
-                                                                      .words[1]]
-                                                                  .desc,
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      MyIdenaAppTheme
-                                                                          .fontName,
-                                                                  fontSize: 14,
-                                                                  letterSpacing:
-                                                                      -0.1,
-                                                                  color: MyIdenaAppTheme
-                                                                      .darkText),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  RaisedButton(
-                                                      elevation: 5.0,
-                                                      onPressed: () async {
-                                                        setState(() {
-                                                          flipKeyWordPairsNumber =
-                                                              utilFlip.findNextFlipKeyWordPairsNotUsed(
-                                                                  dnaAll,
-                                                                  flipKeyWordPairsNumber +
-                                                                      1);
-                                                        });
-                                                      },
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20.0),
-                                                      ),
-                                                      color: Colors.white,
-                                                      child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            Icon(
-                                                              Icons.autorenew,
-                                                              color:
-                                                                  Colors.black,
-                                                              size: 18,
-                                                            ),
-                                                            Text(
-                                                              AppLocalizations.of(
-                                                                          context)
-                                                                      .translate(
-                                                                          "Change words") +
-                                                                  " (#" +
-                                                                  (flipKeyWordPairsNumber +
-                                                                          1)
-                                                                      .toString() +
-                                                                  ")",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                letterSpacing:
-                                                                    1.5,
-                                                                fontSize: 12.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                          ),
+                                          SizedBox(height: 10.0),
+                                          new Container(
+                                            height: 200,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Flexible(
+                                                  flex: 3,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Text(
+                                                            dictWords
+                                                                    .words[_dnaIdentityResponse
+                                                                        .data
+                                                                        .result
+                                                                        .flipKeyWordPairs
+                                                                        .elementAt(
+                                                                            flipKeyWordPairsNumber)
+                                                                        .words[0]]
+                                                                    .name +
+                                                                " : ",
+                                                            style: TextStyle(
                                                                 fontFamily:
                                                                     MyIdenaAppTheme
                                                                         .fontName,
-                                                              ),
-                                                            ),
-                                                          ])),
-                                                  SizedBox(height: 10.0),
-                                                  RaisedButton(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    -0.1,
+                                                                color: MyIdenaAppTheme
+                                                                    .darkText),
+                                                          ),
+                                                          Text(
+                                                            dictWords
+                                                                .words[_dnaIdentityResponse
+                                                                    .data
+                                                                    .result
+                                                                    .flipKeyWordPairs
+                                                                    .elementAt(
+                                                                        flipKeyWordPairsNumber)
+                                                                    .words[0]]
+                                                                .desc,
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    MyIdenaAppTheme
+                                                                        .fontName,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    -0.1,
+                                                                color: MyIdenaAppTheme
+                                                                    .darkText),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Text(
+                                                            dictWords
+                                                                    .words[_dnaIdentityResponse
+                                                                        .data
+                                                                        .result
+                                                                        .flipKeyWordPairs
+                                                                        .elementAt(
+                                                                            flipKeyWordPairsNumber)
+                                                                        .words[1]]
+                                                                    .name +
+                                                                " : ",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    MyIdenaAppTheme
+                                                                        .fontName,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    -0.1,
+                                                                color: MyIdenaAppTheme
+                                                                    .darkText),
+                                                          ),
+                                                          Text(
+                                                            dictWords
+                                                                .words[_dnaIdentityResponse
+                                                                    .data
+                                                                    .result
+                                                                    .flipKeyWordPairs
+                                                                    .elementAt(
+                                                                        flipKeyWordPairsNumber)
+                                                                    .words[1]]
+                                                                .desc,
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    MyIdenaAppTheme
+                                                                        .fontName,
+                                                                fontSize: 14,
+                                                                letterSpacing:
+                                                                    -0.1,
+                                                                color: MyIdenaAppTheme
+                                                                    .darkText),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                RaisedButton(
                                                     elevation: 5.0,
                                                     onPressed: () async {
                                                       setState(() {
-                                                        step = 2;
+                                                        flipKeyWordPairsNumber =
+                                                            utilFlip.findNextFlipKeyWordPairsNotUsed(
+                                                                _dnaIdentityResponse
+                                                                    .data
+                                                                    .result
+                                                                    .flipKeyWordPairs,
+                                                                flipKeyWordPairsNumber +
+                                                                    1);
                                                       });
                                                     },
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              30.0),
+                                                              20.0),
                                                     ),
                                                     color: Colors.white,
-                                                    child: Text(
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                "Next step"),
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          letterSpacing: 1.5,
-                                                          fontSize: 12.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              MyIdenaAppTheme
-                                                                  .fontName,
-                                                        )),
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Icon(
+                                                            Icons.autorenew,
+                                                            color: Colors.black,
+                                                            size: 18,
+                                                          ),
+                                                          Text(
+                                                            AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        "Change words") +
+                                                                " (#" +
+                                                                (flipKeyWordPairsNumber +
+                                                                        1)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              letterSpacing:
+                                                                  1.5,
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  MyIdenaAppTheme
+                                                                      .fontName,
+                                                            ),
+                                                          ),
+                                                        ])),
+                                                SizedBox(height: 10.0),
+                                                RaisedButton(
+                                                  elevation: 5.0,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      step = 2;
+                                                    });
+                                                  },
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30.0),
                                                   ),
-                                                  SizedBox(height: 10.0),
-                                                ],
-                                              ),
+                                                  color: Colors.white,
+                                                  child: Text(
+                                                      AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              "Next step"),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        letterSpacing: 1.5,
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            MyIdenaAppTheme
+                                                                .fontName,
+                                                      )),
+                                                ),
+                                                SizedBox(height: 10.0),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-                },
-              );
-            }
+                  ),
+                );
+              },
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -1153,7 +1148,7 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                                                 .fontName,
                                                         fontSize: 15.0,
                                                       )),
-                                                                SizedBox(height: 20.0),
+                                                  SizedBox(height: 20.0),
                                                   new Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -1172,7 +1167,9 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                                                           20.0)),
                                                           onPressed: () {
                                                             setState(() {
-                                                              httpService.submitFlip(images);
+                                                              httpService
+                                                                  .submitFlip(
+                                                                      images);
                                                               Navigator
                                                                   .pushReplacement(
                                                                 context,
@@ -1200,7 +1197,6 @@ class _FlipsCreatorViewState extends State<FlipsCreatorView> {
                                                                   context);
                                                             });
                                                           }),
-                                                
                                                     ],
                                                   ),
                                                 ],

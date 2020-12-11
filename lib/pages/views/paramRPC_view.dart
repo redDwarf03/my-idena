@@ -6,9 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+import 'package:my_idena/utils/util_demo_mode.dart';
+import 'package:my_idena/utils/util_public_node.dart';
 
 class ParamRPCView extends StatefulWidget {
   final AnimationController animationController;
@@ -33,6 +36,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
   Timer _timer;
+  var checkedValue = getPublicNode();
 
   @override
   void initState() {
@@ -132,7 +136,64 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.only(top: 6),
+                                              child: CheckboxListTile(
+                                                activeColor: Colors.black12,
+                                                checkColor: Colors.green,
+                                                title: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          "Public node ?"),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: MyIdenaAppTheme
+                                                        .fontName,
+                                                  ),
+                                                ),
+                                                value: checkedValue,
+                                                onChanged: (newValue) {
+                                                  if (newValue) {
+                                                    apiUrlController.value =
+                                                        TextEditingValue(
+                                                            text: PN_URL_SLASH);
+                                                  } else {
+                                                    apiUrlController.value =
+                                                        TextEditingValue(
+                                                            text: "http://");
+                                                  }
+                                                  try {
+                                                    IdenaSharedPreferences
+                                                        _idenaSharedPreferences =
+                                                        IdenaSharedPreferences(
+                                                            apiUrlController
+                                                                .text,
+                                                            keyAppController
+                                                                .text);
+                                                    SharedPreferencesHelper
+                                                        .setIdenaSharedPreferences(
+                                                            _idenaSharedPreferences);
+                                                    idenaSharedPreferences =
+                                                        _idenaSharedPreferences;
+                                                    initIdenaAddress();
+                                                  } catch (e) {
+                                                    logger.e(e.toString());
+                                                  }
+                                                  setState(() {
+                                                    checkedValue = newValue;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 6),
                                               child: TextFormField(
+                                                enableInteractiveSelection:
+                                                    getPublicNode()
+                                                        ? false
+                                                        : true,
+                                                enabled: getPublicNode()
+                                                    ? false
+                                                    : true,
                                                 controller: apiUrlController,
                                                 validator: (val) => val.isEmpty
                                                     ? AppLocalizations.of(
@@ -142,13 +203,19 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                     : null,
                                                 onChanged: (val) {
                                                   try {
+                                                    IdenaSharedPreferences
+                                                        _idenaSharedPreferences =
+                                                        IdenaSharedPreferences(
+                                                            apiUrlController
+                                                                .text,
+                                                            keyAppController
+                                                                .text);
                                                     SharedPreferencesHelper
                                                         .setIdenaSharedPreferences(
-                                                            IdenaSharedPreferences(
-                                                                apiUrlController
-                                                                    .text,
-                                                                keyAppController
-                                                                    .text));
+                                                            _idenaSharedPreferences);
+                                                    idenaSharedPreferences =
+                                                        _idenaSharedPreferences;
+                                                    initIdenaAddress();
                                                   } catch (e) {
                                                     logger.e(e.toString());
                                                   }
@@ -202,13 +269,19 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                     : null,
                                                 onChanged: (val) {
                                                   try {
+                                                    IdenaSharedPreferences
+                                                        _idenaSharedPreferences =
+                                                        IdenaSharedPreferences(
+                                                            apiUrlController
+                                                                .text,
+                                                            keyAppController
+                                                                .text);
                                                     SharedPreferencesHelper
                                                         .setIdenaSharedPreferences(
-                                                            IdenaSharedPreferences(
-                                                                apiUrlController
-                                                                    .text,
-                                                                keyAppController
-                                                                    .text));
+                                                            _idenaSharedPreferences);
+                                                    idenaSharedPreferences =
+                                                        _idenaSharedPreferences;
+                                                    initIdenaAddress();
                                                   } catch (e) {
                                                     logger.e(e.toString());
                                                   }
@@ -330,5 +403,24 @@ class _ParamRPCViewState extends State<ParamRPCView> {
             );
           }
         });
+  }
+
+  initIdenaAddress() async {
+    if (getDemoModeStatus()) {
+      idenaAddress = DM_IDENTITY_ADDRESS;
+    } else {
+      if (getPublicNode() == false) {
+        idenaAddress = "";
+        Uri url = Uri.parse(idenaSharedPreferences.apiUrl);
+        await httpService
+            .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
+            .then((value) => idenaAddress);
+      } else {
+        // TODO: A changer
+        idenaAddress = "0xf429e36d68be10428d730784391589572ee0f72b";
+      }
+    }
+
+    logger.i("Idena address loaded: " + idenaAddress);
   }
 }

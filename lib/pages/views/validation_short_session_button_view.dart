@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/validation_session_infos.dart';
 
 class ValidationShortSessionButtonView extends StatefulWidget {
   final ValidationSessionInfo validationSessionInfo;
-  final DnaAll dnaAll;
   final String currentPeriod;
   final AnimationController animationController;
   final bool simulationMode;
@@ -14,7 +12,6 @@ class ValidationShortSessionButtonView extends StatefulWidget {
 
   const ValidationShortSessionButtonView(
       {Key key,
-      this.dnaAll,
       this.currentPeriod,
       this.animationController,
       this.validationSessionInfo,
@@ -40,17 +37,6 @@ class _ValidationShortSessionButtonViewState
               submitShortAnswers(widget.validationSessionInfo);
             }
             widget.goLongSession(true);
-           /* Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => ValidationSessionScreen(
-                    simulationMode: widget.simulationMode,
-                    animationController: widget.animationController,
-                    dnaAll: widget.dnaAll,
-                    typeLaunchSession: EpochPeriod.LongSession,
-                    checkFlipsQualityProcess: false,
-                  ),
-                ));*/
           },
           padding: EdgeInsets.all(5.0),
           shape: RoundedRectangleBorder(

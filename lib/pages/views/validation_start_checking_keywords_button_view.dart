@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/screens/validation_session_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/enums/epoch_period.dart' as EpochPeriod;
 
 class ValidationStartCheckingKeywordsButtonView extends StatefulWidget {
-  final DnaAll dnaAll;
   final AnimationController animationController;
   final bool simulationMode;
+  final int millisecondsSinceEpoch;
+  final int shortSessionDuration;
+  final int longSessionDuration;
 
-  const ValidationStartCheckingKeywordsButtonView({Key key, this.dnaAll, this.animationController, this.simulationMode}) : super(key: key);
+  const ValidationStartCheckingKeywordsButtonView(
+      {Key key,
+      this.animationController,
+      this.simulationMode,
+      this.millisecondsSinceEpoch,
+      this.shortSessionDuration,
+      this.longSessionDuration})
+      : super(key: key);
 
   @override
-  _ValidationStartCheckingKeywordsButtonViewState createState() => _ValidationStartCheckingKeywordsButtonViewState();
+  _ValidationStartCheckingKeywordsButtonViewState createState() =>
+      _ValidationStartCheckingKeywordsButtonViewState();
 }
 
-class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationStartCheckingKeywordsButtonView> {
+class _ValidationStartCheckingKeywordsButtonViewState
+    extends State<ValidationStartCheckingKeywordsButtonView> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -34,7 +44,8 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                           child: Column(
                             children: <Widget>[
                               Text(
-                                AppLocalizations.of(context).translate("Your answers are not yet submitted"),
+                                AppLocalizations.of(context).translate(
+                                    "Your answers are not yet submitted"),
                                 style: TextStyle(
                                     fontFamily: MyIdenaAppTheme.fontName,
                                     fontWeight: FontWeight.bold,
@@ -46,7 +57,8 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                                 height: 20,
                               ),
                               Text(
-                                AppLocalizations.of(context).translate("Please qualify the keywords relevance and submit the answers."),
+                                AppLocalizations.of(context).translate(
+                                    "Please qualify the keywords relevance and submit the answers."),
                                 style: TextStyle(
                                     fontFamily: MyIdenaAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
@@ -55,7 +67,8 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                                     color: MyIdenaAppTheme.darkText),
                               ),
                               Text(
-                                AppLocalizations.of(context).translate("The flips with irrelevant keywords will be penalized"),
+                                AppLocalizations.of(context).translate(
+                                    "The flips with irrelevant keywords will be penalized"),
                                 style: TextStyle(
                                     fontFamily: MyIdenaAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
@@ -72,11 +85,19 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                                   Navigator.push<dynamic>(
                                       context,
                                       MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) => ValidationSessionScreen(
+                                        builder: (BuildContext context) =>
+                                            ValidationSessionScreen(
+                                          longSessionDuration:
+                                              widget.longSessionDuration,
+                                          shortSessionDuration:
+                                              widget.shortSessionDuration,
+                                          millisecondsSinceEpoch:
+                                              widget.millisecondsSinceEpoch,
                                           simulationMode: widget.simulationMode,
-                                          animationController: widget.animationController,
-                                          dnaAll: widget.dnaAll,
-                                          typeLaunchSession: EpochPeriod.LongSession,
+                                          animationController:
+                                              widget.animationController,
+                                          typeLaunchSession:
+                                              EpochPeriod.LongSession,
                                           checkFlipsQualityProcess: true,
                                         ),
                                       ));
@@ -86,7 +107,9 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
                                 color: Colors.white,
-                                child: Text(AppLocalizations.of(context).translate("Ok, I understand"),
+                                child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate("Ok, I understand"),
                                     style: TextStyle(
                                       color: Colors.black,
                                       letterSpacing: 1.5,
@@ -106,7 +129,8 @@ class _ValidationStartCheckingKeywordsButtonViewState extends State<ValidationSt
             borderRadius: BorderRadius.circular(30.0),
           ),
           color: Colors.white,
-          child: Text(AppLocalizations.of(context).translate("Start checking keywords"),
+          child: Text(
+              AppLocalizations.of(context).translate("Start checking keywords"),
               style: TextStyle(
                 color: Colors.black,
                 letterSpacing: 1.5,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/pages/screens/on_boarding_screen.dart';
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
 
 class RouteScreen extends StatefulWidget {
   @override
@@ -24,30 +24,18 @@ class _RouteScreenState extends State<RouteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String apiUrl;
-    String keyApp;
-    return FutureBuilder<IdenaSharedPreferences>(
-        future: SharedPreferencesHelper.getIdenaSharedPreferences(),
-        builder: (BuildContext context,
-            AsyncSnapshot<IdenaSharedPreferences> snapshot) {
-          if (snapshot.hasData == false) {
+    return FutureBuilder<bool>(
+        future: httpService.checkConnection(
+            idenaSharedPreferences.apiUrl, idenaSharedPreferences.keyApp),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData == false || snapshot.data == null) {
             return Center(child: CircularProgressIndicator());
           } else {
-            apiUrl = snapshot.data.apiUrl != null ? snapshot.data.apiUrl : "";
-            keyApp = snapshot.data.keyApp != null ? snapshot.data.keyApp : "";
-            return FutureBuilder<bool>(
-                future: httpService.checkConnection(apiUrl, keyApp),
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  if (snapshot.hasData == false || snapshot.data == null) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    if (snapshot.data) {
-                      return Home();
-                    } else {
-                      return OnBoardingScreen();
-                    }
-                  }
-                });
+            if (snapshot.data) {
+              return Home();
+            } else {
+              return OnBoardingScreen();
+            }
           }
         });
   }

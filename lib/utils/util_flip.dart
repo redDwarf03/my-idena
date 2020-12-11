@@ -1,34 +1,27 @@
-import 'package:my_idena/backoffice/bean/dna_all.dart';
-
 const int NB_MAX_FLIPKEYWORDPAIRS = 9;
 
 class UtilFlip {
-  int getFirstFlipKeyWordPairsNotUsed(DnaAll dnaAll) {
-    if (dnaAll.dnaIdentityResponse.result == null) {
-      for (var i = 0;
-          i < dnaAll.dnaIdentityResponse.result.flipKeyWordPairs.length;
-          i++) {
-        if (!dnaAll.dnaIdentityResponse.result.flipKeyWordPairs
-            .elementAt(i)
-            .used) {
-          return i;
-        }
+  int getFirstFlipKeyWordPairsNotUsed(List flipKeyWordPairs) {
+    int first = 0;
+    for (var i = 0; i < flipKeyWordPairs.length; i++) {
+      if (!flipKeyWordPairs.elementAt(i).used) {
+        first = i;
+        break;
       }
-    } 
-    return 0;
-    
+    }
+    return first;
   }
 
   int findNextFlipKeyWordPairsNotUsed(
-      DnaAll dnaAll, int flipKeyWordPairsNotUsedNumber) {
+      List flipKeyWordPairs, int flipKeyWordPairsNotUsedNumber) {
     int start = flipKeyWordPairsNotUsedNumber;
     if (flipKeyWordPairsNotUsedNumber == NB_MAX_FLIPKEYWORDPAIRS) {
       start = 0;
     }
     for (var i = start;
-        i < dnaAll.dnaIdentityResponse.result.flipKeyWordPairs.length;
+        i < flipKeyWordPairs.length;
         i++) {
-      if (!dnaAll.dnaIdentityResponse.result.flipKeyWordPairs
+      if (!flipKeyWordPairs
           .elementAt(i)
           .used) {
         return i;

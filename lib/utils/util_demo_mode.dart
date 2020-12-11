@@ -1,4 +1,4 @@
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+import 'package:my_idena/main.dart';
 
 const String DM_IDENTITY_ADDRESS = "0cxbd304e235b073637018c0430a4242d6f233bcf3";
 const int DM_IDENTITY_AGE = 5;
@@ -31,17 +31,9 @@ const int DM_IDENTITY_KEYWORD_2 = 15;
 const int DM_IDENTITY_KEYWORD_3 = 10;
 const int DM_IDENTITY_KEYWORD_4 = 4;
 
-Future<bool> getDemoModeStatus(String keyApp) async {
-  if (keyApp == null) {
-    IdenaSharedPreferences idenaSharedPreferences =
-        await SharedPreferencesHelper.getIdenaSharedPreferences();
-    if (idenaSharedPreferences == null) {
-      return false;
-    }
-    keyApp = idenaSharedPreferences.keyApp;
-  }
+bool getDemoModeStatus() {
 
-  if (keyApp == DM_KEY_APP) {
+ if(idenaSharedPreferences.keyApp == DM_KEY_APP) {
     return true;
   } else {
     return false;

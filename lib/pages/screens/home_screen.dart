@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/backoffice/factory/httpService.dart';
 import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/views/mining_view.dart';
@@ -11,6 +8,7 @@ import 'package:my_idena/pages/views/title_view.dart';
 import 'package:my_idena/pages/views/transactions_view.dart';
 import 'package:my_idena/pages/views/validation_session_infos_view.dart';
 import 'package:my_idena/pages/widgets/app_bar_widget.dart';
+import 'package:my_idena/utils/util_public_node.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, this.animationController, this.firstState})
@@ -25,13 +23,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
-  HttpService httpService = HttpService();
-  var logger = Logger();
 
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
-  DnaAll dnaAll;
 
   @override
   void initState() {
@@ -67,148 +62,160 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void addAllListData(BuildContext context) {
-    const int count = 10;
-    listViews.add(
-      TitleView(
-        titleTxt: "Portofolio",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      PortofolioView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    if (publicNode == false) {
+    if (idenaAddress.isNotEmpty) {
+      const int count = 10;
       listViews.add(
         TitleView(
-          titleTxt: "Online mining status",
+          titleTxt: "Portofolio",
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController,
-                  curve: Interval((1 / count) * 2, 1.0,
+                  curve: Interval((1 / count) * 0, 1.0,
                       curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
         ),
       );
 
       listViews.add(
-        MiningView(
+        PortofolioView(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
                   parent: widget.animationController,
-                  curve: Interval((1 / count) * 3, 1.0,
+                  curve: Interval((1 / count) * 1, 1.0,
                       curve: Curves.fastOutSlowIn))),
           animationController: widget.animationController,
-          firstState: widget.firstState,
+        ),
+      );
+
+      if (getPublicNode() == false) {
+        listViews.add(
+          TitleView(
+            titleTxt: "Online mining status",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController,
+                    curve: Interval((1 / count) * 2, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+
+        listViews.add(
+          MiningView(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController,
+                    curve: Interval((1 / count) * 3, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+            firstState: widget.firstState,
+          ),
+        );
+      }
+      listViews.add(
+        TitleView(
+          titleTxt: "Validation",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 4, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
+
+      listViews.add(
+        ValidationSessionInfosView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 5, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
+
+      listViews.add(
+        TitleView(
+          titleTxt: "Profile",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 6, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
+
+      listViews.add(
+        ProfileView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 7, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
+        ),
+      );
+
+      if (getPublicNode() == false) {
+        listViews.add(
+          TitleView(
+            titleTxt: "Recent transactions",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController,
+                    curve: Interval((1 / count) * 8, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+
+        listViews.add(
+          TransactionsView(
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController,
+                    curve: Interval((1 / count) * 9, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          ),
+        );
+      }
+    } else {
+      const int count = 1;
+      listViews.add(
+        TitleView(
+          titleTxt: "You are not connected.\nPlease, go to the settings tab",
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController,
+                  curve: Interval((1 / count) * 0, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController,
         ),
       );
     }
-    listViews.add(
-      TitleView(
-        titleTxt: "Validation",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      ValidationSessionInfosView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: "Profile",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      ProfileView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 7, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: "Recent transactions",
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
-      TransactionsView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 9, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: httpService.getDnaAll(),
-        builder: (BuildContext context, AsyncSnapshot<DnaAll> snapshot) {
-          if (snapshot.hasData) {
-            dnaAll = snapshot.data;
-            if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
-              return SizedBox();
-            } else {
-              return Container(
-                color: MyIdenaAppTheme.background,
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Stack(
-                    children: <Widget>[
-                      getMainListViewUI(scrollController, listViews,
-                          widget.animationController),
-                      getAppBarUI(topBarAnimation, widget.animationController,
-                          topBarOpacity, false),
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.bottom,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        });
+    return Container(
+      color: MyIdenaAppTheme.background,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: <Widget>[
+            getMainListViewUI(
+                scrollController, listViews, widget.animationController),
+            getAppBarUI(topBarAnimation, widget.animationController,
+                topBarOpacity, false),
+            SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:my_idena/backoffice/bean/dna_all.dart';
+import 'package:my_idena/backoffice/bean/dna_identity_response.dart';
 import 'package:my_idena/enums/identity_status.dart' as IdentityStatus;
 
 const int CAN_VALIDATE = 0;
@@ -24,8 +25,8 @@ class UtilIdentity {
   }
 
   // 1 =
-  int canValidate(DnaAll dnaAll) {
-    if (dnaAll == null || dnaAll.dnaIdentityResponse == null) {
+  int canValidate(DnaIdentityResponse dnaIdentityResponse) {
+    if (dnaIdentityResponse == null) {
       return WRONG_STATUS;
     }
     var identityStatus1 = [
@@ -46,24 +47,24 @@ class UtilIdentity {
       IdentityStatus.Invite,
     ];
 
-    if (identityStatus3.contains(dnaAll.dnaIdentityResponse.result.state)) {
+    if (identityStatus3.contains(dnaIdentityResponse.result.state)) {
       return WRONG_STATUS;
     }
 
-    if (identityStatus2.contains(dnaAll.dnaIdentityResponse.result.state)) {
+    if (identityStatus2.contains(dnaIdentityResponse.result.state)) {
       return CAN_VALIDATE;
     } else {
       bool shouldSendFlips = true;
-      if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state)) {
+      if (identityStatus1.contains(dnaIdentityResponse.result.state)) {
         try {
           int numOfFlipsToSubmit =
-              dnaAll.dnaIdentityResponse.result.requiredFlips -
-                  dnaAll.dnaIdentityResponse.result.flips.length;
+              dnaIdentityResponse.result.requiredFlips -
+                  dnaIdentityResponse.result.flips.length;
           shouldSendFlips = numOfFlipsToSubmit > 0;
         } catch (e) {}
       }
 
-      if (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state) &&
+      if (identityStatus1.contains(dnaIdentityResponse.result.state) &&
           !shouldSendFlips) {
         return CAN_VALIDATE;
       } else {
@@ -76,16 +77,16 @@ class UtilIdentity {
     }
   }
 
-  bool canMine(DnaAll dnaAll) {
+  bool canMine(String state) {
     var identityStatus1 = [
       IdentityStatus.Human,
       IdentityStatus.Verified,
       IdentityStatus.Newbie
     ];
-    return (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state));
+    return (identityStatus1.contains(state));
   }
 
-  bool canTerminate(DnaAll dnaAll) {
+  bool canTerminate(String state) {
     var identityStatus1 = [
       IdentityStatus.Candidate,
       IdentityStatus.Verified,
@@ -93,24 +94,24 @@ class UtilIdentity {
       IdentityStatus.Zombie,
       IdentityStatus.Human
     ];
-    return (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state));
+    return (identityStatus1.contains(state));
   }
 
-  bool canSubmitFlip(DnaAll dnaAll) {
+  bool canSubmitFlip(DnaIdentityResponse dnaIdentityResponse) {
     var identityStatus1 = [
       IdentityStatus.Newbie,
       IdentityStatus.Verified,
       IdentityStatus.Human
     ];
-    return (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state) &&
-        dnaAll.dnaIdentityResponse.result.requiredFlips > 0 &&
-        (dnaAll.dnaIdentityResponse.result.flips.length <
-            dnaAll.dnaIdentityResponse.result.availableFlips));
+    return (identityStatus1.contains(dnaIdentityResponse.result.state) &&
+        dnaIdentityResponse.result.requiredFlips > 0 &&
+        (dnaIdentityResponse.result.flips.length <
+            dnaIdentityResponse.result.availableFlips));
   }
 
-  bool canActivateInvite(DnaAll dnaAll) {
+  bool canActivateInvite(String state) {
     var identityStatus1 = [IdentityStatus.Undefined, IdentityStatus.Invite];
-    return (identityStatus1.contains(dnaAll.dnaIdentityResponse.result.state));
+    return (identityStatus1.contains(state));
   }
 
   String mapToFriendlyStatus(status) {

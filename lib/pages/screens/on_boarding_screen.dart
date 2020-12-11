@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/factory/connectivity_service.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+import 'package:my_idena/utils/util_demo_mode.dart';
+import 'package:my_idena/utils/util_public_node.dart';
 
 Timer _timerCheckNode;
 
@@ -60,7 +63,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
 
     Platform.isAndroid ? nbPages = 4 : nbPages = 3;
 
-    
     /*AuthenticationMethod authenticationMethod = new AuthenticationMethod.password(password: "1Qt%gQQS-QS5,G}_");
     authenticationMethod.password = "1Qt%gQQS-QS5,G}_";
     SSHClientConfiguration sshClientConfiguration = new SSHClientConfiguration(user: "root", authenticationMethod: authenticationMethod);
@@ -69,8 +71,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     sshTunnel.start().then((value) => print("value = " + value));
     print("dddd");
     */
-
-
   }
 
   Future checkNode() async {
@@ -225,6 +225,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   }
 
   _getPageUrlApi({int index, BuildContext contextStream}) {
+    var checkedValue = getPublicNode();
     return Scaffold(
       backgroundColor: Colors.black,
       body: Align(
@@ -286,9 +287,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     : null,
                 onChanged: (val) {
                   try {
-                    SharedPreferencesHelper.setIdenaSharedPreferences(
+                    IdenaSharedPreferences _idenaSharedPreferences =
                         IdenaSharedPreferences(
-                            apiUrlController.text, keyAppController.text));
+                            apiUrlController.text, keyAppController.text);
+                    SharedPreferencesHelper.setIdenaSharedPreferences(
+                        _idenaSharedPreferences);
+                    idenaSharedPreferences = _idenaSharedPreferences;
+                    initIdenaAddress();
                   } catch (e) {
                     logger.e(e.toString());
                   }
@@ -318,6 +323,49 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 ),
               ),
               checkNodeConnection(),
+              SizedBox(
+                height: 20,
+              ),
+              Theme(
+                data: ThemeData(unselectedWidgetColor: Colors.white),
+                child: CheckboxListTile(
+                  activeColor: Colors.white,
+                  checkColor: Colors.green,
+                  title: Text(
+                    AppLocalizations.of(context)
+                        .translate("Or, you can use the public node"),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                  value: checkedValue,
+                  onChanged: (newValue) {
+                    if (newValue) {
+                      apiUrlController.value =
+                          TextEditingValue(text: PN_URL_SLASH);
+                    } else {
+                      apiUrlController.value =
+                          TextEditingValue(text: "http://");
+                    }
+                    try {
+                      IdenaSharedPreferences _idenaSharedPreferences =
+                          IdenaSharedPreferences(
+                              apiUrlController.text, keyAppController.text);
+                      SharedPreferencesHelper.setIdenaSharedPreferences(
+                          _idenaSharedPreferences);
+                      idenaSharedPreferences = _idenaSharedPreferences;
+                      initIdenaAddress();
+                    } catch (e) {
+                      logger.e(e.toString());
+                    }
+                    setState(() {
+                      checkedValue = newValue;
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -380,9 +428,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       : null,
                   onChanged: (val) {
                     try {
-                      SharedPreferencesHelper.setIdenaSharedPreferences(
+                      IdenaSharedPreferences _idenaSharedPreferences =
                           IdenaSharedPreferences(
-                              apiUrlController.text, keyAppController.text));
+                              apiUrlController.text, keyAppController.text);
+                      SharedPreferencesHelper.setIdenaSharedPreferences(
+                          _idenaSharedPreferences);
+                      idenaSharedPreferences = _idenaSharedPreferences;
+                      initIdenaAddress();
                     } catch (e) {
                       logger.e(e.toString());
                     }
@@ -526,6 +578,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             _checkNodeConnection = snapshot.data;
             if (_checkNodeConnection) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
+                initIdenaAddress();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => Home()),
@@ -558,5 +611,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             );
           }
         });
+  }
+
+  initIdenaAddress() async {
+    if (getDemoModeStatus()) {
+      idenaAddress = DM_IDENTITY_ADDRESS;
+    } else {
+      if (getPublicNode() == false) {
+        idenaAddress = "";
+        Uri url = Uri.parse(idenaSharedPreferences.apiUrl);
+        await httpService
+            .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
+            .then((value) => idenaAddress);
+      } else {
+        // TODO: A changer
+        idenaAddress = "0xf429e36d68be10428d730784391589572ee0f72b";
+      }
+    }
+
+    logger.i("Idena address loaded: " + idenaAddress);
   }
 }
