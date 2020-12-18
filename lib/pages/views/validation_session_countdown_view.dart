@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:badges/badges.dart';
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/backoffice/bean/dna_ceremonyIntervals_response.dart';
@@ -21,6 +23,7 @@ class ValidationSessionCountdownText extends StatefulWidget {
   final DateTime nextValidation;
   final AnimationController animationController;
   final DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
+
   const ValidationSessionCountdownText({
     Key key,
     @required this.nextValidation,
@@ -43,9 +46,9 @@ class _ValidationSessionCountdownTextState
   HttpService httpService = new HttpService();
   String currentPeriod = "";
   int endTime;
-  int endTimeBeforeFlipSession;
   Timer _timer;
   bool wait = false;
+  CountdownTimerController controller;
 
   @override
   void initState() {
@@ -54,13 +57,18 @@ class _ValidationSessionCountdownTextState
     if (widget.nextValidation != null &&
         widget.dnaCeremonyIntervalsResponse != null) {
       endTime = widget.nextValidation.millisecondsSinceEpoch;
-      endTimeBeforeFlipSession = widget.nextValidation.millisecondsSinceEpoch -
-          (widget.dnaCeremonyIntervalsResponse.result
-                  .flipLotteryDuration) *
-              1000;
+      controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
     }
 
     _timerUpdate();
+  }
+
+  void onEnd() {
+    wait = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      launchSession();
+      wait = false;
+    });
   }
 
   _timerUpdate() {
@@ -148,15 +156,7 @@ class _ValidationSessionCountdownTextState
                                 ),
                               ),
                               CountdownTimer(
-                                endTime: endTime,
-                                onEnd: () {
-                                  wait = true;
-                                  Future.delayed(const Duration(seconds: 5),
-                                      () {
-                                    launchSession();
-                                    wait = false;
-                                  });
-                                },
+                                controller: controller,
                                 widgetBuilder: (_, CurrentRemainingTime time) {
                                   if (time == null) {
                                     return Text("");
@@ -255,7 +255,9 @@ class _ValidationSessionCountdownTextState
                                 ),
                               ),
                               lineWidget(90),
-                              sendIdna ? Container() : gift(context, _dnaIdentityResponse.data)
+                              sendIdna
+                                  ? Container()
+                                  : gift(context, _dnaIdentityResponse.data)
                             ]))
                       ])));
                 }
@@ -283,7 +285,9 @@ class _ValidationSessionCountdownTextState
                                 ),
                               ),
                               lineWidget(90),
-                              sendIdna ? Container() : gift(context, _dnaIdentityResponse.data)
+                              sendIdna
+                                  ? Container()
+                                  : gift(context, _dnaIdentityResponse.data)
                             ]))
                       ])));
                 }
@@ -354,9 +358,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    dnaIdentityResponse.result
-                                        .address,
-                                    1);
+                                    dnaIdentityResponse.result.address, 1);
                               } catch (e) {
                                 logger.e(e.toString());
                               }
@@ -407,9 +409,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    dnaIdentityResponse.result
-                                        .address,
-                                    10);
+                                    dnaIdentityResponse.result.address, 10);
                               } catch (e) {
                                 logger.e(e.toString());
                               }
@@ -460,9 +460,7 @@ class _ValidationSessionCountdownTextState
                             onPressed: () {
                               try {
                                 httpService.sendTransaction(
-                                    dnaIdentityResponse.result
-                                        .address,
-                                    50);
+                                    dnaIdentityResponse.result.address, 50);
                               } catch (e) {
                                 logger.e(e.toString());
                               }
@@ -540,7 +538,7 @@ class _ValidationSessionCountdownTextState
             ),
           ),
           CountdownTimer(
-            endTime: endTime,
+            controller: controller,
             widgetBuilder: (_, CurrentRemainingTime time) {
               if (time == null) {
                 return Text("");

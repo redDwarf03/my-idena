@@ -13,6 +13,7 @@ import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/pages/myIdena_home.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+import 'package:my_idena/utils/util_crypto.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/utils/util_public_node.dart';
 
@@ -34,9 +35,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   int numPage;
   final _keyForm = GlobalKey<FormState>();
   bool _keyAppVisible;
+  bool _encryptedPkVisible;
+  bool _passwordPkVisible;
   bool _checkNodeConnection;
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
+  TextEditingController encryptedPkController = new TextEditingController();
+  TextEditingController passwordPkController = new TextEditingController();
   StreamController _nodeController;
   HttpService httpService = HttpService();
   var logger = Logger();
@@ -46,6 +51,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     pageController.dispose();
     apiUrlController.dispose();
     keyAppController.dispose();
+    encryptedPkController.dispose();
+    passwordPkController.dispose();
     _nodeController.close();
     _timerCheckNode.cancel();
 
@@ -56,6 +63,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   void initState() {
     super.initState();
     _keyAppVisible = false;
+    _encryptedPkVisible = false;
+    _passwordPkVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
     _timerCheckNode =
@@ -74,14 +83,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   }
 
   Future checkNode() async {
-    httpService
-        .checkConnection(apiUrlController.text, keyAppController.text)
-        .then((res) {
-      if (!_nodeController.isClosed && _timerCheckNode.isActive) {
-        _nodeController.add(res);
-        return res;
-      }
-    });
+    if (idenaAddress == "") {
+      _nodeController.add(false);
+      return false;
+    } else {
+      httpService
+          .checkConnection(apiUrlController.text, keyAppController.text)
+          .then((res) {
+        if (!_nodeController.isClosed && _timerCheckNode.isActive) {
+          _nodeController.add(res);
+          return res;
+        }
+      });
+    }
   }
 
   @override
@@ -98,6 +112,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 snapshot.data.apiUrl != null ? snapshot.data.apiUrl : "";
             keyAppController.text =
                 snapshot.data.keyApp != null ? snapshot.data.keyApp : "";
+            encryptedPkController.text = snapshot.data.encryptedPk != null
+                ? snapshot.data.encryptedPk
+                : "";
+            passwordPkController.text = snapshot.data.passwordPk != null
+                ? snapshot.data.passwordPk
+                : "";
             return Form(
               key: _keyForm,
               child: PageView(
@@ -289,7 +309,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   try {
                     IdenaSharedPreferences _idenaSharedPreferences =
                         IdenaSharedPreferences(
-                            apiUrlController.text, keyAppController.text);
+                            apiUrlController.text,
+                            keyAppController.text,
+                            encryptedPkController.text,
+                            passwordPkController.text);
                     SharedPreferencesHelper.setIdenaSharedPreferences(
                         _idenaSharedPreferences);
                     idenaSharedPreferences = _idenaSharedPreferences;
@@ -316,10 +339,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   contentPadding: EdgeInsets.only(top: 14.0),
                   prefixIcon: Icon(
                     FlevaIcons.link_2,
-                    color: Colors.white54,
+                       color: Colors.white54,
                   ),
                   hintText: AppLocalizations.of(context)
                       .translate("Enter your API url"),
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
+                  ),
                 ),
               ),
               checkNodeConnection(),
@@ -352,7 +380,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     try {
                       IdenaSharedPreferences _idenaSharedPreferences =
                           IdenaSharedPreferences(
-                              apiUrlController.text, keyAppController.text);
+                              apiUrlController.text,
+                              keyAppController.text,
+                              encryptedPkController.text,
+                              passwordPkController.text);
                       SharedPreferencesHelper.setIdenaSharedPreferences(
                           _idenaSharedPreferences);
                       idenaSharedPreferences = _idenaSharedPreferences;
@@ -364,6 +395,148 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       checkedValue = newValue;
                     });
                   },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: TextFormField(
+                  enableInteractiveSelection: getPublicNode() ? true : false,
+                  enabled: getPublicNode() ? true : false,
+                  controller: encryptedPkController,
+                  validator: (val) => val.isEmpty
+                      ? AppLocalizations.of(context)
+                          .translate("Enter your private key backup")
+                      : null,
+                  onChanged: (val) {
+                    try {
+                      IdenaSharedPreferences _idenaSharedPreferences =
+                          IdenaSharedPreferences(
+                              apiUrlController.text,
+                              keyAppController.text,
+                              encryptedPkController.text,
+                              passwordPkController.text);
+                      SharedPreferencesHelper.setIdenaSharedPreferences(
+                          _idenaSharedPreferences);
+                      idenaSharedPreferences = _idenaSharedPreferences;
+                      initIdenaAddress();
+                    } catch (e) {
+                      logger.e(e.toString());
+                    }
+                  },
+                  keyboardType: TextInputType.text,
+                  obscureText: !_encryptedPkVisible,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
+                  ),
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.grey[400], width: 1.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 14.0),
+                    prefixIcon: Icon(
+                      Icons.vpn_key,
+                      color: Colors.white54,
+                    ),
+                    hintText: AppLocalizations.of(context)
+                        .translate("Enter your private key backup"),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _encryptedPkVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _encryptedPkVisible = !_encryptedPkVisible;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: TextFormField(
+                  enableInteractiveSelection: getPublicNode() ? true : false,
+                  enabled: getPublicNode() ? true : false,
+                  controller: passwordPkController,
+                  validator: (val) => val.isEmpty
+                      ? AppLocalizations.of(context)
+                          .translate("Enter your password")
+                      : null,
+                  onChanged: (val) {
+                    try {
+                      IdenaSharedPreferences _idenaSharedPreferences =
+                          IdenaSharedPreferences(
+                              apiUrlController.text,
+                              keyAppController.text,
+                              encryptedPkController.text,
+                              passwordPkController.text);
+                      SharedPreferencesHelper.setIdenaSharedPreferences(
+                          _idenaSharedPreferences);
+                      idenaSharedPreferences = _idenaSharedPreferences;
+                      initIdenaAddress();
+                    } catch (e) {
+                      logger.e(e.toString());
+                    }
+                  },
+                  keyboardType: TextInputType.text,
+                  obscureText: !_passwordPkVisible,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: MyIdenaAppTheme.fontName,
+                    letterSpacing: -0.2,
+                  ),
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.grey[400], width: 1.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xFFF2F3F8), width: 1.0),
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 14.0),
+                    prefixIcon: Icon(
+                      Icons.vpn_key,
+                      color: Colors.white54,
+                    ),
+                    hintText: AppLocalizations.of(context)
+                        .translate("Enter your password"),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                      fontFamily: MyIdenaAppTheme.fontName,
+                      letterSpacing: -0.2,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordPkVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _passwordPkVisible = !_passwordPkVisible;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -430,7 +603,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     try {
                       IdenaSharedPreferences _idenaSharedPreferences =
                           IdenaSharedPreferences(
-                              apiUrlController.text, keyAppController.text);
+                              apiUrlController.text,
+                              keyAppController.text,
+                              encryptedPkController.text,
+                              passwordPkController.text);
                       SharedPreferencesHelper.setIdenaSharedPreferences(
                           _idenaSharedPreferences);
                       idenaSharedPreferences = _idenaSharedPreferences;
@@ -458,7 +634,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                     contentPadding: EdgeInsets.only(top: 14.0),
                     prefixIcon: Icon(
                       Icons.vpn_key,
-                      color: Colors.white54,
+                         color: Colors.white54,
                     ),
                     hintText: AppLocalizations.of(context)
                         .translate("Enter your key app"),
@@ -576,7 +752,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
-            if (_checkNodeConnection) {
+            if (_checkNodeConnection && idenaAddress != "") {
               SchedulerBinding.instance.addPostFrameCallback((_) {
                 initIdenaAddress();
                 Navigator.pushReplacement(
@@ -624,11 +800,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
             .then((value) => idenaAddress);
       } else {
-        // TODO: A changer
-        idenaAddress = "0xf429e36d68be10428d730784391589572ee0f72b";
+        await UtilCrypto()
+            .encryptedPrivateKeyToAddress(idenaSharedPreferences.encryptedPk,
+                idenaSharedPreferences.passwordPk)
+            .then((value) => idenaAddress = value);
       }
     }
 
-    logger.i("Idena address loaded: " + idenaAddress);
+    //logger.i("Idena address loaded: " + idenaAddress);
   }
 }

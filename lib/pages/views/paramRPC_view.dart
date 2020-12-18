@@ -10,6 +10,7 @@ import 'package:my_idena/main.dart';
 import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
+import 'package:my_idena/utils/util_crypto.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/utils/util_public_node.dart';
 
@@ -28,13 +29,16 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   HttpService httpService = HttpService();
   var logger = Logger();
   final _keyFormParamRPC = GlobalKey<FormState>();
-  String apiUrl;
-  String keyApp;
+
   bool _keyAppVisible;
+  bool _encryptedPkVisible;
+  bool _passwordPkVisible;
   bool _checkNodeConnection;
   StreamController _nodeController;
   TextEditingController apiUrlController = new TextEditingController();
   TextEditingController keyAppController = new TextEditingController();
+  TextEditingController encryptedPkController = new TextEditingController();
+  TextEditingController passwordPkController = new TextEditingController();
   Timer _timer;
   var checkedValue = getPublicNode();
 
@@ -42,20 +46,27 @@ class _ParamRPCViewState extends State<ParamRPCView> {
   void initState() {
     super.initState();
     _keyAppVisible = false;
+    _encryptedPkVisible = false;
+    _passwordPkVisible = false;
     _nodeController = StreamController<bool>.broadcast();
 
     _timer = Timer.periodic(Duration(milliseconds: 500), (_) => checkNode());
   }
 
   Future checkNode() async {
-    httpService
-        .checkConnection(apiUrlController.text, keyAppController.text)
-        .then((res) {
-      if (!_nodeController.isClosed && _timer.isActive) {
-        _nodeController.add(res);
-        return res;
-      }
-    });
+    if (idenaAddress == "") {
+      _nodeController.add(false);
+      return false;
+    } else {
+      httpService
+          .checkConnection(apiUrlController.text, keyAppController.text)
+          .then((res) {
+        if (!_nodeController.isClosed && _timer.isActive) {
+          _nodeController.add(res);
+          return res;
+        }
+      });
+    }
   }
 
   @override
@@ -64,6 +75,8 @@ class _ParamRPCViewState extends State<ParamRPCView> {
     _timer.cancel();
     apiUrlController.dispose();
     keyAppController.dispose();
+    encryptedPkController.dispose();
+    passwordPkController.dispose();
     super.dispose();
   }
 
@@ -80,6 +93,12 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                 snapshot.data.apiUrl != null ? snapshot.data.apiUrl : "";
             keyAppController.text =
                 snapshot.data.keyApp != null ? snapshot.data.keyApp : "";
+            encryptedPkController.text = snapshot.data.encryptedPk != null
+                ? snapshot.data.encryptedPk
+                : "";
+            passwordPkController.text = snapshot.data.passwordPk != null
+                ? snapshot.data.passwordPk
+                : "";
             return AnimatedBuilder(
                 animation: widget.animationController,
                 builder: (BuildContext context, Widget child) {
@@ -151,15 +170,19 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                 ),
                                                 value: checkedValue,
                                                 onChanged: (newValue) {
-                                                  if (newValue) {
-                                                    apiUrlController.value =
-                                                        TextEditingValue(
-                                                            text: PN_URL_SLASH);
-                                                  } else {
-                                                    apiUrlController.value =
-                                                        TextEditingValue(
-                                                            text: "http://");
-                                                  }
+                                                  setState(() {
+                                                    if (newValue) {
+                                                      apiUrlController.value =
+                                                          TextEditingValue(
+                                                              text:
+                                                                  PN_URL_SLASH);
+                                                    } else {
+                                                      apiUrlController.value =
+                                                          TextEditingValue(
+                                                              text: "http://");
+                                                    }
+                                                  });
+
                                                   try {
                                                     IdenaSharedPreferences
                                                         _idenaSharedPreferences =
@@ -167,6 +190,10 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                             apiUrlController
                                                                 .text,
                                                             keyAppController
+                                                                .text,
+                                                            encryptedPkController
+                                                                .text,
+                                                            passwordPkController
                                                                 .text);
                                                     SharedPreferencesHelper
                                                         .setIdenaSharedPreferences(
@@ -209,6 +236,10 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                             apiUrlController
                                                                 .text,
                                                             keyAppController
+                                                                .text,
+                                                            encryptedPkController
+                                                                .text,
+                                                            passwordPkController
                                                                 .text);
                                                     SharedPreferencesHelper
                                                         .setIdenaSharedPreferences(
@@ -275,6 +306,10 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                             apiUrlController
                                                                 .text,
                                                             keyAppController
+                                                                .text,
+                                                            encryptedPkController
+                                                                .text,
+                                                            passwordPkController
                                                                 .text);
                                                     SharedPreferencesHelper
                                                         .setIdenaSharedPreferences(
@@ -339,6 +374,198 @@ class _ParamRPCViewState extends State<ParamRPCView> {
                                                 ),
                                               ),
                                             ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 6),
+                                              child: TextFormField(
+                                                enableInteractiveSelection:
+                                                    getPublicNode()
+                                                        ? true
+                                                        : false,
+                                                enabled: getPublicNode()
+                                                    ? true
+                                                    : false,
+                                                controller:
+                                                    encryptedPkController,
+                                                validator: (val) => val.isEmpty
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate(
+                                                            "Enter your private key backup")
+                                                    : null,
+                                                onChanged: (val) {
+                                                  try {
+                                                    IdenaSharedPreferences
+                                                        _idenaSharedPreferences =
+                                                        IdenaSharedPreferences(
+                                                            apiUrlController
+                                                                .text,
+                                                            keyAppController
+                                                                .text,
+                                                            encryptedPkController
+                                                                .text,
+                                                            passwordPkController
+                                                                .text);
+                                                    SharedPreferencesHelper
+                                                        .setIdenaSharedPreferences(
+                                                            _idenaSharedPreferences);
+                                                    idenaSharedPreferences =
+                                                        _idenaSharedPreferences;
+                                                    initIdenaAddress();
+                                                  } catch (e) {
+                                                    logger.e(e.toString());
+                                                  }
+                                                },
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                obscureText:
+                                                    !_encryptedPkVisible,
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily:
+                                                      MyIdenaAppTheme.fontName,
+                                                ),
+                                                decoration: InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.grey[400],
+                                                        width: 1.0),
+                                                  ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xFFF2F3F8),
+                                                        width: 1.0),
+                                                  ),
+                                                  border: InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          top: 14.0),
+                                                  prefixIcon: Icon(
+                                                    Icons.vpn_key,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  hintText: AppLocalizations.of(
+                                                          context)
+                                                      .translate(
+                                                          "Enter your private key backup"),
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      _encryptedPkVisible
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _encryptedPkVisible =
+                                                            !_encryptedPkVisible;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 6),
+                                              child: TextFormField(
+                                                enableInteractiveSelection:
+                                                    getPublicNode()
+                                                        ? true
+                                                        : false,
+                                                enabled: getPublicNode()
+                                                    ? true
+                                                    : false,
+                                                controller:
+                                                    passwordPkController,
+                                                validator: (val) => val.isEmpty
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate(
+                                                            "Enter your password")
+                                                    : null,
+                                                onChanged: (val) {
+                                                  try {
+                                                    IdenaSharedPreferences
+                                                        _idenaSharedPreferences =
+                                                        IdenaSharedPreferences(
+                                                            apiUrlController
+                                                                .text,
+                                                            keyAppController
+                                                                .text,
+                                                            encryptedPkController
+                                                                .text,
+                                                            passwordPkController
+                                                                .text);
+                                                    SharedPreferencesHelper
+                                                        .setIdenaSharedPreferences(
+                                                            _idenaSharedPreferences);
+                                                    idenaSharedPreferences =
+                                                        _idenaSharedPreferences;
+                                                    initIdenaAddress();
+                                                  } catch (e) {
+                                                    logger.e(e.toString());
+                                                  }
+                                                },
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                obscureText:
+                                                    !_passwordPkVisible,
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontFamily:
+                                                      MyIdenaAppTheme.fontName,
+                                                ),
+                                                decoration: InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.grey[400],
+                                                        width: 1.0),
+                                                  ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xFFF2F3F8),
+                                                        width: 1.0),
+                                                  ),
+                                                  border: InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          top: 14.0),
+                                                  prefixIcon: Icon(
+                                                    Icons.vpn_key,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  hintText: AppLocalizations.of(
+                                                          context)
+                                                      .translate(
+                                                          "Enter your password"),
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      _passwordPkVisible
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Theme.of(context)
+                                                          .primaryColorDark,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _passwordPkVisible =
+                                                            !_passwordPkVisible;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                             SizedBox(
                                               height: 5,
                                             ),
@@ -367,7 +594,7 @@ class _ParamRPCViewState extends State<ParamRPCView> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _checkNodeConnection = snapshot.data;
-            if (_checkNodeConnection) {
+            if (_checkNodeConnection && idenaAddress != "") {
               return Text(
                 AppLocalizations.of(context).translate("Connection to node ok"),
                 style: TextStyle(
@@ -416,11 +643,13 @@ class _ParamRPCViewState extends State<ParamRPCView> {
             .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
             .then((value) => idenaAddress);
       } else {
-        // TODO: A changer
-        idenaAddress = "0xf429e36d68be10428d730784391589572ee0f72b";
+        await UtilCrypto()
+            .encryptedPrivateKeyToAddress(idenaSharedPreferences.encryptedPk,
+                idenaSharedPreferences.passwordPk)
+            .then((value) => idenaAddress = value);
       }
     }
 
-    logger.i("Idena address loaded: " + idenaAddress);
+    //logger.i("Idena address loaded: " + idenaAddress);
   }
 }

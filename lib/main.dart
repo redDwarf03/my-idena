@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cryptography/cryptography.dart';
+import 'package:my_idena/utils/util_crypto.dart';
+import 'package:web3dart/web3dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,19 +21,11 @@ import 'package:my_idena/pages/screens/deep_link_screen.dart';
 import 'package:my_idena/pages/screens/route_screen.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/utils/crypto/cryptor.dart';
-import 'package:my_idena/utils/crypto/hash.dart';
 import 'package:my_idena/utils/util_demo_mode.dart';
 import 'package:my_idena/utils/util_public_node.dart';
-import 'package:pointycastle/api.dart';
-import 'package:pointycastle/block/aes_fast.dart';
-import 'package:pointycastle/block/modes/gcm.dart';
 import 'package:provider/provider.dart';
-import 'package:quartet/quartet.dart';
 import 'package:sha3/sha3.dart';
-import 'package:steel_crypt/steel_crypt.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:secp256k1/secp256k1.dart' as secp256k1;
 
 DnaAll dnaAll = new DnaAll();
 var logger = Logger();
@@ -104,72 +99,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
             .then((value) => idenaAddress);
       } else {
-        // TODO: A changer
-
-       /* 
-
-        var k = SHA3(256, SHA3_PADDING, 256);
-        k.update(utf8.encode(mdp));
-        var mdpHash = k.digest();
-        print("** hash mdp " + HEX.encode(mdpHash));
-
-        // ok
-        var mdpArray = Uint8List.fromList(HEX.decode(HEX.encode(mdpHash)));
-        print("** key : " + HEX.encode(mdpArray));
-
-        // Data - ok
-        var dataArray = Uint8List.fromList(HEX.decode(encPrivateKey));
-        print("** dataArray : " + dataArray.toString());
-
-        var dataArray0to12 = dataArray.sublist(0, 12);
-        var dataArray0ToLength16 = dataArray.sublist(0, dataArray.length - 16);
-        var dataArray12ToLength16 =
-            dataArray.sublist(12, dataArray.length - 16);
-
-        // Algorithm : String algorithm = "aes-256-gcm";
-        // Key
-        // const key = Buffer.from(sha3_256.array(passphrase));
-        // Initialization vector - ok
-        // dataArray0to12
-        print("iv : " + HEX.encode(dataArray0to12));
-
-        String plainText = encPrivateKey;
-        String key = HEX.encode(mdpArray);
-        String iv = HEX.encode(dataArray0to12);
-        String decryptedString;
-
-        //final decrypted = Cryptor.decrypt(encPrivateKey, key);
-        //print("private decrypted : " + decrypted);
-        var keyGen = CryptKey();
-        var key32 = HEX.encode(mdpHash);
-        var iv16 = HEX.encode(dataArray0to12);
-        var aes = AesCrypt(key: key32, padding: PaddingAES.pkcs7);
-
-        print('AES Symmetric GCM:');
-        var crypted = aes.gcm.encrypt(inp: encPrivateKey, iv: iv16); //encrypt
-        print(crypted);
-        print(aes.gcm.decrypt(enc: encPrivateKey, iv: iv16)); //decrypt
-        print('');
-
-        String privateKeyDecrypted =
-            "c51310620099d4939031ff990702f8027e38eeebcb4961547a91b63272d13376";
-        // Privatkey decrypted
-        var pk = secp256k1.PrivateKey.fromHex(privateKeyDecrypted);
-
-        var pub = pk.publicKey;
-
-        String sPubKey = "0x" + slice(pub.toHex(), 2);
-        print("** sPubKey : " + sPubKey);
-        //print("** adresse : 0x" + HEX.encode(keccak256(sPubKey)).substring(24));
-        var m = SHA3(256, SHA3_PADDING, 256);
-        m.update(utf8.encode(sPubKey));
-        print("** adresse : 0x" + HEX.encode(k.digest()));
-*/
-        idenaAddress = "0xf429e36d68be10428d730784391589572ee0f72b";
+        await UtilCrypto().encryptedPrivateKeyToAddress(idenaSharedPreferences.encryptedPk, idenaSharedPreferences.passwordPk).then((value) => idenaAddress = value);
       }
     }
 
-    logger.i("Idena address loaded: " + idenaAddress);
+    //logger.i("Idena address loaded: " + idenaAddress);
   }
 
   initPlatformState() async {

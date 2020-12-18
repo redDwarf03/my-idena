@@ -235,7 +235,9 @@
   "Yes with pleasure": "Yes with pleasure",
   "Public node ?": "Public node ?",
   "Or, you can use the public node": "Or, you can use the public node",
-  "You are not connected.\nPlease, go to the settings tab": "You are not connected.\nPlease, go to the settings tab"
+  "You are not connected.\nPlease, go to the settings tab": "You are not connected.\nPlease, go to the settings tab",
+  "Enter your password": "Enter your password",
+  "Enter your private key backup": "Enter your private key backup"
 
     
 

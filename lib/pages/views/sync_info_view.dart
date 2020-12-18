@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_idena/backoffice/bean/bcn_syncing_response.dart';
 import 'package:my_idena/backoffice/factory/httpService.dart';
+import 'package:my_idena/main.dart';
 import 'package:my_idena/utils/app_localizations.dart';
 import 'package:my_idena/utils/util_public_node.dart';
 
@@ -52,20 +53,20 @@ class _SyncInfoViewState extends State<SyncInfoView> {
             label: Text(AppLocalizations.of(context).translate("Not connected"),
                 style: TextStyle(fontSize: 12, color: Colors.white)),
           )
-        : getPublicNode()
+        : idenaAddress == ""
             ? Chip(
-                backgroundColor: Colors.blue[800],
+                backgroundColor: Colors.red,
                 padding: EdgeInsets.all(0),
                 label: Text(
-                    AppLocalizations.of(context).translate("Public Node"),
+                    AppLocalizations.of(context).translate("Not connected"),
                     style: TextStyle(fontSize: 12, color: Colors.white)),
               )
-            : bcnSyncingResponse == null
+            : getPublicNode()
                 ? Chip(
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.blue[800],
                     padding: EdgeInsets.all(0),
                     label: Text(
-                        AppLocalizations.of(context).translate("Not connected"),
+                        AppLocalizations.of(context).translate("Public Node"),
                         style: TextStyle(fontSize: 12, color: Colors.white)),
                   )
                 : bcnSyncingResponse.result.syncing
