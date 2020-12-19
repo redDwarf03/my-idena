@@ -99,11 +99,16 @@ class HttpService {
     }
   }
 
-  Future<DnaGetBalanceResponse> getDnaGetBalance(
-      Uri url, String keyApp) async {
+  Future<DnaGetBalanceResponse> getDnaGetBalance(Uri url, String keyApp) async {
     DnaGetBalanceRequest dnaGetBalanceRequest;
     DnaGetBalanceResponse dnaGetBalanceResponse;
 
+    if (getDemoModeStatus()) {
+      dnaGetBalanceResponse = new DnaGetBalanceResponse();
+      dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
+      dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
+      dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
+    } else {
       mapParams = {
         'method': DnaGetBalanceRequest.METHOD_NAME,
         'params': [idenaAddress],
@@ -123,16 +128,40 @@ class HttpService {
       } catch (e) {
         logger.e(e.toString());
       }
-    
+    }
 
     return dnaGetBalanceResponse;
   }
 
-  Future<DnaIdentityResponse> getDnaIdentity(
-      Uri url, String keyApp) async {
+  Future<DnaIdentityResponse> getDnaIdentity(Uri url, String keyApp) async {
     DnaIdentityRequest dnaIdentityRequest;
     DnaIdentityResponse dnaIdentityResponse;
-  
+
+    if (getDemoModeStatus()) {
+      dnaIdentityResponse = new DnaIdentityResponse();
+      dnaIdentityResponse.result = DnaIdentityResponseResult();
+      dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
+      dnaIdentityResponse.result.age = DM_IDENTITY_AGE;
+      dnaIdentityResponse.result.state = DM_IDENTITY_STATE;
+      dnaIdentityResponse.result.online = DM_IDENTITY_ONLINE;
+      dnaIdentityResponse.result.flips = new List(DM_IDENTITY_MADE_FLIPS);
+      dnaIdentityResponse.result.availableFlips =
+          DM_IDENTITY_REQUIRED_FLIPS - DM_IDENTITY_MADE_FLIPS;
+      dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
+      dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
+      dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
+      dnaIdentityResponse.result.totalQualifiedFlips =
+          DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
+      dnaIdentityResponse.result.totalShortFlipPoints =
+          DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS;
+      List<int> _listWords1 = [DM_IDENTITY_KEYWORD_1, DM_IDENTITY_KEYWORD_2];
+      dnaIdentityResponse.result.flipKeyWordPairs = new List<FlipKeyWordPair>();
+      dnaIdentityResponse.result.flipKeyWordPairs
+          .add(new FlipKeyWordPair(id: 1, words: _listWords1, used: false));
+      List<int> _listWords2 = [DM_IDENTITY_KEYWORD_3, DM_IDENTITY_KEYWORD_4];
+      dnaIdentityResponse.result.flipKeyWordPairs
+          .add(new FlipKeyWordPair(id: 1, words: _listWords2, used: false));
+    } else {
       mapParams = {
         'method': DnaIdentityRequest.METHOD_NAME,
         'params': [idenaAddress],
@@ -151,7 +180,7 @@ class HttpService {
       } catch (e) {
         logger.e(e.toString());
       }
-    
+    }
 
     return dnaIdentityResponse;
   }
@@ -160,22 +189,31 @@ class HttpService {
     DnaGetEpochRequest dnaGetEpochRequest;
     DnaGetEpochResponse dnaGetEpochResponse;
 
-    mapParams = {
-      'method': DnaGetEpochRequest.METHOD_NAME,
-      'params': [],
-      'id': 101,
-      'key': keyApp
-    };
+    if (getDemoModeStatus()) {
+      dnaGetEpochResponse = new DnaGetEpochResponse();
+      dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
+      dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
+      dnaGetEpochResponse.result.epoch = DM_EPOCH_EPOCH;
+      dnaGetEpochResponse.result.nextValidation = DM_EPOCH_NEXT_VALIDATION;
+    } else {
+      mapParams = {
+        'method': DnaGetEpochRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': keyApp
+      };
 
-    try {
-      dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
-      body = json.encode(dnaGetEpochRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
+      try {
+        dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
+        body = json.encode(dnaGetEpochRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
+        }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
 
     return dnaGetEpochResponse;
@@ -186,24 +224,36 @@ class HttpService {
     DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
     DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
 
-    mapParams = {
-      'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
-      'params': [],
-      'id': 101,
-      'key': keyApp
-    };
+    if (getDemoModeStatus()) {
+      dnaCeremonyIntervalsResponse.result =
+          new DnaCeremonyIntervalsResponseResult();
+      dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+          DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+      dnaCeremonyIntervalsResponse.result.longSessionDuration =
+          DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+      dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+          DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+    } else {
+      mapParams = {
+        'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': keyApp
+      };
 
-    try {
-      dnaCeremonyIntervalsRequest =
-          DnaCeremonyIntervalsRequest.fromJson(mapParams);
-      body = json.encode(dnaCeremonyIntervalsRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaCeremonyIntervalsResponse =
-            dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
+      try {
+        dnaCeremonyIntervalsRequest =
+            DnaCeremonyIntervalsRequest.fromJson(mapParams);
+        body = json.encode(dnaCeremonyIntervalsRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaCeremonyIntervalsResponse =
+              dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
+        }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
 
     return dnaCeremonyIntervalsResponse;
@@ -214,23 +264,29 @@ class HttpService {
     DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
     DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
 
-    mapParams = {
-      'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
-      'params': [],
-      'id': 101,
-      'key': keyApp
-    };
+    if (getDemoModeStatus()) {
+      dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
+    } else {
+      mapParams = {
+        'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
+        'params': [],
+        'id': 101,
+        'key': keyApp
+      };
 
-    try {
-      dnaGetCoinbaseAddrRequest = DnaGetCoinbaseAddrRequest.fromJson(mapParams);
-      body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaGetCoinbaseAddrResponse =
-            dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
+      try {
+        dnaGetCoinbaseAddrRequest =
+            DnaGetCoinbaseAddrRequest.fromJson(mapParams);
+        body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaGetCoinbaseAddrResponse =
+              dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
+        }
+      } catch (e) {
+        logger.e(e.toString());
       }
-    } catch (e) {
-      logger.e(e.toString());
     }
 
     return dnaGetCoinbaseAddrResponse;
@@ -408,7 +464,6 @@ class HttpService {
 
     HttpClient httpClient = new HttpClient();
     try {
-    
       HttpClientRequest request =
           await httpClient.postUrl(Uri.parse(idenaSharedPreferences.apiUrl));
       request.headers.set('content-type', 'application/json');
@@ -556,8 +611,7 @@ class HttpService {
     BcnSyncingRequest bcnSyncingRequest;
     BcnSyncingResponse bcnSyncingResponse;
     try {
-      if (getDemoModeStatus() ||
-          getPublicNode()) {
+      if (getDemoModeStatus() || getPublicNode()) {
         bcnSyncingResponse = new BcnSyncingResponse();
         bcnSyncingResponse.result = new BcnSyncingResponseResult();
         bcnSyncingResponse.result.syncing = DM_SYNC_SYNCING;
