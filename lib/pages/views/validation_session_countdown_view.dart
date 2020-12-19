@@ -486,13 +486,13 @@ class _ValidationSessionCountdownTextState
     Uri url = Uri.parse(idenaSharedPreferences.apiUrl);
     String keyApp = idenaSharedPreferences.keyApp;
 
-    httpService.getDnaGetEpoch(url, keyApp).then((_dnaGetEpochResponse) {
+    await httpService.getDnaGetEpoch(url, keyApp).then((_dnaGetEpochResponse) {
       dnaAll.dnaGetEpochResponse = _dnaGetEpochResponse;
       dnaAll.dnaGetEpochResponse.result.nextValidation = DateTime.now();
-      httpService.getDnaCeremonyIntervals(url, keyApp).then(
-          (_dnaCeremonyIntervalsResponse) => dnaAll
-              .dnaCeremonyIntervalsResponse = _dnaCeremonyIntervalsResponse);
     });
+    await httpService.getDnaCeremonyIntervals(url, keyApp).then(
+        (_dnaCeremonyIntervalsResponse) => dnaAll.dnaCeremonyIntervalsResponse =
+            _dnaCeremonyIntervalsResponse);
 
     Navigator.pushReplacement(
         context,
