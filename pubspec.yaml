@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.62+4162
+version: 2.0.1+5001
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -30,29 +30,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
-  http: ^0.12.2
-
   provider: ^4.3.2+2
 
   json_rpc_2: ^2.2.2
 
-  web_socket_channel: ^1.1.0
-
   mime: ^0.9.7
-  
-  intl: ^0.16.1
- 
-  shared_preferences: ^0.5.12+4
 
   quiver: ^2.1.5
 
   characters: ^1.0.0
-  
-  flutter_launcher_icons: ^0.8.1
-
-  logger: ^0.9.4
-  
-  uni_links: ^0.4.0
   
   url_launcher: ^5.7.10
   
@@ -69,16 +55,12 @@ dependencies:
   charts_common: ^0.9.0
 
   carousel_slider: ^2.3.1
-  
-  badges: ^1.1.6
 
   flutter_countdown_timer: ^1.6.0
 
   multi_image_picker: ^4.7.14
   
   quartet: ^0.1.1
-
-  hex: ^0.1.2
 
   sha3: ^0.1.2
 
@@ -88,10 +70,131 @@ dependencies:
 
   web3dart: ^1.2.3 
 
+  # Securley store data in a keystore
+  flutter_secure_storage: ^3.3.3
+
+  # Shared prefs
+  shared_preferences: ^0.5.12+4
+
+  # Flare for animations
+  flare_flutter: ^2.0.6
+
+  asn1lib: ^0.8.1
+  
+  # Websockets
+  web_socket_channel: ^1.1.0
+
+  # Platform-specific build info
+  package_info: ^0.4.3+2
+
+  # Device-specific info
+  device_info: ^1.0.0
+
+  # JSON Serialization
+  json_annotation: ^3.0.1
+
+  # Localization
+  intl: ^0.16.1
+
+  # BigDecimal alternative
+  decimal: ^0.3.5
+
+  # Logger
+  logger: ^0.9.4
+
+  # Native webview plugin
+  flutter_webview_plugin: ^0.3.11
+
+  # SQLite
+  sqflite: ^1.3.2+1
+
+  # Android/iOS path provider
+  path_provider: ^1.6.24
+  
+  # TouchID/FaceID
+  local_auth: ^0.6.3+4
+
+  # Eventbus
+  event_taxi: ^0.1.5
+
+  # SVG
+  flutter_svg: ^0.19.1
+  
+  badges: ^1.1.6
+  
+  ffi: ^0.1.3
+
+  flutter_launcher_icons: ^0.8.1
+
+  # QR Codes
+  qr_flutter: ^2.0.1 # Generator
+  barcode_scan:
+    git:
+      url: https://github.com/redDwarf03/flutter_barcode_reader.git
+      ref: master
+  
+  # Deep link support
+  uni_links:
+    git:
+      url: https://github.com/CathalT/uni_links.git
+      ref: nfc_android
+
+  # HTTP client
+  http: ^0.12.2
+
+  # Easy hexadecimal encoding and decoding
+  hex: ^0.1.2
+  
+  # Vibrate
+  vibrate:
+    git:
+      url: https://github.com/bbedward/flutter_vibrate.git
+      ref: master
+
+  # Toast
+  oktoast: ^2.3.2
+
+  # Slidable list actions
+  flutter_slidable: ^0.5.7
+
+  # Lock helper
+  synchronized: ^2.2.0+2
+
+  # Service provider
+  get_it: ^5.0.1
+  
+  convert: ^2.1.1
+
+  # Root/Jailbreak detection
+  root_checker:
+    git:
+      url: https://github.com/bbedward/root_checker.git
+      ref: master
+
+  # Validation utilities
+  validators: ^2.0.0+1
+
+  # Auto resize text widget
+  auto_size_text: ^2.1.0
+
+  # Avoid keyboard from overlapping text fields
+  keyboard_avoider: ^0.1.2
+
+  tweetnacl: ^0.3.2
+
+  hash: ^1.0.3
+  
+  circular_countdown_timer: ^0.0.8
+
+  fluttericon: ^1.0.7
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  build_runner: ^1.7.0
+  json_serializable: ^3.2.5
+  intl_translation: ^0.17.9
+  
 flutter_icons:
   image_path: "assets/images/icon.png" 
   android: true
@@ -102,60 +205,63 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Bold.ttf
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Medium.ttf
+          weight: 400
+    - family: NunitoSans
+      fonts:
+        - asset: fonts/NunitoSans-Regular.ttf
+          weight: 600
+        - asset: fonts/NunitoSans-ExtraLight.ttf
+          weight: 100
+        - asset: fonts/NunitoSans-Light.ttf
+          weight: 200
+        - asset: fonts/NunitoSans-SemiBold.ttf
+          weight: 700
+        - asset: fonts/NunitoSans-Bold.ttf
+          weight: 800
+        - asset: fonts/NunitoSans-ExtraBold.ttf
+          weight: 900
+    - family: OverpassMono
+      fonts:
+        - asset: fonts/OverpassMono-Regular.ttf
+          weight: 600
+        - asset: fonts/OverpassMono-Light.ttf
+          weight: 100
+    - family: AppIcons
+      fonts:
+        - asset: fonts/AppIcons.ttf
+          weight: 500
+    - family: Comfortaa
+      fonts:
+        - asset: fonts/Comfortaa-Bold.ttf
+          weight: 700
+        - asset: fonts/Comfortaa-Regular.ttf
+          weight: 400
+        - asset: fonts/Comfortaa-Light.ttf
+          weight: 300
+  assets: 
+    - assets/QR.svg
+    - assets/icon.png
+    - assets/send_animation.flr
+    - assets/searchseedqr_animation_magnifyingglassonly.flr
+    - assets/searchseedqr_animation_glassonly.flr
+    - assets/searchseedqr_animation_qronly.flr
+    - assets/searchseedmanual_animation_magnifyingglassonly.flr
+    - assets/searchseedmanual_animation_glassonly.flr
+    - assets/searchseedmanual_animation_seedonly.flr
+    - assets/sharecard_logo.svg
+    - assets/pulltosend_animation.flr
+    - assets/sheethandle_animation.flr
+    - assets/images/      
+    - lib/util/words.json
+    - test/examples/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/
-    - assets/images/      
-    - i18n/fr.json
-    - i18n/en.json 
-    - i18n/zh_Hans.json
-    - i18n/zh_Hant.json
-    - i18n/ru.json
-    - i18n/hr.json
-    - i18n/id.json
-    - i18n/ja.json
-    - i18n/es.json
-    - i18n/sr_Latn.json
-    - i18n/sr_Cyrl.json
-    - lib/utils/words.json
-    - test/examples/
-    - pubspec.yaml
-    
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Bold.ttf
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Medium.ttf
-          weight: 400
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

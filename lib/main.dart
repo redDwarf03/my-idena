@@ -1,315 +1,452 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:cryptography/cryptography.dart';
-import 'package:my_idena/utils/util_crypto.dart';
-import 'package:web3dart/web3dart.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hex/hex.dart';
-import 'package:my_idena/backoffice/bean/dna_all.dart';
-import 'package:my_idena/backoffice/factory/connectivity_service.dart';
-import 'package:my_idena/backoffice/factory/httpService.dart';
-import 'package:my_idena/backoffice/factory/sharedPreferencesHelper.dart';
-import 'package:my_idena/beans/deepLinkParam.dart';
-import 'package:my_idena/beans/dictWords.dart';
-import 'package:my_idena/enums/connection_status.dart';
-import 'package:my_idena/myIdena_app/myIdena_app_theme.dart';
-import 'package:my_idena/pages/screens/deep_link_screen.dart';
-import 'package:my_idena/pages/screens/route_screen.dart';
-import 'package:my_idena/utils/app_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/utils/util_demo_mode.dart';
-import 'package:my_idena/utils/util_public_node.dart';
-import 'package:provider/provider.dart';
-import 'package:sha3/sha3.dart';
-import 'package:uni_links/uni_links.dart';
-
-DnaAll dnaAll = new DnaAll();
-var logger = Logger();
-DeepLinkParam deepLinkParam;
-HttpService httpService = HttpService();
-List wordsMap;
-IdenaSharedPreferences idenaSharedPreferences;
-String idenaAddress;
-DictWords dictWords;
+import 'package:my_idena/model/available_language.dart';
+import 'package:my_idena/network/model/dictWords.dart';
+import 'package:my_idena/ui/before_scan_screen.dart';
+import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
+import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
+import 'package:my_idena/ui/createFlips/creation_flips_step_3.dart';
+import 'package:my_idena/ui/createFlips/creation_flips_step_4.dart';
+import 'package:my_idena/ui/settings/configure_access_node.dart';
+import 'package:my_idena/ui/password_lock_screen.dart';
+import 'package:my_idena/ui/validation_session/validation_session_step_1.dart';
+import 'package:my_idena/ui/validation_session/validation_session_step_2.dart';
+import 'package:my_idena/ui/validation_session/validation_session_step_3.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
+import 'package:my_idena/util/caseconverter.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:my_idena/styles.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/ui/home_page.dart';
+import 'package:my_idena/ui/lock_screen.dart';
+import 'package:my_idena/ui/intro/intro_welcome.dart';
+import 'package:my_idena/ui/intro/intro_backup_confirm.dart';
+import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:root_checker/root_checker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]).then((_) => runApp(MyApp()));
+  // Setup Service Provide
+  setupServiceLocator();
+  // Setup logger, only show warning and higher in release mode.
+  if (kReleaseMode) {
+    Logger.level = Level.warning;
+  } else {
+    Logger.level = Level.debug;
+  }
+  // Run app
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new StateContainer(child: new App()));
+  });
 }
 
-class MyApp extends StatefulWidget {
+class App extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _AppState createState() => new _AppState();
 }
 
-enum UniLinksType { string, uri }
-
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  StreamSubscription _sub;
-  UniLinksType _type = UniLinksType.string;
-  String _latestLink = 'Unknown';
-  Uri _latestUri;
-
+class _AppState extends State<App> {
   @override
-  initState() {
+  void initState() {
+    setListWords();
     super.initState();
-    initPlatformState();
-    initIdenaSharedPreferences();
-    initWords();
+  }
+
+  void setListWords() async {
+    var dictWords = await DictWords().getDictWords();
+    setState(() {
+      StateContainer.of(context).dictWords = dictWords;
+      print("Nb words loaded: " +
+          StateContainer.of(context).dictWords.words.length.toString());
+    });
+  }
+
+  // This widget is the root of the application.
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        StateContainer.of(context).curTheme.statusBar);
+    return OKToast(
+      textStyle: AppStyles.textStyleSnackbar(context),
+      backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'my Idena',
+        theme: ThemeData(
+          dialogBackgroundColor:
+              StateContainer.of(context).curTheme.backgroundDark,
+          primaryColor: StateContainer.of(context).curTheme.primary,
+          accentColor: StateContainer.of(context).curTheme.primary10,
+          backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
+          fontFamily: 'Roboto',
+          brightness: Brightness.dark,
+        ),
+        localizationsDelegates: [
+          AppLocalizationsDelegate(StateContainer.of(context).curLanguage),
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        locale: StateContainer.of(context).curLanguage == null ||
+                StateContainer.of(context).curLanguage.language ==
+                    AvailableLanguage.DEFAULT
+            ? null
+            : StateContainer.of(context).curLanguage.getLocale(),
+        supportedLocales: [
+          const Locale('en', 'US'), // English
+          // Currency-default requires country included
+          const Locale("es", "AR"),
+          const Locale("en", "AU"),
+          const Locale("pt", "BR"),
+          const Locale("en", "CA"),
+          const Locale("de", "CH"),
+          const Locale("es", "CL"),
+          const Locale("zh", "CN"),
+          const Locale("cs", "CZ"),
+          const Locale("da", "DK"),
+          const Locale("fr", "FR"),
+          const Locale("en", "GB"),
+          const Locale("zh", "HK"),
+          const Locale("hu", "HU"),
+          const Locale("id", "ID"),
+          const Locale("he", "IL"),
+          const Locale("hi", "IN"),
+          const Locale("ja", "JP"),
+          const Locale("ko", "KR"),
+          const Locale("es", "MX"),
+          const Locale("ta", "MY"),
+          const Locale("en", "NZ"),
+          const Locale("tl", "PH"),
+          const Locale("ur", "PK"),
+          const Locale("pl", "PL"),
+          const Locale("ru", "RU"),
+          const Locale("sv", "SE"),
+          const Locale("zh", "SG"),
+          const Locale("th", "TH"),
+          const Locale("tr", "TR"),
+          const Locale("en", "TW"),
+          const Locale("es", "VE"),
+          const Locale("en", "ZA"),
+          const Locale("en", "US"),
+          const Locale("es", "AR"),
+          const Locale("de", "AT"),
+          const Locale("fr", "BE"),
+          const Locale("de", "BE"),
+          const Locale("nl", "BE"),
+          const Locale("tr", "CY"),
+          const Locale("et", "EE"),
+          const Locale("fi", "FI"),
+          const Locale("fr", "FR"),
+          const Locale("el", "GR"),
+          const Locale("es", "AR"),
+          const Locale("en", "IE"),
+          const Locale("it", "IT"),
+          const Locale("es", "AR"),
+          const Locale("lv", "LV"),
+          const Locale("lt", "LT"),
+          const Locale("fr", "LU"),
+          const Locale("en", "MT"),
+          const Locale("nl", "NL"),
+          const Locale("pt", "PT"),
+          const Locale("sk", "SK"),
+          const Locale("sl", "SI"),
+          const Locale("es", "ES"),
+          const Locale("ar", "AE"), // UAE
+          const Locale("ar", "SA"), // Saudi Arabia
+          const Locale("ar", "KW"), // Kuwait
+        ],
+        initialRoute: '/',
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case '/':
+              return NoTransitionRoute(
+                builder: (_) => Splash(),
+                settings: settings,
+              );
+            case '/home':
+              return NoTransitionRoute(
+                builder: (_) =>
+                    AppHomePage(priceConversion: settings.arguments),
+                settings: settings,
+              );
+            case '/home_transition':
+              return NoPopTransitionRoute(
+                builder: (_) =>
+                    AppHomePage(priceConversion: settings.arguments),
+                settings: settings,
+              );
+            case '/intro_welcome':
+              return NoTransitionRoute(
+                builder: (_) => IntroWelcomePage(),
+                settings: settings,
+              );
+            case '/configure_access_node':
+              return MaterialPageRoute(
+                builder: (_) => ConfigureAccessNodePage(),
+                settings: settings,
+              );
+            case '/intro_backup_confirm':
+              return MaterialPageRoute(
+                builder: (_) => IntroBackupConfirm(),
+                settings: settings,
+              );
+            case '/lock_screen':
+              return NoTransitionRoute(
+                builder: (_) => AppLockScreen(),
+                settings: settings,
+              );
+            case '/lock_screen_transition':
+              return MaterialPageRoute(
+                builder: (_) => AppLockScreen(),
+                settings: settings,
+              );
+            case '/password_lock_screen':
+              return NoTransitionRoute(
+                builder: (_) => AppPasswordLockScreen(),
+                settings: settings,
+              );
+            case '/before_scan_screen':
+              return NoTransitionRoute(
+                builder: (_) => BeforeScanScreen(),
+                settings: settings,
+              );
+            case '/validation_session_step_1':
+              return NoTransitionRoute(
+                builder: (_) => ValidationSessionStep1Page(
+                    simulationMode: settings.arguments),
+                settings: settings,
+              );
+            case '/validation_session_step_2':
+              return NoTransitionRoute(
+                builder: (_) => ValidationSessionStep2Page(
+                    simulationMode: settings.arguments),
+                settings: settings,
+              );
+            case '/validation_session_step_3':
+              var map = Map<String, dynamic>.from(settings.arguments);
+              return NoTransitionRoute(
+                builder: (_) => ValidationSessionStep3Page(
+                  simulationMode: map['simulationMode'],
+                  paramValidationSessionInfo: map['validationSessionInfo'],
+                ),
+                settings: settings,
+              );
+            case '/creation_flips_step_1':
+              return NoTransitionRoute(
+                builder: (_) => CreationFlipsStep1Page(
+                    flipKeyWordPairs: settings.arguments),
+                settings: settings,
+              );
+            case '/creation_flips_step_2':
+              var map = Map<String, dynamic>.from(settings.arguments);
+              return NoTransitionRoute(
+                builder: (_) => CreationFlipsStep2Page(
+                  word1: map['word1'],
+                  word2: map['word2'],
+                ),
+                settings: settings,
+              );
+            case '/creation_flips_step_3':
+              var map = Map<String, dynamic>.from(settings.arguments);
+              return NoTransitionRoute(
+                builder: (_) => CreationFlipsStep3Page(
+                  imgToDisplay_1: map['imgToDisplay_1'],
+                  imgToDisplay_2: map['imgToDisplay_2'],
+                  imgToDisplay_3: map['imgToDisplay_3'],
+                  imgToDisplay_4: map['imgToDisplay_4'],
+                ),
+                settings: settings,
+              );
+            case '/creation_flips_step_4':
+              var map = Map<String, dynamic>.from(settings.arguments);
+              return NoTransitionRoute(
+                builder: (_) => CreationFlipsStep4Page(
+                  imgToDisplay_1: map['imgToDisplay_1'],
+                  imgToDisplay_2: map['imgToDisplay_2'],
+                  imgToDisplay_3: map['imgToDisplay_3'],
+                  imgToDisplay_4: map['imgToDisplay_4'],
+                  imgToDisplayMixed_1: map['imgToDisplayMixed_1'],
+                  imgToDisplayMixed_2: map['imgToDisplayMixed_2'],
+                  imgToDisplayMixed_3: map['imgToDisplayMixed_3'],
+                  imgToDisplayMixed_4: map['imgToDisplayMixed_4'],
+                ),
+                settings: settings,
+              );
+            default:
+              return null;
+          }
+        },
+      ),
+    );
+  }
+}
+
+/// Splash
+/// Default page route that determines if user is logged in and routes them appropriately.
+class Splash extends StatefulWidget {
+  @override
+  SplashState createState() => new SplashState();
+}
+
+class SplashState extends State<Splash> with WidgetsBindingObserver {
+  bool _hasCheckedLoggedIn;
+  bool _retried;
+
+  Future checkLoggedIn() async {
+    // Check if device is rooted or jailbroken, show user a warning informing them of the risks if so
+    if (!(await sl.get<SharedPrefsUtil>().getHasSeenRootWarning()) &&
+        (await RootChecker.isDeviceRooted)) {
+      AppDialogs.showConfirmDialog(
+          context,
+          CaseChange.toUpperCase(AppLocalization.of(context).warning, context),
+          AppLocalization.of(context).rootWarning,
+          AppLocalization.of(context).iUnderstandTheRisks.toUpperCase(),
+          () async {
+            await sl.get<SharedPrefsUtil>().setHasSeenRootWarning();
+            checkLoggedIn();
+          },
+          cancelText: AppLocalization.of(context).exit.toUpperCase(),
+          cancelAction: () {
+            if (Platform.isIOS) {
+              exit(0);
+            } else {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            }
+          });
+      return;
+    }
+    if (!_hasCheckedLoggedIn) {
+      _hasCheckedLoggedIn = true;
+    } else {
+      return;
+    }
+    try {
+      // iOS key store is persistent, so if this is first launch then we will clear the keystore
+      bool firstLaunch = await sl.get<SharedPrefsUtil>().getFirstLaunch();
+      if (firstLaunch) {
+        await sl.get<Vault>().deleteAll();
+      }
+      await sl.get<SharedPrefsUtil>().setFirstLaunch();
+      // See if logged in already
+      bool isLoggedIn = false;
+      bool isEncrypted = false;
+      var pin = await sl.get<Vault>().getPin();
+      if (pin != null) {
+        isLoggedIn = true;
+      }
+
+      if (isLoggedIn) {
+        if (isEncrypted) {
+          Navigator.of(context).pushReplacementNamed('/password_lock_screen');
+        } else if (await sl.get<SharedPrefsUtil>().getLock() ||
+            await sl.get<SharedPrefsUtil>().shouldLock()) {
+          Navigator.of(context).pushReplacementNamed('/lock_screen');
+        } else {
+          await AppUtil().loginAccount(context);
+          PriceConversion conversion =
+              await sl.get<SharedPrefsUtil>().getPriceConversion();
+          Navigator.of(context)
+              .pushReplacementNamed('/home', arguments: conversion);
+        }
+      } else {
+        Navigator.of(context).pushReplacementNamed('/intro_welcome');
+      }
+    } catch (e) {
+      /// Fallback secure storage
+      /// A very small percentage of users are encountering issues writing to the
+      /// Android keyStore using the flutter_secure_storage plugin.
+      ///
+      /// Instead of telling them they are out of luck, this is an automatic "fallback"
+      /// It will generate a 64-byte secret using the native android "bottlerocketstudios" Vault
+      /// This secret is used to encrypt sensitive data and save it in SharedPreferences
+      if (Platform.isAndroid && e.toString().contains("flutter_secure")) {
+        if (!(await sl.get<SharedPrefsUtil>().useLegacyStorage())) {
+          await sl.get<SharedPrefsUtil>().setUseLegacyStorage();
+          checkLoggedIn();
+        }
+      } else {
+        await sl.get<Vault>().deleteAll();
+        await sl.get<SharedPrefsUtil>().deleteAll();
+        if (!_retried) {
+          _retried = true;
+          _hasCheckedLoggedIn = false;
+          checkLoggedIn();
+        }
+      }
+    }
   }
 
   @override
-  dispose() {
-    if (_sub != null) _sub.cancel();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _hasCheckedLoggedIn = false;
+    _retried = false;
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback((_) => checkLoggedIn());
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  initWords() async {
-    Map<String, dynamic> dictWordsDdata;
-    dictWords = await DictWords().getDictWords();
-    dictWordsDdata = dictWords.toJson();
-    wordsMap = dictWordsDdata["words"];
-    logger.i("Nb words loaded: " + wordsMap.length.toString());
-  }
-
-  initIdenaSharedPreferences() async {
-    await SharedPreferencesHelper.getIdenaSharedPreferences().then((value) {
-      idenaSharedPreferences = value;
-      initIdenaAddress();
-    });
-    logger
-        .i("Idena Shared Preferences loaded: " + idenaSharedPreferences.apiUrl);
-  }
-
-  initIdenaAddress() async {
-    if (getDemoModeStatus()) {
-      idenaAddress = DM_IDENTITY_ADDRESS;
-    } else {
-      if (getPublicNode() == false) {
-        idenaAddress = "";
-        Uri url = Uri.parse(idenaSharedPreferences.apiUrl);
-        await httpService
-            .getDnaGetCoinbaseAddr(url, idenaSharedPreferences.keyApp)
-            .then((value) => idenaAddress);
-      } else {
-        await UtilCrypto().encryptedPrivateKeyToAddress(idenaSharedPreferences.encryptedPk, idenaSharedPreferences.passwordPk).then((value) => idenaAddress = value);
-      }
-    }
-
-    //logger.i("Idena address loaded: " + idenaAddress);
-  }
-
-  initPlatformState() async {
-    if (_type == UniLinksType.string) {
-      await initPlatformStateForStringUniLinks();
-    } else {
-      await initPlatformStateForUriUniLinks();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Account for user changing locale when leaving the app
+    switch (state) {
+      case AppLifecycleState.paused:
+        super.didChangeAppLifecycleState(state);
+        break;
+      case AppLifecycleState.resumed:
+        setLanguage();
+        super.didChangeAppLifecycleState(state);
+        break;
+      default:
+        super.didChangeAppLifecycleState(state);
+        break;
     }
   }
 
-  initPlatformStateForStringUniLinks() async {
-    // Attach a listener to the links stream
-    _sub = getLinksStream().listen((String link) {
-      if (!mounted) return;
-      setState(() {
-        _latestLink = link ?? 'Unknown';
-        _latestUri = null;
-        try {
-          if (link != null) _latestUri = Uri.parse(link);
-        } on FormatException {}
-      });
-    }, onError: (err) {
-      if (!mounted) return;
-      setState(() {
-        _latestLink = 'Failed to get latest link: $err.';
-        _latestUri = null;
-      });
-    });
-
-    // Attach a second listener to the stream
-    getLinksStream().listen((String link) {
-      print('got link: $link');
-    }, onError: (err) {
-      print('got err: $err');
-    });
-
-    // Get the latest link
-    String initialLink;
-    Uri initialUri;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      initialLink = await getInitialLink();
-      print('initial link: $initialLink');
-      if (initialLink != null) initialUri = Uri.parse(initialLink);
-    } on PlatformException {
-      initialLink = 'Failed to get initial link.';
-      initialUri = null;
-    } on FormatException {
-      initialLink = 'Failed to parse the initial link as Uri.';
-      initialUri = null;
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
+  void setLanguage() {
     setState(() {
-      _latestLink = initialLink;
-      _latestUri = initialUri;
+      StateContainer.of(context).deviceLocale = Localizations.localeOf(context);
     });
-  }
-
-  /// An implementation using the [Uri] convenience helpers
-  initPlatformStateForUriUniLinks() async {
-    // Attach a listener to the Uri links stream
-    _sub = getUriLinksStream().listen((Uri uri) {
-      if (!mounted) return;
+    sl.get<SharedPrefsUtil>().getLanguage().then((setting) {
       setState(() {
-        _latestUri = uri;
-        _latestLink = uri?.toString() ?? 'Unknown';
+        StateContainer.of(context).updateLanguage(setting);
       });
-    }, onError: (err) {
-      if (!mounted) return;
-      setState(() {
-        _latestUri = null;
-        _latestLink = 'Failed to get latest link: $err.';
-      });
-    });
-
-    // Attach a second listener to the stream
-    getUriLinksStream().listen((Uri uri) {
-      print('got uri: ${uri?.path} ${uri?.queryParametersAll}');
-    }, onError: (err) {
-      print('got err: $err');
-    });
-
-    // Get the latest Uri
-    Uri initialUri;
-    String initialLink;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      initialUri = await getInitialUri();
-      print('initial uri: ${initialUri?.path}'
-          ' ${initialUri?.queryParametersAll}');
-      initialLink = initialUri?.toString();
-    } on PlatformException {
-      initialUri = null;
-      initialLink = 'Failed to get initial uri.';
-    } on FormatException {
-      initialUri = null;
-      initialLink = 'Bad parse the initial link as Uri.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _latestUri = initialUri;
-      _latestLink = initialLink;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = _latestUri?.queryParametersAll?.entries?.toList();
-    if (list != null) {
-      deepLinkParam = new DeepLinkParam();
-      for (var i = 0; i < list.length; i++) {
-        switch (list[i].key) {
-          case "nonce_endpoint":
-            {
-              deepLinkParam.nonceEndpoint = list[i].value[0];
-            }
-            break;
-          case "token":
-            {
-              deepLinkParam.token = list[i].value[0];
-            }
-            break;
-          case "callback_url":
-            {
-              deepLinkParam.callbackUrl = list[i].value[0];
-            }
-            break;
-          case "authentication_endpoint":
-            {
-              deepLinkParam.authenticationEndpoint = list[i].value[0];
-            }
-            break;
-        }
-      }
-      logger.i("nonce_endpoint: " + deepLinkParam.nonceEndpoint);
-      logger.i("token: " + deepLinkParam.token);
-      logger.i("callback_url: " + deepLinkParam.callbackUrl);
-      logger.i(
-          "authentication_endpoint: " + deepLinkParam.authenticationEndpoint);
-    }
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness:
-          Platform.isAndroid ? Brightness.dark : Brightness.light,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarDividerColor: Colors.grey,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
-    return StreamProvider<ConnectivityStatus>(
-      create: (contextStream) =>
-          ConnectivityService().connectionStatusController.stream,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        supportedLocales: [
-          const Locale('en', ''),
-          const Locale('fr', ''),
-          const Locale('hr', ''),
-          const Locale('id', ''),
-          const Locale('ru', ''),
-          const Locale('ja', ''),
-          const Locale('es', ''),
-          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
-          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
-          const Locale.fromSubtags(languageCode: 'sr', scriptCode: 'Latn'),
-          const Locale.fromSubtags(languageCode: 'sr', scriptCode: 'Cyrl'),
-        ],
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-          textTheme: MyIdenaAppTheme.textTheme,
-          platform: TargetPlatform.iOS,
-        ),
-        home: list != null && list.length > 0
-            ? new DeepLinkScreen(
-                deepLinkParam: deepLinkParam,
-              )
-            : new RouteScreen(),
-      ),
+    // This seems to be the earliest place we can retrieve the device Locale
+    setLanguage();
+    sl
+        .get<SharedPrefsUtil>()
+        .getCurrency(StateContainer.of(context).deviceLocale)
+        .then((currency) {
+      StateContainer.of(context).curCurrency = currency;
+    });
+    return new Scaffold(
+      backgroundColor: StateContainer.of(context).curTheme.background,
     );
-  }
-
-  Uint8List createUint8ListFromHexString(String hex) {
-    hex = hex.replaceAll(RegExp(r'\s'), ''); // remove all whitespace, if any
-
-    var result = Uint8List(hex.length ~/ 2);
-    for (var i = 0; i < hex.length; i += 2) {
-      var num = hex.substring(i, i + 2);
-      var byte = int.parse(num, radix: 16);
-      result[i ~/ 2] = byte;
-    }
-    return result;
   }
 }

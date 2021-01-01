@@ -1,0 +1,1779 @@
+{
+  "@@last_modified": "2021-01-01T17:32:38.472452",
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "dialog_cancel",
+    "type": "text",
+    "placeholders": {}
+  },
+  "close": "Close",
+  "@close": {
+    "description": "dialog_close",
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "dialog_confirm",
+    "type": "text",
+    "placeholders": {}
+  },
+  "no": "No",
+  "@no": {
+    "description": "intro_new_wallet_backup_no",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "intro_new_wallet_backup_yes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "onStr": "On",
+  "@onStr": {
+    "description": "generic_on",
+    "type": "text",
+    "placeholders": {}
+  },
+  "off": "Off",
+  "@off": {
+    "description": "generic_off",
+    "type": "text",
+    "placeholders": {}
+  },
+  "send": "Send",
+  "@send": {
+    "description": "home_send_cta",
+    "type": "text",
+    "placeholders": {}
+  },
+  "receive": "Receive",
+  "@receive": {
+    "description": "home_receive_cta",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sent": "Sent",
+  "@sent": {
+    "description": "history_sent",
+    "type": "text",
+    "placeholders": {}
+  },
+  "received": "Received",
+  "@received": {
+    "description": "history_received",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactions": "Transactions",
+  "@transactions": {
+    "description": "transaction_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addressCopied": "Address Copied",
+  "@addressCopied": {
+    "description": "receive_copied",
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyAddress": "Copy Address",
+  "@copyAddress": {
+    "description": "receive_copy_cta",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addressShare": "Share Address",
+  "@addressShare": {
+    "description": "receive_share_cta",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addressHint": "Enter Address",
+  "@addressHint": {
+    "description": "send_address_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seed": "Seed",
+  "@seed": {
+    "description": "intro_new_wallet_seed_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seedInvalid": "Seed is Invalid",
+  "@seedInvalid": {
+    "description": "intro_seed_invalid",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seedCopied": "Seed Copied to Clipboard\nIt is pasteable for 2 minutes.",
+  "@seedCopied": {
+    "description": "intro_new_wallet_seed_copied",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scanQrCode": "Scan QR Code",
+  "@scanQrCode": {
+    "description": "send_scan_qr",
+    "type": "text",
+    "placeholders": {}
+  },
+  "qrInvalidSeed": "QR code does not contain a valid seed or private key",
+  "@qrInvalidSeed": {
+    "description": "qr_invalid_seed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "qrInvalidAddress": "QR code does not contain a valid destination",
+  "@qrInvalidAddress": {
+    "description": "qr_invalid_address",
+    "type": "text",
+    "placeholders": {}
+  },
+  "qrInvalidPermissions": "Please Grant Camera Permissions to scan QR Codes",
+  "@qrInvalidPermissions": {
+    "description": "User did not grant camera permissions to the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "qrUnknownError": "Could not Read QR Code",
+  "@qrUnknownError": {
+    "description": "An unknown error occurred with the QR scanner",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeContact": "Remove Contact",
+  "@removeContact": {
+    "description": "contact_remove_btn",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeContactConfirmation": "Are you sure you want to delete %1?",
+  "@removeContactConfirmation": {
+    "description": "contact_remove_sure",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactHeader": "Contact",
+  "@contactHeader": {
+    "description": "contact_view_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactsHeader": "Contacts",
+  "@contactsHeader": {
+    "description": "contact_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addContact": "Add Contact",
+  "@addContact": {
+    "description": "contact_add_button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactNameHint": "Enter a Name @",
+  "@contactNameHint": {
+    "description": "contact_name_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactInvalid": "Invalid Contact Name",
+  "@contactInvalid": {
+    "description": "contact_invalid_name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactAdded": "%1 added to contacts.",
+  "@contactAdded": {
+    "description": "contact_added",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactRemoved": "%1 has been removed from contacts!",
+  "@contactRemoved": {
+    "description": "contact_removed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactNameMissing": "Choose a Name for this Contact",
+  "@contactNameMissing": {
+    "description": "contact_name_missing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contactExists": "Contact Already Exists",
+  "@contactExists": {
+    "description": "contact_name_exists",
+    "type": "text",
+    "placeholders": {}
+  },
+  "configureAccessNodeHeader": "Configure your access",
+  "@configureAccessNodeHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterApiUrl": "Enter your API url",
+  "@enterApiUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterDemoMode": "Demo mode activation ?",
+  "@enterDemoMode": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterPublicNode": "Access to a Public Node ?",
+  "@enterPublicNode": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterKeyApp": "Enter your key app",
+  "@enterKeyApp": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterEncryptedPk": "Enter your private key backup",
+  "@enterEncryptedPk": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterPasswordPk": "Enter your password",
+  "@enterPasswordPk": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "apiUrlMissing": "Please Enter your API url",
+  "@apiUrlMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "encryptedPkMissing": "Please Enter your private key backup",
+  "@encryptedPkMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordPkMissing": "Please Enter your password",
+  "@passwordPkMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "wrongApiUrl": "The Api Url is not an url valid",
+  "@wrongApiUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "keyAppMissing": "Please Enter your key app",
+  "@keyAppMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "backupYourSeed": "Backup your seed",
+  "@backupYourSeed": {
+    "description": "intro_new_wallet_seed_backup_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "backupSeedConfirm": "Are you sure that you backed up your wallet seed?",
+  "@backupSeedConfirm": {
+    "description": "intro_new_wallet_backup",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seedBackupInfo": "Below is your wallet's seed. It is crucial that you backup your seed and never store it as plaintext or a screenshot.",
+  "@seedBackupInfo": {
+    "description": "intro_new_wallet_seed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "copySeed": "Copy Seed",
+  "@copySeed": {
+    "description": "copy_seed_btn",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seedCopiedShort": "Seed Copied",
+  "@seedCopiedShort": {
+    "description": "seed_copied_btn",
+    "type": "text",
+    "placeholders": {}
+  },
+  "importSeed": "Import Seed",
+  "@importSeed": {
+    "description": "intro_seed_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "importSeedHint": "Please enter your seed below.",
+  "@importSeedHint": {
+    "description": "intro_seed_info",
+    "type": "text",
+    "placeholders": {}
+  },
+  "welcomeText": "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
+  "@welcomeText": {
+    "description": "intro_welcome_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "configureNode": "Configure node",
+  "@configureNode": {
+    "description": "intro_welcome_configure_node",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailBlock": "Block",
+  "@transactionDetailBlock": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailDate": "Date",
+  "@transactionDetailDate": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFrom": "From address",
+  "@transactionDetailFrom": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTo": "To address",
+  "@transactionDetailTo": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTxId": "Transaction id",
+  "@transactionDetailTxId": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailAmount": "Amount",
+  "@transactionDetailAmount": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFee": "Fee",
+  "@transactionDetailFee": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailReward": "Reward",
+  "@transactionDetailReward": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
+  "@transactionDetailCopyPaste": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sentTo": "Sent To",
+  "@sentTo": {
+    "description": "sent_to",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sending": "Sending",
+  "@sending": {
+    "description": "send_sending",
+    "type": "text",
+    "placeholders": {}
+  },
+  "to": "To",
+  "@to": {
+    "description": "send_to",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendAmountConfirm": "Send %1 IDNA",
+  "@sendAmountConfirm": {
+    "description": "send_pin_description",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendError": "An error occurred. Try again later.",
+  "@sendError": {
+    "description": "send_generic_error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAmount": "Enter Amount",
+  "@enterAmount": {
+    "description": "send_amount_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAddress": "Enter Address",
+  "@enterAddress": {
+    "description": "enter_address",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOpenfield": "Enter Openfield",
+  "@enterOpenfield": {
+    "description": "send_openfield_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOperation": "Enter Operation",
+  "@enterOperation": {
+    "description": "send_operation_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterTokenQuantity": "Enter Quantity",
+  "@enterTokenQuantity": {
+    "description": "send_enterTokenQuantity_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendATokenQuestion": "Send a token ?",
+  "@sendATokenQuestion": {
+    "description": "sendATokenQuestion_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "available": "available",
+  "@available": {
+    "description": "available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "openfield": "Openfield",
+  "@openfield": {
+    "description": "openfield",
+    "type": "text",
+    "placeholders": {}
+  },
+  "operation": "Operation",
+  "@operation": {
+    "description": "operation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "diacritic": "Common accents and diacritical signs will be replacing with an equivalent character",
+  "@diacritic": {
+    "description": "diacritic",
+    "type": "text",
+    "placeholders": {}
+  },
+  "optionalParameters": "Optional Parameters",
+  "@optionalParameters": {
+    "description": "optionalParameters",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidAddress": "Address entered was invalid",
+  "@invalidAddress": {
+    "description": "send_invalid_address",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addressMising": "Please Enter an Address",
+  "@addressMising": {
+    "description": "send_enter_address",
+    "type": "text",
+    "placeholders": {}
+  },
+  "amountMissing": "Please Enter an Amount",
+  "@amountMissing": {
+    "description": "send_enter_amount",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tokenQuantityMissing": "Please Enter a Quantity",
+  "@tokenQuantityMissing": {
+    "description": "send_enter_token_quantity",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tokenMissing": "Please choose a Token",
+  "@tokenMissing": {
+    "description": "send_enter_token",
+    "type": "text",
+    "placeholders": {}
+  },
+  "insufficientTokenQuantity": "Insufficient Quantity in your wallet",
+  "@insufficientTokenQuantity": {
+    "description": "send_insufficient_token_quantity",
+    "type": "text",
+    "placeholders": {}
+  },
+  "minimumSend": "Minimum send amount is %1 IDNA",
+  "@minimumSend": {
+    "description": "send_minimum_error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "insufficientBalance": "Insufficient Balance",
+  "@insufficientBalance": {
+    "description": "send_insufficient_balance",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendFrom": "Send From",
+  "@sendFrom": {
+    "description": "send_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "fees": "Fees",
+  "@fees": {
+    "description": "fees",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinCreateTitle": "Create a 6-digit pin",
+  "@pinCreateTitle": {
+    "description": "pin_create_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinConfirmTitle": "Confirm your pin",
+  "@pinConfirmTitle": {
+    "description": "pin_confirm_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinEnterTitle": "Enter pin",
+  "@pinEnterTitle": {
+    "description": "pin_enter_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinConfirmError": "Pins do not match",
+  "@pinConfirmError": {
+    "description": "pin_confirm_error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinInvalid": "Invalid pin entered",
+  "@pinInvalid": {
+    "description": "pin_error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosHeader": "Profile Infos",
+  "@profileInfosHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosAddress": "Address",
+  "@profileInfosAddress": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosAge": "Age",
+  "@profileInfosAge": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosEpoch": "Epoch",
+  "@profileInfosEpoch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosState": "State",
+  "@profileInfosState": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosScore": "Score",
+  "@profileInfosScore": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosRequiredFlips": "Required flips",
+  "@profileInfosRequiredFlips": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileInfosMadeFlips": "Made flips",
+  "@profileInfosMadeFlips": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeDays": "d",
+  "@timeDays": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeHours": "h",
+  "@timeHours": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeMin": "m",
+  "@timeMin": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeSec": "s",
+  "@timeSec": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeTransfer": "Transfer",
+  "@typeTransfer": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeInvitationActivated": "Invitation activated",
+  "@typeInvitationActivated": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeInvitationIssued": "Invitation issued",
+  "@typeInvitationIssued": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeInvitationTerminated": "Invitation terminated",
+  "@typeInvitationTerminated": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeIdentityTerminated": "Identity terminated",
+  "@typeIdentityTerminated": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeFlipSubmitted": "Flip submitted",
+  "@typeFlipSubmitted": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeDeploy": "Deploy",
+  "@typeDeploy": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeMiningStatusOff": "Mining status Off",
+  "@typeMiningStatusOff": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeMiningStatusOn": "Mining status On",
+  "@typeMiningStatusOn": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeCallContractSendVote": "Send public vote",
+  "@typeCallContractSendVote": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeCallContractSendVoteProof": "Send secret vote",
+  "@typeCallContractSendVoteProof": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeCallContractStartVoting": "Start voting",
+  "@typeCallContractStartVoting": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeCallContractFinishVoting": "Finish voting",
+  "@typeCallContractFinishVoting": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "typeCallContractProlongVoting": "Prolong voting",
+  "@typeCallContractProlongVoting": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationDoesntAllow": "Your status doesn't allow you\nto participate in the validation session",
+  "@validationDoesntAllow": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationMustProvideFlips": "To participate in the validation session\nyou must provide your flips",
+  "@validationMustProvideFlips": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationWillStartSoon": "Idena validation will start soon\nPlease, stay on this page until launch.",
+  "@validationWillStartSoon": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationNextDate": "Next validation",
+  "@validationNextDate": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationWaitingEnd": "Waiting for the end of long session",
+  "@validationWaitingEnd": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationReachingConsensus": "Please wait. The network is reaching consensus about validated identities",
+  "@validationReachingConsensus": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationNextAllowed": "You can participate in the next validation session",
+  "@validationNextAllowed": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationTipInfo": "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
+  "@validationTipInfo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationTipThxHeader": "Thank you !",
+  "@validationTipThxHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationTipConfirmationHeader": "Confirmation",
+  "@validationTipConfirmationHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationTipConfirmationQuestion": "Are you sure you want to send a tip",
+  "@validationTipConfirmationQuestion": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationForceStart": "Idena validation started.\nPlease, click here to force the launch",
+  "@validationForceStart": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationHeader": "Validation Session",
+  "@validationHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationStep1Header": "Select meaningful story: left or right",
+  "@validationStep1Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationStep3Header": "Check flips quality",
+  "@validationStep3Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "submitAnswers": "Submit Answers",
+  "@submitAnswers": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "startCheckingKeywords": "Start checking keywords",
+  "@startCheckingKeywords": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "demoMode": "Demo mode",
+  "@demoMode": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicNode": "Public Node",
+  "@publicNode": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "synchronized": "Synchronized",
+  "@synchronized": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "notSynchronized": "Not Synchronized",
+  "@notSynchronized": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "notConnected": "Not Connected",
+  "@notConnected": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "connected": "Connected",
+  "@connected": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "peersNotFound": "Peers are not found",
+  "@peersNotFound": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "synchronizingBlocks": "Synchronizing blocks",
+  "@synchronizingBlocks": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "goHome": "Go home",
+  "@goHome": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationUnderstand": "Ok, I understand",
+  "@validationUnderstand": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationQualifyKeywordsNoAvailable": "No keywords available",
+  "@validationQualifyKeywordsNoAvailable": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationAnswersNotYetSubmitted": "Your answers are not yet submitted",
+  "@validationAnswersNotYetSubmitted": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationQualifyKeywordsQuestion": "Are both keywords relevant to the flip ?",
+  "@validationQualifyKeywordsQuestion": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationQualifyKeywordsRelevant": "Both relevant",
+  "@validationQualifyKeywordsRelevant": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationQualifyKeywordsIrrelevant": "Irrelevant",
+  "@validationQualifyKeywordsIrrelevant": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationQualifyKeywords": "Please qualify the keywords relevance and submit the answers.",
+  "@validationQualifyKeywords": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationFlipsIrrelevantKeywordsWarning": "The flips with irrelevant keywords will be penalized",
+  "@validationFlipsIrrelevantKeywordsWarning": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationFlipsIrrelevantLimitControl": "The number of flips that can be reported\nshould be limited to 1/3",
+  "@validationFlipsIrrelevantLimitControl": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationFlipsSubmitOk": "Your answers for the validation session have been submitted successfully!",
+  "@validationFlipsSubmitOk": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep1Header": "Think up a story",
+  "@flipsCreatorStep1Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorHeader": "Flips Creator",
+  "@flipsCreatorHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep1Info": "Think up a short story about someone/something related to the two key words below according to the template",
+  "@flipsCreatorStep1Info": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep1ChangeWords": "Change words",
+  "@flipsCreatorStep1ChangeWords": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep1NextStep": "Next step",
+  "@flipsCreatorStep1NextStep": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep2Header": "Select 4 images to tell your story",
+  "@flipsCreatorStep2Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep2Info1": "Use keywords for the story",
+  "@flipsCreatorStep2Info1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep2Info2": "and template \"Before – Something happens – After\".\nPlease no text on images to explain your story.",
+  "@flipsCreatorStep2Info2": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep2PickImages": "Pick images",
+  "@flipsCreatorStep2PickImages": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep3Header": "Shuffle images",
+  "@flipsCreatorStep3Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep3Info1": "Shuffle images in order to make a nonsense sequence of images",
+  "@flipsCreatorStep3Info1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep4Header": "Submit flip",
+  "@flipsCreatorStep4Header": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep4Info1": "Make sure it is not possible to read the shuffled images as a meaningful story",
+  "@flipsCreatorStep4Info1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep4Info2": "Are you sure that you want to submit this flip ?",
+  "@flipsCreatorStep4Info2": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep4Warning1": "If you make BAD flip, you will lose all iDNA rewards !\nThe cost of deleting a flip is about 8 iDNA",
+  "@flipsCreatorStep4Warning1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "flipsCreatorStep4Submit": "Submit flip",
+  "@flipsCreatorStep4Submit": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pickFromList": "Pick From a List",
+  "@pickFromList": {
+    "description": "pick rep from list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "uptime": "Uptime",
+  "@uptime": {
+    "description": "Rep uptime",
+    "type": "text",
+    "placeholders": {}
+  },
+  "authMethod": "Authentication Method",
+  "@authMethod": {
+    "description": "settings_disable_fingerprint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinMethod": "PIN",
+  "@pinMethod": {
+    "description": "settings_pin_method",
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "settings_privacy_policy",
+    "type": "text",
+    "placeholders": {}
+  },
+  "biometricsMethod": "Biometrics",
+  "@biometricsMethod": {
+    "description": "settings_fingerprint_method",
+    "type": "text",
+    "placeholders": {}
+  },
+  "currency": "Currency",
+  "@currency": {
+    "description": "A settings menu item for changing currency",
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeCurrency": "Change Currency",
+  "@changeCurrency": {
+    "description": "settings_local_currency",
+    "type": "text",
+    "placeholders": {}
+  },
+  "language": "Language",
+  "@language": {
+    "description": "settings_change_language",
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "settings_logout",
+    "type": "text",
+    "placeholders": {}
+  },
+  "rootWarning": "It appears your device is \"rooted\", \"jailbroken\", or modified in a way that compromises security. It is recommended that you reset your device to its original state before proceeding.",
+  "@rootWarning": {
+    "description": "Shown to users if they have a rooted Android device or jailbroken iOS device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "iUnderstandTheRisks": "I Understand the Risks",
+  "@iUnderstandTheRisks": {
+    "description": "Shown to users if they have a rooted Android device or jailbroken iOS device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exit": "Exit",
+  "@exit": {
+    "description": "Exit action, like a button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "warning": "Warning",
+  "@warning": {
+    "description": "settings_logout_alert_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutDetail": "Logging out will remove your configuration and all my Idena-related data from this device.",
+  "@logoutDetail": {
+    "description": "settings_logout_alert_message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutAction": "Delete Configuration and Logout",
+  "@logoutAction": {
+    "description": "settings_logout_alert_confirm_cta",
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutAreYouSure": "Are you sure?",
+  "@logoutAreYouSure": {
+    "description": "settings_logout_warning_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutReassurance": "",
+  "@logoutReassurance": {
+    "description": "settings_logout_warning_message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsHeader": "Settings",
+  "@settingsHeader": {
+    "description": "settings_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "preferences": "Preferences",
+  "@preferences": {
+    "description": "settings_preferences_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "informations": "Informations",
+  "@informations": {
+    "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "features": "Features",
+  "@features": {
+    "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tryValidationSession": "Try a validation session",
+  "@tryValidationSession": {
+    "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "miningStatus": "Mining status",
+  "@miningStatus": {
+    "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchField": "Search...",
+  "@searchField": {
+    "description": "search_field_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "myTokens": "Tokens",
+  "@myTokens": {
+    "description": "my_tokens_button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "manage": "Manage",
+  "@manage": {
+    "description": "settings_manage_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "backupSeed": "Backup Seed",
+  "@backupSeed": {
+    "description": "settings_backup_seed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "fingerprintSeedBackup": "Authenticate to backup seed.",
+  "@fingerprintSeedBackup": {
+    "description": "settings_fingerprint_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pinSeedBackup": "Enter PIN to Backup Seed",
+  "@pinSeedBackup": {
+    "description": "settings_pin_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "systemDefault": "System Default",
+  "@systemDefault": {
+    "description": "settings_default_language_string",
+    "type": "text",
+    "placeholders": {}
+  },
+  "activateMiningHeader": "Activate mining status",
+  "@activateMiningHeader": {
+    "description": "mining_infos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deactivateMiningHeader": "Deactivate mining status",
+  "@deactivateMiningHeader": {
+    "description": "mining_infos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "activateMiningInfos": "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.",
+  "@activateMiningInfos": {
+    "description": "mining_infos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deactivateMiningInfos": "Submit the form to deactivate your mining status.\nYou can activate it again afterwards.",
+  "@deactivateMiningInfos": {
+    "description": "mining_infos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scanInstructions": "Scan a Idena \naddress QR code",
+  "@scanInstructions": {
+    "description": "scan_send_instruction_label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unlockPin": "Enter PIN to Unlock my Idena",
+  "@unlockPin": {
+    "description": "unlock_idena_pin",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unlockBiometrics": "Authenticate to Unlock my Idena",
+  "@unlockBiometrics": {
+    "description": "unlock_idena_bio",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lockAppSetting": "Authenticate on Launch",
+  "@lockAppSetting": {
+    "description": "authenticate_on_launch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "locked": "Locked",
+  "@locked": {
+    "description": "lockedtxt",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unlock": "Unlock",
+  "@unlock": {
+    "description": "unlocktxt",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tooManyFailedAttempts": "Too many failed unlock attempts.",
+  "@tooManyFailedAttempts": {
+    "description": "fail_toomany_attempts",
+    "type": "text",
+    "placeholders": {}
+  },
+  "securityHeader": "Security",
+  "@securityHeader": {
+    "description": "security_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autoLockHeader": "Automatically Lock",
+  "@autoLockHeader": {
+    "description": "auto_lock_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "xMinutes": "After %1 minutes",
+  "@xMinutes": {
+    "description": "after_minutes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "xMinute": "After %1 minute",
+  "@xMinute": {
+    "description": "after_minute",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instantly": "Instantly",
+  "@instantly": {
+    "description": "insantly",
+    "type": "text",
+    "placeholders": {}
+  },
+  "setAppPassword": "Set App Password",
+  "@setAppPassword": {
+    "description": "Allows user to encrypt app with a password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "setPassword": "Set Password",
+  "@setPassword": {
+    "description": "A button that sets the app password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "disableAppPassword": "Disable App Password",
+  "@disableAppPassword": {
+    "description": "Allows user to deencrypt app with a password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "encryptionFailedError": "Failed to set a wallet password",
+  "@encryptionFailedError": {
+    "description": "If encrypting a wallet raised an error",
+    "type": "text",
+    "placeholders": {}
+  },
+  "setPasswordSuccess": "Password has been set successfully",
+  "@setPasswordSuccess": {
+    "description": "Setting a Wallet Password was successful",
+    "type": "text",
+    "placeholders": {}
+  },
+  "disablePasswordSuccess": "Password has been disabled",
+  "@disablePasswordSuccess": {
+    "description": "Disabling a Wallet Password was successful",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exampleCardIntro": "Welcome to my Idena. Once you receive IDNA, transactions will show up like this:",
+  "@exampleCardIntro": {
+    "description": "example_card_intro",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exampleCardLittle": "A little",
+  "@exampleCardLittle": {
+    "description": "example_card_little",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exampleCardLot": "A lot of",
+  "@exampleCardLot": {
+    "description": "example_card_lot",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exampleCardTo": "to someone",
+  "@exampleCardTo": {
+    "description": "example_card_to",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exampleCardFrom": "from someone",
+  "@exampleCardFrom": {
+    "description": "example_card_from",
+    "type": "text",
+    "placeholders": {}
+  },
+  "defaultAccountName": "Main Account",
+  "@defaultAccountName": {
+    "description": "Default account name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "defaultNewAccountName": "Account %1",
+  "@defaultNewAccountName": {
+    "description": "Default new account name - e.g. Account 1",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newAccountIntro": "This is your new account. Once you receive IDNA, transactions will show up like this:",
+  "@newAccountIntro": {
+    "description": "Alternate account intro card",
+    "type": "text",
+    "placeholders": {}
+  },
+  "account": "Account",
+  "@account": {
+    "description": "Account text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "accounts": "Accounts",
+  "@accounts": {
+    "description": "Accounts header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addAccount": "Add Account",
+  "@addAccount": {
+    "description": "Default new account name - e.g. Account 1",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hideAccountHeader": "Hide Account?",
+  "@hideAccountHeader": {
+    "description": "Confirmation dialog header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeAccountText": "Are you sure you want to hide this account? You can re-add it later by tapping the \"%1\" button.",
+  "@removeAccountText": {
+    "description": "Remove account dialog body",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tapToReveal": "Tap to reveal",
+  "@tapToReveal": {
+    "description": "Tap to reveal hidden content",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tapToHide": "Tap to hide",
+  "@tapToHide": {
+    "description": "Tap to hide content",
+    "type": "text",
+    "placeholders": {}
+  },
+  "copied": "Copied",
+  "@copied": {
+    "description": "Copied (to clipboard)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "copy": "Copy",
+  "@copy": {
+    "description": "Copy (to clipboard)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "seedDescription": "A seed bears the same information as a secret phrase, but in a machine-readable way. As long as you have one of them backed up, you'll have access to your funds.",
+  "@seedDescription": {
+    "description": "Describing what a seed is",
+    "type": "text",
+    "placeholders": {}
+  },
+  "importSecretPhrase": "Import Secret Phrase",
+  "@importSecretPhrase": {
+    "description": "Header for restoring using mnemonic",
+    "type": "text",
+    "placeholders": {}
+  },
+  "importSecretPhraseHint": "Please enter your 24-word secret phrase below. Each word should be separated by a space.",
+  "@importSecretPhraseHint": {
+    "description": "helper message for importing mnemnic",
+    "type": "text",
+    "placeholders": {}
+  },
+  "qrMnemonicError": "QR does not contain a valid secret phrase",
+  "@qrMnemonicError": {
+    "description": "When QR does not contain a valid mnemonic phrase",
+    "type": "text",
+    "placeholders": {}
+  },
+  "mnemonicInvalidWord": "%1 is not a valid word",
+  "@mnemonicInvalidWord": {
+    "description": "A word that is not part of bip39",
+    "type": "text",
+    "placeholders": {}
+  },
+  "mnemonicSizeError": "Secret phrase may only contain 24 words",
+  "@mnemonicSizeError": {
+    "description": "err",
+    "type": "text",
+    "placeholders": {}
+  },
+  "secretPhrase": "Secret Phrase",
+  "@secretPhrase": {
+    "description": "Secret (mnemonic) phrase",
+    "type": "text",
+    "placeholders": {}
+  },
+  "backupConfirmButton": "I've Backed It Up",
+  "@backupConfirmButton": {
+    "description": "Has backed up seed confirmation button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "gotItButton": "Got It!",
+  "@gotItButton": {
+    "description": "Got It! Acknowledgement button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "import": "Import",
+  "@import": {
+    "description": "Generic import",
+    "type": "text",
+    "placeholders": {}
+  },
+  "importSeedInstead": "Import Seed Instead",
+  "@importSeedInstead": {
+    "description": "importSeedInstead",
+    "type": "text",
+    "placeholders": {}
+  },
+  "switchToSeed": "Switch to Seed",
+  "@switchToSeed": {
+    "description": "switchToSeed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "backupSecretPhrase": "Backup Secret Phrase",
+  "@backupSecretPhrase": {
+    "description": "backup seed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPasswordHint": "Create a password",
+  "@createPasswordHint": {
+    "description": "A text field hint that tells the user to create a password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirmPasswordHint": "Confirm the password",
+  "@confirmPasswordHint": {
+    "description": "A text field hint that tells the user to confirm the password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterPasswordHint": "Enter your password",
+  "@enterPasswordHint": {
+    "description": "A text field hint that tells the users to enter their password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordsDontMatch": "Passwords do not match",
+  "@passwordsDontMatch": {
+    "description": "An error indicating a password has been confirmed incorrectly",
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordBlank": "Password cannot be empty",
+  "@passwordBlank": {
+    "description": "An error indicating a password has been entered incorrectly",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPassword": "Invalid Password",
+  "@invalidPassword": {
+    "description": "An error indicating a password has been entered incorrectly",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createAPasswordHeader": "Create a password.",
+  "@createAPasswordHeader": {
+    "description": "A paragraph that tells the users to create a password.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPasswordSheetHeader": "Create",
+  "@createPasswordSheetHeader": {
+    "description": "Prompt user to create a new password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "disablePasswordSheetHeader": "Disable",
+  "@disablePasswordSheetHeader": {
+    "description": "Prompt user to disable their password",
+    "type": "text",
+    "placeholders": {}
+  },
+  "aboutHeader": "About",
+  "@aboutHeader": {
+    "description": "settings_about",
+    "type": "text",
+    "placeholders": {}
+  },
+  "thanksForHelp": "Thanks for help",
+  "@thanksForHelp": {
+    "description": "thanks_label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "thanksAuthor": "Created by",
+  "@thanksAuthor": {
+    "description": "thanks_author_label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsHeader": "Validation Basics",
+  "@validationBasicsHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipHeader": "What is a Good Flip ?",
+  "@validationBasicsGoodFlipHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipHeader": "What is a Bad Flip ?",
+  "@validationBasicsBadFlipHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipRewardHeader": "A good flip earns you rewards in iDNA",
+  "@validationBasicsGoodFlipRewardHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipRewardHeader": "A bad flip penalizes you in iDNA",
+  "@validationBasicsBadFlipRewardHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem1": "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.",
+  "@validationBasicsGoodFlipItem1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem2": "A good flip is EASY to solve for humans, but hard for robots.",
+  "@validationBasicsGoodFlipItem2": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem3": "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.",
+  "@validationBasicsGoodFlipItem3": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem4": "A good flip uses no text.",
+  "@validationBasicsGoodFlipItem4": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem5": "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.",
+  "@validationBasicsGoodFlipItem5": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem6": "A good flip should be relevant to both of the seed words.",
+  "@validationBasicsGoodFlipItem6": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem7": "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.",
+  "@validationBasicsGoodFlipItem7": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsGoodFlipItem8": "A good flip uses the shuffle to create a 100% non logical alternative.",
+  "@validationBasicsGoodFlipItem8": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem1": "A bad flip has NO logical story, even if it uses both keywords.",
+  "@validationBasicsBadFlipItem1": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem2": "A bad flip contains numbers or letters on images.",
+  "@validationBasicsBadFlipItem2": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem3": "A bad flip is hard to understand.",
+  "@validationBasicsBadFlipItem3": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem4": "A bad flip contains hateful, inappropriate or NSFW content.",
+  "@validationBasicsBadFlipItem4": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem5": "A bad flip does NOT USE BOTH keywords in the story.",
+  "@validationBasicsBadFlipItem5": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem6": "A bad flip uses objects in images in sequence (1-2-3-4).",
+  "@validationBasicsBadFlipItem6": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationBasicsBadFlipItem7": "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation",
+  "@validationBasicsBadFlipItem7": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noSkipButton": "No, Skip",
+  "@noSkipButton": {
+    "description": "A button that declines and skips the mentioned process.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yesButton": "Yes",
+  "@yesButton": {
+    "description": "A button that accepts the mentioned process.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nextButton": "Next",
+  "@nextButton": {
+    "description": "A button that goes to the next screen.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "goBackButton": "Go Back",
+  "@goBackButton": {
+    "description": "A button that goes to the previous screen.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "supportButton": "Support",
+  "@supportButton": {
+    "description": "A button to open up the live support window",
+    "type": "text",
+    "placeholders": {}
+  },
+  "liveSupportButton": "Support",
+  "@liveSupportButton": {
+    "description": "A button to open up the live support window",
+    "type": "text",
+    "placeholders": {}
+  },
+  "connectingHeader": "Connecting",
+  "@connectingHeader": {
+    "description": "A header to let the user now that my Idena is currently connecting to (or loading) live chat.",
+    "type": "text",
+    "placeholders": {}
+  }
+}
