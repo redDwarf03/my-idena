@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttericon/linearicons_free_icons.dart';
+import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
@@ -549,10 +553,14 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _aboutOffsetFloat,
                 child: About(_aboutController, _aboutOpen)),
-            SlideTransition(
-                position: _profileInfosOffsetFloat,
-                child: ProfileInfos(_profileInfosController, _profileInfosOpen,
-                    StateContainer.of(context).selectedAccount.address)),
+            StateContainer.of(context).selectedAccount.address != null
+                ? SlideTransition(
+                    position: _profileInfosOffsetFloat,
+                    child: ProfileInfos(
+                        _profileInfosController,
+                        _profileInfosOpen,
+                        StateContainer.of(context).selectedAccount.address))
+                : SizedBox(),
           ],
         ),
       ),
@@ -631,10 +639,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                                     height: 60,
                                   ),
                                   onPressed: () {
-                                    AccountDetailsSheet(
-                                            StateContainer.of(context)
-                                                .selectedAccount)
-                                        .mainBottomSheet(context);
+                                    if (StateContainer.of(context)
+                                            .selectedAccount
+                                            .address !=
+                                        null) {
+                                      AccountDetailsSheet(
+                                              StateContainer.of(context)
+                                                  .selectedAccount)
+                                          .mainBottomSheet(context);
+                                    }
                                   },
                                 ),
                               ),
@@ -848,9 +861,14 @@ class _SettingsSheetState extends State<SettingsSheet>
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.0)),
                       onPressed: () {
-                        AccountDetailsSheet(
-                                StateContainer.of(context).selectedAccount)
-                            .mainBottomSheet(context);
+                        if (StateContainer.of(context)
+                                .selectedAccount
+                                .address !=
+                            null) {
+                          AccountDetailsSheet(
+                                  StateContainer.of(context).selectedAccount)
+                              .mainBottomSheet(context);
+                        }
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -967,13 +985,13 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).tryValidationSession,
-                        AppIcons.score, onPressed: () {
+                        LineariconsFree.select, onPressed: () {
                       bool simulationMode = true;
                       Navigator.of(context).pushNamed(
                           '/validation_session_step_1',
                           arguments: simulationMode);
                     }),
-                    Divider(
+                    /*Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
                     ),
@@ -983,7 +1001,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         FontAwesome5.paint_brush, onPressed: () {
                       Navigator.of(context).pushNamed('/creation_flips_step_1',
                           arguments: _flipKeyWordPairs);
-                    }),
+                    }),*/
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -998,19 +1016,23 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLine(
-                        context,
-                        AppLocalization.of(context).profileInfosHeader,
-                        AppIcons.at, onPressed: () {
-                      setState(() {
-                        _profileInfosOpen = true;
-                      });
-                      _profileInfosController.forward();
-                    }),
+                    StateContainer.of(context).selectedAccount.address != null
+                        ? Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          )
+                        : SizedBox(),
+                    StateContainer.of(context).selectedAccount.address != null
+                        ? AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).profileInfosHeader,
+                            FontAwesome5.address_card, onPressed: () {
+                            setState(() {
+                              _profileInfosOpen = true;
+                            });
+                            _profileInfosController.forward();
+                          })
+                        : SizedBox(),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1018,7 +1040,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).validationBasicsHeader,
-                        AppIcons.warning, onPressed: () {
+                        Octicons.law, onPressed: () {
                       setState(() {
                         _validationBasicsOpen = true;
                       });
@@ -1059,7 +1081,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         context,
                         AppLocalization.of(context).changeCurrency,
                         StateContainer.of(context).curCurrency,
-                        AppIcons.currency,
+                        FontAwesome.money,
                         _currencyDialog),
                     Divider(
                       height: 2,
@@ -1069,7 +1091,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         context,
                         AppLocalization.of(context).language,
                         StateContainer.of(context).curLanguage,
-                        AppIcons.language,
+                        FontAwesome.language,
                         _languageDialog),
                     Divider(
                       height: 2,
@@ -1105,7 +1127,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).contactsHeader,
-                        AppIcons.contact, onPressed: () {
+                        Typicons.contacts, onPressed: () {
                       setState(() {
                         _contactsOpen = true;
                       });
@@ -1118,7 +1140,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).logout,
-                        AppIcons.logout, onPressed: () {
+                        FontAwesome.logout, onPressed: () {
                       AppDialogs.showConfirmDialog(
                           context,
                           CaseChange.toUpperCase(

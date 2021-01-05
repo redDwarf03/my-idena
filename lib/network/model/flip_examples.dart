@@ -111,14 +111,14 @@ class FlipExamples {
               "ready": true,
               "extra": false,
               "available": true
-            },/*
+            },
             {
               "hash":
                   "bafkreighaw7k7ot6fte7ykumdt6u2ny3z2w6s3sdvbjkfdgrlvnq7vuvva",
               "ready": true,
               "extra": false,
               "available": true
-            }
+            },
             {
               "hash":
                   "bafkreigitnf5xvmza4deb6gnne6gmcqzv7ows3lwgpafldmy3dwmb4qoia",
@@ -202,7 +202,7 @@ class FlipExamples {
               "ready": true,
               "extra": false,
               "available": true
-            }*/
+            }
           ]
         };
       }

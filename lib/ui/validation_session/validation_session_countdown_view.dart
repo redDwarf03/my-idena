@@ -58,7 +58,10 @@ class _ValidationSessionCountdownTextState
     _dnaCeremonyIntervalsResponse = await appService.getDnaCeremonyIntervals();
     _dnaGetEpochResponse = await appService.getDnaGetEpoch();
 
-    if (_dnaGetEpochResponse.result.nextValidation != null &&
+    if (_dnaGetEpochResponse.result != null &&
+        _dnaGetEpochResponse.result.nextValidation != null &&
+        _dnaGetEpochResponse.result.nextValidation.compareTo(DateTime.now()) >=
+            0 &&
         _dnaCeremonyIntervalsResponse != null) {
       endTime =
           _dnaGetEpochResponse.result.nextValidation.millisecondsSinceEpoch;
@@ -69,7 +72,7 @@ class _ValidationSessionCountdownTextState
   void onEnd() {
     wait = true;
     Future.delayed(const Duration(seconds: 5), () {
-      launchSession();
+      launchSession(false);
       wait = false;
     });
   }
@@ -86,12 +89,36 @@ class _ValidationSessionCountdownTextState
   @override
   void dispose() {
     _timer.cancel();
+    if (controller != null) {
+      controller.dispose();
+    }
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildChild(context);
+    return _dnaGetEpochResponse == null || _dnaGetEpochResponse.result == null
+        ? SizedBox()
+        : Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                  bottomRight: Radius.circular(8.0),
+                  topRight: Radius.circular(68.0)),
+              color: StateContainer.of(context).curTheme.primary,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.4),
+                    offset: Offset(0.1, 1.1),
+                    blurRadius: 5.0),
+              ],
+            ),
+            height: 130,
+            width: (MediaQuery.of(context).size.width - 14),
+            margin: EdgeInsetsDirectional.only(start: 7, top: 0.0, end: 7.0),
+            child: _buildChild(context));
   }
 
   _buildChild(BuildContext context) {
@@ -103,6 +130,10 @@ class _ValidationSessionCountdownTextState
           if (!_dnaIdentityResponse.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
+            if (_dnaIdentityResponse.data.result.address == null) {
+              return SizedBox();
+            }
+
             int canValidate =
                 UtilIdentity().canValidate(_dnaIdentityResponse.data);
             if (canValidate > 0) {
@@ -194,14 +225,42 @@ class _ValidationSessionCountdownTextState
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10.0))),
-                                      label: Text(
-                                        AppLocalization.of(context)
-                                                .validationWillStartSoon +
-                                            "${time.min}:" +
-                                            "${time.sec}",
-                                        style:
-                                            AppStyles.textStyleHomeInfoWarning(
-                                                context),
+                                      label: Row(
+                                        children: [
+                                          Text(
+                                            AppLocalization.of(context)
+                                                .validationWillStartSoon,
+                                            style: AppStyles
+                                                .textStyleHomeInfoWarning(
+                                                    context),
+                                          ),
+                                          Text(
+                                              time.min != null
+                                                  ? "${time.min}" +
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .timeMin
+                                                  : "0" +
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .timeMin,
+                                              style: AppStyles
+                                                  .textStyleHomeInfoWarning(
+                                                      context)),
+                                          Text(
+                                              time.sec != null
+                                                  ? " ${time.sec}" +
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .timeSec
+                                                  : " 0" +
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .timeSec,
+                                              style: AppStyles
+                                                  .textStyleHomeInfoWarning(
+                                                      context)),
+                                        ],
                                       ),
                                       icon: Icon(
                                         Icons.warning,
@@ -234,7 +293,7 @@ class _ValidationSessionCountdownTextState
                                   ? Text("")
                                   : RaisedButton.icon(
                                       onPressed: () {
-                                        launchSession();
+                                        launchSession(true);
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
@@ -392,10 +451,12 @@ class _ValidationSessionCountdownTextState
     );
   }
 
-  Future launchSession() async {
-    bool simulationMode = false;
-    Navigator.of(context)
-        .pushNamed('/validation_session_step_1', arguments: simulationMode);
+  Future launchSession(bool force) async {
+    if (currentPeriod == EpochPeriod.ShortSession || force) {
+      bool simulationMode = false;
+      Navigator.of(context)
+          .pushNamed('/validation_session_step_2', arguments: simulationMode);
+    }
   }
 
   Widget getBadgeGift(int amount) {

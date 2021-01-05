@@ -14,7 +14,6 @@ import 'package:my_idena/themes.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/model/available_language.dart';
-import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/account.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
@@ -292,9 +291,7 @@ class StateContainerState extends State<StateContainer> {
   }
 
   Future<void> requestUpdate({bool pending = true}) async {
-    if (wallet != null &&
-        wallet.address != null &&
-        Address(wallet.address).isValid()) {
+    if (wallet != null && wallet.address != null) {
       // Request account history
       int count = 30;
       try {
@@ -340,6 +337,13 @@ class StateContainerState extends State<StateContainer> {
         // TODO handle account history error
         sl.get<Logger>().e("account_history e", e);
       }
+    } else {
+      setState(() {
+        if (wallet != null) {
+          wallet.historyLoading = false;
+          wallet.loading = false;
+        }
+      });
     }
   }
 

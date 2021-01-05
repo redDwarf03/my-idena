@@ -170,6 +170,8 @@ class _ValidationSessionStep1PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
+                          address: StateContainer.of(context).selectedAccount.address,
+                          simulationMode: widget.simulationMode,
                             validationSessionInfoFlips: validationSessionInfo
                                 .listSessionValidationFlips[index],
                             onSelectFlip: (ValidationSessionInfoFlips

@@ -8,12 +8,14 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/network/model/dictWords.dart';
 import 'package:my_idena/network/model/flip_examples.dart';
+import 'package:my_idena/network/model/request/flip_get_key_request.dart';
 import 'package:my_idena/network/model/request/flip_get_request.dart';
 import 'package:my_idena/network/model/request/flip_longHashes_request.dart';
 import 'package:my_idena/network/model/request/flip_shortHashes_request.dart';
 import 'package:my_idena/network/model/request/flip_submitLongAnswers_request.dart';
 import 'package:my_idena/network/model/request/flip_submitShortAnswers_request.dart';
 import 'package:my_idena/network/model/request/flip_words_request.dart';
+import 'package:my_idena/network/model/response/flip_get_key_response.dart';
 import 'package:my_idena/network/model/response/flip_get_response.dart';
 import 'package:my_idena/network/model/response/flip_longHashes_response.dart';
 import 'package:my_idena/network/model/response/flip_shortHashes_response.dart';
@@ -178,6 +180,7 @@ class ValidationService {
 
   Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       ValidationSessionInfoFlips validationSessionInfoFlips,
+      String address,
       bool simulationMode) async {
     Completer<ValidationSessionInfoFlips> _completer =
         new Completer<ValidationSessionInfoFlips>();
@@ -185,6 +188,8 @@ class ValidationService {
     try {
       // get Flip
       FlipGetResponse flipGetResponse;
+      FlipGetKeyResponse flipGetKeyResponse;
+      
       if (simulationMode) {
         String data =
             await loadAssets(validationSessionInfoFlips.hash + "_images");
@@ -207,6 +212,21 @@ class ValidationService {
         if (responseHttp.statusCode == 200) {
           flipGetResponse = flipGetResponseFromJson(responseHttp.body);
         }
+
+        /*mapParams = {
+          'method': FlipGetKeyRequest.METHOD_NAME,
+          'params': [validationSessionInfoFlips.hash] ,
+          'id': 101,
+          'key': keyApp
+        };
+
+        FlipGetKeyRequest flipGetKeyRequest = FlipGetKeyRequest.fromJson(mapParams);
+        body = json.encode(flipGetKeyRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipGetKeyResponse = flipGetKeyResponseFromJson(responseHttp.body);
+        }*/
       }
 
       Uint8List imageUint8_1;

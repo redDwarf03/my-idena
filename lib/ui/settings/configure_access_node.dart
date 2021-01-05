@@ -166,6 +166,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       key: _scaffoldKey,
@@ -177,240 +178,265 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
               top: MediaQuery.of(context).size.height * 0.075),
           child: Column(
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  // Back Button
+                  Container(
+                    margin: EdgeInsetsDirectional.only(
+                        start: smallScreen(context) ? 15 : 20),
+                    height: 50,
+                    width: 50,
+                    child: FlatButton(
+                        highlightColor:
+                            StateContainer.of(context).curTheme.text15,
+                        splashColor: StateContainer.of(context).curTheme.text15,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(AppIcons.back,
+                            color: StateContainer.of(context).curTheme.text,
+                            size: 24)),
+                  ),
+                ],
+              ),
+              // The header
+              Container(
+                margin: EdgeInsetsDirectional.only(
+                  start: smallScreen(context) ? 30 : 40,
+                  end: smallScreen(context) ? 30 : 40,
+                  top: 10,
+                ),
+                alignment: AlignmentDirectional(-1, 0),
+                child: AutoSizeText(
+                  AppLocalization.of(context).configureAccessNodeHeader,
+                  style: AppStyles.textStyleHeaderColored(context),
+                  stepGranularity: 0.1,
+                  maxLines: 1,
+                  minFontSize: 12,
+                ),
+              ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 30, bottom: bottom + 30),
+                    child: Column(
                       children: <Widget>[
-                        // Back Button
-                        Container(
-                          margin: EdgeInsetsDirectional.only(
-                              start: smallScreen(context) ? 15 : 20),
-                          height: 50,
-                          width: 50,
-                          child: FlatButton(
-                              highlightColor:
-                                  StateContainer.of(context).curTheme.text15,
-                              splashColor:
-                                  StateContainer.of(context).curTheme.text15,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50.0)),
-                              padding: EdgeInsets.all(0.0),
-                              child: Icon(AppIcons.back,
-                                  color:
-                                      StateContainer.of(context).curTheme.text,
-                                  size: 24)),
+                        Stack(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      AppLocalization.of(context).enterDemoMode,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w100,
+                                        fontFamily: 'Roboto',
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .text60,
+                                      ),
+                                    ),
+                                    Switch(
+                                        value: _isDemoModeSwitched,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _isDemoModeSwitched = value;
+                                            if (_isDemoModeSwitched) {
+                                              _isPublicNodeSwitched = false;
+                                            }
+                                            _apiUrlController =
+                                                TextEditingController();
+                                            _keyAppController =
+                                                TextEditingController();
+                                            _encryptedPkController =
+                                                TextEditingController();
+                                            _passwordPkController =
+                                                TextEditingController();
+                                            _apiUrlValidationText = "";
+                                            _keyAppValidationText = "";
+                                            _encryptedPkValidationText = "";
+                                            _passwordPkValidationText = "";
+                                            _apiUrlHint = "";
+                                            _keyAppHint = "";
+                                            _encryptedPkHint = "";
+                                            _passwordPkHint = "";
+                                          });
+                                          updateSharedPrefsUtil();
+                                        },
+                                        activeTrackColor:
+                                            StateContainer.of(context)
+                                                .curTheme
+                                                .backgroundDarkest,
+                                        activeColor: Colors.green),
+                                  ],
+                                )),
+                                /*_isDemoModeSwitched
+                                    ? SizedBox()
+                                    : Container(
+                                        child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            AppLocalization.of(context)
+                                                .enterPublicNode,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w100,
+                                              fontFamily: 'Roboto',
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .text60,
+                                            ),
+                                          ),
+                                          Switch(
+                                              value: _isPublicNodeSwitched,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _isPublicNodeSwitched = value;
+                                                  if (_isPublicNodeSwitched) {
+                                                    _isDemoModeSwitched = false;
+                                                  }
+                                                  _apiUrlController =
+                                                      TextEditingController();
+                                                  _keyAppController =
+                                                      TextEditingController();
+                                                  _encryptedPkController =
+                                                      TextEditingController();
+                                                  _passwordPkController =
+                                                      TextEditingController();
+                                                  _apiUrlValidationText = "";
+                                                  _keyAppValidationText = "";
+                                                  _encryptedPkValidationText =
+                                                      "";
+                                                  _passwordPkValidationText =
+                                                      "";
+                                                  _apiUrlHint = "";
+                                                  _keyAppHint = "";
+                                                  _encryptedPkHint = "";
+                                                  _passwordPkHint = "";
+                                                });
+                                                updateSharedPrefsUtil();
+                                              },
+                                              activeTrackColor:
+                                                  StateContainer.of(context)
+                                                      .curTheme
+                                                      .backgroundDarkest,
+                                              activeColor: Colors.green),
+                                        ],
+                                      )),*/
+                                _isDemoModeSwitched || _isPublicNodeSwitched
+                                    ? SizedBox()
+                                    : Container(
+                                        child: getApiUrlContainer(),
+                                      ),
+                                _isDemoModeSwitched || _isPublicNodeSwitched
+                                    ? SizedBox()
+                                    : Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: Text(_apiUrlValidationText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                _isDemoModeSwitched
+                                    ? SizedBox()
+                                    : Container(
+                                        child: getKeyAppContainer(),
+                                      ),
+                                _isDemoModeSwitched
+                                    ? SizedBox(
+                                        height: 1,
+                                      )
+                                    : Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: Text(_keyAppValidationText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                _isPublicNodeSwitched == false
+                                    ? SizedBox()
+                                    : Container(
+                                        child: getEncryptedPkContainer(),
+                                      ),
+                                _isPublicNodeSwitched == false
+                                    ? SizedBox()
+                                    : Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: Text(_encryptedPkValidationText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                _isPublicNodeSwitched == false
+                                    ? SizedBox()
+                                    : Container(
+                                        child: getPasswordPkContainer(),
+                                      ),
+                                _isPublicNodeSwitched == false
+                                    ? SizedBox()
+                                    : Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: Text(_passwordPkValidationText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                _addressText != null
+                                    ? Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: SelectableText(_addressText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
-
-                    // The header
-                    Container(
-                      margin: EdgeInsetsDirectional.only(
-                        start: smallScreen(context) ? 30 : 40,
-                        end: smallScreen(context) ? 30 : 40,
-                        top: 10,
-                      ),
-                      alignment: AlignmentDirectional(-1, 0),
-                      child: AutoSizeText(
-                        AppLocalization.of(context).configureAccessNodeHeader,
-                        style: AppStyles.textStyleHeaderColored(context),
-                        stepGranularity: 0.1,
-                        maxLines: 1,
-                        minFontSize: 12,
-                      ),
-                    ),
-                    Container(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppLocalization.of(context).enterDemoMode,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w100,
-                            fontFamily: 'Roboto',
-                            color: StateContainer.of(context).curTheme.text60,
-                          ),
-                        ),
-                        Switch(
-                            value: _isDemoModeSwitched,
-                            onChanged: (value) {
-                              setState(() {
-                                _isDemoModeSwitched = value;
-                                if (_isDemoModeSwitched) {
-                                  _isPublicNodeSwitched = false;
-                                }
-                                _apiUrlController = TextEditingController();
-                                _keyAppController = TextEditingController();
-                                _encryptedPkController =
-                                    TextEditingController();
-                                _passwordPkController = TextEditingController();
-                                _apiUrlValidationText = "";
-                                _keyAppValidationText = "";
-                                _encryptedPkValidationText = "";
-                                _passwordPkValidationText = "";
-                                _apiUrlHint = "";
-                                _keyAppHint = "";
-                                _encryptedPkHint = "";
-                                _passwordPkHint = "";
-                              });
-                              updateSharedPrefsUtil();
-                            },
-                            activeTrackColor: StateContainer.of(context)
-                                .curTheme
-                                .backgroundDarkest,
-                            activeColor: Colors.green),
-                      ],
-                    )),
-                    _isDemoModeSwitched
-                        ? SizedBox()
-                        : Container(
-                            child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppLocalization.of(context).enterPublicNode,
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w100,
-                                  fontFamily: 'Roboto',
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .text60,
-                                ),
-                              ),
-                              Switch(
-                                  value: _isPublicNodeSwitched,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isPublicNodeSwitched = value;
-                                      if (_isPublicNodeSwitched) {
-                                        _isDemoModeSwitched = false;
-                                      }
-                                      _apiUrlController =
-                                          TextEditingController();
-                                      _keyAppController =
-                                          TextEditingController();
-                                      _encryptedPkController =
-                                          TextEditingController();
-                                      _passwordPkController =
-                                          TextEditingController();
-                                      _apiUrlValidationText = "";
-                                      _keyAppValidationText = "";
-                                      _encryptedPkValidationText = "";
-                                      _passwordPkValidationText = "";
-                                      _apiUrlHint = "";
-                                      _keyAppHint = "";
-                                      _encryptedPkHint = "";
-                                      _passwordPkHint = "";
-                                    });
-                                    updateSharedPrefsUtil();
-                                  },
-                                  activeTrackColor: StateContainer.of(context)
-                                      .curTheme
-                                      .backgroundDarkest,
-                                  activeColor: Colors.green),
-                            ],
-                          )),
-                    _isDemoModeSwitched || _isPublicNodeSwitched
-                        ? SizedBox()
-                        : Container(
-                            child: getApiUrlContainer(),
-                          ),
-                    _isDemoModeSwitched || _isPublicNodeSwitched
-                        ? SizedBox()
-                        : Container(
-                            alignment: AlignmentDirectional(0, 0),
-                            margin: EdgeInsets.only(top: 3),
-                            child: Text(_apiUrlValidationText,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
-                                )),
-                          ),
-                    _isDemoModeSwitched
-                        ? SizedBox()
-                        : Container(
-                            child: getKeyAppContainer(),
-                          ),
-                    _isDemoModeSwitched
-                        ? SizedBox(
-                            height: 1,
-                          )
-                        : Container(
-                            alignment: AlignmentDirectional(0, 0),
-                            margin: EdgeInsets.only(top: 3),
-                            child: Text(_keyAppValidationText,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
-                                )),
-                          ),
-                    _isPublicNodeSwitched == false
-                        ? SizedBox()
-                        : Container(
-                            child: getEncryptedPkContainer(),
-                          ),
-                    _isPublicNodeSwitched == false
-                        ? SizedBox()
-                        : Container(
-                            alignment: AlignmentDirectional(0, 0),
-                            margin: EdgeInsets.only(top: 3),
-                            child: Text(_encryptedPkValidationText,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
-                                )),
-                          ),
-                    _isPublicNodeSwitched == false
-                        ? SizedBox()
-                        : Container(
-                            child: getPasswordPkContainer(),
-                          ),
-                    _isPublicNodeSwitched == false
-                        ? SizedBox()
-                        : Container(
-                            alignment: AlignmentDirectional(0, 0),
-                            margin: EdgeInsets.only(top: 3),
-                            child: Text(_passwordPkValidationText,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
-                                )),
-                          ),
-                    Container(
-                      alignment: AlignmentDirectional(0, 0),
-                      margin: EdgeInsets.only(top: 3),
-                      child: SelectableText(_addressText,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: StateContainer.of(context).curTheme.primary,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w600,
-                          )),
-                    ),
-                  ],
+                  ),
                 ),
               ),
 
@@ -724,5 +750,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
     }
+    await sl.get<SharedPrefsUtil>().setAddress(_addressText);
   }
 }

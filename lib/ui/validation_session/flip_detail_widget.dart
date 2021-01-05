@@ -7,8 +7,10 @@ import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 class FlipDetail extends StatefulWidget {
   final ValidationSessionInfoFlips validationSessionInfoFlips;
   final Function(ValidationSessionInfoFlips) onSelectFlip;
+  final String address;
+  final bool simulationMode;
 
-  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip});
+  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip, this.simulationMode, this.address});
 
   _FlipDetailState createState() => _FlipDetailState();
 }
@@ -32,7 +34,7 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesRight == null ||
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
       _validationSessionInfoFlips = await ValidationService()
-          .getValidationSessionFlipDetail(_validationSessionInfoFlips, true);
+          .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode);
       print("listImagesLeft length : " +
           _validationSessionInfoFlips.listImagesLeft.length.toString());
       setState(() {});

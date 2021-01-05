@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 
 import 'package:intl/intl.dart';
@@ -486,22 +487,25 @@ class _AppHomePageState extends State<AppHomePage>
   }
 
   void paintQrCode({String address}) {
-    QrPainter painter = QrPainter(
-      data:
-          address == null ? StateContainer.of(context).wallet.address : address,
-      version: 6,
-      gapless: false,
-      errorCorrectionLevel: QrErrorCorrectLevel.Q,
-    );
-    painter.toImageData(MediaQuery.of(context).size.width).then((byteData) {
-      setState(() {
-        receive = ReceiveSheet(
-          qrWidget: Container(
-              width: MediaQuery.of(context).size.width / 2.675,
-              child: Image.memory(byteData.buffer.asUint8List())),
-        );
+    if (StateContainer.of(context).wallet.address != null && address != null) {
+      QrPainter painter = QrPainter(
+        data: address == null
+            ? StateContainer.of(context).wallet.address
+            : address,
+        version: 6,
+        gapless: false,
+        errorCorrectionLevel: QrErrorCorrectLevel.Q,
+      );
+      painter.toImageData(MediaQuery.of(context).size.width).then((byteData) {
+        setState(() {
+          receive = ReceiveSheet(
+            qrWidget: Container(
+                width: MediaQuery.of(context).size.width / 2.675,
+                child: Image.memory(byteData.buffer.asUint8List())),
+          );
+        });
       });
-    });
+    }
   }
 
   @override
@@ -705,26 +709,7 @@ class _AppHomePageState extends State<AppHomePage>
                         ),
                       ),
                       AppPopupButton(),*/
-                      Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8.0),
-                                bottomLeft: Radius.circular(8.0),
-                                bottomRight: Radius.circular(8.0),
-                                topRight: Radius.circular(68.0)),
-                            color: StateContainer.of(context).curTheme.primary,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.4),
-                                  offset: Offset(0.1, 1.1),
-                                  blurRadius: 5.0),
-                            ],
-                          ),
-                          height: 130,
-                          width: (MediaQuery.of(context).size.width - 14),
-                          margin: EdgeInsetsDirectional.only(
-                              start: 7, top: 0.0, end: 7.0),
-                          child: ValidationSessionCountdownText()),
+                      ValidationSessionCountdownText(),
                     ],
                   ),
                 ],
@@ -1360,7 +1345,7 @@ class _AppHomePageState extends State<AppHomePage>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0)),
                   padding: EdgeInsets.all(0.0),
-                  child: Icon(AppIcons.settings,
+                  child: Icon(LineariconsFree.menu_circle,
                       color: StateContainer.of(context).curTheme.icon,
                       size: 24)),
             ),
@@ -1386,14 +1371,19 @@ class _AppHomePageState extends State<AppHomePage>
                       tag: "avatar",
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return UIUtil.showAccountWebview(
-                                context,
-                                StateContainer.of(context)
-                                    .selectedAccount
-                                    .address);
-                          }));
+                          if (StateContainer.of(context)
+                                  .selectedAccount
+                                  .address !=
+                              null) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return UIUtil.showAccountWebview(
+                                  context,
+                                  StateContainer.of(context)
+                                      .selectedAccount
+                                      .address);
+                            }));
+                          }
                         },
                         child: CircleAvatar(
                           backgroundColor:

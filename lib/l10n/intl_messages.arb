@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-01T17:32:38.472452",
+  "@@last_modified": "2021-01-05T11:24:30.785642",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -1242,13 +1242,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "activateMiningInfos": "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.",
+  "activateMiningInfos": "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.\n\nPlease, wait few seconds before the activation...",
   "@activateMiningInfos": {
     "description": "mining_infos",
     "type": "text",
     "placeholders": {}
   },
-  "deactivateMiningInfos": "Submit the form to deactivate your mining status.\nYou can activate it again afterwards.",
+  "deactivateMiningInfos": "Submit the form to deactivate your mining status.\nYou can activate it again afterwards.\n\nPlease, wait few seconds before the desactivation...",
   "@deactivateMiningInfos": {
     "description": "mining_infos",
     "type": "text",
@@ -1362,7 +1362,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "exampleCardIntro": "Welcome to my Idena. Once you receive IDNA, transactions will show up like this:",
+  "exampleCardIntro": "Welcome to my Idena. Once you receive transactions, they will show up like this:",
   "@exampleCardIntro": {
     "description": "example_card_intro",
     "type": "text",

@@ -73,20 +73,19 @@ class _ValidationSessionStep3PageState
           dnaCeremonyIntervalsResponse.result.longSessionDuration;
       print("Duration : " + _durationCalculation.toString());
     } else {
-      _durationCalculation =
-          dnaCeremonyIntervalsResponse.result.longSessionDuration -
-              DateTime.now()
-                  .difference(dnaGetEpochResponse.result.nextValidation)
+      
+    _durationCalculation =
+              dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+                  .difference(DateTime.now())
                   .inSeconds -
               5;
       print("Duration : " +
           dnaCeremonyIntervalsResponse.result.longSessionDuration.toString() +
           "-" +
-          DateTime.now()
-              .difference(dnaGetEpochResponse.result.nextValidation)
+          dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+              .difference(DateTime.now())
               .inSeconds
-              .toString() +
-          "-5");
+              .toString() + "-5");
     }
 
     setState(() {
@@ -97,7 +96,7 @@ class _ValidationSessionStep3PageState
   Future<void> loadValidationSession() async {
     validationSessionInfo = await ValidationService()
         .getValidationSessionFlipsList(
-            EpochPeriod.LongSession, widget.paramValidationSessionInfo, true);
+            EpochPeriod.LongSession, widget.paramValidationSessionInfo, widget.simulationMode);
     setState(() {});
   }
 
@@ -169,6 +168,8 @@ class _ValidationSessionStep3PageState
                         return Column(
                           children: [
                             FlipDetail(
+                               address: StateContainer.of(context).selectedAccount.address,
+                               simulationMode: widget.simulationMode,
                                 validationSessionInfoFlips:
                                     validationSessionInfo
                                         .listSessionValidationFlips[index],

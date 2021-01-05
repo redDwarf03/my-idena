@@ -39,6 +39,7 @@ class SharedPrefsUtil {
   static const String key_app = 'fidena_key_app';
   static const String encrypted_pk = 'fidena_encrypted_pk';
   static const String password_pk = 'fidena_password_pk';
+  static const String address = 'fidena_address';
 
   // For plain-text data
   Future<void> set(String key, value) async {
@@ -268,6 +269,14 @@ class SharedPrefsUtil {
     return await get(password_pk, defaultValue: "");
   }
 
+  Future<void> setAddress(String value) async {
+    return await set(address, value);
+  }
+
+  Future<String> getAddress() async {
+    return await get(address, defaultValue: "");
+  }
+
  // For logging out
   Future<void> deleteConfAccessNode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -275,6 +284,7 @@ class SharedPrefsUtil {
     await prefs.remove(key_app);
     await prefs.remove(encrypted_pk);
     await prefs.remove(password_pk);
+    await prefs.remove(address);
   }
 
   // For logging out
@@ -295,5 +305,6 @@ class SharedPrefsUtil {
     await prefs.remove(key_app);
     await prefs.remove(encrypted_pk);
     await prefs.remove(password_pk);
+    await prefs.remove(address);
   }
 }

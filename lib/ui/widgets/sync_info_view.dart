@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
+import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_public_node.dart';
@@ -21,6 +23,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   bool _status = true;
   bool _publicNode = false;
   bool _demoMode = false;
+  bool _mining;
   AppService appService = new AppService();
   BcnSyncingResponse _bcnSyncingResponse;
   int _initialCurrentBlock = 0;
@@ -40,6 +43,15 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(seconds: 1), () async {
       _status = await appService.getWStatusGetResponse();
+      if (StateContainer.of(context).selectedAccount.address != null) {
+        DnaIdentityResponse _dnaIdentityResponse = await AppService()
+            .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
+        if (_dnaIdentityResponse != null &&
+            _dnaIdentityResponse.result != null) {
+          _mining = _dnaIdentityResponse.result.online;
+        }
+      }
+
       _publicNode = await PublicNodeUtil().getPublicNode();
       _demoMode = await DemoModeUtil().getDemoModeStatus();
       _bcnSyncingResponse = await appService.checkSync();
@@ -74,16 +86,26 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 children: [
                   Icon(
                     AppIcons.share,
-                    color: Colors.green,
+                    color: StateContainer.of(context).curTheme.primary,
                     size: 15,
                   ),
                   SizedBox(height: 3),
                   Text(AppLocalization.of(context).demoMode,
-                      style: TextStyle(color: Colors.green, fontSize: 8)),
+                      style: TextStyle( color: StateContainer.of(context).curTheme.primary, fontSize: 8)),
                 ],
               )
             : SizedBox(),
-        SizedBox(width: 10),
+        _publicNode == false && _demoMode == false && _mining != null
+            ? Column(
+                children: [
+                  _mining == false
+                      ? Icon(RpgAwesome.mining_diamonds,
+                          size: 24, color: Colors.grey)
+                      : Icon(RpgAwesome.mining_diamonds,
+                          size: 24, color: Colors.green),
+                ],
+              )
+            : SizedBox(),
         _publicNode
             ? Column(
                 children: [
@@ -100,7 +122,6 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-        SizedBox(width: 10),
         _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing
             ? _bcnSyncingResponse != null &&
                     _bcnSyncingResponse.result.highestBlock == 0
@@ -112,10 +133,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                           style: TextStyle(color: Colors.orange, fontSize: 8))
                     ],
                   )
-                : Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                  
+                : Column(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Text(
                         _bcnSyncingResponse.result.currentBlock.toString() +
                             "\n/" +

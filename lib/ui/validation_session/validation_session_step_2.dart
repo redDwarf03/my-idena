@@ -59,17 +59,17 @@ class _ValidationSessionStep2PageState
           dnaCeremonyIntervalsResponse.result.longSessionDuration;
       print("Duration : " + _durationCalculation.toString());
     } else {
+    
       _durationCalculation =
-          dnaCeremonyIntervalsResponse.result.longSessionDuration -
-              DateTime.now()
-                  .difference(dnaGetEpochResponse.result.nextValidation)
+              dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+                  .difference(DateTime.now())
                   .inSeconds -
               5;
       print("Duration : " +
           dnaCeremonyIntervalsResponse.result.longSessionDuration.toString() +
           "-" +
-          DateTime.now()
-              .difference(dnaGetEpochResponse.result.nextValidation)
+          dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+              .difference(DateTime.now())
               .inSeconds
               .toString() + "-5");
     }
@@ -157,6 +157,8 @@ class _ValidationSessionStep2PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
+                           address: StateContainer.of(context).selectedAccount.address,
+                           simulationMode: widget.simulationMode,
                             validationSessionInfoFlips: validationSessionInfo
                                 .listSessionValidationFlips[index],
                             onSelectFlip: (ValidationSessionInfoFlips

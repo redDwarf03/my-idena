@@ -15,7 +15,8 @@ import 'package:my_idena/network/model/request/dna_getCoinbaseAddr_request.dart'
 import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
-import 'package:my_idena/network/model/request/send_tx_request.dart';
+import 'package:my_idena/network/model/request/flip_get_key_request.dart';
+import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
 import 'package:my_idena/network/model/response/dna_becomeOffline_response.dart';
@@ -26,8 +27,6 @@ import 'package:my_idena/network/model/response/dna_getCoinbaseAddr_response.dar
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/network/model/response/dna_sendTransaction_response.dart';
-import 'package:my_idena/network/model/response/mpinsert_response.dart';
-import 'package:my_idena/network/model/response/servers_wallet_legacy.dart';
 import 'package:my_idena/network/model/response/simple_price_response.dart';
 import 'package:my_idena/network/model/response/simple_price_response_aed.dart';
 import 'package:my_idena/network/model/response/simple_price_response_ars.dart';
@@ -551,6 +550,11 @@ class AppService {
         }
       } catch (e) {
         logger.e(e.toString());
+        dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
+        dnaGetCoinbaseAddrResponse.result =
+            await sl.get<SharedPrefsUtil>().getAddress();
+        print("we use the address in memory : " +
+            dnaGetCoinbaseAddrResponse.result);
       }
     }
     _completer.complete(dnaGetCoinbaseAddrResponse);
@@ -564,6 +568,13 @@ class AppService {
 
     Completer<DnaIdentityResponse> _completer =
         new Completer<DnaIdentityResponse>();
+
+    if (address == null) {
+      dnaIdentityResponse = new DnaIdentityResponse();
+      dnaIdentityResponse.result = DnaIdentityResponseResult();
+      _completer.complete(dnaIdentityResponse);
+      return _completer.future;
+    }
 
     if (await DemoModeUtil().getDemoModeStatus()) {
       dnaIdentityResponse = new DnaIdentityResponse();
@@ -615,6 +626,9 @@ class AppService {
         }
       } catch (e) {
         logger.e(e.toString());
+        dnaIdentityResponse = new DnaIdentityResponse();
+        dnaIdentityResponse.result = DnaIdentityResponseResult();
+        dnaIdentityResponse.result.address = address;
       }
     }
     _completer.complete(dnaIdentityResponse);
@@ -711,6 +725,16 @@ class AppService {
         if (responseHttp.statusCode == 200) {
           dnaCeremonyIntervalsResponse =
               dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
+          if (dnaCeremonyIntervalsResponse.result == null) {
+            dnaCeremonyIntervalsResponse.result =
+                new DnaCeremonyIntervalsResponseResult();
+            dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+                DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+            dnaCeremonyIntervalsResponse.result.longSessionDuration =
+                DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+            dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+                DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+          }
         }
       } catch (e) {
         logger.e(e.toString());
@@ -753,12 +777,16 @@ class AppService {
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
-
-          currentPeriod = dnaGetEpochResponse.result.currentPeriod;
+          if (dnaGetEpochResponse.result != null) {
+            currentPeriod = dnaGetEpochResponse.result.currentPeriod;
+          } else {
+            currentPeriod = EpochPeriod.None;
+          }
         }
       }
     } catch (e) {
       logger.e(e.toString());
+      currentPeriod = EpochPeriod.None;
     }
 
     _completer.complete(currentPeriod);

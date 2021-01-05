@@ -22,6 +22,7 @@ class FlipGetRequest {
     String key;
 
     static const String METHOD_NAME = "flip_get";
+    static const String METHOD_NAME_RAW = "flip_getRaw";
 
     factory FlipGetRequest.fromJson(Map<String, dynamic> json) => FlipGetRequest(
         method: json["method"],

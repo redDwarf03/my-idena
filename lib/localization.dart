@@ -1110,12 +1110,12 @@ class AppLocalization {
   }
 
    String get activateMiningInfos {
-    return Intl.message("Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.",
+    return Intl.message("Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.\n\nPlease, wait few seconds before the activation...",
         desc: 'mining_infos', name: 'activateMiningInfos');
   }
 
    String get deactivateMiningInfos {
-    return Intl.message("Submit the form to deactivate your mining status.\nYou can activate it again afterwards.",
+    return Intl.message("Submit the form to deactivate your mining status.\nYou can activate it again afterwards.\n\nPlease, wait few seconds before the desactivation...",
         desc: 'mining_infos', name: 'deactivateMiningInfos');
   }
 
@@ -1227,7 +1227,7 @@ class AppLocalization {
 
   String get exampleCardIntro {
     return Intl.message(
-        "Welcome to my Idena. Once you receive IDNA, transactions will show up like this:",
+        "Welcome to my Idena. Once you receive transactions, they will show up like this:",
         desc: 'example_card_intro',
         name: 'exampleCardIntro');
   }

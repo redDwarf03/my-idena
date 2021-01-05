@@ -15,23 +15,52 @@ class DnaGetEpochResponse {
     this.jsonrpc,
     this.id,
     this.result,
+    this.error,
   });
 
   String jsonrpc;
   int id;
   DnaGetEpochResponseResult result;
+  DnaGetEpochResponseError error;
 
   factory DnaGetEpochResponse.fromJson(Map<String, dynamic> json) =>
       DnaGetEpochResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: DnaGetEpochResponseResult.fromJson(json["result"]),
+        error: json["error"] != null
+            ? DnaGetEpochResponseError.fromJson(json["error"])
+            : null,
+        result: json["result"] != null
+            ? DnaGetEpochResponseResult.fromJson(json["result"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "result": result.toJson(),
+        "error": error.toJson(),
+      };
+}
+
+class DnaGetEpochResponseError {
+  DnaGetEpochResponseError({
+    this.code,
+    this.message,
+  });
+
+  int code;
+  String message;
+
+  factory DnaGetEpochResponseError.fromJson(Map<String, dynamic> json) =>
+      DnaGetEpochResponseError(
+        code: json["code"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "message": message,
       };
 }
 
