@@ -138,7 +138,7 @@ class IdenaTheme extends BaseTheme {
 
   Brightness brightness = Brightness.dark;
   SystemUiOverlayStyle statusBar =
-      SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent);
+      SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.red);
 
   BoxShadow boxShadow = BoxShadow(color: Colors.transparent);
   BoxShadow boxShadowButton = BoxShadow(color: Colors.transparent);
