@@ -238,6 +238,47 @@ class AppLocalization {
         desc: '', name: 'enterPasswordPk');
   }  
 
+ String get enterVps {
+    return Intl.message("Access to a VPS ?",
+        desc: '', name: 'enterVps');
+  }  
+
+ String get enterVpsUser {
+    return Intl.message("Enter a user",
+        desc: '', name: 'enterVpsUser');
+  }  
+
+ String get enterVpsIp {
+    return Intl.message("Enter the VPS Address",
+        desc: '', name: 'enterVpsIp');
+  }  
+
+ String get enterVpsTunnel {
+    return Intl.message("Enter the Tunnel Address",
+        desc: '', name: 'enterVpsTunnel');
+  }  
+  
+ String get enterVpsPassword {
+    return Intl.message("Enter the password",
+        desc: '', name: 'enterVpsPassword');
+  }   
+
+ String get enterVpsTunnelExample {
+    return Intl.message("ex: 'http://localhost:9009' with http or https",
+        desc: '', name: 'enterVpsTunnelExample');
+  }  
+
+ String get enterVpsIpExample {
+    return Intl.message("ex: '11.22.33.44:22'",
+        desc: '', name: 'enterVpsIpExample');
+  }  
+
+ String get enterVpsUserExample {
+    return Intl.message("ex: 'root'",
+        desc: '', name: 'enterVpsUserExample');
+  }  
+
+
   String get apiUrlMissing {
     return Intl.message("Please Enter your API url",
         desc: '', name: 'apiUrlMissing');

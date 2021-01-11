@@ -41,6 +41,10 @@ class SharedPrefsUtil {
   static const String password_pk = 'fidena_password_pk';
   static const String address = 'fidena_address';
 
+  static const String vps_user = 'fidena_vps_user';
+  static const String vps_password = 'fidena_vps_password';
+  static const String vps_ip = 'fidena_vps_ip';
+
   // For plain-text data
   Future<void> set(String key, value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -233,15 +237,12 @@ class SharedPrefsUtil {
   }
 
   Future<Uri> getApiUrl() async {
-    try
-    {
-        String apiUrl = await get(api_url, defaultValue: "");
-        Uri uri = Uri.parse(apiUrl);
-        return uri;
-    }
-    catch(e)
-    {
-        return null;
+    try {
+      String apiUrl = await get(api_url, defaultValue: "");
+      Uri uri = Uri.parse(apiUrl);
+      return uri;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -277,13 +278,40 @@ class SharedPrefsUtil {
     return await get(address, defaultValue: "");
   }
 
- // For logging out
+  Future<void> setVpsUser(String value) async {
+    return await set(vps_user, value);
+  }
+
+  Future<String> getVpsUser() async {
+    return await get(vps_user, defaultValue: "");
+  }
+
+  Future<void> setVpsPassword(String value) async {
+    return await set(vps_password, value);
+  }
+
+  Future<String> getVpsPassword() async {
+    return await get(vps_password, defaultValue: "");
+  }
+
+  Future<void> setVpsIp(String value) async {
+    return await set(vps_ip, value);
+  }
+
+  Future<String> getVpsIp() async {
+    return await get(vps_ip, defaultValue: "");
+  }
+
+  // For logging out
   Future<void> deleteConfAccessNode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(api_url);
     await prefs.remove(key_app);
     await prefs.remove(encrypted_pk);
     await prefs.remove(password_pk);
+    await prefs.remove(vps_ip);
+    await prefs.remove(vps_password);
+    await prefs.remove(vps_user);
     await prefs.remove(address);
   }
 
@@ -306,5 +334,8 @@ class SharedPrefsUtil {
     await prefs.remove(encrypted_pk);
     await prefs.remove(password_pk);
     await prefs.remove(address);
+    await prefs.remove(vps_ip);
+    await prefs.remove(vps_password);
+    await prefs.remove(vps_user);
   }
 }

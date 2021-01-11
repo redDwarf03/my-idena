@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dartssh/client.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
@@ -15,7 +16,6 @@ import 'package:my_idena/network/model/request/dna_getCoinbaseAddr_request.dart'
 import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
-import 'package:my_idena/network/model/request/flip_get_key_request.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -70,6 +70,8 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_vps.dart';
+import 'package:dartssh/http.dart' as ssh;
 
 class AppService {
   var logger = Logger();
@@ -79,6 +81,7 @@ class AppService {
   String body;
   http.Response responseHttp;
   Map<String, dynamic> mapParams;
+  SSHClient sshClient;
 
   Future<DnaGetBalanceResponse> getBalanceGetResponse(
       String address, bool activeBus) async {
@@ -109,13 +112,27 @@ class AppService {
       };
 
       try {
-        dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapParams);
-        body = json.encode(dnaGetBalanceRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaGetBalanceResponse =
-              dnaGetBalanceResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaGetBalanceResponse =
+                dnaGetBalanceResponseFromJson(response.text);
+          }
+        } else {
+          dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapParams);
+          body = json.encode(dnaGetBalanceRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaGetBalanceResponse =
+                dnaGetBalanceResponseFromJson(responseHttp.body);
+          }
         }
 
         if (activeBus) {
@@ -137,6 +154,7 @@ class AppService {
     Completer<BcnTransactionsResponse> _completer =
         new Completer<BcnTransactionsResponse>();
 
+    BcnTransactionsRequest bcnTransactionsRequest;
     BcnTransactionsResponse bcnTransactionsResponse;
     HttpClient httpClient = new HttpClient();
 
@@ -152,28 +170,45 @@ class AppService {
       bcnTransactionsResponse = new BcnTransactionsResponse();
       bcnTransactionsResponse.result = new BcnTransactionsResponseResult();
     } else {
+      Map<String, dynamic> mapParams = {
+        'method': BcnTransactionsRequest.METHOD_NAME,
+        "params": [
+          {"address": address, "count": count}
+        ],
+        'id': 101,
+        'key': keyApp
+      };
+
       try {
-        HttpClientRequest request = await httpClient.postUrl(url);
-        request.headers.set('content-type', 'application/json');
-
-        Map<String, dynamic> map = {
-          'method': BcnTransactionsRequest.METHOD_NAME,
-          "params": [
-            {"address": address, "count": count}
-          ],
-          'id': 101,
-          'key': keyApp
-        };
-        BcnTransactionsRequest bcnTransactionsRequest =
-            BcnTransactionsRequest.fromJson(map);
-        request.add(utf8.encode(json.encode(bcnTransactionsRequest.toJson())));
-        HttpClientResponse response = await request.close();
-        if (response.statusCode == 200) {
-          String reply = await response.transform(utf8.decoder).join();
-
-          bcnTransactionsResponse = bcnTransactionsResponseFromJson(reply);
-          bcnTransactionsResponse.result.transactions = new List.from(
-              bcnTransactionsResponse.result.transactions.reversed);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            bcnTransactionsResponse =
+                bcnTransactionsResponseFromJson(response.text);
+            if (bcnTransactionsResponse.result.transactions != null) {
+              bcnTransactionsResponse.result.transactions = new List.from(
+                  bcnTransactionsResponse.result.transactions.reversed);
+            }
+          }
+        } else {
+          bcnTransactionsRequest = BcnTransactionsRequest.fromJson(mapParams);
+          body = json.encode(bcnTransactionsRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            bcnTransactionsResponse =
+                bcnTransactionsResponseFromJson(responseHttp.body);
+            if (bcnTransactionsResponse.result.transactions != null) {
+              bcnTransactionsResponse.result.transactions = new List.from(
+                  bcnTransactionsResponse.result.transactions.reversed);
+            }
+          }
         }
       } catch (e) {
         logger.e(e.toString());
@@ -439,76 +474,65 @@ class AppService {
     return simplePriceResponse;
   }
 
-  double getFeesEstimation(String openfield, String operation) {
-    const double FEE_BASE = 0.01;
-    double fees = FEE_BASE;
-    if (openfield != null) {
-      fees += (openfield.length / 100000);
-      if (openfield.startsWith("alias=")) {
-        fees += 1;
-      }
-    }
-    if (operation != null) {
-      if (operation == "token:issue") {
-        fees += 10;
-      }
-      if (operation == "alias:register") {
-        fees += 1;
-      }
-    }
-
-    //print("getFeesEstimation: " + fees.toString());
-    return fees;
-  }
-
   Future<bool> getWStatusGetResponse() async {
+    DnaIdentityRequest dnaIdentityRequest;
+
     Completer<bool> _completer = new Completer<bool>();
 
     if (await DemoModeUtil().getDemoModeStatus()) {
       _completer.complete(true);
-    } else {
-      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+      return _completer.future;
+    }
 
-      HttpClient httpClient = new HttpClient();
-      try {
-        if (url == null || keyApp == null || keyApp == "") {
-          _completer.complete(false);
-        } else {
-          HttpClientRequest request = await httpClient
-              .postUrl(url)
-              .timeout(const Duration(seconds: 5), onTimeout: () {
-            return null;
-          });
-          request.headers.set('content-type', 'application/json');
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-          Map<String, dynamic> mapGetIdentity = {
-            'method': DnaIdentityRequest.METHOD_NAME,
-            'params': [],
-            'id': 101,
-            'key': keyApp
-          };
+    if (url == null ||
+        keyApp == null ||
+        url.isAbsolute == false ||
+        keyApp == "") {
+      _completer.complete(false);
+      return _completer.future;
+    }
 
-          DnaIdentityRequest dnaIdentityRequest =
-              DnaIdentityRequest.fromJson(mapGetIdentity);
-          request.add(utf8.encode(json.encode(dnaIdentityRequest.toJson())));
-          HttpClientResponse response = await request.close();
-          if (response.statusCode == 200) {
-            String reply = await response.transform(utf8.decoder).join();
-            if (dnaIdentityResponseFromJson(reply).result == null) {
-              _completer.complete(false);
-            } else {
-              _completer.complete(true);
-            }
-          } else {
+    mapParams = {
+      'method': DnaIdentityRequest.METHOD_NAME,
+      'params': [],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          if (dnaIdentityResponseFromJson(response.text).result == null) {
             _completer.complete(false);
+          } else {
+            _completer.complete(true);
           }
         }
-      } catch (e) {
-        _completer.complete(false);
-      } finally {
-        httpClient.close();
+      } else {
+        dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
+        body = json.encode(dnaIdentityRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          if (dnaIdentityResponseFromJson(responseHttp.body).result == null) {
+            _completer.complete(false);
+          } else {
+            _completer.complete(true);
+          }
+        }
       }
+    } catch (e) {
+      _completer.complete(false);
     }
 
     return _completer.future;
@@ -531,6 +555,7 @@ class AppService {
         _completer.complete(dnaGetCoinbaseAddrResponse);
         return _completer.future;
       }
+
       mapParams = {
         'method': DnaGetCoinbaseAddrRequest.METHOD_NAME,
         'params': [],
@@ -539,22 +564,34 @@ class AppService {
       };
 
       try {
-        dnaGetCoinbaseAddrRequest =
-            DnaGetCoinbaseAddrRequest.fromJson(mapParams);
-        body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaGetCoinbaseAddrResponse =
-              dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaGetCoinbaseAddrResponse =
+                dnaGetCoinbaseAddrResponseFromJson(response.text);
+          }
+        } else {
+          dnaGetCoinbaseAddrRequest =
+              DnaGetCoinbaseAddrRequest.fromJson(mapParams);
+          body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaGetCoinbaseAddrResponse =
+                dnaGetCoinbaseAddrResponseFromJson(responseHttp.body);
+          }
         }
       } catch (e) {
         logger.e(e.toString());
         dnaGetCoinbaseAddrResponse = new DnaGetCoinbaseAddrResponse();
         dnaGetCoinbaseAddrResponse.result =
             await sl.get<SharedPrefsUtil>().getAddress();
-        print("we use the address in memory : " +
-            dnaGetCoinbaseAddrResponse.result);
       }
     }
     _completer.complete(dnaGetCoinbaseAddrResponse);
@@ -617,12 +654,26 @@ class AppService {
       };
 
       try {
-        dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
-        body = json.encode(dnaIdentityRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaIdentityResponse = dnaIdentityResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaIdentityResponse = dnaIdentityResponseFromJson(response.text);
+          }
+        } else {
+          dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
+          body = json.encode(dnaIdentityRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaIdentityResponse =
+                dnaIdentityResponseFromJson(responseHttp.body);
+          }
         }
       } catch (e) {
         logger.e(e.toString());
@@ -666,12 +717,26 @@ class AppService {
       };
 
       try {
-        dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
-        body = json.encode(dnaGetEpochRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaGetEpochResponse = dnaGetEpochResponseFromJson(response.text);
+          }
+        } else {
+          dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
+          body = json.encode(dnaGetEpochRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaGetEpochResponse =
+                dnaGetEpochResponseFromJson(responseHttp.body);
+          }
         }
       } catch (e) {
         logger.e(e.toString());
@@ -717,23 +782,47 @@ class AppService {
       };
 
       try {
-        dnaCeremonyIntervalsRequest =
-            DnaCeremonyIntervalsRequest.fromJson(mapParams);
-        body = json.encode(dnaCeremonyIntervalsRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaCeremonyIntervalsResponse =
-              dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
-          if (dnaCeremonyIntervalsResponse.result == null) {
-            dnaCeremonyIntervalsResponse.result =
-                new DnaCeremonyIntervalsResponseResult();
-            dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
-                DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
-            dnaCeremonyIntervalsResponse.result.longSessionDuration =
-                DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
-            dnaCeremonyIntervalsResponse.result.shortSessionDuration =
-                DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaCeremonyIntervalsResponse =
+                dnaCeremonyIntervalsResponseFromJson(response.text);
+            if (dnaCeremonyIntervalsResponse.result == null) {
+              dnaCeremonyIntervalsResponse.result =
+                  new DnaCeremonyIntervalsResponseResult();
+              dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+                  DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+              dnaCeremonyIntervalsResponse.result.longSessionDuration =
+                  DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+              dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+                  DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+            }
+          }
+        } else {
+          dnaCeremonyIntervalsRequest =
+              DnaCeremonyIntervalsRequest.fromJson(mapParams);
+          body = json.encode(dnaCeremonyIntervalsRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaCeremonyIntervalsResponse =
+                dnaCeremonyIntervalsResponseFromJson(responseHttp.body);
+            if (dnaCeremonyIntervalsResponse.result == null) {
+              dnaCeremonyIntervalsResponse.result =
+                  new DnaCeremonyIntervalsResponseResult();
+              dnaCeremonyIntervalsResponse.result.flipLotteryDuration =
+                  DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION;
+              dnaCeremonyIntervalsResponse.result.longSessionDuration =
+                  DM_CEREMONY_INTERVALS_LONG_SESSION_DURATION;
+              dnaCeremonyIntervalsResponse.result.shortSessionDuration =
+                  DM_CEREMONY_INTERVALS_SHORT_SESSION_DURATION;
+            }
           }
         }
       } catch (e) {
@@ -771,16 +860,35 @@ class AppService {
           'key': keyApp
         };
 
-        dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
-        body = json.encode(dnaGetEpochRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaGetEpochResponse = dnaGetEpochResponseFromJson(responseHttp.body);
-          if (dnaGetEpochResponse.result != null) {
-            currentPeriod = dnaGetEpochResponse.result.currentPeriod;
-          } else {
-            currentPeriod = EpochPeriod.None;
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            dnaGetEpochResponse = dnaGetEpochResponseFromJson(response.text);
+            if (dnaGetEpochResponse.result != null) {
+              currentPeriod = dnaGetEpochResponse.result.currentPeriod;
+            } else {
+              currentPeriod = EpochPeriod.None;
+            }
+          }
+        } else {
+          dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
+          body = json.encode(dnaGetEpochRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaGetEpochResponse =
+                dnaGetEpochResponseFromJson(responseHttp.body);
+            if (dnaGetEpochResponse.result != null) {
+              currentPeriod = dnaGetEpochResponse.result.currentPeriod;
+            } else {
+              currentPeriod = EpochPeriod.None;
+            }
           }
         }
       }
@@ -819,12 +927,27 @@ class AppService {
         'key': keyApp
       };
 
-      dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(mapParams);
-      body = json.encode(dnaBecomeOnlineRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaBecomeOnlineResponse =
-            dnaBecomeOnlineResponseFromJson(responseHttp.body);
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaBecomeOnlineResponse =
+              dnaBecomeOnlineResponseFromJson(response.text);
+        }
+      } else {
+        dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(mapParams);
+        body = json.encode(dnaBecomeOnlineRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaBecomeOnlineResponse =
+              dnaBecomeOnlineResponseFromJson(responseHttp.body);
+        }
       }
     } catch (e) {
       logger.e(e.toString());
@@ -859,12 +982,27 @@ class AppService {
         'key': keyApp
       };
 
-      dnaBecomeOffLineRequest = DnaBecomeOfflineRequest.fromJson(mapParams);
-      body = json.encode(dnaBecomeOffLineRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaBecomeOffLineResponse =
-            dnaBecomeOfflineResponseFromJson(responseHttp.body);
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaBecomeOffLineResponse =
+              dnaBecomeOfflineResponseFromJson(response.text);
+        }
+      } else {
+        dnaBecomeOffLineRequest = DnaBecomeOfflineRequest.fromJson(mapParams);
+        body = json.encode(dnaBecomeOffLineRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaBecomeOffLineResponse =
+              dnaBecomeOfflineResponseFromJson(responseHttp.body);
+        }
       }
     } catch (e) {
       logger.e(e.toString());
@@ -903,12 +1041,28 @@ class AppService {
         'key': keyApp
       };
 
-      dnaSendTransactionRequest = DnaSendTransactionRequest.fromJson(mapParams);
-      body = json.encode(dnaSendTransactionRequest.toJson());
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        dnaSendTransactionResponse =
-            dnaSendTransactionResponseFromJson(responseHttp.body);
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaSendTransactionResponse =
+              dnaSendTransactionResponseFromJson(response.text);
+        }
+      } else {
+        dnaSendTransactionRequest =
+            DnaSendTransactionRequest.fromJson(mapParams);
+        body = json.encode(dnaSendTransactionRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaSendTransactionResponse =
+              dnaSendTransactionResponseFromJson(responseHttp.body);
+        }
       }
     } catch (e) {
       logger.e(e.toString());
@@ -949,12 +1103,25 @@ class AppService {
           'key': keyApp
         };
 
-        bcnSyncingRequest = BcnSyncingRequest.fromJson(mapParams);
-        body = json.encode(bcnSyncingRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          bcnSyncingResponse = bcnSyncingResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            bcnSyncingResponse = bcnSyncingResponseFromJson(response.text);
+          }
+        } else {
+          bcnSyncingRequest = BcnSyncingRequest.fromJson(mapParams);
+          body = json.encode(bcnSyncingRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            bcnSyncingResponse = bcnSyncingResponseFromJson(responseHttp.body);
+          }
         }
       }
     } catch (e) {}

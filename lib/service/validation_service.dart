@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/network/model/dictWords.dart';
 import 'package:my_idena/network/model/flip_examples.dart';
-import 'package:my_idena/network/model/request/flip_get_key_request.dart';
 import 'package:my_idena/network/model/request/flip_get_request.dart';
 import 'package:my_idena/network/model/request/flip_longHashes_request.dart';
 import 'package:my_idena/network/model/request/flip_shortHashes_request.dart';
@@ -30,6 +29,9 @@ import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_vps.dart';
+import 'package:dartssh/http.dart' as ssh;
+import 'package:dartssh/client.dart';
 
 class ValidationService {
   var logger = Logger();
@@ -39,6 +41,7 @@ class ValidationService {
   String body;
   http.Response responseHttp;
   Map<String, dynamic> mapParams;
+  SSHClient sshClient;
 
   Future<ValidationSessionInfo> getValidationSessionFlipsList(
       String typeSession,
@@ -93,27 +96,55 @@ class ValidationService {
         mapParams = {'method': method, "params": [], 'id': 101, 'key': keyApp};
 
         if (typeSession == EpochPeriod.ShortSession) {
-          flipShortHashesRequest = FlipShortHashesRequest.fromJson(mapParams);
-          logger.i(
-              new JsonEncoder.withIndent('  ').convert(flipShortHashesRequest));
-          body = json.encode(flipShortHashesRequest.toJson());
-          responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
-          if (responseHttp.statusCode == 200) {
-            flipShortHashesResponse =
-                flipShortHashesResponseFromJson(responseHttp.body);
+          if (await VpsUtil().isVpsUsed()) {
+            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            var response = await ssh.HttpClientImpl(
+                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                .request(url.toString(),
+                    method: 'POST',
+                    data: jsonEncode(mapParams),
+                    headers: requestHeaders);
+            if (response.status == 200) {
+              flipShortHashesResponse =
+                  flipShortHashesResponseFromJson(response.text);
+            }
+          } else {
+            flipShortHashesRequest = FlipShortHashesRequest.fromJson(mapParams);
+            logger.i(new JsonEncoder.withIndent('  ')
+                .convert(flipShortHashesRequest));
+            body = json.encode(flipShortHashesRequest.toJson());
+            responseHttp =
+                await http.post(url, body: body, headers: requestHeaders);
+            if (responseHttp.statusCode == 200) {
+              flipShortHashesResponse =
+                  flipShortHashesResponseFromJson(responseHttp.body);
+            }
           }
         }
         if (typeSession == EpochPeriod.LongSession) {
-          flipLongHashesRequest = FlipLongHashesRequest.fromJson(mapParams);
-          logger.i(
-              new JsonEncoder.withIndent('  ').convert(flipLongHashesRequest));
-          body = json.encode(flipLongHashesRequest.toJson());
-          responseHttp =
-              await http.post(url, body: body, headers: requestHeaders);
-          if (responseHttp.statusCode == 200) {
-            flipLongHashesResponse =
-                flipLongHashesResponseFromJson(responseHttp.body);
+          if (await VpsUtil().isVpsUsed()) {
+            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            var response = await ssh.HttpClientImpl(
+                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                .request(url.toString(),
+                    method: 'POST',
+                    data: jsonEncode(mapParams),
+                    headers: requestHeaders);
+            if (response.status == 200) {
+              flipLongHashesResponse =
+                  flipLongHashesResponseFromJson(response.text);
+            }
+          } else {
+            flipLongHashesRequest = FlipLongHashesRequest.fromJson(mapParams);
+            logger.i(new JsonEncoder.withIndent('  ')
+                .convert(flipLongHashesRequest));
+            body = json.encode(flipLongHashesRequest.toJson());
+            responseHttp =
+                await http.post(url, body: body, headers: requestHeaders);
+            if (responseHttp.statusCode == 200) {
+              flipLongHashesResponse =
+                  flipLongHashesResponseFromJson(responseHttp.body);
+            }
           }
         }
       }
@@ -189,7 +220,8 @@ class ValidationService {
       // get Flip
       FlipGetResponse flipGetResponse;
       FlipGetKeyResponse flipGetKeyResponse;
-      
+      FlipGetRequest flipGetRequest;
+
       if (simulationMode) {
         String data =
             await loadAssets(validationSessionInfoFlips.hash + "_images");
@@ -205,12 +237,25 @@ class ValidationService {
           'key': keyApp
         };
 
-        FlipGetRequest flipGetRequest = FlipGetRequest.fromJson(mapParams);
-        body = json.encode(flipGetRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          flipGetResponse = flipGetResponseFromJson(responseHttp.body);
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            flipGetResponse = flipGetResponseFromJson(response.text);
+          }
+        } else {
+          flipGetRequest = FlipGetRequest.fromJson(mapParams);
+          body = json.encode(flipGetRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            flipGetResponse = flipGetResponseFromJson(responseHttp.body);
+          }
         }
 
         /*mapParams = {
@@ -350,14 +395,28 @@ class ValidationService {
           'key': keyApp
         };
 
-        FlipWordsRequest flipWordsRequest =
-            FlipWordsRequest.fromJson(mapParams);
-        body = json.encode(flipWordsRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          flipWordsResponse = flipWordsResponseFromJson(responseHttp.body);
-          nbWords = flipWordsResponse.result.words.length;
+        if (await VpsUtil().isVpsUsed()) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            flipWordsResponse = flipWordsResponseFromJson(response.text);
+            nbWords = flipWordsResponse.result.words.length;
+          }
+        } else {
+          FlipWordsRequest flipWordsRequest =
+              FlipWordsRequest.fromJson(mapParams);
+          body = json.encode(flipWordsRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            flipWordsResponse = flipWordsResponseFromJson(responseHttp.body);
+            nbWords = flipWordsResponse.result.words.length;
+          }
         }
       } catch (e) {}
     }
@@ -380,7 +439,8 @@ class ValidationService {
 
   Future<String> loadAssets(String fileName) async {
     try {
-      return await rootBundle.loadString('test/examples/' + fileName + '.json', cache: false);
+      return await rootBundle.loadString('test/examples/' + fileName + '.json',
+          cache: false);
     } catch (e) {
       return null;
     }
@@ -428,14 +488,28 @@ class ValidationService {
       flipSubmitShortAnswersRequest.id = 101;
       flipSubmitShortAnswersRequest.key = keyApp;
 
-      body = json.encode(flipSubmitShortAnswersRequest.toJson());
-
-      logger.i(new JsonEncoder.withIndent('  ')
-          .convert(flipSubmitShortAnswersRequest));
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        flipSubmitShortAnswersResponse =
-            flipSubmitShortAnswersResponseFromJson(responseHttp.body);
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          flipSubmitShortAnswersResponse =
+              flipSubmitShortAnswersResponseFromJson(response.text);
+        }
+      } else {
+        body = json.encode(flipSubmitShortAnswersRequest.toJson());
+        logger.i(new JsonEncoder.withIndent('  ')
+            .convert(flipSubmitShortAnswersRequest));
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipSubmitShortAnswersResponse =
+              flipSubmitShortAnswersResponseFromJson(responseHttp.body);
+        }
       }
     } catch (e) {
       logger.e(e.toString());
@@ -493,14 +567,28 @@ class ValidationService {
       flipSubmitLongAnswersRequest.id = 101;
       flipSubmitLongAnswersRequest.key = keyApp;
 
-      body = json.encode(flipSubmitLongAnswersRequest.toJson());
-
-      logger.i(new JsonEncoder.withIndent('  ')
-          .convert(flipSubmitLongAnswersRequest));
-      responseHttp = await http.post(url, body: body, headers: requestHeaders);
-      if (responseHttp.statusCode == 200) {
-        flipSubmitLongAnswersResponse =
-            flipSubmitLongAnswersResponseFromJson(responseHttp.body);
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          flipSubmitLongAnswersResponse =
+              flipSubmitLongAnswersResponseFromJson(response.text);
+        }
+      } else {
+        body = json.encode(flipSubmitLongAnswersRequest.toJson());
+        logger.i(new JsonEncoder.withIndent('  ')
+            .convert(flipSubmitLongAnswersRequest));
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          flipSubmitLongAnswersResponse =
+              flipSubmitLongAnswersResponseFromJson(responseHttp.body);
+        }
       }
     } catch (e) {
       logger.e(e.toString());
