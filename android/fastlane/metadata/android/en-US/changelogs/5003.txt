@@ -1,0 +1,6 @@
+New major version
+- New interface and ergonomics
+- PIN code protection added
+- Contact management added
+- Details of transaction information added
+- Demonstration mode added

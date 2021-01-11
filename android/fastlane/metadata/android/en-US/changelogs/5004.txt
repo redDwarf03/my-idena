@@ -1,0 +1,1 @@
+- Add native configuration when your node is in a VPS

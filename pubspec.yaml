@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.3+5003
+version: 2.0.4+5004
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -66,8 +66,6 @@ dependencies:
 
   cryptography: ^1.4.1
 
-  secp256k1: ^0.2.2 
-
   web3dart: ^1.2.3 
 
   # Securley store data in a keystore
@@ -78,8 +76,6 @@ dependencies:
 
   # Flare for animations
   flare_flutter: ^2.0.6
-
-  asn1lib: ^0.8.1
   
   # Websockets
   web_socket_channel: ^1.1.0
@@ -88,7 +84,7 @@ dependencies:
   package_info: ^0.4.3+2
 
   # Device-specific info
-  device_info: ^1.0.0
+  device_info: ^1.0.0 
 
   # JSON Serialization
   json_annotation: ^3.0.1
@@ -145,6 +141,9 @@ dependencies:
   # Easy hexadecimal encoding and decoding
   hex: ^0.1.2
   
+  pointycastle: ^1.0.2
+
+  
   # Vibrate
   vibrate:
     git:
@@ -180,13 +179,20 @@ dependencies:
   # Avoid keyboard from overlapping text fields
   keyboard_avoider: ^0.1.2
 
-  tweetnacl: ^0.3.2
+  tweetnacl:
+    git:
+      url: https://github.com/GreenAppers/tweetnacl-dart
 
   hash: ^1.0.3
   
   circular_countdown_timer: ^0.0.8
 
   fluttericon: ^1.0.7
+
+  dartssh: 
+    git:
+      url: https://github.com/GreenAppers/dartssh.git
+      ref: master
   
 dev_dependencies:
   flutter_test:
