@@ -1,2 +1,3 @@
 - Fix the text color in the status bar
 - Fix error when amount of a tx >= 1000
+- Fix issue with biometric recognition

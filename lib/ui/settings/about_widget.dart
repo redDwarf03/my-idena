@@ -100,7 +100,7 @@ class _AboutState extends State<About> {
                           children: [
                             TextSpan(
                               text:
-                                  "Mahmoud !!!, Cryptomatrix, Andrew, Rioda, Sysy, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados, Alek, Shadowcrypto, Kazunori, Bingbinglee, gσѕϯ111, Neotame, Toni.dev, Orizhial, Kevin G., Marko, Martin Grabarz, CoinDrix, Vule, Lemoe, ...",
+                                  "Mahmoud !!!, Cryptomatrix, Andrew, Rioda, Sysy, Bus, JaymenChou, Gutalean, Tony, Dont Ramp, Qsvtr, Ludiveen, Set Animals, Rados, Alek, Shadowcrypto, Kazunori, Bingbinglee, gσѕϯ111, Neotame, Toni.dev, Orizhial, Kevin G., Marko, Martin Grabarz, CoinDrix, Vule, Lemoe, Sascha R., ...",
                               style: AppStyles.textStyleParagraph(context),
                             ),
                           ],
