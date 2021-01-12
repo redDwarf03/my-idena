@@ -840,7 +840,7 @@ class _AppHomePageState extends State<AppHomePage>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  double.tryParse(item.getFormattedAmount()) > 0
+                                  double.tryParse(item.getFormattedAmount().replaceAll(",", "")) > 0
                                       ? Container(
                                           child: RichText(
                                             textAlign: TextAlign.start,

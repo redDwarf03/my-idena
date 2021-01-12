@@ -156,7 +156,6 @@ class AppService {
 
     BcnTransactionsRequest bcnTransactionsRequest;
     BcnTransactionsResponse bcnTransactionsResponse;
-    HttpClient httpClient = new HttpClient();
 
     Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
     String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
@@ -212,8 +211,6 @@ class AppService {
         }
       } catch (e) {
         logger.e(e.toString());
-      } finally {
-        httpClient.close();
       }
     }
 

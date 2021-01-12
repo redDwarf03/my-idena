@@ -6,7 +6,6 @@ import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/model/available_language.dart';
 import 'package:my_idena/model/device_lock_timeout.dart';
-import 'package:my_idena/model/wallet.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }
@@ -22,8 +21,6 @@ class SharedPrefsUtil {
   static const String cur_currency = 'fidena_currency_pref';
   static const String cur_language = 'fidena_language_pref';
   static const String cur_theme = 'fidena_theme_pref';
-  static const String user_representative =
-      'fidena_user_rep'; // For when non-opened accounts have set a representative
   static const String firstcontact_added = 'fidena_first_c_added';
   static const String lock_kalium = 'fidena_lock_dev';
   static const String kalium_lock_timeout = 'fidena_lock_timeout';
@@ -133,15 +130,6 @@ class SharedPrefsUtil {
   Future<LanguageSetting> getLanguage() async {
     return LanguageSetting(AvailableLanguage.values[await get(cur_language,
         defaultValue: AvailableLanguage.DEFAULT.index)]);
-  }
-
-  Future<void> setRepresentative(String rep) async {
-    return await set(user_representative, rep);
-  }
-
-  Future<String> getRepresentative() async {
-    return await get(user_representative,
-        defaultValue: AppWallet.defaultRepresentative);
   }
 
   Future<void> setLock(bool value) async {
@@ -321,7 +309,6 @@ class SharedPrefsUtil {
     await prefs.remove(seed_backed_up_key);
     await prefs.remove(app_uuid_key);
     await prefs.remove(price_conversion);
-    await prefs.remove(user_representative);
     await prefs.remove(cur_currency);
     await prefs.remove(auth_method);
     await prefs.remove(lock_kalium);

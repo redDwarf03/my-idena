@@ -6,25 +6,21 @@ import 'package:my_idena/util/numberutil.dart';
 
 /// Main wallet object that's passed around the app via state
 class AppWallet {
-  static const String defaultRepresentative = '0xf2b4f700d2975abd39000587f9788f66afedf691';
-
   bool _loading; // Whether or not app is initially loading
   bool _historyLoading; // Whether or not we have received initial account history response
   String _address;
   double _accountBalance;
   double _accountStake;
-  String _representative;
   String _localCurrencyPrice;
   String _btcPrice;
   List<Transaction> _history;
 
   AppWallet({String address, double accountBalance, double accountStake,
-                String representative, String localCurrencyPrice,String btcPrice, 
+                String localCurrencyPrice,String btcPrice, 
                 List<Transaction> history, bool loading, bool historyLoading}) {
     this._address = address;
     this._accountBalance = accountBalance ?? 0;
     this._accountStake = accountStake ?? 0;
-    this._representative = representative;
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
     this._btcPrice = btcPrice ?? "0";
     this._history = history ?? new List<Transaction>();
@@ -91,14 +87,6 @@ class AppWallet {
 
   set btcPrice(String value) {
     _btcPrice = value;
-  }
-
-  String get representative {
-   return _representative ?? defaultRepresentative;
-  }
-
-  set representative(String value) {
-    _representative = value;
   }
 
   List<Transaction> get history => _history;
