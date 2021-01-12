@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/ui/util/routes.dart';
 
-/** TODO - Replace all usage with the class in sheet_util.dart */
 class AppSheets {
   //App Ninty Height Sheet
   static Future<T> showAppHeightNineSheet<T>(
