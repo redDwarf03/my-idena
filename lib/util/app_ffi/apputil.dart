@@ -9,7 +9,7 @@ import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_crypto.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 
 class AppUtil {
   Future<String> getAddress() async {
@@ -17,7 +17,7 @@ class AppUtil {
     if (await DemoModeUtil().getDemoModeStatus()) {
       address = DM_IDENTITY_ADDRESS;
     } else {
-      if (await PublicNodeUtil().getPublicNode() == false) {
+      if (await SharedNodeUtil().getSharedNode() == false) {
         DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse = await AppService().getDnaGetCoinbaseAddr();
         address = dnaGetCoinbaseAddrResponse == null ? "" : dnaGetCoinbaseAddrResponse.result;
       } else {

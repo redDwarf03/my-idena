@@ -69,7 +69,7 @@ import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 import 'package:my_idena/util/util_vps.dart';
 import 'package:dartssh/http.dart' as ssh;
 
@@ -1078,7 +1078,7 @@ class AppService {
 
     try {
       if (await DemoModeUtil().getDemoModeStatus() ||
-          await PublicNodeUtil().getPublicNode()) {
+          await SharedNodeUtil().getSharedNode()) {
         bcnSyncingResponse = new BcnSyncingResponse();
         bcnSyncingResponse.result = new BcnSyncingResponseResult();
         bcnSyncingResponse.result.syncing = DM_SYNC_SYNCING;

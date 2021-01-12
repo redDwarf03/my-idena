@@ -9,7 +9,7 @@ import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 
 class SyncInfoView extends StatefulWidget {
   const SyncInfoView({Key key}) : super(key: key);
@@ -21,7 +21,7 @@ class SyncInfoView extends StatefulWidget {
 class _SyncInfoViewState extends State<SyncInfoView> {
   Timer _timerSync;
   bool _status = true;
-  bool _publicNode = false;
+  bool _sharedNode = false;
   bool _demoMode = false;
   bool _mining;
   AppService appService = new AppService();
@@ -52,7 +52,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
         }
       }
 
-      _publicNode = await PublicNodeUtil().getPublicNode();
+      _sharedNode = await SharedNodeUtil().getSharedNode();
       _demoMode = await DemoModeUtil().getDemoModeStatus();
       _bcnSyncingResponse = await appService.checkSync();
       if (_initialCurrentBlock == 0 &&
@@ -95,7 +95,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-        _publicNode == false && _demoMode == false && _mining != null
+        _sharedNode == false && _demoMode == false && _mining != null
             ? Column(
                 children: [
                   _mining == false
@@ -106,7 +106,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-        _publicNode
+        _sharedNode
             ? Column(
                 children: [
                   Icon(
@@ -115,7 +115,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                     size: 15,
                   ),
                   SizedBox(height: 3),
-                  Text(AppLocalization.of(context).publicNode,
+                  Text(AppLocalization.of(context).sharedNode,
                       style: TextStyle(
                           color: StateContainer.of(context).curTheme.primary,
                           fontSize: 8)),

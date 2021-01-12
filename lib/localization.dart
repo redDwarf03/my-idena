@@ -218,9 +218,9 @@ class AppLocalization {
         desc: '', name: 'enterDemoMode');
   }  
 
-  String get enterPublicNode {
-    return Intl.message("Access to a Public Node ?",
-        desc: '', name: 'enterPublicNode');
+  String get enterSharedNode {
+    return Intl.message("Access to a Shared Node ?",
+        desc: '', name: 'enterSharedNode');
   }  
 
   String get enterKeyApp {
@@ -797,9 +797,9 @@ class AppLocalization {
         desc: '', name: 'demoMode');
   }
 
-  String get publicNode {
-    return Intl.message("Public Node",
-        desc: '', name: 'publicNode');
+  String get sharedNode {
+    return Intl.message("Shared Node",
+        desc: '', name: 'sharedNode');
   }
 
   String get synchronized {

@@ -23,7 +23,7 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 
 class ConfigureAccessNodePage extends StatefulWidget {
   @override
@@ -70,7 +70,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   String _vpsPasswordValidationText = "";
   String _addressText = "";
   bool _isDemoModeSwitched = false;
-  bool _isPublicNodeSwitched = false;
+  bool _isSharedNodeSwitched = false;
   bool _isVpsSwitched = false;
   bool _keyAppVisible;
   bool _encryptedPkVisible;
@@ -213,7 +213,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(milliseconds: 500), () async {
       status = true;
-      if (_isPublicNodeSwitched == false &&
+      if (_isSharedNodeSwitched == false &&
           _isDemoModeSwitched == false &&
           _isVpsSwitched == false) {
         status = await appService.getWStatusGetResponse();
@@ -222,7 +222,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         }
       } else {
         _addressText = await AppUtil().getAddress();
-        if (_isPublicNodeSwitched) {
+        if (_isSharedNodeSwitched) {
           if (_addressText != null && _addressText.isEmpty == false) {
             DnaIdentityResponse _dnaIdentityResponse =
                 await appService.getDnaIdentity(_addressText);
@@ -241,7 +241,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
       //print("status getStatus : " + status.toString());
       _addressText = await AppUtil().getAddress();
-      if (_isPublicNodeSwitched) {
+      if (_isSharedNodeSwitched) {
         if (_addressText != null && _addressText.isEmpty == false) {
           DnaIdentityResponse _dnaIdentityResponse =
               await appService.getDnaIdentity(_addressText);
@@ -355,7 +355,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                           setState(() {
                                             _isDemoModeSwitched = value;
                                             if (_isDemoModeSwitched) {
-                                              _isPublicNodeSwitched = false;
+                                              _isSharedNodeSwitched = false;
                                               _isVpsSwitched = false;
                                             }
                                             _apiUrlController =
@@ -410,7 +410,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                         children: [
                                           Text(
                                             AppLocalization.of(context)
-                                                .enterPublicNode,
+                                                .enterSharedNode,
                                             style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w100,
@@ -421,11 +421,11 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                             ),
                                           ),
                                           Switch(
-                                              value: _isPublicNodeSwitched,
+                                              value: _isSharedNodeSwitched,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  _isPublicNodeSwitched = value;
-                                                  if (_isPublicNodeSwitched) {
+                                                  _isSharedNodeSwitched = value;
+                                                  if (_isSharedNodeSwitched) {
                                                     _isDemoModeSwitched = false;
                                                      _isVpsSwitched = false;
                                                   }
@@ -495,7 +495,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                   _isVpsSwitched = value;
                                                   if (_isVpsSwitched) {
                                                     _isDemoModeSwitched = false;
-                                                    _isPublicNodeSwitched =
+                                                    _isSharedNodeSwitched =
                                                         false;
                                                   }
                                                   _apiUrlController =
@@ -544,13 +544,13 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                         ],
                                       )),
                                 _isDemoModeSwitched ||
-                                        _isPublicNodeSwitched ||
+                                        _isSharedNodeSwitched ||
                                         _isVpsSwitched
                                     ? SizedBox()
                                     : Container(
                                         child: getApiUrlContainer(),
                                       ),
-                                _isDemoModeSwitched || _isPublicNodeSwitched
+                                _isDemoModeSwitched || _isSharedNodeSwitched
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -587,12 +587,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isPublicNodeSwitched == false
+                                _isSharedNodeSwitched == false
                                     ? SizedBox()
                                     : Container(
                                         child: getEncryptedPkContainer(),
                                       ),
-                                _isPublicNodeSwitched == false
+                                _isSharedNodeSwitched == false
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -607,12 +607,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isPublicNodeSwitched == false
+                                _isSharedNodeSwitched == false
                                     ? SizedBox()
                                     : Container(
                                         child: getPasswordPkContainer(),
                                       ),
-                                _isPublicNodeSwitched == false
+                                _isSharedNodeSwitched == false
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -1153,7 +1153,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
     if (_isDemoModeSwitched == false) {
       if (_isVpsSwitched == false) {
-        if (_isPublicNodeSwitched == false) {
+        if (_isSharedNodeSwitched == false) {
           if (_apiUrlController.text.trim().isEmpty) {
             isValid = false;
             setState(() {
@@ -1206,7 +1206,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setApiUrl(_apiUrlController.text);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
     }
-    if (_isPublicNodeSwitched) {
+    if (_isSharedNodeSwitched) {
       await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
       await sl
           .get<SharedPrefsUtil>()

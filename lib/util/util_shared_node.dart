@@ -3,8 +3,8 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 
 const String PN_URL = "https://node.idena.io";
 
-class PublicNodeUtil {
-  Future<bool> getPublicNode() async {
+class SharedNodeUtil {
+  Future<bool> getSharedNode() async {
     if (await sl.get<SharedPrefsUtil>().getApiUrl() == Uri.parse(PN_URL)) {
       return true;
     } else {

@@ -41,7 +41,7 @@ import 'package:my_idena/ui/widgets/sync_info_view.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:my_idena/bus/events.dart';
 
@@ -84,7 +84,7 @@ class _AppHomePageState extends State<AppHomePage>
 
   bool _lockDisabled = false; // whether we should avoid locking the app
 
-  bool isPublicNode = false;
+  bool isSharedNode = false;
 
   // Main card height
   double mainCardHeight;
@@ -121,7 +121,7 @@ class _AppHomePageState extends State<AppHomePage>
   void initState() {
     super.initState();
 
-    _setPublicNode();
+    _setSharedNode();
     _registerBus();
     WidgetsBinding.instance.addObserver(this);
     if (widget.priceConversion != null) {
@@ -200,8 +200,8 @@ class _AppHomePageState extends State<AppHomePage>
     }
   }
 
-  Future<void> _setPublicNode() async {
-    isPublicNode = await PublicNodeUtil().getPublicNode();
+  Future<void> _setSharedNode() async {
+    isSharedNode = await SharedNodeUtil().getSharedNode();
   }
 
   /// Add donations contact if it hasnt already been added
@@ -422,7 +422,7 @@ class _AppHomePageState extends State<AppHomePage>
             ],
           ));
     } else if (StateContainer.of(context).wallet.history.length == 0 &&
-        isPublicNode == false) {
+        isSharedNode == false) {
       _disposeAnimation();
       return ReactiveRefreshIndicator(
         backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
@@ -552,7 +552,7 @@ class _AppHomePageState extends State<AppHomePage>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            isPublicNode == false
+                            isSharedNode == false
                                 ? Text(
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context)

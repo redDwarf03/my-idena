@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-11T18:22:30.376943",
+  "@@last_modified": "2021-01-12T18:52:57.308059",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -228,8 +228,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterPublicNode": "Access to a Public Node ?",
-  "@enterPublicNode": {
+  "enterSharedNode": "Access to a Shared Node ?",
+  "@enterSharedNode": {
     "description": "",
     "type": "text",
     "placeholders": {}
@@ -888,8 +888,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "publicNode": "Public Node",
-  "@publicNode": {
+  "sharedNode": "Shared Node",
+  "@sharedNode": {
     "description": "",
     "type": "text",
     "placeholders": {}

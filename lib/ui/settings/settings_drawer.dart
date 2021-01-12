@@ -15,7 +15,7 @@ import 'package:my_idena/ui/settings/validation_basics_widget.dart';
 import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/util_public_node.dart';
+import 'package:my_idena/util/util_shared_node.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
@@ -86,13 +86,13 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   bool _miningActive;
 
-  bool _publicNode;
+  bool _sharedNode;
   bool _demoMode;
   bool _canMine;
   List _flipKeyWordPairs;
 
   void loadCtx() async {
-    bool _pn = await PublicNodeUtil().getPublicNode();
+    bool _pn = await SharedNodeUtil().getSharedNode();
     bool _dm = await DemoModeUtil().getDemoModeStatus();
 
     DnaIdentityResponse _dnaIdentityResponse = await AppService()
@@ -101,7 +101,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     List _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
     bool cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
     setState(() {
-      _publicNode = _pn;
+      _sharedNode = _pn;
       _demoMode = _dm;
       _miningActive = _m;
       _canMine = cm;
@@ -119,7 +119,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _profileInfosOpen = false;
     _loadingAccounts = false;
     _miningActive = false;
-    _publicNode = true;
+    _sharedNode = true;
     _demoMode = true;
     _canMine = false;
 
@@ -929,7 +929,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    _publicNode == false &&
+                    _sharedNode == false &&
                             _demoMode == false &&
                             _canMine == true
                         ? Divider(
@@ -937,7 +937,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
-                    _publicNode == false &&
+                    _sharedNode == false &&
                             _demoMode == false &&
                             _canMine == true
                         ? AppSettings.buildSettingsListItemSwitch(
