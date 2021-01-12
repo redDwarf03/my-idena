@@ -293,7 +293,7 @@ class StateContainerState extends State<StateContainer> {
   Future<void> requestUpdate({bool pending = true}) async {
     if (wallet != null && wallet.address != null) {
       // Request account history
-      int count = 30;
+      int count = 40;
       try {
         await AppService()
             .getBalanceGetResponse(wallet.address.toString(), true);
