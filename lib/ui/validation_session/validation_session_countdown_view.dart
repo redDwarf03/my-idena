@@ -455,7 +455,7 @@ class _ValidationSessionCountdownTextState
     if (currentPeriod == EpochPeriod.ShortSession || force) {
       bool simulationMode = false;
       Navigator.of(context)
-          .pushNamed('/validation_session_step_2', arguments: simulationMode);
+          .pushNamed('/validation_session_step_1', arguments: simulationMode);
     }
   }
 
