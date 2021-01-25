@@ -13,6 +13,7 @@ import 'package:my_idena/network/model/response/dna_ceremonyIntervals_response.d
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/caseconverter.dart';
@@ -40,7 +41,6 @@ class _ValidationSessionCountdownTextState
   int endTime;
   Timer _timer;
   bool wait = false;
-  AppService appService = new AppService();
   CountdownTimerController controller;
   DnaCeremonyIntervalsResponse _dnaCeremonyIntervalsResponse;
   DnaGetEpochResponse _dnaGetEpochResponse;
@@ -55,8 +55,9 @@ class _ValidationSessionCountdownTextState
   }
 
   Future<void> loadInfos() async {
-    _dnaCeremonyIntervalsResponse = await appService.getDnaCeremonyIntervals();
-    _dnaGetEpochResponse = await appService.getDnaGetEpoch();
+    _dnaCeremonyIntervalsResponse =
+        await sl.get<AppService>().getDnaCeremonyIntervals();
+    _dnaGetEpochResponse = await sl.get<AppService>().getDnaGetEpoch();
 
     if (_dnaGetEpochResponse.result != null &&
         _dnaGetEpochResponse.result.nextValidation != null &&
@@ -79,7 +80,7 @@ class _ValidationSessionCountdownTextState
 
   _timerUpdate() {
     _timer = Timer(const Duration(seconds: 1), () async {
-      currentPeriod = await appService.getCurrentPeriod();
+      currentPeriod = await sl.get<AppService>().getCurrentPeriod();
       if (!mounted) return;
       setState(() {});
       _timerUpdate();
@@ -123,7 +124,8 @@ class _ValidationSessionCountdownTextState
 
   _buildChild(BuildContext context) {
     return FutureBuilder(
-        future: appService
+        future: sl
+            .get<AppService>()
             .getDnaIdentity(StateContainer.of(context).selectedAccount.address),
         builder: (BuildContext context,
             AsyncSnapshot<DnaIdentityResponse> _dnaIdentityResponse) {
@@ -483,9 +485,9 @@ class _ValidationSessionCountdownTextState
               CaseChange.toUpperCase(
                   AppLocalization.of(context).yesButton, context), () {
             setState(() {
-              appService.sendTip(
+              sl.get<AppService>().sendTip(
                   StateContainer.of(context).selectedAccount.address,
-                  amount.toDouble());
+                  amount.toDouble().toString());
               AppDialogs.showConfirmDialog(
                   context,
                   AppLocalization.of(context).validationTipThxHeader,
