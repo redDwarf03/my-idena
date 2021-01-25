@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/dimens.dart';
@@ -23,7 +22,7 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_shared_node.dart';
+import 'package:my_idena/util/util_node.dart';
 
 class ConfigureAccessNodePage extends StatefulWidget {
   @override
@@ -33,7 +32,6 @@ class ConfigureAccessNodePage extends StatefulWidget {
 
 class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final Logger log = sl.get<Logger>();
 
   FocusNode _apiUrlFocusNode;
   FocusNode _keyAppFocusNode;
@@ -72,6 +70,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   bool _isDemoModeSwitched = false;
   bool _isSharedNodeSwitched = false;
   bool _isVpsSwitched = false;
+  bool _isPublicNodeSwitched = false;
   bool _keyAppVisible;
   bool _encryptedPkVisible;
   bool _passwordPkVisible;
@@ -79,7 +78,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
   Timer _timerSync;
   bool status = false;
-  AppService appService = new AppService();
 
   @override
   void dispose() {
@@ -212,11 +210,13 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(milliseconds: 500), () async {
-      status = true;
+      _addressText = "";
+      status = false;
       if (_isSharedNodeSwitched == false &&
           _isDemoModeSwitched == false &&
-          _isVpsSwitched == false) {
-        status = await appService.getWStatusGetResponse();
+          _isVpsSwitched == false &&
+          _isPublicNodeSwitched == false) {
+        status = await sl.get<AppService>().getWStatusGetResponse();
         if (status) {
           _addressText = await AppUtil().getAddress();
         }
@@ -225,7 +225,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         if (_isSharedNodeSwitched) {
           if (_addressText != null && _addressText.isEmpty == false) {
             DnaIdentityResponse _dnaIdentityResponse =
-                await appService.getDnaIdentity(_addressText);
+                await sl.get<AppService>().getDnaIdentity(_addressText);
             if (_dnaIdentityResponse == null) {
               status = false;
               //print("status getIdentity : " + status.toString());
@@ -244,7 +244,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       if (_isSharedNodeSwitched) {
         if (_addressText != null && _addressText.isEmpty == false) {
           DnaIdentityResponse _dnaIdentityResponse =
-              await appService.getDnaIdentity(_addressText);
+              await sl.get<AppService>().getDnaIdentity(_addressText);
           if (_dnaIdentityResponse == null) {
             status = false;
             //print("status getIdentity : " + status.toString());
@@ -357,6 +357,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                             if (_isDemoModeSwitched) {
                                               _isSharedNodeSwitched = false;
                                               _isVpsSwitched = false;
+                                              _isPublicNodeSwitched = false;
                                             }
                                             _apiUrlController =
                                                 TextEditingController();
@@ -400,8 +401,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                         activeColor: Colors.green),
                                   ],
                                 )),
-
-                                /*_isDemoModeSwitched
+                                _isDemoModeSwitched
                                     ? SizedBox()
                                     : Container(
                                         child: Row(
@@ -427,7 +427,9 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                   _isSharedNodeSwitched = value;
                                                   if (_isSharedNodeSwitched) {
                                                     _isDemoModeSwitched = false;
-                                                     _isVpsSwitched = false;
+                                                    _isVpsSwitched = false;
+                                                    _isPublicNodeSwitched =
+                                                        false;
                                                   }
                                                   _apiUrlController =
                                                       TextEditingController();
@@ -437,10 +439,14 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                       TextEditingController();
                                                   _passwordPkController =
                                                       TextEditingController();
-                                            _vpsUserController = TextEditingController();
-                                            _vpsIpController = TextEditingController();
-                                            _vpsTunnelController = TextEditingController();
-                                            _vpsPasswordController = TextEditingController();
+                                                  _vpsUserController =
+                                                      TextEditingController();
+                                                  _vpsIpController =
+                                                      TextEditingController();
+                                                  _vpsTunnelController =
+                                                      TextEditingController();
+                                                  _vpsPasswordController =
+                                                      TextEditingController();
                                                   _apiUrlValidationText = "";
                                                   _keyAppValidationText = "";
                                                   _encryptedPkValidationText =
@@ -450,7 +456,8 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                   _vpsUserValidationText = "";
                                                   _vpsIpValidationText = "";
                                                   _vpsTunnelValidationText = "";
-                                                  _vpsPasswordValidationText = "";
+                                                  _vpsPasswordValidationText =
+                                                      "";
                                                   _apiUrlHint = "";
                                                   _keyAppHint = "";
                                                   _encryptedPkHint = "";
@@ -468,7 +475,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                       .backgroundDarkest,
                                               activeColor: Colors.green),
                                         ],
-                                      )),*/
+                                      )),
                                 _isDemoModeSwitched
                                     ? SizedBox()
                                     : Container(
@@ -497,6 +504,83 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                                     _isDemoModeSwitched = false;
                                                     _isSharedNodeSwitched =
                                                         false;
+                                                    _isPublicNodeSwitched =
+                                                        false;
+                                                  }
+                                                  _apiUrlController =
+                                                      TextEditingController();
+                                                  _keyAppController =
+                                                      TextEditingController();
+                                                  _encryptedPkController =
+                                                      TextEditingController();
+                                                  _passwordPkController =
+                                                      TextEditingController();
+                                                  _vpsUserController =
+                                                      TextEditingController();
+                                                  _vpsIpController =
+                                                      TextEditingController();
+                                                  _vpsTunnelController =
+                                                      TextEditingController();
+                                                  _vpsPasswordController =
+                                                      TextEditingController();
+                                                  _apiUrlValidationText = "";
+                                                  _keyAppValidationText = "";
+                                                  _encryptedPkValidationText =
+                                                      "";
+                                                  _passwordPkValidationText =
+                                                      "";
+                                                  _vpsUserValidationText = "";
+                                                  _vpsIpValidationText = "";
+                                                  _vpsTunnelValidationText = "";
+                                                  _vpsPasswordValidationText =
+                                                      "";
+                                                  _apiUrlHint = "";
+                                                  _keyAppHint = "";
+                                                  _encryptedPkHint = "";
+                                                  _passwordPkHint = "";
+                                                  _vpsUserHint = "";
+                                                  _vpsIpHint = "";
+                                                  _vpsTunnelHint = "";
+                                                  _vpsPasswordHint = "";
+                                                });
+                                                updateSharedPrefsUtil();
+                                              },
+                                              activeTrackColor:
+                                                  StateContainer.of(context)
+                                                      .curTheme
+                                                      .backgroundDarkest,
+                                              activeColor: Colors.green),
+                                        ],
+                                      )),
+                                _isDemoModeSwitched
+                                    ? SizedBox()
+                                    : Container(
+                                        child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            AppLocalization.of(context)
+                                                .enterPublicNode,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w100,
+                                              fontFamily: 'Roboto',
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .text60,
+                                            ),
+                                          ),
+                                          Switch(
+                                              value: _isPublicNodeSwitched,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _isPublicNodeSwitched = value;
+                                                  if (_isPublicNodeSwitched) {
+                                                    _isDemoModeSwitched = false;
+                                                    _isSharedNodeSwitched =
+                                                        false;
+                                                    _isVpsSwitched = false;
                                                   }
                                                   _apiUrlController =
                                                       TextEditingController();
@@ -545,12 +629,16 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                       )),
                                 _isDemoModeSwitched ||
                                         _isSharedNodeSwitched ||
-                                        _isVpsSwitched
+                                        _isVpsSwitched ||
+                                        _isPublicNodeSwitched
                                     ? SizedBox()
                                     : Container(
                                         child: getApiUrlContainer(),
                                       ),
-                                _isDemoModeSwitched || _isSharedNodeSwitched
+                                 _isDemoModeSwitched ||
+                                        _isSharedNodeSwitched ||
+                                        _isVpsSwitched ||
+                                        _isPublicNodeSwitched
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -565,12 +653,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isDemoModeSwitched
+                                _isDemoModeSwitched || _isPublicNodeSwitched
                                     ? SizedBox()
                                     : Container(
                                         child: getKeyAppContainer(),
                                       ),
-                                _isDemoModeSwitched
+                                _isDemoModeSwitched || _isPublicNodeSwitched
                                     ? SizedBox(
                                         height: 1,
                                       )
@@ -1013,7 +1101,8 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
             FocusScope.of(context).unfocus();
           },
         ),
-        Text(AppLocalization.of(context).enterVpsUserExample, style: AppStyles.textStyleParagraphSmall(context)),
+        Text(AppLocalization.of(context).enterVpsUserExample,
+            style: AppStyles.textStyleParagraphSmall(context)),
       ],
     );
   }
@@ -1151,6 +1240,10 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _vpsPasswordFocusNode.unfocus();
     _vpsTunnelFocusNode.unfocus();
 
+    if (_isPublicNodeSwitched)
+    {
+      return isValid;
+    }
     if (_isDemoModeSwitched == false) {
       if (_isVpsSwitched == false) {
         if (_isSharedNodeSwitched == false) {
@@ -1200,23 +1293,27 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
   void updateSharedPrefsUtil() async {
     if (_isDemoModeSwitched) {
+      await sl.get<SharedPrefsUtil>().setNodeType(DEMO_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl("http://127.0.0.1");
       await sl.get<SharedPrefsUtil>().setKeyApp(DM_KEY_APP);
-    } else {
-      await sl.get<SharedPrefsUtil>().setApiUrl(_apiUrlController.text);
+      await sl.get<SharedPrefsUtil>().setVpsIp("");
+      await sl.get<SharedPrefsUtil>().setVpsUser("");
+      await sl.get<SharedPrefsUtil>().setVpsPassword("");
+      await sl.get<SharedPrefsUtil>().setEncryptedPk("");
+      await sl.get<SharedPrefsUtil>().setPasswordPk("");
+    } else if (_isSharedNodeSwitched) {
+      await sl.get<SharedPrefsUtil>().setNodeType(SHARED_NODE);
+      await sl.get<SharedPrefsUtil>().setApiUrl(SN_URL);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
-    }
-    if (_isSharedNodeSwitched) {
-      await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
       await sl
           .get<SharedPrefsUtil>()
           .setEncryptedPk(_encryptedPkController.text);
       await sl.get<SharedPrefsUtil>().setPasswordPk(_passwordPkController.text);
-    } else {
-      await sl.get<SharedPrefsUtil>().setEncryptedPk("");
-      await sl.get<SharedPrefsUtil>().setPasswordPk("");
-    }
-    if (_isVpsSwitched) {
+      await sl.get<SharedPrefsUtil>().setVpsIp("");
+      await sl.get<SharedPrefsUtil>().setVpsUser("");
+      await sl.get<SharedPrefsUtil>().setVpsPassword("");
+    } else if (_isVpsSwitched) {
+      await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_VPS_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_vpsTunnelController.text);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
       await sl.get<SharedPrefsUtil>().setVpsIp(_vpsIpController.text);
@@ -1224,10 +1321,26 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl
           .get<SharedPrefsUtil>()
           .setVpsPassword(_vpsPasswordController.text);
-    } else {
+      await sl.get<SharedPrefsUtil>().setEncryptedPk("");
+      await sl.get<SharedPrefsUtil>().setPasswordPk("");
+    } else if (_isPublicNodeSwitched) {
+      await sl.get<SharedPrefsUtil>().setNodeType(PUBLIC_NODE);
+      await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
+      await sl.get<SharedPrefsUtil>().setKeyApp("");
       await sl.get<SharedPrefsUtil>().setVpsIp("");
       await sl.get<SharedPrefsUtil>().setVpsUser("");
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
+      await sl.get<SharedPrefsUtil>().setEncryptedPk("");
+      await sl.get<SharedPrefsUtil>().setPasswordPk("");
+    } else {
+      await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_LOCAL_NODE);
+      await sl.get<SharedPrefsUtil>().setApiUrl(_apiUrlController.text);
+      await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
+      await sl.get<SharedPrefsUtil>().setVpsIp("");
+      await sl.get<SharedPrefsUtil>().setVpsUser("");
+      await sl.get<SharedPrefsUtil>().setVpsPassword("");
+      await sl.get<SharedPrefsUtil>().setEncryptedPk("");
+      await sl.get<SharedPrefsUtil>().setPasswordPk("");
     }
     await sl.get<SharedPrefsUtil>().setAddress(_addressText);
   }

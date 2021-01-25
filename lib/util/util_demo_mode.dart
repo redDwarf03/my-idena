@@ -1,7 +1,4 @@
 
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-
 const String DM_IDENTITY_ADDRESS = "0cxbd304e235b073637018c0430a4242d6f233bcf3";
 const int DM_IDENTITY_AGE = 5;
 const String DM_IDENTITY_STATE = "Human";
@@ -32,16 +29,5 @@ const int DM_IDENTITY_KEYWORD_1 = 23;
 const int DM_IDENTITY_KEYWORD_2 = 15;
 const int DM_IDENTITY_KEYWORD_3 = 10;
 const int DM_IDENTITY_KEYWORD_4 = 4;
-
-class DemoModeUtil {
-  Future<bool> getDemoModeStatus() async {
-
- if(await sl.get<SharedPrefsUtil>().getKeyApp() == DM_KEY_APP) {
-    return true;
-  } else {
-    return false;
-  }
-}
-}
 
 

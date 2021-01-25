@@ -8,8 +8,8 @@ import 'package:my_idena/localization.dart';
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
-import 'package:my_idena/util/util_demo_mode.dart';
-import 'package:my_idena/util/util_shared_node.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/util/util_node.dart';
 
 class SyncInfoView extends StatefulWidget {
   const SyncInfoView({Key key}) : super(key: key);
@@ -21,10 +21,8 @@ class SyncInfoView extends StatefulWidget {
 class _SyncInfoViewState extends State<SyncInfoView> {
   Timer _timerSync;
   bool _status = true;
-  bool _sharedNode = false;
-  bool _demoMode = false;
+  int _nodeType = UNKOWN_NODE;
   bool _mining;
-  AppService appService = new AppService();
   BcnSyncingResponse _bcnSyncingResponse;
   int _initialCurrentBlock = 0;
 
@@ -42,19 +40,18 @@ class _SyncInfoViewState extends State<SyncInfoView> {
 
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(seconds: 1), () async {
-      _status = await appService.getWStatusGetResponse();
+      _nodeType = await NodeUtil().getNodeType();
+      _status = await sl.get<AppService>().getWStatusGetResponse();
       if (StateContainer.of(context).selectedAccount.address != null) {
-        DnaIdentityResponse _dnaIdentityResponse = await AppService()
+        DnaIdentityResponse _dnaIdentityResponse = await sl
+            .get<AppService>()
             .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
         if (_dnaIdentityResponse != null &&
             _dnaIdentityResponse.result != null) {
           _mining = _dnaIdentityResponse.result.online;
         }
       }
-
-      _sharedNode = await SharedNodeUtil().getSharedNode();
-      _demoMode = await DemoModeUtil().getDemoModeStatus();
-      _bcnSyncingResponse = await appService.checkSync();
+      _bcnSyncingResponse = await sl.get<AppService>().checkSync();
       if (_initialCurrentBlock == 0 &&
           _bcnSyncingResponse != null &&
           _bcnSyncingResponse.result.highestBlock == 0) {
@@ -81,21 +78,22 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   Widget _buildChild(BuildContext context) {
     return Row(
       children: [
-        _demoMode
-            ? Column(
-                children: [
-                  Icon(
-                    AppIcons.share,
+        Column(
+          children: [
+            Icon(
+              AppIcons.share,
+              color: StateContainer.of(context).curTheme.primary,
+              size: 15,
+            ),
+            SizedBox(height: 3),
+            Text(NodeUtil().getLabel(_nodeType),
+                style: TextStyle(
                     color: StateContainer.of(context).curTheme.primary,
-                    size: 15,
-                  ),
-                  SizedBox(height: 3),
-                  Text(AppLocalization.of(context).demoMode,
-                      style: TextStyle( color: StateContainer.of(context).curTheme.primary, fontSize: 8)),
-                ],
-              )
-            : SizedBox(),
-        _sharedNode == false && _demoMode == false && _mining != null
+                    fontSize: 8)),
+          ],
+        ),
+        SizedBox(width: 10),
+        _nodeType != SHARED_NODE && _nodeType != DEMO_NODE && _mining != null
             ? Column(
                 children: [
                   _mining == false
@@ -106,74 +104,76 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-        _sharedNode
-            ? Column(
+        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+            ? SizedBox()
+            : _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing
+                ? _bcnSyncingResponse != null &&
+                        _bcnSyncingResponse.result.highestBlock == 0
+                    ? Column(
+                        children: [
+                          Icon(Icons.find_replace,
+                              color: Colors.orange, size: 18),
+                          Text(AppLocalization.of(context).peersNotFound,
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.orange, fontSize: 8))
+                        ],
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                            Text(
+                                _bcnSyncingResponse.result.currentBlock
+                                        .toString() +
+                                    "\n/" +
+                                    _bcnSyncingResponse.result.highestBlock
+                                        .toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.orange, fontSize: 8)),
+                            Text(
+                                AppLocalization.of(context).synchronizingBlocks,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.orange, fontSize: 8))
+                          ])
+                : Text(""),
+        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+            ? SizedBox()
+            : SizedBox(width: 10),
+        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+            ? SizedBox()
+            : Column(
                 children: [
-                  Icon(
-                    AppIcons.share,
-                    color: StateContainer.of(context).curTheme.primary,
-                    size: 15,
-                  ),
-                  SizedBox(height: 3),
-                  Text(AppLocalization.of(context).sharedNode,
-                      style: TextStyle(
-                          color: StateContainer.of(context).curTheme.primary,
-                          fontSize: 8)),
+                  _status == false
+                      ? Icon(
+                          Icons
+                              .signal_cellular_connected_no_internet_4_bar_rounded,
+                          color: Colors.red,
+                          size: 18)
+                      : _bcnSyncingResponse != null &&
+                              _bcnSyncingResponse.result != null &&
+                              _bcnSyncingResponse.result.syncing != null &&
+                              _bcnSyncingResponse.result.syncing
+                          ? Icon(Icons.signal_cellular_alt_rounded,
+                              color: Colors.orange, size: 18)
+                          : Icon(Icons.signal_cellular_alt_rounded,
+                              color: Colors.green, size: 18),
+                  _status == false
+                      ? Text(AppLocalization.of(context).notConnected,
+                          style: TextStyle(color: Colors.red, fontSize: 8))
+                      : _bcnSyncingResponse != null &&
+                              _bcnSyncingResponse.result != null &&
+                              _bcnSyncingResponse.result.syncing != null &&
+                              _bcnSyncingResponse.result.syncing
+                          ? Text(AppLocalization.of(context).notSynchronized,
+                              style:
+                                  TextStyle(color: Colors.orange, fontSize: 8))
+                          : Text(AppLocalization.of(context).connected,
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 8))
                 ],
-              )
-            : SizedBox(),
-        _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing
-            ? _bcnSyncingResponse != null &&
-                    _bcnSyncingResponse.result.highestBlock == 0
-                ? Column(
-                    children: [
-                      Icon(Icons.find_replace, color: Colors.orange, size: 18),
-                      Text(AppLocalization.of(context).peersNotFound,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.orange, fontSize: 8))
-                    ],
-                  )
-                : Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Text(
-                        _bcnSyncingResponse.result.currentBlock.toString() +
-                            "\n/" +
-                            _bcnSyncingResponse.result.highestBlock.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.orange, fontSize: 8)),
-                    Text(AppLocalization.of(context).synchronizingBlocks,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.orange, fontSize: 8))
-                  ])
-            : Text(""),
-        SizedBox(width: 10),
-        Column(
-          children: [
-            _status == false
-                ? Icon(
-                    Icons.signal_cellular_connected_no_internet_4_bar_rounded,
-                    color: Colors.red,
-                    size: 18)
-                : _bcnSyncingResponse != null &&
-                        _bcnSyncingResponse.result != null &&
-                        _bcnSyncingResponse.result.syncing != null &&
-                        _bcnSyncingResponse.result.syncing
-                    ? Icon(Icons.signal_cellular_alt_rounded,
-                        color: Colors.orange, size: 18)
-                    : Icon(Icons.signal_cellular_alt_rounded,
-                        color: Colors.green, size: 18),
-            _status == false
-                ? Text(AppLocalization.of(context).notConnected,
-                    style: TextStyle(color: Colors.red, fontSize: 8))
-                : _bcnSyncingResponse != null &&
-                        _bcnSyncingResponse.result != null &&
-                        _bcnSyncingResponse.result.syncing != null &&
-                        _bcnSyncingResponse.result.syncing
-                    ? Text(AppLocalization.of(context).notSynchronized,
-                        style: TextStyle(color: Colors.orange, fontSize: 8))
-                    : Text(AppLocalization.of(context).connected,
-                        style: TextStyle(color: Colors.green, fontSize: 8))
-          ],
-        ),
+              ),
       ],
     );
   }

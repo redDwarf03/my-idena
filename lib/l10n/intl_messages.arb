@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-12T23:46:07.811428",
+  "@@last_modified": "2021-01-25T22:34:10.175138",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -258,6 +258,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "enterPublicNode": "Access to a Public Node ?",
+  "@enterPublicNode": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "enterVpsUser": "Enter a user",
   "@enterVpsUser": {
     "description": "",
@@ -434,6 +440,12 @@
   },
   "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
   "@transactionDetailCopyPaste": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailUnconfirmed": "Unconfirmed",
+  "@transactionDetailUnconfirmed": {
     "description": "transaction_detail",
     "type": "text",
     "placeholders": {}
