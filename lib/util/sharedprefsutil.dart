@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/available_currency.dart';
@@ -41,6 +42,7 @@ class SharedPrefsUtil {
   static const String vps_user = 'fidena_vps_user';
   static const String vps_password = 'fidena_vps_password';
   static const String vps_ip = 'fidena_vps_ip';
+  static const String node_type = 'fidena_node_type';
 
   // For plain-text data
   Future<void> set(String key, value) async {
@@ -138,6 +140,14 @@ class SharedPrefsUtil {
 
   Future<bool> getLock() async {
     return await get(lock_kalium, defaultValue: false);
+  }
+
+  Future<void> setNodeType(int value) async {
+    return await set(node_type, value);
+  }
+
+  Future<int> getNodeType() async {
+    return await get(node_type, defaultValue: UNKOWN_NODE);
   }
 
   Future<void> setLockTimeout(LockTimeoutSetting setting) async {
@@ -301,6 +311,7 @@ class SharedPrefsUtil {
     await prefs.remove(vps_password);
     await prefs.remove(vps_user);
     await prefs.remove(address);
+    await prefs.remove(node_type);
   }
 
   // For logging out
@@ -324,5 +335,6 @@ class SharedPrefsUtil {
     await prefs.remove(vps_ip);
     await prefs.remove(vps_password);
     await prefs.remove(vps_user);
+    await prefs.remove(node_type);
   }
 }

@@ -1,0 +1,5 @@
+- Fix issue when system launch long session instead short session in validation session.
+- Display tx unconfirmed (in mempool)
+- Add QR code to scan the address (e.q. menu receive)
+- Node types access (Local Node, VPS Node, Public Node, Shared Node, Demo Node)
+- Add send transactions features

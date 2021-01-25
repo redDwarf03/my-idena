@@ -217,7 +217,7 @@ class StateContainerState extends State<StateContainer> {
     address = await AppUtil().getAddress();
     account.address = address;
     DnaIdentityResponse dnaIdentityResponse = new DnaIdentityResponse();
-    dnaIdentityResponse = await AppService().getDnaIdentity(address);
+    dnaIdentityResponse = await sl.get<AppService>().getDnaIdentity(address);
     account.state =
         dnaIdentityResponse == null || dnaIdentityResponse.result == null
             ? ""
@@ -262,7 +262,7 @@ class StateContainerState extends State<StateContainer> {
 
   // Change curency
   void updateCurrency(AvailableCurrency currency) async {
-    await AppService().getSimplePrice(currency.getIso4217Code());
+    await sl.get<AppService>().getSimplePrice(currency.getIso4217Code());
     setState(() {
       curCurrency = currency;
     });
@@ -295,35 +295,25 @@ class StateContainerState extends State<StateContainer> {
       // Request account history
       int count = 40;
       try {
-        await AppService()
+        await sl
+            .get<AppService>()
             .getBalanceGetResponse(wallet.address.toString(), true);
-        await AppService().getSimplePrice(curCurrency.getIso4217Code());
+        await sl.get<AppService>().getSimplePrice(curCurrency.getIso4217Code());
 
-        BcnTransactionsResponse addressTxsResponse =
-            await AppService().getAddressTxsResponse(wallet.address, count);
+        BcnTransactionsResponse addressTxsResponse = await sl
+            .get<AppService>()
+            .getAddressTxsResponse(wallet.address, count);
+
+        wallet.history.clear();
 
         // Iterate list in reverse (oldest to newest block)
         if (addressTxsResponse != null &&
             addressTxsResponse.result != null &&
             addressTxsResponse.result.transactions != null) {
           for (Transaction item in addressTxsResponse.result.transactions) {
-            // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
-            bool newItem = true;
-            if (wallet.history.length > 0) {
-              for (int i = 0; i < wallet.history.length; i++) {
-                if (wallet.history[i].timestamp == item.timestamp &&
-                    wallet.history[i].hash == item.hash) {
-                  newItem = false;
-                  break;
-                }
-              }
-            }
-
-            if (newItem) {
-              setState(() {
-                wallet.history.insert(0, item);
-              });
-            }
+            setState(() {
+              wallet.history.insert(0, item);
+            });
           }
         }
 

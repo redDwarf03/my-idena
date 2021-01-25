@@ -203,7 +203,7 @@ class AccountDetailsSheet {
                                                   .primary60,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w100,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                           TextSpan(
@@ -222,7 +222,7 @@ class AccountDetailsSheet {
                                                   .primary60,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w700,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                           TextSpan(
@@ -233,7 +233,7 @@ class AccountDetailsSheet {
                                                   .primary60,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w100,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                         ],
@@ -253,7 +253,7 @@ class AccountDetailsSheet {
                                               color: Colors.red.withOpacity(0.6),
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w100,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                           TextSpan(
@@ -270,7 +270,7 @@ class AccountDetailsSheet {
                                               color: Colors.red.withOpacity(0.6),
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w700,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                           TextSpan(
@@ -280,7 +280,7 @@ class AccountDetailsSheet {
                                                   Colors.red.withOpacity(0.6),
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w100,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                         ],
@@ -324,7 +324,7 @@ class AccountDetailsSheet {
                                             color: StateContainer.of(context)
                                                 .curTheme
                                                 .primary,
-                                            fontFamily: 'NunitoSans',
+                                            fontFamily: 'Roboto',
                                           ),
                                         ),
                                       ])),

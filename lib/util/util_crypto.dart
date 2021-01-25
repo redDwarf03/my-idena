@@ -48,8 +48,8 @@ class UtilCrypto {
 
       //print("address.hex : " + address.hex);
       return address.hex;
-    } on Exception catch (_) {
-
+    } catch(e) {
+      print(e);
       return "";
     }
   }

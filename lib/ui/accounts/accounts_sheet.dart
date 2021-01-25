@@ -65,7 +65,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     widget.accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await AppService().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
         setState(() {
           account.balance = balanceGetResponse.result.balance;
         });
@@ -125,7 +125,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await AppService().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
         sl
             .get<DBHelper>()
             .updateAccountBalance(account, balanceGetResponse.result.balance);
@@ -409,7 +409,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                       AutoSizeText(
                                         account.name,
                                         style: TextStyle(
-                                          fontFamily: "NunitoSans",
+                                          fontFamily: "Roboto",
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16.0,
                                           color: StateContainer.of(context)
@@ -456,7 +456,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                           " IDNA",
                                       style: TextStyle(
                                           fontSize: 16.0,
-                                          fontFamily: "NunitoSans",
+                                          fontFamily: "Roboto",
                                           fontWeight: FontWeight.w900,
                                           color: StateContainer.of(context)
                                               .curTheme

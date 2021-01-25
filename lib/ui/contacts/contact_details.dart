@@ -199,7 +199,7 @@ class ContactDetailsSheet {
                                   color: StateContainer.of(context)
                                       .curTheme
                                       .primary,
-                                  fontFamily: 'NunitoSans',
+                                  fontFamily: 'Roboto',
                                 ),
                               ),
                             ),
@@ -257,7 +257,7 @@ class ContactDetailsSheet {
                                     color: StateContainer.of(context)
                                         .curTheme
                                         .success,
-                                    fontFamily: 'NunitoSans',
+                                    fontFamily: 'Roboto',
                                     fontWeight: FontWeight.w600,
                                   )),
                             ),

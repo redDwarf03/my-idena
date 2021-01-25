@@ -237,7 +237,7 @@ class _PinScreenState extends State<PinScreen>
             style: TextStyle(
               fontSize: 20.0,
               color: StateContainer.of(context).curTheme.primary,
-              fontFamily: 'NunitoSans',
+              fontFamily: 'Roboto',
               fontWeight: FontWeight.w700,
             ),
           ),

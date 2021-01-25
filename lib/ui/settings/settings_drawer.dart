@@ -9,13 +9,15 @@ import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
+import 'package:my_idena/ui/receive/receive_sheet.dart';
+import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
 import 'package:my_idena/ui/settings/profile_infos_widget.dart';
 import 'package:my_idena/ui/settings/validation_basics_widget.dart';
 import 'package:my_idena/ui/widgets/app_simpledialog.dart';
-import 'package:my_idena/util/util_demo_mode.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/util_shared_node.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
@@ -45,6 +47,10 @@ import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
 
 class SettingsSheet extends StatefulWidget {
+  ReceiveSheet receive;
+
+  SettingsSheet(this.receive);
+
   _SettingsSheetState createState() => _SettingsSheetState();
 }
 
@@ -85,28 +91,30 @@ class _SettingsSheetState extends State<SettingsSheet>
   bool notNull(Object o) => o != null;
 
   bool _miningActive;
-
-  bool _sharedNode;
-  bool _demoMode;
+  int _nodeType;
   bool _canMine;
   List _flipKeyWordPairs;
 
   void loadCtx() async {
-    bool _pn = await SharedNodeUtil().getSharedNode();
-    bool _dm = await DemoModeUtil().getDemoModeStatus();
-
-    DnaIdentityResponse _dnaIdentityResponse = await AppService()
-        .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
-    bool _m = _dnaIdentityResponse.result.online;
-    List _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
-    bool cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
-    setState(() {
-      _sharedNode = _pn;
-      _demoMode = _dm;
-      _miningActive = _m;
-      _canMine = cm;
-      _flipKeyWordPairs = _fk;
-    });
+    int _nt = await NodeUtil().getNodeType();
+    if (_nt != PUBLIC_NODE) {
+      DnaIdentityResponse _dnaIdentityResponse = await sl
+          .get<AppService>()
+          .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
+      bool _m = _dnaIdentityResponse.result.online;
+      List _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
+      bool cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
+      setState(() {
+        _miningActive = _m;
+        _nodeType = _nt;
+        _canMine = cm;
+        _flipKeyWordPairs = _fk;
+      });
+    } else {
+      setState(() {
+        _nodeType = _nt;
+      });
+    }
   }
 
   @override
@@ -119,8 +127,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _profileInfosOpen = false;
     _loadingAccounts = false;
     _miningActive = false;
-    _sharedNode = true;
-    _demoMode = true;
+    _nodeType = UNKOWN_NODE;
     _canMine = false;
 
     loadCtx();
@@ -553,7 +560,8 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _aboutOffsetFloat,
                 child: About(_aboutController, _aboutOpen)),
-            StateContainer.of(context).selectedAccount.address != null
+            StateContainer.of(context).selectedAccount.address != null &&
+                    _nodeType != PUBLIC_NODE
                 ? SlideTransition(
                     position: _profileInfosOffsetFloat,
                     child: ProfileInfos(
@@ -929,16 +937,16 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    _sharedNode == false &&
-                            _demoMode == false &&
+                    _nodeType != SHARED_NODE &&
+                            _nodeType != DEMO_NODE &&
                             _canMine == true
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
-                    _sharedNode == false &&
-                            _demoMode == false &&
+                    _nodeType != SHARED_NODE &&
+                            _nodeType != DEMO_NODE &&
                             _canMine == true
                         ? AppSettings.buildSettingsListItemSwitch(
                             context,
@@ -957,8 +965,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                                             .validationUnderstand,
                                         context), () {
                                     setState(() {
-                                      AppService().becomeOnline();
+                                      sl.get<AppService>().becomeOnline();
                                       _miningActive = _isSwitched;
+                                      StateContainer.of(context)
+                                          .requestUpdate();
                                     });
                                   })
                                 : AppDialogs.showConfirmDialog(
@@ -972,8 +982,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                                             .validationUnderstand,
                                         context), () {
                                     setState(() {
-                                      AppService().becomeOffline();
+                                      sl.get<AppService>().becomeOffline();
                                       _miningActive = _isSwitched;
+                                      StateContainer.of(context)
+                                          .requestUpdate();
                                     });
                                   });
                           })
@@ -991,6 +1003,40 @@ class _SettingsSheetState extends State<SettingsSheet>
                           '/validation_session_step_1',
                           arguments: simulationMode);
                     }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).receive,
+                        AppIcons.import_icon, onPressed: () {
+                      if (widget.receive == null) {
+                        return;
+                      }
+                      Sheets.showAppHeightEightSheet(
+                          context: context, widget: widget.receive);
+                    }),
+                    StateContainer.of(context).wallet != null &&
+                            StateContainer.of(context).wallet.accountBalance > 0 && _nodeType != SHARED_NODE
+                        ? Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          )
+                        : SizedBox(),
+                    StateContainer.of(context).wallet != null &&
+                            StateContainer.of(context).wallet.accountBalance > 0  && _nodeType != SHARED_NODE
+                        ? AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).send,
+                            AppIcons.export_icon, onPressed: () {
+                            Sheets.showAppHeightNineSheet(
+                                context: context,
+                                widget: SendSheet(
+                                    localCurrency: StateContainer.of(context)
+                                        .curCurrency));
+                          })
+                        : SizedBox(),
                     /*Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1016,23 +1062,30 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    StateContainer.of(context).selectedAccount.address != null
-                        ? Divider(
-                            height: 2,
-                            color: StateContainer.of(context).curTheme.text15,
-                          )
-                        : SizedBox(),
-                    StateContainer.of(context).selectedAccount.address != null
-                        ? AppSettings.buildSettingsListItemSingleLine(
-                            context,
-                            AppLocalization.of(context).profileInfosHeader,
-                            FontAwesome5.address_card, onPressed: () {
-                            setState(() {
-                              _profileInfosOpen = true;
-                            });
-                            _profileInfosController.forward();
-                          })
-                        : SizedBox(),
+                    _nodeType == PUBLIC_NODE
+                        ? SizedBox()
+                        : StateContainer.of(context).selectedAccount.address !=
+                                null
+                            ? Divider(
+                                height: 2,
+                                color:
+                                    StateContainer.of(context).curTheme.text15,
+                              )
+                            : SizedBox(),
+                    _nodeType == PUBLIC_NODE
+                        ? SizedBox()
+                        : StateContainer.of(context).selectedAccount.address !=
+                                null
+                            ? AppSettings.buildSettingsListItemSingleLine(
+                                context,
+                                AppLocalization.of(context).profileInfosHeader,
+                                FontAwesome5.address_card, onPressed: () {
+                                setState(() {
+                                  _profileInfosOpen = true;
+                                });
+                                _profileInfosController.forward();
+                              })
+                            : SizedBox(),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,

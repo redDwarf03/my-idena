@@ -171,7 +171,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
                                       color: StateContainer.of(context)
                                           .curTheme
                                           .primary,
-                                      fontFamily: 'NunitoSans',
+                                      fontFamily: 'Roboto',
                                     ),
                                   ),
                                   // Error Container
@@ -187,7 +187,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
                                           color: StateContainer.of(context)
                                               .curTheme
                                               .primary,
-                                          fontFamily: 'NunitoSans',
+                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.w600,
                                         )),
                                   ),

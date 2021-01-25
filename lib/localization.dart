@@ -242,6 +242,10 @@ class AppLocalization {
     return Intl.message("Access to a VPS ?",
         desc: '', name: 'enterVps');
   }  
+ String get enterPublicNode {
+    return Intl.message("Access to a Public Node ?",
+        desc: '', name: 'enterPublicNode');
+  }  
 
  String get enterVpsUser {
     return Intl.message("Enter a user",
@@ -404,6 +408,11 @@ class AppLocalization {
   String get transactionDetailCopyPaste {
     return Intl.message('Double click on text to copy to clipboard',
         desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
+  }
+
+  String get transactionDetailUnconfirmed {
+    return Intl.message('Unconfirmed',
+        desc: 'transaction_detail', name: 'transactionDetailUnconfirmed');
   }
 
   /// 

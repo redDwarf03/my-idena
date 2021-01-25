@@ -34,9 +34,9 @@ class _ProfileInfosState extends State<ProfileInfos> {
 
   Future<void> loadProfileInfos() async {
     DnaIdentityResponse _dnaIdentityResponse =
-        await AppService().getDnaIdentity(widget.address);
+        await sl.get<AppService>().getDnaIdentity(widget.address);
     DnaGetEpochResponse _dnaGetEpochResponse =
-        await AppService().getDnaGetEpoch();
+        await sl.get<AppService>().getDnaGetEpoch();
 
     setState(() {
       dnaIdentityResponse = _dnaIdentityResponse;

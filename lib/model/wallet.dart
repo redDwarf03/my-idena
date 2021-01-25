@@ -7,7 +7,8 @@ import 'package:my_idena/util/numberutil.dart';
 /// Main wallet object that's passed around the app via state
 class AppWallet {
   bool _loading; // Whether or not app is initially loading
-  bool _historyLoading; // Whether or not we have received initial account history response
+  bool
+      _historyLoading; // Whether or not we have received initial account history response
   String _address;
   double _accountBalance;
   double _accountStake;
@@ -15,9 +16,15 @@ class AppWallet {
   String _btcPrice;
   List<Transaction> _history;
 
-  AppWallet({String address, double accountBalance, double accountStake,
-                String localCurrencyPrice,String btcPrice, 
-                List<Transaction> history, bool loading, bool historyLoading}) {
+  AppWallet(
+      {String address,
+      double accountBalance,
+      double accountStake,
+      String localCurrencyPrice,
+      String btcPrice,
+      List<Transaction> history,
+      bool loading,
+      bool historyLoading}) {
     this._address = address;
     this._accountBalance = accountBalance ?? 0;
     this._accountStake = accountStake ?? 0;
@@ -25,7 +32,7 @@ class AppWallet {
     this._btcPrice = btcPrice ?? "0";
     this._history = history ?? new List<Transaction>();
     this._loading = loading ?? true;
-    this._historyLoading = historyLoading  ?? true;
+    this._historyLoading = historyLoading ?? true;
   }
 
   String get address => _address;
@@ -40,7 +47,7 @@ class AppWallet {
     this._accountBalance = accountBalance;
   }
 
- double get accountStake => _accountStake;
+  double get accountStake => _accountStake;
 
   set accountStake(double accountStake) {
     this._accountStake = accountStake;
@@ -61,10 +68,35 @@ class AppWallet {
     return NumberUtil.getRawAsUsableString(_accountStake.toString());
   }
 
+  String getAccountBalanceMoinsFeesDisplay(estimationFees) {
+    if (accountBalance == null) {
+      return "0";
+    }
+    double value = _accountBalance - estimationFees;
+    return NumberUtil.getRawAsUsableString(value.toString());
+  }
 
-  String getLocalCurrencyPrice(AvailableCurrency currency, {String locale = "en_US"}) {
-    Decimal converted = Decimal.parse(_localCurrencyPrice) * (NumberUtil.getRawAsUsableDecimal(_accountBalance.toString()) + NumberUtil.getRawAsUsableDecimal(_accountStake.toString()));
-    return NumberFormat.currency(locale:locale, symbol: currency.getCurrencySymbol()).format(converted.toDouble());
+  String getLocalCurrencyPriceMoinsFees(
+      AvailableCurrency currency, double estimationFees,
+      {String locale = "en_US"}) {
+    double value = _accountBalance - estimationFees;
+    Decimal converted = Decimal.parse(_localCurrencyPrice) *
+        NumberUtil.getRawAsUsableDecimal(value.toString());
+    return NumberFormat.currency(
+            locale: locale,
+            symbol: currency.getCurrencySymbol(),
+            decimalDigits: 5)
+        .format(converted.toDouble());
+  }
+
+  String getLocalCurrencyPrice(AvailableCurrency currency,
+      {String locale = "en_US"}) {
+    Decimal converted = Decimal.parse(_localCurrencyPrice) *
+        (NumberUtil.getRawAsUsableDecimal(_accountBalance.toString()) +
+            NumberUtil.getRawAsUsableDecimal(_accountStake.toString()));
+    return NumberFormat.currency(
+            locale: locale, symbol: currency.getCurrencySymbol())
+        .format(converted.toDouble());
   }
 
   set localCurrencyPrice(String value) {
@@ -76,12 +108,16 @@ class AppWallet {
   }
 
   String get btcPrice {
-    Decimal converted = Decimal.parse(_btcPrice) * (NumberUtil.getRawAsUsableDecimal(_accountBalance.toString()) + NumberUtil.getRawAsUsableDecimal(_accountStake.toString()));
+    Decimal converted = Decimal.parse(_btcPrice) *
+        (NumberUtil.getRawAsUsableDecimal(_accountBalance.toString()) +
+            NumberUtil.getRawAsUsableDecimal(_accountStake.toString()));
     // Show 4 decimal places for BTC price if its >= 0.0001 BTC, otherwise 6 decimals
     if (converted >= Decimal.parse("0.0001")) {
-      return new NumberFormat("#,##0.0000", "en_US").format(converted.toDouble());
+      return new NumberFormat("#,##0.0000", "en_US")
+          .format(converted.toDouble());
     } else {
-      return new NumberFormat("#,##0.000000000", "en_US").format(converted.toDouble());
+      return new NumberFormat("#,##0.000000000", "en_US")
+          .format(converted.toDouble());
     }
   }
 
