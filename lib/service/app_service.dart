@@ -6,7 +6,9 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
+import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
+import 'package:my_idena/network/model/request/bcn_transaction_request.dart';
 import 'package:my_idena/network/model/request/bcn_transactions_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOffline_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOnline_request.dart';
@@ -16,6 +18,8 @@ import 'package:my_idena/network/model/request/dna_getCoinbaseAddr_request.dart'
 import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
+import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
+import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -69,7 +73,7 @@ import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_idena/util/util_shared_node.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
 import 'package:dartssh/http.dart' as ssh;
 
@@ -98,7 +102,7 @@ class AppService {
       return _completer.future;
     }
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaGetBalanceResponse = new DnaGetBalanceResponse();
       dnaGetBalanceResponse.result = new DnaGetBalanceResponseResult();
       dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
@@ -165,7 +169,7 @@ class AppService {
       return _completer.future;
     }
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       bcnTransactionsResponse = new BcnTransactionsResponse();
       bcnTransactionsResponse.result = new BcnTransactionsResponseResult();
     } else {
@@ -190,10 +194,6 @@ class AppService {
           if (response.status == 200) {
             bcnTransactionsResponse =
                 bcnTransactionsResponseFromJson(response.text);
-            if (bcnTransactionsResponse.result.transactions != null) {
-              bcnTransactionsResponse.result.transactions = new List.from(
-                  bcnTransactionsResponse.result.transactions.reversed);
-            }
           }
         } else {
           bcnTransactionsRequest = BcnTransactionsRequest.fromJson(mapParams);
@@ -203,12 +203,47 @@ class AppService {
           if (responseHttp.statusCode == 200) {
             bcnTransactionsResponse =
                 bcnTransactionsResponseFromJson(responseHttp.body);
-            if (bcnTransactionsResponse.result.transactions != null) {
-              bcnTransactionsResponse.result.transactions = new List.from(
-                  bcnTransactionsResponse.result.transactions.reversed);
+          }
+        }
+
+        List<Transaction> listTxsMempool = new List();
+        BcnMempoolResponse bcnMempoolResponse = await getMemPool(address);
+        if (bcnMempoolResponse != null && bcnMempoolResponse.result != null) {
+          List<String> hashList = bcnMempoolResponse.result;
+          if (hashList != null) {
+            for (int i = 0; i < hashList.length; i++) {
+              BcnTransactionResponse bcnTransactionResponse =
+                  await getTransaction(hashList[i], address);
+              if (bcnTransactionResponse != null &&
+                  bcnTransactionResponse.result != null) {
+                Transaction transaction = new Transaction();
+                transaction.amount = bcnTransactionResponse.result.amount;
+                transaction.blockHash = bcnTransactionResponse.result.blockHash;
+                transaction.epoch = bcnTransactionResponse.result.epoch;
+                transaction.from = bcnTransactionResponse.result.from;
+                transaction.hash = bcnTransactionResponse.result.hash;
+                transaction.maxFee = bcnTransactionResponse.result.maxFee;
+                transaction.nonce = bcnTransactionResponse.result.nonce;
+                transaction.payload = bcnTransactionResponse.result.payload;
+                transaction.timestamp = bcnTransactionResponse.result.timestamp;
+                transaction.tips = bcnTransactionResponse.result.tips;
+                transaction.to = bcnTransactionResponse.result.to;
+                transaction.type = bcnTransactionResponse.result.type;
+                transaction.usedFee = bcnTransactionResponse.result.usedFee;
+                listTxsMempool.add(transaction);
+              }
             }
           }
         }
+
+        if (bcnTransactionsResponse != null && bcnTransactionsResponse.result != null &&
+            bcnTransactionsResponse.result.transactions != null) {
+          bcnTransactionsResponse.result.transactions = new List.from(
+              bcnTransactionsResponse.result.transactions.reversed);
+          if (listTxsMempool != null && listTxsMempool.length > 0) {
+            bcnTransactionsResponse.result.transactions.addAll(listTxsMempool);
+          }
+        } 
       } catch (e) {
         logger.e(e.toString());
       }
@@ -476,7 +511,7 @@ class AppService {
 
     Completer<bool> _completer = new Completer<bool>();
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       _completer.complete(true);
       return _completer.future;
     }
@@ -542,7 +577,7 @@ class AppService {
     Completer<DnaGetCoinbaseAddrResponse> _completer =
         new Completer<DnaGetCoinbaseAddrResponse>();
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaGetCoinbaseAddrResponse.result = DM_IDENTITY_ADDRESS;
     } else {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
@@ -610,7 +645,7 @@ class AppService {
       return _completer.future;
     }
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaIdentityResponse = new DnaIdentityResponse();
       dnaIdentityResponse.result = DnaIdentityResponseResult();
       dnaIdentityResponse.result.address = DM_IDENTITY_ADDRESS;
@@ -691,7 +726,7 @@ class AppService {
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaGetEpochResponse = new DnaGetEpochResponse();
       dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
       dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
@@ -752,7 +787,7 @@ class AppService {
     Completer<DnaCeremonyIntervalsResponse> _completer =
         new Completer<DnaCeremonyIntervalsResponse>();
 
-    if (await DemoModeUtil().getDemoModeStatus()) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
       dnaCeremonyIntervalsResponse.result =
           new DnaCeremonyIntervalsResponseResult();
@@ -839,7 +874,7 @@ class AppService {
     try {
       DnaGetEpochRequest dnaGetEpochRequest;
       DnaGetEpochResponse dnaGetEpochResponse;
-      if (await DemoModeUtil().getDemoModeStatus()) {
+      if (await NodeUtil().getNodeType() == DEMO_NODE) {
         currentPeriod = DM_EPOCH_CURRENT_PERIOD;
       } else {
         Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
@@ -1009,7 +1044,20 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaSendTransactionResponse> sendTip(String from, double amount) async {
+  Future<DnaSendTransactionResponse> sendTip(String from, String amount) async {
+    DnaSendTransactionResponse dnaSendTransactionResponse;
+    Completer<DnaSendTransactionResponse> _completer =
+        new Completer<DnaSendTransactionResponse>();
+
+    dnaSendTransactionResponse = await sendTx(
+        from, amount, "0xf429e36D68BE10428D730784391589572Ee0f72B");
+
+    _completer.complete(dnaSendTransactionResponse);
+    return _completer.future;
+  }
+
+  Future<DnaSendTransactionResponse> sendTx(
+      String from, String amount, String to) async {
     DnaSendTransactionRequest dnaSendTransactionRequest;
     DnaSendTransactionResponse dnaSendTransactionResponse;
 
@@ -1028,11 +1076,7 @@ class AppService {
       Map<String, dynamic> mapParams = {
         'method': DnaSendTransactionRequest.METHOD_NAME,
         "params": [
-          {
-            "from": from,
-            "to": "0xf429e36D68BE10428D730784391589572Ee0f72B",
-            'amount': amount.toString()
-          }
+          {"from": from, "to": to, 'amount': amount}
         ],
         'id': 101,
         'key': keyApp
@@ -1049,6 +1093,17 @@ class AppService {
         if (response.status == 200) {
           dnaSendTransactionResponse =
               dnaSendTransactionResponseFromJson(response.text);
+
+          if (dnaSendTransactionResponse.error != null) {
+            EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                response: dnaSendTransactionResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(TransactionSendEvent(response: "Success"));
+          }
+        } else {
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: responseHttp.body));
         }
       } else {
         dnaSendTransactionRequest =
@@ -1059,6 +1114,17 @@ class AppService {
         if (responseHttp.statusCode == 200) {
           dnaSendTransactionResponse =
               dnaSendTransactionResponseFromJson(responseHttp.body);
+
+          if (dnaSendTransactionResponse.error != null) {
+            EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                response: dnaSendTransactionResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(TransactionSendEvent(response: "Success"));
+          }
+        } else {
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: responseHttp.body));
         }
       }
     } catch (e) {
@@ -1077,8 +1143,8 @@ class AppService {
         new Completer<BcnSyncingResponse>();
 
     try {
-      if (await DemoModeUtil().getDemoModeStatus() ||
-          await SharedNodeUtil().getSharedNode()) {
+      if (await NodeUtil().getNodeType() == DEMO_NODE ||
+          await NodeUtil().getNodeType() == SHARED_NODE) {
         bcnSyncingResponse = new BcnSyncingResponse();
         bcnSyncingResponse.result = new BcnSyncingResponseResult();
         bcnSyncingResponse.result.syncing = DM_SYNC_SYNCING;
@@ -1124,6 +1190,122 @@ class AppService {
     } catch (e) {}
 
     _completer.complete(bcnSyncingResponse);
+    return _completer.future;
+  }
+
+  double getFeesEstimation() {
+    // TODO
+    //print("getFeesEstimation: " + fees.toString());
+    return 0;
+  }
+
+  Future<BcnMempoolResponse> getMemPool(String address) async {
+    BcnMempoolResponse bcnMempoolResponse;
+    BcnMempoolRequest bcnMempoolRequest;
+
+    Completer<BcnMempoolResponse> _completer =
+        new Completer<BcnMempoolResponse>();
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(bcnMempoolResponse);
+        return _completer.future;
+      }
+
+      Map<String, dynamic> mapParams = {
+        'method': BcnMempoolRequest.METHOD_NAME,
+        "params": [address],
+        'id': 101,
+        'key': keyApp
+      };
+
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          bcnMempoolResponse = bcnMempoolResponseFromJson(response.text);
+        }
+      } else {
+        bcnMempoolRequest = BcnMempoolRequest.fromJson(mapParams);
+        body = json.encode(bcnMempoolRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          bcnMempoolResponse = bcnMempoolResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(bcnMempoolResponse);
+    return _completer.future;
+  }
+
+  Future<BcnTransactionResponse> getTransaction(
+      String hash, String address) async {
+    BcnTransactionRequest bcnTransactionRequest;
+    BcnTransactionResponse bcnTransactionResponse;
+
+    Completer<BcnTransactionResponse> _completer =
+        new Completer<BcnTransactionResponse>();
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(bcnTransactionResponse);
+        return _completer.future;
+      }
+
+      Map<String, dynamic> mapParams = {
+        'method': BcnTransactionRequest.METHOD_NAME,
+        "params": [hash],
+        'id': 101,
+        'key': keyApp
+      };
+
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          bcnTransactionResponse =
+              bcnTransactionResponseFromJson(response.text);
+        }
+      } else {
+        bcnTransactionRequest = BcnTransactionRequest.fromJson(mapParams);
+        body = json.encode(bcnTransactionRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          bcnTransactionResponse =
+              bcnTransactionResponseFromJson(responseHttp.body);
+          if (bcnTransactionResponse != null &&
+              bcnTransactionResponse.result != null &&
+              bcnTransactionResponse.result.from != address) {
+            bcnTransactionResponse = null;
+          }
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(bcnTransactionResponse);
     return _completer.future;
   }
 }
