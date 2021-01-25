@@ -27,6 +27,7 @@ import 'package:my_idena/network/model/block_types.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/ui/contacts/add_contact.dart';
+import 'package:my_idena/ui/popup_button.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
 import 'package:my_idena/ui/settings/settings_drawer.dart';
 import 'package:my_idena/ui/validation_session/validation_session_countdown_view.dart';
@@ -41,7 +42,7 @@ import 'package:my_idena/ui/widgets/sync_info_view.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/util_shared_node.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:my_idena/bus/events.dart';
 
@@ -84,7 +85,7 @@ class _AppHomePageState extends State<AppHomePage>
 
   bool _lockDisabled = false; // whether we should avoid locking the app
 
-  bool isSharedNode = false;
+  int _nodeType = UNKOWN_NODE;
 
   // Main card height
   double mainCardHeight;
@@ -121,7 +122,7 @@ class _AppHomePageState extends State<AppHomePage>
   void initState() {
     super.initState();
 
-    _setSharedNode();
+    _setNodeType();
     _registerBus();
     WidgetsBinding.instance.addObserver(this);
     if (widget.priceConversion != null) {
@@ -200,8 +201,8 @@ class _AppHomePageState extends State<AppHomePage>
     }
   }
 
-  Future<void> _setSharedNode() async {
-    isSharedNode = await SharedNodeUtil().getSharedNode();
+  Future<void> _setNodeType() async {
+    _nodeType = await NodeUtil().getNodeType();
   }
 
   /// Add donations contact if it hasnt already been added
@@ -422,7 +423,7 @@ class _AppHomePageState extends State<AppHomePage>
             ],
           ));
     } else if (StateContainer.of(context).wallet.history.length == 0 &&
-        isSharedNode == false) {
+        _nodeType != SHARED_NODE) {
       _disposeAnimation();
       return ReactiveRefreshIndicator(
         backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
@@ -512,7 +513,7 @@ class _AppHomePageState extends State<AppHomePage>
   Widget build(BuildContext context) {
     // Create QR ahead of time because it improves performance this way
     if (receive == null && StateContainer.of(context).wallet != null) {
-      paintQrCode();
+      paintQrCode(address: StateContainer.of(context).wallet.address);
     }
 
     return Scaffold(
@@ -524,7 +525,7 @@ class _AppHomePageState extends State<AppHomePage>
       drawer: SizedBox(
         width: UIUtil.drawerWidth(context),
         child: Drawer(
-          child: SettingsSheet(),
+          child: SettingsSheet(receive),
         ),
       ),
       body: SafeArea(
@@ -552,7 +553,7 @@ class _AppHomePageState extends State<AppHomePage>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            isSharedNode == false
+                            _nodeType != SHARED_NODE && _nodeType != PUBLIC_NODE
                                 ? Text(
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context)
@@ -634,84 +635,14 @@ class _AppHomePageState extends State<AppHomePage>
                     ],
                   ),
                   //
+                  _nodeType != SHARED_NODE && _nodeType != PUBLIC_NODE && _nodeType != UNKOWN_NODE ?
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      /*Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            StateContainer.of(context).curTheme.boxShadowButton
-                          ],
-                        ),
-                        height: 55,
-                        width: (MediaQuery.of(context).size.width - 18) / 3,
-                        margin: EdgeInsetsDirectional.only(
-                            start: 14, top: 0.0, end: 7.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          color: receive != null
-                              ? StateContainer.of(context).curTheme.primary
-                              : StateContainer.of(context).curTheme.primary60,
-                          child: AutoSizeText(
-                            AppLocalization.of(context).receive,
-                            textAlign: TextAlign.center,
-                            style: AppStyles.textStyleButtonPrimary(context),
-                            maxLines: 1,
-                            stepGranularity: 0.5,
-                          ),
-                          onPressed: () {
-                            if (receive == null) {
-                              return;
-                            }
-                            Sheets.showAppHeightEightSheet(
-                                context: context, widget: receive);
-                          },
-                          highlightColor: receive != null
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
-                          splashColor: receive != null
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            StateContainer.of(context).curTheme.boxShadowButton
-                          ],
-                        ),
-                        height: 55,
-                        width: (MediaQuery.of(context).size.width - 158) / 3,
-                        margin: EdgeInsetsDirectional.only(
-                            start: 7, top: 0.0, end: 7.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          color: StateContainer.of(context).curTheme.primary,
-                          child: Icon(Icons.scatter_plot_rounded,
-                              color: StateContainer.of(context)
-                                  .curTheme
-                                  .background,
-                              size: 40),
-                          onPressed: () {
-                            bool simulationMode = true;
-                            Navigator.of(context).pushNamed(
-                                '/validation_session_step_1',
-                                arguments: simulationMode);
-                          },
-                          highlightColor:
-                              StateContainer.of(context).curTheme.background40,
-                          splashColor:
-                              StateContainer.of(context).curTheme.background40,
-                        ),
-                      ),
-                      AppPopupButton(),*/
+                      AppPopupButton(),
                       ValidationSessionCountdownText(),
                     ],
-                  ),
+                  ) : SizedBox(),
                 ],
               ),
             ),
@@ -815,6 +746,7 @@ class _AppHomePageState extends State<AppHomePage>
                                   style: AppStyles.textStyleTransactionType(
                                       context),
                                 ),
+                                item.timestamp > 0 ?
                                 Text(
                                   DateFormat.yMEd(
                                           Localizations.localeOf(context)
@@ -825,6 +757,11 @@ class _AppHomePageState extends State<AppHomePage>
                                                   item.timestamp * 1000)
                                               .toLocal())
                                       .toString(),
+                                  style: AppStyles.textStyleTransactionUnit(
+                                      context),
+                                ) : Text(
+                                  AppLocalization.of(context).transactionDetailUnconfirmed,
+                                  textAlign: TextAlign.start,
                                   style: AppStyles.textStyleTransactionUnit(
                                       context),
                                 ),
@@ -840,7 +777,10 @@ class _AppHomePageState extends State<AppHomePage>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  double.tryParse(item.getFormattedAmount().replaceAll(",", "")) > 0
+                                  double.tryParse(item
+                                              .getFormattedAmount()
+                                              .replaceAll(",", "")) >
+                                          0
                                       ? Container(
                                           child: RichText(
                                             textAlign: TextAlign.start,
