@@ -1,0 +1,20 @@
+syntax = "proto3";
+package models;
+
+// in folder: protoc --dart_out=. models.proto
+
+message ProtoTransaction {
+    message Data {
+        uint32 nonce = 1;
+        uint32 epoch = 2;
+        uint32 type = 3;
+        bytes to = 4;
+        bytes amount = 5;
+        bytes maxFee = 6;
+        bytes tips = 7;
+        bytes payload = 8;
+    }
+    Data data = 1;
+    bytes signature = 2;
+    bool useRlp = 3;
+}
