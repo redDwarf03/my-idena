@@ -19,7 +19,6 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_node.dart';
@@ -67,10 +66,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   String _vpsTunnelValidationText = "";
   String _vpsPasswordValidationText = "";
   String _addressText = "";
-  bool _isDemoModeSwitched = false;
-  bool _isSharedNodeSwitched = false;
-  bool _isVpsSwitched = false;
-  bool _isPublicNodeSwitched = false;
+  int _selectedNodeType = NORMAL_VPS_NODE;
   bool _keyAppVisible;
   bool _encryptedPkVisible;
   bool _passwordPkVisible;
@@ -212,17 +208,17 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _timerSync = Timer(const Duration(milliseconds: 500), () async {
       _addressText = "";
       status = false;
-      if (_isSharedNodeSwitched == false &&
-          _isDemoModeSwitched == false &&
-          _isVpsSwitched == false &&
-          _isPublicNodeSwitched == false) {
+      if (_selectedNodeType != SHARED_NODE &&
+          _selectedNodeType != DEMO_NODE &&
+          _selectedNodeType != NORMAL_VPS_NODE &&
+          _selectedNodeType != PUBLIC_NODE) {
         status = await sl.get<AppService>().getWStatusGetResponse();
         if (status) {
           _addressText = await AppUtil().getAddress();
         }
       } else {
         _addressText = await AppUtil().getAddress();
-        if (_isSharedNodeSwitched) {
+        if (_selectedNodeType == SHARED_NODE) {
           if (_addressText != null && _addressText.isEmpty == false) {
             DnaIdentityResponse _dnaIdentityResponse =
                 await sl.get<AppService>().getDnaIdentity(_addressText);
@@ -241,7 +237,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
       //print("status getStatus : " + status.toString());
       _addressText = await AppUtil().getAddress();
-      if (_isSharedNodeSwitched) {
+      if (_selectedNodeType == SHARED_NODE) {
         if (_addressText != null && _addressText.isEmpty == false) {
           DnaIdentityResponse _dnaIdentityResponse =
               await sl.get<AppService>().getDnaIdentity(_addressText);
@@ -338,307 +334,22 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                     child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      AppLocalization.of(context).enterDemoMode,
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w100,
-                                        fontFamily: 'Roboto',
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .text60,
-                                      ),
-                                    ),
-                                    Switch(
-                                        value: _isDemoModeSwitched,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isDemoModeSwitched = value;
-                                            if (_isDemoModeSwitched) {
-                                              _isSharedNodeSwitched = false;
-                                              _isVpsSwitched = false;
-                                              _isPublicNodeSwitched = false;
-                                            }
-                                            _apiUrlController =
-                                                TextEditingController();
-                                            _keyAppController =
-                                                TextEditingController();
-                                            _encryptedPkController =
-                                                TextEditingController();
-                                            _passwordPkController =
-                                                TextEditingController();
-                                            _vpsUserController =
-                                                TextEditingController();
-                                            _vpsIpController =
-                                                TextEditingController();
-                                            _vpsTunnelController =
-                                                TextEditingController();
-                                            _vpsPasswordController =
-                                                TextEditingController();
-                                            _apiUrlValidationText = "";
-                                            _keyAppValidationText = "";
-                                            _encryptedPkValidationText = "";
-                                            _passwordPkValidationText = "";
-                                            _vpsUserValidationText = "";
-                                            _vpsIpValidationText = "";
-                                            _vpsTunnelValidationText = "";
-                                            _vpsPasswordValidationText = "";
-                                            _apiUrlHint = "";
-                                            _keyAppHint = "";
-                                            _encryptedPkHint = "";
-                                            _passwordPkHint = "";
-                                            _vpsUserHint = "";
-                                            _vpsIpHint = "";
-                                            _vpsTunnelHint = "";
-                                            _vpsPasswordHint = "";
-                                          });
-                                          updateSharedPrefsUtil();
-                                        },
-                                        activeTrackColor:
-                                            StateContainer.of(context)
-                                                .curTheme
-                                                .backgroundDarkest,
-                                        activeColor: Colors.green),
+                                    getEnterNodeTypeContainer(),
                                   ],
                                 )),
-                                _isDemoModeSwitched
-                                    ? SizedBox()
-                                    : Container(
-                                        child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            AppLocalization.of(context)
-                                                .enterSharedNode,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .text60,
-                                            ),
-                                          ),
-                                          Switch(
-                                              value: _isSharedNodeSwitched,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _isSharedNodeSwitched = value;
-                                                  if (_isSharedNodeSwitched) {
-                                                    _isDemoModeSwitched = false;
-                                                    _isVpsSwitched = false;
-                                                    _isPublicNodeSwitched =
-                                                        false;
-                                                  }
-                                                  _apiUrlController =
-                                                      TextEditingController();
-                                                  _keyAppController =
-                                                      TextEditingController();
-                                                  _encryptedPkController =
-                                                      TextEditingController();
-                                                  _passwordPkController =
-                                                      TextEditingController();
-                                                  _vpsUserController =
-                                                      TextEditingController();
-                                                  _vpsIpController =
-                                                      TextEditingController();
-                                                  _vpsTunnelController =
-                                                      TextEditingController();
-                                                  _vpsPasswordController =
-                                                      TextEditingController();
-                                                  _apiUrlValidationText = "";
-                                                  _keyAppValidationText = "";
-                                                  _encryptedPkValidationText =
-                                                      "";
-                                                  _passwordPkValidationText =
-                                                      "";
-                                                  _vpsUserValidationText = "";
-                                                  _vpsIpValidationText = "";
-                                                  _vpsTunnelValidationText = "";
-                                                  _vpsPasswordValidationText =
-                                                      "";
-                                                  _apiUrlHint = "";
-                                                  _keyAppHint = "";
-                                                  _encryptedPkHint = "";
-                                                  _passwordPkHint = "";
-                                                  _vpsUserHint = "";
-                                                  _vpsIpHint = "";
-                                                  _vpsTunnelHint = "";
-                                                  _vpsPasswordHint = "";
-                                                });
-                                                updateSharedPrefsUtil();
-                                              },
-                                              activeTrackColor:
-                                                  StateContainer.of(context)
-                                                      .curTheme
-                                                      .backgroundDarkest,
-                                              activeColor: Colors.green),
-                                        ],
-                                      )),
-                                _isDemoModeSwitched
-                                    ? SizedBox()
-                                    : Container(
-                                        child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            AppLocalization.of(context)
-                                                .enterVps,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .text60,
-                                            ),
-                                          ),
-                                          Switch(
-                                              value: _isVpsSwitched,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _isVpsSwitched = value;
-                                                  if (_isVpsSwitched) {
-                                                    _isDemoModeSwitched = false;
-                                                    _isSharedNodeSwitched =
-                                                        false;
-                                                    _isPublicNodeSwitched =
-                                                        false;
-                                                  }
-                                                  _apiUrlController =
-                                                      TextEditingController();
-                                                  _keyAppController =
-                                                      TextEditingController();
-                                                  _encryptedPkController =
-                                                      TextEditingController();
-                                                  _passwordPkController =
-                                                      TextEditingController();
-                                                  _vpsUserController =
-                                                      TextEditingController();
-                                                  _vpsIpController =
-                                                      TextEditingController();
-                                                  _vpsTunnelController =
-                                                      TextEditingController();
-                                                  _vpsPasswordController =
-                                                      TextEditingController();
-                                                  _apiUrlValidationText = "";
-                                                  _keyAppValidationText = "";
-                                                  _encryptedPkValidationText =
-                                                      "";
-                                                  _passwordPkValidationText =
-                                                      "";
-                                                  _vpsUserValidationText = "";
-                                                  _vpsIpValidationText = "";
-                                                  _vpsTunnelValidationText = "";
-                                                  _vpsPasswordValidationText =
-                                                      "";
-                                                  _apiUrlHint = "";
-                                                  _keyAppHint = "";
-                                                  _encryptedPkHint = "";
-                                                  _passwordPkHint = "";
-                                                  _vpsUserHint = "";
-                                                  _vpsIpHint = "";
-                                                  _vpsTunnelHint = "";
-                                                  _vpsPasswordHint = "";
-                                                });
-                                                updateSharedPrefsUtil();
-                                              },
-                                              activeTrackColor:
-                                                  StateContainer.of(context)
-                                                      .curTheme
-                                                      .backgroundDarkest,
-                                              activeColor: Colors.green),
-                                        ],
-                                      )),
-                                _isDemoModeSwitched
-                                    ? SizedBox()
-                                    : Container(
-                                        child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            AppLocalization.of(context)
-                                                .enterPublicNode,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .text60,
-                                            ),
-                                          ),
-                                          Switch(
-                                              value: _isPublicNodeSwitched,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _isPublicNodeSwitched = value;
-                                                  if (_isPublicNodeSwitched) {
-                                                    _isDemoModeSwitched = false;
-                                                    _isSharedNodeSwitched =
-                                                        false;
-                                                    _isVpsSwitched = false;
-                                                  }
-                                                  _apiUrlController =
-                                                      TextEditingController();
-                                                  _keyAppController =
-                                                      TextEditingController();
-                                                  _encryptedPkController =
-                                                      TextEditingController();
-                                                  _passwordPkController =
-                                                      TextEditingController();
-                                                  _vpsUserController =
-                                                      TextEditingController();
-                                                  _vpsIpController =
-                                                      TextEditingController();
-                                                  _vpsTunnelController =
-                                                      TextEditingController();
-                                                  _vpsPasswordController =
-                                                      TextEditingController();
-                                                  _apiUrlValidationText = "";
-                                                  _keyAppValidationText = "";
-                                                  _encryptedPkValidationText =
-                                                      "";
-                                                  _passwordPkValidationText =
-                                                      "";
-                                                  _vpsUserValidationText = "";
-                                                  _vpsIpValidationText = "";
-                                                  _vpsTunnelValidationText = "";
-                                                  _vpsPasswordValidationText =
-                                                      "";
-                                                  _apiUrlHint = "";
-                                                  _keyAppHint = "";
-                                                  _encryptedPkHint = "";
-                                                  _passwordPkHint = "";
-                                                  _vpsUserHint = "";
-                                                  _vpsIpHint = "";
-                                                  _vpsTunnelHint = "";
-                                                  _vpsPasswordHint = "";
-                                                });
-                                                updateSharedPrefsUtil();
-                                              },
-                                              activeTrackColor:
-                                                  StateContainer.of(context)
-                                                      .curTheme
-                                                      .backgroundDarkest,
-                                              activeColor: Colors.green),
-                                        ],
-                                      )),
-                                _isDemoModeSwitched ||
-                                        _isSharedNodeSwitched ||
-                                        _isVpsSwitched ||
-                                        _isPublicNodeSwitched
+                                SizedBox(height: 30),
+                                _selectedNodeType == DEMO_NODE ||
+                                        _selectedNodeType == SHARED_NODE ||
+                                        _selectedNodeType == NORMAL_VPS_NODE ||
+                                        _selectedNodeType == PUBLIC_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getApiUrlContainer(),
                                       ),
-                                 _isDemoModeSwitched ||
-                                        _isSharedNodeSwitched ||
-                                        _isVpsSwitched ||
-                                        _isPublicNodeSwitched
+                                _selectedNodeType == DEMO_NODE ||
+                                        _selectedNodeType == SHARED_NODE ||
+                                        _selectedNodeType == NORMAL_VPS_NODE ||
+                                        _selectedNodeType == PUBLIC_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -653,12 +364,14 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isDemoModeSwitched || _isPublicNodeSwitched
+                                _selectedNodeType == DEMO_NODE ||
+                                        _selectedNodeType == PUBLIC_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getKeyAppContainer(),
                                       ),
-                                _isDemoModeSwitched || _isPublicNodeSwitched
+                                _selectedNodeType == DEMO_NODE ||
+                                        _selectedNodeType == PUBLIC_NODE
                                     ? SizedBox(
                                         height: 1,
                                       )
@@ -675,12 +388,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isSharedNodeSwitched == false
+                                _selectedNodeType != SHARED_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getEncryptedPkContainer(),
                                       ),
-                                _isSharedNodeSwitched == false
+                                _selectedNodeType != SHARED_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -695,12 +408,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isSharedNodeSwitched == false
+                                _selectedNodeType != SHARED_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getPasswordPkContainer(),
                                       ),
-                                _isSharedNodeSwitched == false
+                                _selectedNodeType != SHARED_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -730,12 +443,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                             )),
                                       )
                                     : SizedBox(),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getVpsIpContainer(),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -750,12 +463,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getVpsUserContainer(),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -770,12 +483,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getVpsPasswordContainer(),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -790,12 +503,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         child: getVpsTunnelContainer(),
                                       ),
-                                _isVpsSwitched == false
+                                _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
@@ -882,47 +595,80 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   }
 
   getApiUrlContainer() {
-    return AppTextField(
-      focusNode: _apiUrlFocusNode,
-      controller: _apiUrlController,
-      topMargin: 30,
-      cursorColor: StateContainer.of(context).curTheme.primary,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16.0,
-        color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'Roboto',
-      ),
-      inputFormatters: [LengthLimitingTextInputFormatter(35)],
-      onChanged: (text) {
-        // Always reset the error message to be less annoying
-        updateSharedPrefsUtil();
-        setState(() {
-          _apiUrlValidationText = "";
-        });
-      },
-      textInputAction: TextInputAction.next,
-      maxLines: null,
-      autocorrect: false,
-      hintText:
-          _apiUrlHint == null ? "" : AppLocalization.of(context).enterApiUrl,
-      keyboardType: TextInputType.multiline,
-      textAlign: TextAlign.left,
-      onSubmitted: (text) {
-        FocusScope.of(context).unfocus();
-      },
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterApiUrl,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _apiUrlFocusNode,
+          controller: _apiUrlController,
+          topMargin: 0,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(35)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            updateSharedPrefsUtil();
+            setState(() {
+              _apiUrlValidationText = "";
+            });
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: null,
+          autocorrect: false,
+          hintText: _apiUrlHint == null
+              ? ""
+              : AppLocalization.of(context).enterApiUrl,
+          keyboardType: TextInputType.multiline,
+          textAlign: TextAlign.left,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+        )
+      ],
     );
   }
 
   getKeyAppContainer() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterKeyApp,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
         AppTextField(
           focusNode: _keyAppFocusNode,
           controller: _keyAppController,
           obscureText: !_keyAppVisible,
           enableSuggestions: false,
-          topMargin: 30,
+          topMargin: 0,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -962,118 +708,170 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   }
 
   getEncryptedPkContainer() {
-    return AppTextField(
-      focusNode: _encryptedPkFocusNode,
-      controller: _encryptedPkController,
-      obscureText: !_encryptedPkVisible,
-      enableSuggestions: false,
-      topMargin: 30,
-      cursorColor: StateContainer.of(context).curTheme.primary,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16.0,
-        color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'Roboto',
-      ),
-      inputFormatters: [LengthLimitingTextInputFormatter(150)],
-      onChanged: (text) {
-        // Always reset the error message to be less annoying
-        updateSharedPrefsUtil();
-        setState(() {
-          _encryptedPkValidationText = "";
-        });
-      },
-      textInputAction: TextInputAction.next,
-      maxLines: 1,
-      autocorrect: false,
-      hintText: _encryptedPkHint == null
-          ? ""
-          : AppLocalization.of(context).enterEncryptedPk,
-      keyboardType: TextInputType.multiline,
-      textAlign: TextAlign.left,
-      onSubmitted: (text) {
-        FocusScope.of(context).unfocus();
-      },
-      suffixButton: TextFieldButton(
-          icon: _encryptedPkVisible ? Icons.visibility : Icons.visibility_off,
-          onPressed: () {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterEncryptedPk,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _encryptedPkFocusNode,
+          controller: _encryptedPkController,
+          obscureText: !_encryptedPkVisible,
+          enableSuggestions: false,
+          topMargin: 0,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(150)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            updateSharedPrefsUtil();
             setState(() {
-              _encryptedPkVisible = !_encryptedPkVisible;
+              _encryptedPkValidationText = "";
             });
-          }),
-      prefixButton: TextFieldButton(
-          icon: AppIcons.scan,
-          onPressed: () async {
-            UIUtil.cancelLockEvent();
-            String scanResult =
-                await UserDataUtil.getQRData(DataType.ADDRESS, context);
-            if (scanResult == null) {
-              UIUtil.showSnackbar(
-                  AppLocalization.of(context).qrInvalidAddress, context);
-            } else if (scanResult != null &&
-                !QRScanErrs.ERROR_LIST.contains(scanResult)) {
-              if (mounted) {
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          autocorrect: false,
+          hintText: _encryptedPkHint == null
+              ? ""
+              : AppLocalization.of(context).enterEncryptedPk,
+          keyboardType: TextInputType.multiline,
+          textAlign: TextAlign.left,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+          suffixButton: TextFieldButton(
+              icon:
+                  _encryptedPkVisible ? Icons.visibility : Icons.visibility_off,
+              onPressed: () {
                 setState(() {
-                  _encryptedPkController.text = scanResult;
-                  _encryptedPkValidationText = "";
+                  _encryptedPkVisible = !_encryptedPkVisible;
                 });
-                _encryptedPkFocusNode.unfocus();
-              }
-            }
-          }),
+              }),
+          prefixButton: TextFieldButton(
+              icon: AppIcons.scan,
+              onPressed: () async {
+                UIUtil.cancelLockEvent();
+                String scanResult =
+                    await UserDataUtil.getQRData(DataType.ADDRESS, context);
+                if (scanResult == null) {
+                  UIUtil.showSnackbar(
+                      AppLocalization.of(context).qrInvalidAddress, context);
+                } else if (scanResult != null &&
+                    !QRScanErrs.ERROR_LIST.contains(scanResult)) {
+                  if (mounted) {
+                    setState(() {
+                      _encryptedPkController.text = scanResult;
+                      _encryptedPkValidationText = "";
+                    });
+                    _encryptedPkFocusNode.unfocus();
+                  }
+                }
+              }),
+        )
+      ],
     );
   }
 
   getPasswordPkContainer() {
-    return AppTextField(
-      focusNode: _passwordPkFocusNode,
-      controller: _passwordPkController,
-      obscureText: !_passwordPkVisible,
-      enableSuggestions: false,
-      topMargin: 30,
-      cursorColor: StateContainer.of(context).curTheme.primary,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16.0,
-        color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'Roboto',
-      ),
-      inputFormatters: [LengthLimitingTextInputFormatter(100)],
-      onChanged: (text) {
-        // Always reset the error message to be less annoying
-        updateSharedPrefsUtil();
-        setState(() {
-          _passwordPkValidationText = "";
-        });
-      },
-      suffixButton: TextFieldButton(
-          icon: _passwordPkVisible ? Icons.visibility : Icons.visibility_off,
-          onPressed: () {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterPasswordPk,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _passwordPkFocusNode,
+          controller: _passwordPkController,
+          obscureText: !_passwordPkVisible,
+          enableSuggestions: false,
+          topMargin: 0,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(100)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            updateSharedPrefsUtil();
             setState(() {
-              _passwordPkVisible = !_passwordPkVisible;
+              _passwordPkValidationText = "";
             });
-          }),
-      textInputAction: TextInputAction.next,
-      maxLines: 1,
-      autocorrect: false,
-      hintText: _passwordPkHint == null
-          ? ""
-          : AppLocalization.of(context).enterPasswordPk,
-      keyboardType: TextInputType.multiline,
-      textAlign: TextAlign.left,
-      onSubmitted: (text) {
-        FocusScope.of(context).unfocus();
-      },
+          },
+          suffixButton: TextFieldButton(
+              icon:
+                  _passwordPkVisible ? Icons.visibility : Icons.visibility_off,
+              onPressed: () {
+                setState(() {
+                  _passwordPkVisible = !_passwordPkVisible;
+                });
+              }),
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          autocorrect: false,
+          hintText: _passwordPkHint == null
+              ? ""
+              : AppLocalization.of(context).enterPasswordPk,
+          keyboardType: TextInputType.multiline,
+          textAlign: TextAlign.left,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+        )
+      ],
     );
   }
 
   getVpsUserContainer() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterVpsUser,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
         AppTextField(
           focusNode: _vpsUserFocusNode,
           controller: _vpsUserController,
-          topMargin: 30,
+          topMargin: 0,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -1102,7 +900,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           },
         ),
         Text(AppLocalization.of(context).enterVpsUserExample,
-            style: AppStyles.textStyleParagraphSmall(context)),
+            style: AppStyles.textStyleParagraphSmallest(context)),
       ],
     );
   }
@@ -1110,10 +908,24 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   getVpsIpContainer() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterVpsIp,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
         AppTextField(
           focusNode: _vpsIpFocusNode,
           controller: _vpsIpController,
-          topMargin: 30,
+          topMargin: 0,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -1141,7 +953,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           },
         ),
         Text(AppLocalization.of(context).enterVpsIpExample,
-            style: AppStyles.textStyleParagraphSmall(context)),
+            style: AppStyles.textStyleParagraphSmallest(context)),
       ],
     );
   }
@@ -1149,10 +961,24 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   getVpsTunnelContainer() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterVpsTunnel,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
         AppTextField(
           focusNode: _vpsTunnelFocusNode,
           controller: _vpsTunnelController,
-          topMargin: 30,
+          topMargin: 0,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -1181,51 +1007,70 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           },
         ),
         Text(AppLocalization.of(context).enterVpsTunnelExample,
-            style: AppStyles.textStyleParagraphSmall(context)),
+            style: AppStyles.textStyleParagraphSmallest(context)),
       ],
     );
   }
 
   getVpsPasswordContainer() {
-    return AppTextField(
-      focusNode: _vpsPasswordFocusNode,
-      controller: _vpsPasswordController,
-      obscureText: !_vpsPasswordVisible,
-      enableSuggestions: false,
-      topMargin: 30,
-      cursorColor: StateContainer.of(context).curTheme.primary,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16.0,
-        color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'Roboto',
-      ),
-      inputFormatters: [LengthLimitingTextInputFormatter(100)],
-      onChanged: (text) {
-        // Always reset the error message to be less annoying
-        updateSharedPrefsUtil();
-        setState(() {
-          _vpsPasswordValidationText = "";
-        });
-      },
-      suffixButton: TextFieldButton(
-          icon: _vpsPasswordVisible ? Icons.visibility : Icons.visibility_off,
-          onPressed: () {
+    Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterVpsPassword,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _vpsPasswordFocusNode,
+          controller: _vpsPasswordController,
+          obscureText: !_vpsPasswordVisible,
+          enableSuggestions: false,
+          topMargin: 0,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(100)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            updateSharedPrefsUtil();
             setState(() {
-              _vpsPasswordVisible = !_vpsPasswordVisible;
+              _vpsPasswordValidationText = "";
             });
-          }),
-      textInputAction: TextInputAction.next,
-      maxLines: 1,
-      autocorrect: false,
-      hintText: _vpsPasswordHint == null
-          ? ""
-          : AppLocalization.of(context).enterVpsPassword,
-      keyboardType: TextInputType.multiline,
-      textAlign: TextAlign.left,
-      onSubmitted: (text) {
-        FocusScope.of(context).unfocus();
-      },
+          },
+          suffixButton: TextFieldButton(
+              icon:
+                  _vpsPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              onPressed: () {
+                setState(() {
+                  _vpsPasswordVisible = !_vpsPasswordVisible;
+                });
+              }),
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          autocorrect: false,
+          hintText: _vpsPasswordHint == null
+              ? ""
+              : AppLocalization.of(context).enterVpsPassword,
+          keyboardType: TextInputType.multiline,
+          textAlign: TextAlign.left,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+        )
+      ],
     );
   }
 
@@ -1240,13 +1085,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _vpsPasswordFocusNode.unfocus();
     _vpsTunnelFocusNode.unfocus();
 
-    if (_isPublicNodeSwitched)
-    {
+    if (_selectedNodeType == PUBLIC_NODE) {
       return isValid;
     }
-    if (_isDemoModeSwitched == false) {
-      if (_isVpsSwitched == false) {
-        if (_isSharedNodeSwitched == false) {
+    if (_selectedNodeType != DEMO_NODE) {
+      if (_selectedNodeType != NORMAL_VPS_NODE) {
+        if (_selectedNodeType != SHARED_NODE) {
           if (_apiUrlController.text.trim().isEmpty) {
             isValid = false;
             setState(() {
@@ -1260,7 +1104,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
               });
             }
           }
-          if (_isVpsSwitched) {
+          if (_selectedNodeType == NORMAL_VPS_NODE) {
             // TODO
           }
         } else {
@@ -1292,7 +1136,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   }
 
   void updateSharedPrefsUtil() async {
-    if (_isDemoModeSwitched) {
+    if (_selectedNodeType == DEMO_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(DEMO_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl("http://127.0.0.1");
       await sl.get<SharedPrefsUtil>().setKeyApp(DM_KEY_APP);
@@ -1301,7 +1145,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-    } else if (_isSharedNodeSwitched) {
+    } else if (_selectedNodeType == SHARED_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(SHARED_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(SN_URL);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
@@ -1312,7 +1156,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsIp("");
       await sl.get<SharedPrefsUtil>().setVpsUser("");
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
-    } else if (_isVpsSwitched) {
+    } else if (_selectedNodeType == NORMAL_VPS_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_VPS_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_vpsTunnelController.text);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
@@ -1323,7 +1167,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           .setVpsPassword(_vpsPasswordController.text);
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-    } else if (_isPublicNodeSwitched) {
+    } else if (_selectedNodeType == PUBLIC_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(PUBLIC_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
       await sl.get<SharedPrefsUtil>().setKeyApp("");
@@ -1343,5 +1187,79 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
     }
     await sl.get<SharedPrefsUtil>().setAddress(_addressText);
+  }
+
+  getEnterNodeTypeContainer() {
+    return SizedBox(
+      width: 250,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: StateContainer.of(context).curTheme.backgroundDarkest,
+        ),
+        child: DropdownButtonFormField(
+          value: _selectedNodeType,
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(0.0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color:
+                        StateContainer.of(context).curTheme.backgroundDarkest),
+              ),
+              isDense: true),
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w100,
+            fontFamily: 'Roboto',
+            color: StateContainer.of(context).curTheme.text60,
+          ),
+          items: NodeUtil().getNodeTypeList().map((NodeType nodeType) {
+            return DropdownMenuItem<int>(
+                value: nodeType.type,
+                child: Container(
+                    child: Text(
+                  nodeType.label,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w100,
+                    fontFamily: 'Roboto',
+                    color: StateContainer.of(context).curTheme.text60,
+                  ),
+                )));
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedNodeType = value;
+
+              _apiUrlController = TextEditingController();
+              _keyAppController = TextEditingController();
+              _encryptedPkController = TextEditingController();
+              _passwordPkController = TextEditingController();
+              _vpsUserController = TextEditingController();
+              _vpsIpController = TextEditingController();
+              _vpsTunnelController = TextEditingController();
+              _vpsPasswordController = TextEditingController();
+              _apiUrlValidationText = "";
+              _keyAppValidationText = "";
+              _encryptedPkValidationText = "";
+              _passwordPkValidationText = "";
+              _vpsUserValidationText = "";
+              _vpsIpValidationText = "";
+              _vpsTunnelValidationText = "";
+              _vpsPasswordValidationText = "";
+              _apiUrlHint = "";
+              _keyAppHint = "";
+              _encryptedPkHint = "";
+              _passwordPkHint = "";
+              _vpsUserHint = "";
+              _vpsIpHint = "";
+              _vpsTunnelHint = "";
+              _vpsPasswordHint = "";
+
+              updateSharedPrefsUtil();
+            });
+          },
+        ),
+      ),
+    );
   }
 }

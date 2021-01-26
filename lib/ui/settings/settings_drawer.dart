@@ -176,11 +176,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
-    _profileInfosController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 220),
-    );
-
+    if (_nodeType != PUBLIC_NODE) {
+      _profileInfosController = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 220),
+      );
+    }
     _offsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_controller);
     _securityOffsetFloat =
@@ -194,9 +195,11 @@ class _SettingsSheetState extends State<SettingsSheet>
     _aboutOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_aboutController);
 
-    _profileInfosOffsetFloat =
-        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
-            .animate(_profileInfosController);
+    if (_nodeType != PUBLIC_NODE) {
+      _profileInfosOffsetFloat =
+          Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+              .animate(_profileInfosController);
+    }
 
     // Version string
     PackageInfo.fromPlatform().then((packageInfo) {
@@ -212,7 +215,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityController.dispose();
     _validationBasicsController.dispose();
     _aboutController.dispose();
-    _profileInfosController.dispose();
+    if (_nodeType != PUBLIC_NODE) {
+      _profileInfosController.dispose();
+    }
     super.dispose();
   }
 
@@ -522,12 +527,14 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _aboutController.reverse();
       return false;
-    } else if (_profileInfosOpen) {
-      setState(() {
-        _profileInfosOpen = false;
-      });
-      _profileInfosController.reverse();
-      return false;
+    } else if (_nodeType != PUBLIC_NODE) {
+      if (_profileInfosOpen) {
+        setState(() {
+          _profileInfosOpen = false;
+        });
+        _profileInfosController.reverse();
+        return false;
+      }
     }
     return true;
   }
@@ -1018,14 +1025,18 @@ class _SettingsSheetState extends State<SettingsSheet>
                           context: context, widget: widget.receive);
                     }),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance > 0 && _nodeType != SHARED_NODE
+                            StateContainer.of(context).wallet.accountBalance >
+                                0 &&
+                            _nodeType != SHARED_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance > 0  && _nodeType != SHARED_NODE
+                            StateContainer.of(context).wallet.accountBalance >
+                                0 &&
+                            _nodeType != SHARED_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,

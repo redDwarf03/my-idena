@@ -17,6 +17,7 @@ class NodeUtil {
     return await sl.get<SharedPrefsUtil>().getNodeType();
   }
 
+
   String getLabel(int nodeType) {
     switch (nodeType) {
       case SHARED_NODE:
@@ -33,4 +34,24 @@ class NodeUtil {
         return "Unknown";
     }
   }
+
+  List<NodeType> getNodeTypeList() {
+    List<NodeType> nodeTypeList = new List();
+    nodeTypeList
+        .add(new NodeType(type: SHARED_NODE, label: getLabel(SHARED_NODE)));
+    nodeTypeList.add(new NodeType(
+        type: NORMAL_LOCAL_NODE, label: getLabel(NORMAL_LOCAL_NODE)));
+    nodeTypeList.add(
+        new NodeType(type: NORMAL_VPS_NODE, label: getLabel(NORMAL_VPS_NODE)));
+    nodeTypeList
+        .add(new NodeType(type: PUBLIC_NODE, label: getLabel(PUBLIC_NODE)));
+    nodeTypeList.add(new NodeType(type: DEMO_NODE, label: getLabel(DEMO_NODE)));
+    return nodeTypeList;
+  }
+}
+
+class NodeType {
+  NodeType({this.type, this.label});
+  int type;
+  String label;
 }

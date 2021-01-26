@@ -41,7 +41,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(seconds: 1), () async {
       _nodeType = await NodeUtil().getNodeType();
-      _status = await sl.get<AppService>().getWStatusGetResponse();
+
       if (StateContainer.of(context).selectedAccount.address != null) {
         DnaIdentityResponse _dnaIdentityResponse = await sl
             .get<AppService>()
@@ -52,6 +52,14 @@ class _SyncInfoViewState extends State<SyncInfoView> {
         }
       }
       _bcnSyncingResponse = await sl.get<AppService>().checkSync();
+      if(_bcnSyncingResponse != null && _bcnSyncingResponse.result != null && _bcnSyncingResponse.result.currentBlock == _bcnSyncingResponse.result.highestBlock)
+      {
+        _status = true;
+      }
+      else
+      {
+        _status = false;
+      }
       if (_initialCurrentBlock == 0 &&
           _bcnSyncingResponse != null &&
           _bcnSyncingResponse.result.highestBlock == 0) {
@@ -104,7 +112,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+        _nodeType == DEMO_NODE
             ? SizedBox()
             : _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing
                 ? _bcnSyncingResponse != null &&
@@ -138,10 +146,10 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                                     color: Colors.orange, fontSize: 8))
                           ])
                 : Text(""),
-        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+        _nodeType == DEMO_NODE
             ? SizedBox()
             : SizedBox(width: 10),
-        _nodeType == PUBLIC_NODE || _nodeType == DEMO_NODE
+        _nodeType == DEMO_NODE
             ? SizedBox()
             : Column(
                 children: [

@@ -20,6 +20,14 @@ class AppStyles {
         color: StateContainer.of(context).curTheme.text);
   }
 
+  static TextStyle textStyleParagraphSmallest(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.smallest,
+        fontWeight: FontWeight.w200,
+        color: StateContainer.of(context).curTheme.text);
+  }
+
   // Text style for paragraph text with primary color.
   static TextStyle textStyleParagraphPrimary(BuildContext context) {
     return TextStyle(
