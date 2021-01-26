@@ -15,23 +15,27 @@ class DnaGetBalanceResponse {
     this.jsonrpc,
     this.id,
     this.result,
+    this.error,
   });
 
   String jsonrpc;
   int id;
   DnaGetBalanceResponseResult result;
+  DnaGetBalanceResponseError error;
 
   factory DnaGetBalanceResponse.fromJson(Map<String, dynamic> json) =>
       DnaGetBalanceResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: DnaGetBalanceResponseResult.fromJson(json["result"]),
+        result: json["result"] == null ? null : DnaGetBalanceResponseResult.fromJson(json["result"]),
+        error: json["error"] == null ? null : DnaGetBalanceResponseError.fromJson(json["error"]),
       );
 
   Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "result": result.toJson(),
+          "error": result.toJson(),
       };
 }
 
@@ -59,3 +63,26 @@ class DnaGetBalanceResponseResult {
         "nonce": nonce,
       };
 }
+
+
+class DnaGetBalanceResponseError {
+  DnaGetBalanceResponseError({
+    this.code,
+    this.message,
+  });
+
+  int code;
+  String message;
+
+  factory DnaGetBalanceResponseError.fromJson(Map<String, dynamic> json) =>
+      DnaGetBalanceResponseError(
+        code: json["code"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "message": message,
+      };
+}
+

@@ -279,7 +279,7 @@ class StateContainerState extends State<StateContainer> {
     });
     setState(() {
       if (wallet != null) {
-        if (response == null) {
+        if (response == null || response.result == null) {
           wallet.accountBalance = 0;
           wallet.accountStake = 0;
         } else {

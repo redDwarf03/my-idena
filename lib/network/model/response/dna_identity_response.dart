@@ -15,23 +15,27 @@ class DnaIdentityResponse {
     this.jsonrpc,
     this.id,
     this.result,
+    this.error,
   });
 
   String jsonrpc;
   int id;
   DnaIdentityResponseResult result;
+  DnaIdentityResponseError error;
 
   factory DnaIdentityResponse.fromJson(Map<String, dynamic> json) =>
       DnaIdentityResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        result: DnaIdentityResponseResult.fromJson(json["result"]),
+        result: json["result"] == null ? null : DnaIdentityResponseResult.fromJson(json["result"]),
+        error: json["error"] == null ? null : DnaIdentityResponseError.fromJson(json["error"]),
       );
 
   Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "result": result.toJson(),
+        "error": error.toJson(),
       };
 }
 
@@ -179,3 +183,25 @@ class Invitee {
         "Address": address,
       };
 }
+
+class DnaIdentityResponseError {
+  DnaIdentityResponseError({
+    this.code,
+    this.message,
+  });
+
+  int code;
+  String message;
+
+  factory DnaIdentityResponseError.fromJson(Map<String, dynamic> json) =>
+      DnaIdentityResponseError(
+        code: json["code"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "message": message,
+      };
+}
+

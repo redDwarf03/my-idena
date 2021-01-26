@@ -92,15 +92,8 @@ class AppService {
     DnaGetBalanceRequest dnaGetBalanceRequest;
     DnaGetBalanceResponse dnaGetBalanceResponse = new DnaGetBalanceResponse();
 
-    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
     Completer<DnaGetBalanceResponse> _completer =
         new Completer<DnaGetBalanceResponse>();
-
-    if (url.isAbsolute == false || keyApp == "") {
-      _completer.complete(dnaGetBalanceResponse);
-      return _completer.future;
-    }
 
     if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaGetBalanceResponse = new DnaGetBalanceResponse();
@@ -108,12 +101,33 @@ class AppService {
       dnaGetBalanceResponse.result.balance = DM_PORTOFOLIO_MAIN;
       dnaGetBalanceResponse.result.stake = DM_PORTOFOLIO_STAKE;
     } else {
-      mapParams = {
-        'method': DnaGetBalanceRequest.METHOD_NAME,
-        'params': [address],
-        'id': 101,
-        'key': keyApp
-      };
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(dnaGetBalanceResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaGetBalanceRequest.METHOD_NAME,
+          'params': [address],
+          'id': 101,
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(dnaGetBalanceResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaGetBalanceRequest.METHOD_NAME,
+          'params': [address],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       try {
         if (await VpsUtil().isVpsUsed()) {
@@ -173,7 +187,7 @@ class AppService {
       bcnTransactionsResponse = new BcnTransactionsResponse();
       bcnTransactionsResponse.result = new BcnTransactionsResponseResult();
     } else {
-      Map<String, dynamic> mapParams = {
+      mapParams = {
         'method': BcnTransactionsRequest.METHOD_NAME,
         "params": [
           {"address": address, "count": count}
@@ -236,14 +250,15 @@ class AppService {
           }
         }
 
-        if (bcnTransactionsResponse != null && bcnTransactionsResponse.result != null &&
+        if (bcnTransactionsResponse != null &&
+            bcnTransactionsResponse.result != null &&
             bcnTransactionsResponse.result.transactions != null) {
           bcnTransactionsResponse.result.transactions = new List.from(
               bcnTransactionsResponse.result.transactions.reversed);
           if (listTxsMempool != null && listTxsMempool.length > 0) {
             bcnTransactionsResponse.result.transactions.addAll(listTxsMempool);
           }
-        } 
+        }
       } catch (e) {
         logger.e(e.toString());
       }
@@ -673,17 +688,30 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaIdentityResponse);
-        return _completer.future;
-      }
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(dnaIdentityResponse);
+          return _completer.future;
+        }
 
-      mapParams = {
-        'method': DnaIdentityRequest.METHOD_NAME,
-        'params': [address],
-        'id': 101,
-        'key': keyApp
-      };
+        mapParams = {
+          'method': DnaIdentityRequest.METHOD_NAME,
+          'params': [address],
+          'id': 101,
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(dnaIdentityResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaIdentityRequest.METHOD_NAME,
+          'params': [address],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       try {
         if (await VpsUtil().isVpsUsed()) {
@@ -708,7 +736,7 @@ class AppService {
           }
         }
       } catch (e) {
-        logger.e(e.toString());
+        //logger.e(e.toString());
         dnaIdentityResponse = new DnaIdentityResponse();
         dnaIdentityResponse.result = DnaIdentityResponseResult();
         dnaIdentityResponse.result.address = address;
@@ -736,17 +764,30 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaGetEpochResponse);
-        return _completer.future;
-      }
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(dnaGetEpochResponse);
+          return _completer.future;
+        }
 
-      mapParams = {
-        'method': DnaGetEpochRequest.METHOD_NAME,
-        'params': [],
-        'id': 101,
-        'key': keyApp
-      };
+        mapParams = {
+          'method': DnaGetEpochRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(dnaGetEpochResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaGetEpochRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       try {
         if (await VpsUtil().isVpsUsed()) {
@@ -885,7 +926,7 @@ class AppService {
           return _completer.future;
         }
 
-        Map<String, dynamic> mapParams = {
+        mapParams = {
           'method': DnaGetEpochRequest.METHOD_NAME,
           'params': [],
           'id': 101,
@@ -950,7 +991,7 @@ class AppService {
         return _completer.future;
       }
 
-      Map<String, dynamic> mapParams = {
+      mapParams = {
         'method': DnaBecomeOnlineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
@@ -1005,7 +1046,7 @@ class AppService {
         return _completer.future;
       }
 
-      Map<String, dynamic> mapParams = {
+      mapParams = {
         'method': DnaBecomeOfflineRequest.METHOD_NAME,
         "params": [
           {"nonce": null, "epoch": null}
@@ -1073,7 +1114,7 @@ class AppService {
         return _completer.future;
       }
 
-      Map<String, dynamic> mapParams = {
+      mapParams = {
         'method': DnaSendTransactionRequest.METHOD_NAME,
         "params": [
           {"from": from, "to": to, 'amount': amount}
@@ -1154,17 +1195,30 @@ class AppService {
         Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
         String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-        if (url.isAbsolute == false || keyApp == "") {
-          _completer.complete(bcnSyncingResponse);
-          return _completer.future;
-        }
+        if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+          if (url.isAbsolute == false) {
+            _completer.complete(bcnSyncingResponse);
+            return _completer.future;
+          }
 
-        Map<String, dynamic> mapParams = {
-          'method': BcnSyncingRequest.METHOD_NAME,
-          'params': [],
-          'id': 101,
-          'key': keyApp
-        };
+          mapParams = {
+            'method': BcnSyncingRequest.METHOD_NAME,
+            'params': [],
+            'id': 101,
+          };
+        } else {
+          if (url.isAbsolute == false || keyApp == "") {
+            _completer.complete(bcnSyncingResponse);
+            return _completer.future;
+          }
+
+          mapParams = {
+            'method': BcnSyncingRequest.METHOD_NAME,
+            'params': [],
+            'id': 101,
+            'key': keyApp
+          };
+        }
 
         if (await VpsUtil().isVpsUsed()) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
@@ -1215,7 +1269,7 @@ class AppService {
         return _completer.future;
       }
 
-      Map<String, dynamic> mapParams = {
+      mapParams = {
         'method': BcnMempoolRequest.METHOD_NAME,
         "params": [address],
         'id': 101,
@@ -1262,17 +1316,30 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(bcnTransactionResponse);
-        return _completer.future;
-      }
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(bcnTransactionResponse);
+          return _completer.future;
+        }
 
-      Map<String, dynamic> mapParams = {
-        'method': BcnTransactionRequest.METHOD_NAME,
-        "params": [hash],
-        'id': 101,
-        'key': keyApp
-      };
+        mapParams = {
+          'method': BcnTransactionRequest.METHOD_NAME,
+          "params": [hash],
+          'id': 101,
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(bcnTransactionResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': BcnTransactionRequest.METHOD_NAME,
+          "params": [hash],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       if (await VpsUtil().isVpsUsed()) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
@@ -1285,6 +1352,11 @@ class AppService {
         if (response.status == 200) {
           bcnTransactionResponse =
               bcnTransactionResponseFromJson(response.text);
+          if (bcnTransactionResponse != null &&
+              bcnTransactionResponse.result != null &&
+              bcnTransactionResponse.result.from != address) {
+            bcnTransactionResponse = null;
+          }
         }
       } else {
         bcnTransactionRequest = BcnTransactionRequest.fromJson(mapParams);
