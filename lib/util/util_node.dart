@@ -2,8 +2,7 @@ import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 const String PN_URL = "https://rpc.idena.dev";
-const String PN_ADDRESS = "Ox(public node)";
-const String SN_URL = "https://node.idena.io";
+const String PN_ADDRESS = "(public node)";
 
 const int SHARED_NODE = 1;
 const int NORMAL_LOCAL_NODE = 2;
@@ -34,6 +33,25 @@ class NodeUtil {
         return "Unknown";
     }
   }
+
+  String getExplaination(int nodeType) {
+    switch (nodeType) {
+      case SHARED_NODE:
+        return "You use a shared node that is provided by the community members and the Idena core team. They provide an (api key) to connect to their node";
+      case NORMAL_LOCAL_NODE:
+        return "You use a local node in your own computer, in local network, such at your home. You need a VPN access to your node to improve security";
+      case NORMAL_VPS_NODE:
+        return "You use a remote node which is installed on a VPS (Virtual private server)";
+      case PUBLIC_NODE:
+        return "You use a public node which is provided by menxit";
+      case DEMO_NODE:
+        return "You want to discover the app 'my idena'";
+      default:
+        return "Unknown";
+    }
+  }
+
+
 
   List<NodeType> getNodeTypeList() {
     List<NodeType> nodeTypeList = new List();
