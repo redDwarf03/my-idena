@@ -574,7 +574,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                     child: ProfileInfos(
                         _profileInfosController,
                         _profileInfosOpen,
-                        StateContainer.of(context).selectedAccount.address))
+                        StateContainer.of(context).selectedAccount.address,
+                        _nodeType))
                 : SizedBox(),
           ],
         ),
