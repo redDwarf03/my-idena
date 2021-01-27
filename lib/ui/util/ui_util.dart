@@ -391,6 +391,19 @@ class UIUtil {
     );
   }
 
+  static Widget showFAQ(BuildContext context) {
+    cancelLockEvent();
+    return WebviewScaffold(
+      url: AppLocalization.of(context).getFAQ(),
+      appBar: new AppBar(
+        backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
+        brightness: StateContainer.of(context).curTheme.brightness,
+        iconTheme:
+            IconThemeData(color: StateContainer.of(context).curTheme.text),
+      ),
+    );
+  }
+
   static Widget showWebview(BuildContext context, String url) {
     cancelLockEvent();
     return WebviewScaffold(

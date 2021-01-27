@@ -1116,6 +1116,19 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
+                        AppLocalization.of(context).faq,
+                        FontAwesome.help_circled, onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return UIUtil.showFAQ(context);
+                          }));
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
                         AppLocalization.of(context).aboutHeader,
                         AppIcons.info, onPressed: () {
                       setState(() {
