@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
@@ -40,6 +40,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   FocusNode _vpsIpFocusNode;
   FocusNode _vpsTunnelFocusNode;
   FocusNode _vpsPasswordFocusNode;
+  FocusNode _operatorFocusNode;
   TextEditingController _apiUrlController;
   TextEditingController _keyAppController;
   TextEditingController _encryptedPkController;
@@ -48,6 +49,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   TextEditingController _vpsIpController;
   TextEditingController _vpsTunnelController;
   TextEditingController _vpsPasswordController;
+  TextEditingController _operatorController;
 
   String _apiUrlHint = "";
   String _keyAppHint = "";
@@ -57,6 +59,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   String _vpsIpHint = "";
   String _vpsTunnelHint = "";
   String _vpsPasswordHint = "";
+  String _operatorHint = "";
   String _apiUrlValidationText = "";
   String _keyAppValidationText = "";
   String _encryptedPkValidationText = "";
@@ -65,6 +68,9 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   String _vpsIpValidationText = "";
   String _vpsTunnelValidationText = "";
   String _vpsPasswordValidationText = "";
+  String _operatorValidationText = "";
+  String _nodeTypeExplainationText =
+      NodeUtil().getExplaination(NORMAL_VPS_NODE);
   String _addressText = "";
   int _selectedNodeType = NORMAL_VPS_NODE;
   bool _keyAppVisible;
@@ -93,6 +99,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _vpsIpFocusNode = FocusNode();
     _vpsTunnelFocusNode = FocusNode();
     _vpsPasswordFocusNode = FocusNode();
+    _operatorFocusNode = FocusNode();
     _apiUrlController = TextEditingController();
     _keyAppController = TextEditingController();
     _encryptedPkController = TextEditingController();
@@ -101,11 +108,12 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _vpsIpController = TextEditingController();
     _vpsTunnelController = TextEditingController();
     _vpsPasswordController = TextEditingController();
+    _operatorController = TextEditingController();
     _keyAppVisible = false;
     _encryptedPkVisible = false;
     _passwordPkVisible = false;
     _vpsPasswordVisible = false;
-
+    _keyAppFocusNode.requestFocus();
     _apiUrlFocusNode.addListener(() {
       if (_apiUrlFocusNode.hasFocus) {
         setState(() {
@@ -194,7 +202,17 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         });
       }
     });
-
+    _operatorFocusNode.addListener(() {
+      if (_operatorFocusNode.hasFocus) {
+        setState(() {
+          _operatorHint = null;
+        });
+      } else {
+        setState(() {
+          _operatorHint = "";
+        });
+      }
+    });
     _deleteConfAccessNode();
 
     _timeSyncUpdate();
@@ -207,9 +225,13 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   _timeSyncUpdate() {
     _timerSync = Timer(const Duration(milliseconds: 500), () async {
       _addressText = "";
-      status = false;
-      if (_selectedNodeType != SHARED_NODE &&
-          _selectedNodeType != DEMO_NODE &&
+      if (_selectedNodeType == DEMO_NODE || _selectedNodeType == PUBLIC_NODE) {
+        status = true;
+      } else {
+        status = false;
+      }
+
+      if (_selectedNodeType != DEMO_NODE &&
           _selectedNodeType != NORMAL_VPS_NODE &&
           _selectedNodeType != PUBLIC_NODE) {
         status = await sl.get<AppService>().getWStatusGetResponse();
@@ -218,45 +240,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         }
       } else {
         _addressText = await AppUtil().getAddress();
-        if (_selectedNodeType == SHARED_NODE) {
-          if (_addressText != null && _addressText.isEmpty == false) {
-            DnaIdentityResponse _dnaIdentityResponse =
-                await sl.get<AppService>().getDnaIdentity(_addressText);
-            if (_dnaIdentityResponse == null) {
-              status = false;
-              //print("status getIdentity : " + status.toString());
-            } else {
-              _addressText = _dnaIdentityResponse.result.address;
-              status = true;
-            }
-          } else {
-            status = false;
-          }
-        }
-      }
-
-      //print("status getStatus : " + status.toString());
-      _addressText = await AppUtil().getAddress();
-      if (_selectedNodeType == SHARED_NODE) {
-        if (_addressText != null && _addressText.isEmpty == false) {
-          DnaIdentityResponse _dnaIdentityResponse =
-              await sl.get<AppService>().getDnaIdentity(_addressText);
-          if (_dnaIdentityResponse == null) {
-            status = false;
-            //print("status getIdentity : " + status.toString());
-          } else {
-            _addressText = _dnaIdentityResponse.result.address;
-            status = true;
-          }
-        } else {
-          status = false;
-        }
-      } else {
-        if (_addressText == null || _addressText == "") {
-          status = false;
-        } else {
-          status = true;
-        }
       }
       //print("status : " + status.toString());
       if (!mounted) return;
@@ -280,6 +263,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           child: Column(
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   // Back Button
                   Container(
@@ -298,6 +282,28 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                             borderRadius: BorderRadius.circular(50.0)),
                         padding: EdgeInsets.all(0.0),
                         child: Icon(AppIcons.back,
+                            color: StateContainer.of(context).curTheme.text,
+                            size: 24)),
+                  ),
+                  Container(
+                    margin: EdgeInsetsDirectional.only(
+                        end: smallScreen(context) ? 15 : 20),
+                    height: 50,
+                    width: 50,
+                    child: FlatButton(
+                        highlightColor:
+                            StateContainer.of(context).curTheme.text15,
+                        splashColor: StateContainer.of(context).curTheme.text15,
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return UIUtil.showFAQ(context);
+                          }));
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(FontAwesome.help_circled,
                             color: StateContainer.of(context).curTheme.text,
                             size: 24)),
                   ),
@@ -337,6 +343,21 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                     getEnterNodeTypeContainer(),
                                   ],
                                 )),
+                                Container(
+                                  alignment: AlignmentDirectional(0, 0),
+                                  margin: EdgeInsets.only(
+                                      top: 3, left: 10, right: 10),
+                                  child:
+                                      SelectableText(_nodeTypeExplainationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                ),
                                 SizedBox(height: 30),
                                 _selectedNodeType == DEMO_NODE ||
                                         _selectedNodeType == SHARED_NODE ||
@@ -364,6 +385,28 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
+                                _selectedNodeType != SHARED_NODE
+                                    ? SizedBox()
+                                    : Container(
+                                        child: getSharedNodeOperatorContainer(),
+                                      ),
+                                _selectedNodeType != SHARED_NODE
+                                    ? SizedBox(
+                                        height: 1,
+                                      )
+                                    : Container(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        margin: EdgeInsets.only(top: 3),
+                                        child: Text(_operatorValidationText,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary,
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
                                 _selectedNodeType == DEMO_NODE ||
                                         _selectedNodeType == PUBLIC_NODE
                                     ? SizedBox()
@@ -372,9 +415,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                       ),
                                 _selectedNodeType == DEMO_NODE ||
                                         _selectedNodeType == PUBLIC_NODE
-                                    ? SizedBox(
-                                        height: 1,
-                                      )
+                                    ? SizedBox()
                                     : Container(
                                         alignment: AlignmentDirectional(0, 0),
                                         margin: EdgeInsets.only(top: 3),
@@ -428,21 +469,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                                               fontWeight: FontWeight.w600,
                                             )),
                                       ),
-                                _addressText != null
-                                    ? Container(
-                                        alignment: AlignmentDirectional(0, 0),
-                                        margin: EdgeInsets.only(top: 3),
-                                        child: SelectableText(_addressText,
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary,
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                      )
-                                    : SizedBox(),
                                 _selectedNodeType != NORMAL_VPS_NODE
                                     ? SizedBox()
                                     : Container(
@@ -533,8 +559,20 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                 ),
               ),
 
-              // Next Screen Button
-              status
+              _addressText != null && _addressText != ""
+                  ? Container(
+                      alignment: AlignmentDirectional(0, 0),
+                      margin: EdgeInsets.only(top: 3),
+                      child: SelectableText(_addressText,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.green[400],
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w600,
+                          )),
+                    )
+                  : SizedBox(),
+              status && _addressText != null && _addressText != ""
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -703,6 +741,60 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
             FocusScope.of(context).unfocus();
           },
         ),
+      ],
+    );
+  }
+
+  getSharedNodeOperatorContainer() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterOperator,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _operatorFocusNode,
+          controller: _operatorController,
+          topMargin: 0,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(50)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            updateSharedPrefsUtil();
+            setState(() {
+              _operatorValidationText = "";
+            });
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          autocorrect: false,
+          hintText: _operatorHint == null
+              ? ""
+              : AppLocalization.of(context).enterOperator,
+          keyboardType: TextInputType.multiline,
+          textAlign: TextAlign.left,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+        ),
+        Text(AppLocalization.of(context).enterOperatorExample,
+            style: AppStyles.textStyleParagraphSmallest(context)),
       ],
     );
   }
@@ -1013,7 +1105,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   }
 
   getVpsPasswordContainer() {
-    Column(
+    return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1084,9 +1176,18 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
     _vpsIpFocusNode.unfocus();
     _vpsPasswordFocusNode.unfocus();
     _vpsTunnelFocusNode.unfocus();
+    _operatorFocusNode.unfocus();
 
     if (_selectedNodeType == PUBLIC_NODE) {
       return isValid;
+    }
+    if (_selectedNodeType == SHARED_NODE) {
+      if (_operatorController.text.trim().isEmpty) {
+        isValid = false;
+        setState(() {
+          _operatorValidationText = AppLocalization.of(context).operatorMissing;
+        });
+      }
     }
     if (_selectedNodeType != DEMO_NODE) {
       if (_selectedNodeType != NORMAL_VPS_NODE) {
@@ -1147,7 +1248,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
     } else if (_selectedNodeType == SHARED_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(SHARED_NODE);
-      await sl.get<SharedPrefsUtil>().setApiUrl(SN_URL);
+      await sl.get<SharedPrefsUtil>().setApiUrl(_operatorController.text);
       await sl.get<SharedPrefsUtil>().setKeyApp(_keyAppController.text);
       await sl
           .get<SharedPrefsUtil>()
@@ -1229,7 +1330,17 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           onChanged: (value) {
             setState(() {
               _selectedNodeType = value;
-
+              if (_selectedNodeType == SHARED_NODE) {
+                _operatorFocusNode.requestFocus();
+              }
+              if (_selectedNodeType == NORMAL_LOCAL_NODE) {
+                _apiUrlFocusNode.requestFocus();
+              }
+              if (_selectedNodeType == NORMAL_VPS_NODE) {
+                _keyAppFocusNode.requestFocus();
+              }
+              _nodeTypeExplainationText =
+                  NodeUtil().getExplaination(_selectedNodeType);
               _apiUrlController = TextEditingController();
               _keyAppController = TextEditingController();
               _encryptedPkController = TextEditingController();
@@ -1238,6 +1349,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
               _vpsIpController = TextEditingController();
               _vpsTunnelController = TextEditingController();
               _vpsPasswordController = TextEditingController();
+              _operatorController = TextEditingController();
               _apiUrlValidationText = "";
               _keyAppValidationText = "";
               _encryptedPkValidationText = "";
@@ -1246,6 +1358,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
               _vpsIpValidationText = "";
               _vpsTunnelValidationText = "";
               _vpsPasswordValidationText = "";
+              _operatorValidationText = "";
               _apiUrlHint = "";
               _keyAppHint = "";
               _encryptedPkHint = "";
@@ -1254,6 +1367,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
               _vpsIpHint = "";
               _vpsTunnelHint = "";
               _vpsPasswordHint = "";
+              _operatorHint = "";
 
               updateSharedPrefsUtil();
             });
