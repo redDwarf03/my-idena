@@ -1,7 +1,10 @@
 syntax = "proto3";
+
 package models;
 
-// in folder: protoc --dart_out=. models.proto
+// in folder: 
+// protoc --dart_out=. models.proto
+// export PATH="$PATH":"$HOME/(path....)/app/flutter/.pub-cache/bin"
 
 message ProtoTransaction {
     message Data {
