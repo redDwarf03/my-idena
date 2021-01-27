@@ -232,7 +232,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       }
 
       if (_selectedNodeType != DEMO_NODE &&
-          _selectedNodeType != NORMAL_VPS_NODE &&
           _selectedNodeType != PUBLIC_NODE) {
         status = await sl.get<AppService>().getWStatusGetResponse();
         if (status) {
