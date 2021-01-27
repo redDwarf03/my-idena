@@ -635,14 +635,59 @@ class _AppHomePageState extends State<AppHomePage>
                     ],
                   ),
                   //
-                  _nodeType != SHARED_NODE && _nodeType != PUBLIC_NODE && _nodeType != UNKOWN_NODE ?
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      AppPopupButton(),
-                      ValidationSessionCountdownText(),
-                    ],
-                  ) : SizedBox(),
+                  _nodeType != SHARED_NODE &&
+                          _nodeType != PUBLIC_NODE &&
+                          _nodeType != UNKOWN_NODE
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            AppPopupButton(),
+                            ValidationSessionCountdownText(),
+                          ],
+                        )
+                      : _nodeType == PUBLIC_NODE
+                          ? SizedBox()
+                          : Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),
+                                    bottomLeft: Radius.circular(8.0),
+                                    bottomRight: Radius.circular(8.0),
+                                    topRight: Radius.circular(68.0)),
+                                color: Colors.red[300],
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.4),
+                                      offset: Offset(0.1, 1.1),
+                                      blurRadius: 5.0),
+                                ],
+                              ),
+                              height: 130,
+                              width: (MediaQuery.of(context).size.width - 14),
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 7, top: 0.0, end: 7.0),
+                              child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 0, bottom: 0),
+                                  child: Container(
+                                      child: Row(children: <Widget>[
+                                    Expanded(
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                          Column(
+                                            children: [
+                                              Icon(Icons.warning,
+                                                  color: Colors.white),
+                                              Text(
+                                                  "WARNING:\nValidation Session with shared node is not yet available on this app. Work in progress...\nPlease use the web application: https://app.idena.io")
+                                            ],
+                                          )
+                                        ]))
+                                  ])))),
                 ],
               ),
             ),
@@ -746,25 +791,29 @@ class _AppHomePageState extends State<AppHomePage>
                                   style: AppStyles.textStyleTransactionType(
                                       context),
                                 ),
-                                item.timestamp > 0 ?
-                                Text(
-                                  DateFormat.yMEd(
-                                          Localizations.localeOf(context)
-                                              .languageCode)
-                                      .add_Hm()
-                                      .format(
-                                          DateTime.fromMillisecondsSinceEpoch(
-                                                  item.timestamp * 1000)
-                                              .toLocal())
-                                      .toString(),
-                                  style: AppStyles.textStyleTransactionUnit(
-                                      context),
-                                ) : Text(
-                                  AppLocalization.of(context).transactionDetailUnconfirmed,
-                                  textAlign: TextAlign.start,
-                                  style: AppStyles.textStyleTransactionUnit(
-                                      context),
-                                ),
+                                item.timestamp > 0
+                                    ? Text(
+                                        DateFormat.yMEd(
+                                                Localizations.localeOf(context)
+                                                    .languageCode)
+                                            .add_Hm()
+                                            .format(DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        item.timestamp * 1000)
+                                                .toLocal())
+                                            .toString(),
+                                        style:
+                                            AppStyles.textStyleTransactionUnit(
+                                                context),
+                                      )
+                                    : Text(
+                                        AppLocalization.of(context)
+                                            .transactionDetailUnconfirmed,
+                                        textAlign: TextAlign.start,
+                                        style:
+                                            AppStyles.textStyleTransactionUnit(
+                                                context),
+                                      ),
                               ],
                             ),
                           ),
