@@ -24,7 +24,7 @@ class NodeUtil {
       case NORMAL_LOCAL_NODE:
         return "Normal Local";
       case NORMAL_VPS_NODE:
-        return "Normal Vps";
+        return "VPS";
       case PUBLIC_NODE:
         return "Public Node";
       case DEMO_NODE:
