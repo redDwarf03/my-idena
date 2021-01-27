@@ -195,5 +195,9 @@
   "validationBasicsBadFlipItem6": "A bad flip uses objects in images in sequence (1-2-3-4).",
   "validationBasicsBadFlipItem7": "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation",
   "transactionDetailUnconfirmed": "Non confirmé",
-  "enterPublicNode": "Access to a Public Node ?"
+  "enterPublicNode": "Accès à un noeud public ?",
+  "enterOperator": "Saisir l'opérateur",
+  "enterOperatorExample": "ex: 'https://node.idena.io'",
+  "operatorMissing": "Veuillez entrer l'opérateur",
+  "faq": "FAQ et Tutoriaux"
 }

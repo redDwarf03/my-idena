@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-25T22:34:10.175138",
+  "@@last_modified": "2021-01-27T11:59:48.520758",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -306,8 +306,20 @@
     "type": "text",
     "placeholders": {}
   },
+  "enterOperatorExample": "ex: 'https://node.idena.io'",
+  "@enterOperatorExample": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "apiUrlMissing": "Please Enter your API url",
   "@apiUrlMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "operatorMissing": "Please Enter your operator",
+  "@operatorMissing": {
     "description": "",
     "type": "text",
     "placeholders": {}
@@ -1161,6 +1173,12 @@
   "logout": "Logout",
   "@logout": {
     "description": "settings_logout",
+    "type": "text",
+    "placeholders": {}
+  },
+  "faq": "FAQ and tutorials",
+  "@faq": {
+    "description": "settings_faq",
     "type": "text",
     "placeholders": {}
   },

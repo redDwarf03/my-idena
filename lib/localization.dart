@@ -228,6 +228,11 @@ class AppLocalization {
         desc: '', name: 'enterKeyApp');
   }  
 
+  String get enterOperator {
+    return Intl.message("Enter your operator",
+        desc: '', name: 'enterKeyApp');
+  }  
+
   String get enterEncryptedPk {
     return Intl.message("Enter your private key backup",
         desc: '', name: 'enterEncryptedPk');
@@ -282,10 +287,19 @@ class AppLocalization {
         desc: '', name: 'enterVpsUserExample');
   }  
 
+ String get enterOperatorExample {
+    return Intl.message("ex: 'https://node.idena.io'",
+        desc: '', name: 'enterOperatorExample');
+  }  
 
   String get apiUrlMissing {
     return Intl.message("Please Enter your API url",
         desc: '', name: 'apiUrlMissing');
+  }  
+
+  String get operatorMissing {
+    return Intl.message("Please Enter your operator",
+        desc: '', name: 'operatorMissing');
   }  
 
   String get encryptedPkMissing {
@@ -1031,6 +1045,10 @@ class AppLocalization {
     return Intl.message("Logout", desc: 'settings_logout', name: 'logout');
   }
 
+  String get faq {
+    return Intl.message("FAQ and tutorials", desc: 'settings_faq', name: 'faq');
+  }
+
   String get rootWarning {
     return Intl.message(
         'It appears your device is "rooted", "jailbroken", or modified in a way that compromises security. It is recommended that you reset your device to its original state before proceeding.',
@@ -1646,6 +1664,10 @@ class AppLocalization {
 
   String getAccountExplorerUrl(String account) {
     return 'https://scan.idena.io/address/$account';
+  }
+
+  String getFAQ() {
+    return 'https://idena.site/faq-tutorials';
   }
 
   String get privacyUrl {
