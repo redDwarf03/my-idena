@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-27T11:59:48.520758",
+  "@@last_modified": "2021-01-27T12:06:46.881510",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -236,6 +236,12 @@
   },
   "enterKeyApp": "Enter your key app",
   "@enterKeyApp": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOperator": "Enter your operator",
+  "@enterOperator": {
     "description": "",
     "type": "text",
     "placeholders": {}

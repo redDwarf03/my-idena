@@ -230,7 +230,7 @@ class AppLocalization {
 
   String get enterOperator {
     return Intl.message("Enter your operator",
-        desc: '', name: 'enterKeyApp');
+        desc: '', name: 'enterOperator');
   }  
 
   String get enterEncryptedPk {
