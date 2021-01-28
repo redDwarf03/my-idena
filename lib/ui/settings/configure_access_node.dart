@@ -231,8 +231,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         status = false;
       }
 
-      if (_selectedNodeType != DEMO_NODE &&
-          _selectedNodeType != PUBLIC_NODE) {
+      if (_selectedNodeType != DEMO_NODE && _selectedNodeType != PUBLIC_NODE) {
         status = await sl.get<AppService>().getWStatusGetResponse();
         if (status) {
           _addressText = await AppUtil().getAddress();
@@ -1298,13 +1297,17 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         ),
         child: DropdownButtonFormField(
           value: _selectedNodeType,
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: StateContainer.of(context).curTheme.text60,
+          ),
           decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(0.0),
+              contentPadding: const EdgeInsets.fromLTRB(0, 5.5, 0, 0),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color:
-                        StateContainer.of(context).curTheme.backgroundDarkest),
-              ),
+                  borderSide: BorderSide(
+                      color: StateContainer.of(context)
+                          .curTheme
+                          .backgroundDarkest)),
               isDense: true),
           style: TextStyle(
             fontSize: 16.0,
