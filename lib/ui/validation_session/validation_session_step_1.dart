@@ -62,14 +62,16 @@ class _ValidationSessionStep1PageState
           dnaCeremonyIntervalsResponse.result.shortSessionDuration -
               DateTime.now()
                   .difference(dnaGetEpochResponse.result.nextValidation)
-                  .inSeconds - 5;
+                  .inSeconds -
+              5;
       print("Duration : " +
           dnaCeremonyIntervalsResponse.result.shortSessionDuration.toString() +
           "-" +
           DateTime.now()
               .difference(dnaGetEpochResponse.result.nextValidation)
               .inSeconds
-              .toString() + "-5");
+              .toString() +
+          "-5");
     }
 
     setState(() {
@@ -133,6 +135,46 @@ class _ValidationSessionStep1PageState
                         AppLocalization.of(context).validationHeader,
                         style: AppStyles.textStyleSettingsHeader(context),
                       ),
+                      Container(
+                          margin: EdgeInsetsDirectional.only(
+                              end: smallScreen(context) ? 15 : 20),
+                          height: 50,
+                          width: 50,
+                          child: FlatButton(
+                              highlightColor:
+                                  StateContainer.of(context).curTheme.text15,
+                              splashColor:
+                                  StateContainer.of(context).curTheme.text15,
+                              onPressed: () {
+                                loadValidationSession();
+                                setState(() {
+                                  for (int i = 0;
+                                      i <
+                                          validationSessionInfo
+                                              .listSessionValidationFlips
+                                              .length;
+                                      i++) {
+                                    validationSessionInfo
+                                        .listSessionValidationFlips[i]
+                                        .answerType = AnswerType.NONE;
+                                  }
+                                  allSelect = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.refresh,
+                                      color: Colors.red[300], size: 24),
+                                  Text("hot\nreload",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 7, color: Colors.red[300]))
+                                ],
+                              ))),
                     ],
                   ),
                   demoModeClipWidget(context, widget.simulationMode),
@@ -170,8 +212,10 @@ class _ValidationSessionStep1PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
-                          address: StateContainer.of(context).selectedAccount.address,
-                          simulationMode: widget.simulationMode,
+                            address: StateContainer.of(context)
+                                .selectedAccount
+                                .address,
+                            simulationMode: widget.simulationMode,
                             validationSessionInfoFlips: validationSessionInfo
                                 .listSessionValidationFlips[index],
                             onSelectFlip: (ValidationSessionInfoFlips

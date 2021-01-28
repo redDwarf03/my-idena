@@ -59,19 +59,30 @@ class _ValidationSessionStep2PageState
           dnaCeremonyIntervalsResponse.result.longSessionDuration;
       print("Duration : " + _durationCalculation.toString());
     } else {
-    
-      _durationCalculation =
-              dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
-                  .difference(DateTime.now())
-                  .inSeconds -
-              5;
+      _durationCalculation = dnaGetEpochResponse.result.nextValidation
+              .add(new Duration(
+                  seconds:
+                      dnaCeremonyIntervalsResponse.result.longSessionDuration))
+              .add(new Duration(
+                  seconds:
+                      dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+              .difference(DateTime.now())
+              .inSeconds -
+          5;
       print("Duration : " +
           dnaCeremonyIntervalsResponse.result.longSessionDuration.toString() +
           "-" +
-          dnaGetEpochResponse.result.nextValidation.add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.longSessionDuration)).add(new Duration(seconds: dnaCeremonyIntervalsResponse.result.shortSessionDuration))
+          dnaGetEpochResponse.result.nextValidation
+              .add(new Duration(
+                  seconds:
+                      dnaCeremonyIntervalsResponse.result.longSessionDuration))
+              .add(new Duration(
+                  seconds:
+                      dnaCeremonyIntervalsResponse.result.shortSessionDuration))
               .difference(DateTime.now())
               .inSeconds
-              .toString() + "-5");
+              .toString() +
+          "-5");
     }
 
     setState(() {
@@ -120,6 +131,46 @@ class _ValidationSessionStep2PageState
                         AppLocalization.of(context).validationHeader,
                         style: AppStyles.textStyleSettingsHeader(context),
                       ),
+                      Container(
+                          margin: EdgeInsetsDirectional.only(
+                              end: smallScreen(context) ? 15 : 20),
+                          height: 50,
+                          width: 50,
+                          child: FlatButton(
+                              highlightColor:
+                                  StateContainer.of(context).curTheme.text15,
+                              splashColor:
+                                  StateContainer.of(context).curTheme.text15,
+                              onPressed: () {
+                                loadValidationSession();
+                                setState(() {
+                                  for (int i = 0;
+                                      i <
+                                          validationSessionInfo
+                                              .listSessionValidationFlips
+                                              .length;
+                                      i++) {
+                                    validationSessionInfo
+                                        .listSessionValidationFlips[i]
+                                        .answerType = AnswerType.NONE;
+                                  }
+                                  allSelect = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.refresh,
+                                      color: Colors.red[300], size: 24),
+                                  Text("hot\nreload",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 7, color: Colors.red[300]))
+                                ],
+                              ))),
                     ],
                   ),
                   demoModeClipWidget(context, widget.simulationMode),
@@ -157,8 +208,10 @@ class _ValidationSessionStep2PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
-                           address: StateContainer.of(context).selectedAccount.address,
-                           simulationMode: widget.simulationMode,
+                            address: StateContainer.of(context)
+                                .selectedAccount
+                                .address,
+                            simulationMode: widget.simulationMode,
                             validationSessionInfoFlips: validationSessionInfo
                                 .listSessionValidationFlips[index],
                             onSelectFlip: (ValidationSessionInfoFlips
