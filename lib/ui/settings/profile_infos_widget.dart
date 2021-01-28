@@ -9,15 +9,12 @@ import 'package:my_idena/styles.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/util/util_node.dart';
 
 class ProfileInfos extends StatefulWidget {
   final AnimationController profileInfosController;
   bool profileInfosOpen;
   String address;
-  int nodeType;
-  ProfileInfos(this.profileInfosController, this.profileInfosOpen, this.address,
-      this.nodeType);
+  ProfileInfos(this.profileInfosController, this.profileInfosOpen, this.address);
 
   _ProfileInfosState createState() => _ProfileInfosState();
 }
@@ -31,12 +28,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
   void initState() {
     super.initState();
 
-    if (widget.nodeType == DEMO_NODE ||
-        widget.nodeType == NORMAL_LOCAL_NODE ||
-        widget.nodeType == NORMAL_VPS_NODE ||
-        widget.nodeType == SHARED_NODE) {
       loadProfileInfos();
-    }
   }
 
   Future<void> loadProfileInfos() async {

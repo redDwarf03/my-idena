@@ -97,24 +97,24 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   void loadCtx() async {
     int _nt = await NodeUtil().getNodeType();
-    if (_nt != PUBLIC_NODE) {
-      DnaIdentityResponse _dnaIdentityResponse = await sl
-          .get<AppService>()
-          .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
-      bool _m = _dnaIdentityResponse.result.online;
-      List _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
-      bool cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
-      setState(() {
-        _miningActive = _m;
-        _nodeType = _nt;
-        _canMine = cm;
-        _flipKeyWordPairs = _fk;
-      });
-    } else {
-      setState(() {
-        _nodeType = _nt;
-      });
+    DnaIdentityResponse _dnaIdentityResponse = await sl
+        .get<AppService>()
+        .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
+    bool _m = false;
+    List _fk = new List();
+    bool cm = false;
+    if (_dnaIdentityResponse != null && _dnaIdentityResponse.result != null) {
+      _m = _dnaIdentityResponse.result.online;
+      _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
+      cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
     }
+
+    setState(() {
+      _miningActive = _m;
+      _nodeType = _nt;
+      _canMine = cm;
+      _flipKeyWordPairs = _fk;
+    });
   }
 
   @override
@@ -176,12 +176,10 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
-    if (_nodeType != PUBLIC_NODE) {
-      _profileInfosController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 220),
-      );
-    }
+    _profileInfosController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
     _offsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_controller);
     _securityOffsetFloat =
@@ -195,11 +193,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     _aboutOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_aboutController);
 
-    if (_nodeType != PUBLIC_NODE) {
-      _profileInfosOffsetFloat =
-          Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
-              .animate(_profileInfosController);
-    }
+    _profileInfosOffsetFloat =
+        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+            .animate(_profileInfosController);
 
     // Version string
     PackageInfo.fromPlatform().then((packageInfo) {
@@ -215,9 +211,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityController.dispose();
     _validationBasicsController.dispose();
     _aboutController.dispose();
-    if (_nodeType != PUBLIC_NODE) {
-      _profileInfosController.dispose();
-    }
+    _profileInfosController.dispose();
     super.dispose();
   }
 
@@ -527,14 +521,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _aboutController.reverse();
       return false;
-    } else if (_nodeType != PUBLIC_NODE) {
-      if (_profileInfosOpen) {
-        setState(() {
-          _profileInfosOpen = false;
-        });
-        _profileInfosController.reverse();
-        return false;
-      }
+    } else if (_profileInfosOpen) {
+      setState(() {
+        _profileInfosOpen = false;
+      });
+      _profileInfosController.reverse();
+      return false;
     }
     return true;
   }
@@ -567,15 +559,13 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _aboutOffsetFloat,
                 child: About(_aboutController, _aboutOpen)),
-            StateContainer.of(context).selectedAccount.address != null &&
-                    _nodeType != PUBLIC_NODE
+            StateContainer.of(context).selectedAccount.address != null
                 ? SlideTransition(
                     position: _profileInfosOffsetFloat,
                     child: ProfileInfos(
                         _profileInfosController,
                         _profileInfosOpen,
-                        StateContainer.of(context).selectedAccount.address,
-                        _nodeType))
+                        StateContainer.of(context).selectedAccount.address))
                 : SizedBox(),
           ],
         ),
@@ -1084,20 +1074,22 @@ class _SettingsSheetState extends State<SettingsSheet>
                                     StateContainer.of(context).curTheme.text15,
                               )
                             : SizedBox(),
-                    _nodeType == PUBLIC_NODE
-                        ? SizedBox()
-                        : StateContainer.of(context).selectedAccount.address !=
-                                null
-                            ? AppSettings.buildSettingsListItemSingleLine(
-                                context,
-                                AppLocalization.of(context).profileInfosHeader,
-                                FontAwesome5.address_card, onPressed: () {
-                                setState(() {
-                                  _profileInfosOpen = true;
-                                });
-                                _profileInfosController.forward();
-                              })
-                            : SizedBox(),
+                    StateContainer.of(context).selectedAccount.address !=
+                                null &&
+                            StateContainer.of(context)
+                                    .selectedAccount
+                                    .address !=
+                                PN_ADDRESS
+                        ? AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).profileInfosHeader,
+                            FontAwesome5.address_card, onPressed: () {
+                            setState(() {
+                              _profileInfosOpen = true;
+                            });
+                            _profileInfosController.forward();
+                          })
+                        : SizedBox(),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1119,10 +1111,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                         context,
                         AppLocalization.of(context).faq,
                         FontAwesome.help_circled, onPressed: () {
-                   Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return UIUtil.showFAQ(context);
-                          }));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return UIUtil.showFAQ(context);
+                      }));
                     }),
                     Divider(
                       height: 2,
