@@ -14,6 +14,7 @@ import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_3.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_4.dart';
+import 'package:my_idena/ui/intro/intro_import_seed.dart';
 import 'package:my_idena/ui/settings/configure_access_node.dart';
 import 'package:my_idena/ui/password_lock_screen.dart';
 import 'package:my_idena/ui/validation_session/validation_session_step_1.dart';
@@ -221,6 +222,11 @@ class _AppState extends State<App> {
             case '/before_scan_screen':
               return NoTransitionRoute(
                 builder: (_) => BeforeScanScreen(),
+                settings: settings,
+              );
+            case '/intro_import':
+              return MaterialPageRoute(
+                builder: (_) => IntroImportSeedPage(),
                 settings: settings,
               );
             case '/validation_session_step_1':

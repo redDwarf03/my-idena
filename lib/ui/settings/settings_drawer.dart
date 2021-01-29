@@ -945,6 +945,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         : SizedBox(),
                     _nodeType != SHARED_NODE &&
                             _nodeType != DEMO_NODE &&
+                            _nodeType != PUBLIC_NODE &&
                             _canMine == true
                         ? AppSettings.buildSettingsListItemSwitch(
                             context,
@@ -1027,7 +1028,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != SHARED_NODE
+                            _nodeType != SHARED_NODE &&  _nodeType != PUBLIC_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,

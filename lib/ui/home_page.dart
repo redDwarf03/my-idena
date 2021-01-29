@@ -423,7 +423,7 @@ class _AppHomePageState extends State<AppHomePage>
             ],
           ));
     } else if (StateContainer.of(context).wallet.history.length == 0 &&
-        _nodeType != SHARED_NODE) {
+        _nodeType != SHARED_NODE && _nodeType != PUBLIC_NODE) {
       _disposeAnimation();
       return ReactiveRefreshIndicator(
         backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
@@ -645,7 +645,7 @@ class _AppHomePageState extends State<AppHomePage>
                             ValidationSessionCountdownText(),
                           ],
                         )
-                      : _nodeType == PUBLIC_NODE
+                      : _nodeType == UNKOWN_NODE
                           ? SizedBox()
                           : Container(
                               decoration: BoxDecoration(
@@ -682,8 +682,11 @@ class _AppHomePageState extends State<AppHomePage>
                                             children: [
                                               Icon(Icons.warning,
                                                   color: Colors.white),
-                                              Text(
-                                                  "WARNING:\nValidation Session with shared node is not yet available on this app. Work in progress...\nPlease use the web application: https://app.idena.io")
+                                              _nodeType == SHARED_NODE
+                                                  ? Text(
+                                                      "WARNING:\nValidation Session with shared node is not yet available on this app. Work in progress...\nPlease use the web application: https://app.idena.io")
+                                                  : Text(
+                                                      "WARNING:\nValidation Session with public node is not available\nPlease use the web application: https://app.idena.io")
                                             ],
                                           )
                                         ]))

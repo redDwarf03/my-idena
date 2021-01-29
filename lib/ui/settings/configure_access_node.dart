@@ -237,7 +237,9 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           _addressText = await AppUtil().getAddress();
         }
       } else {
-        _addressText = await AppUtil().getAddress();
+        if (_selectedNodeType == DEMO_NODE) {
+          _addressText = await AppUtil().getAddress();
+        }
       }
       //print("status : " + status.toString());
       if (!mounted) return;
@@ -557,7 +559,9 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                 ),
               ),
 
-              _addressText != null && _addressText != ""
+              _addressText != null &&
+                      _addressText != "" &&
+                      _selectedNodeType != PUBLIC_NODE
                   ? Container(
                       alignment: AlignmentDirectional(0, 0),
                       margin: EdgeInsets.only(top: 3),
@@ -570,35 +574,56 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                           )),
                     )
                   : SizedBox(),
-              status && _addressText != null && _addressText != ""
+
+              (status && _addressText != null && _addressText != "") ||
+                      (_selectedNodeType == PUBLIC_NODE)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        AppButton.buildAppButton(
-                            context,
-                            AppButtonType.PRIMARY,
-                            AppLocalization.of(context).goHome,
-                            Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () async {
-                          if (_validateRequest() == true) {
-                            updateSharedPrefsUtil();
-                            await sl.get<DBHelper>().dropAccounts();
-                            await AppUtil().loginAccount(context);
-                            StateContainer.of(context).requestUpdate();
-                          } else {
-                            return;
-                          }
+                        _selectedNodeType == PUBLIC_NODE
+                            ? AppButton.buildAppButton(
+                                context,
+                                AppButtonType.PRIMARY,
+                                AppLocalization.of(context).importSeed,
+                                Dimens.BUTTON_BOTTOM_DIMENS,
+                                onPressed: () async {
+                                if (_validateRequest() == true) {
+                                  updateSharedPrefsUtil();
+                                  await sl.get<DBHelper>().dropAccounts();
+                                  await AppUtil().loginAccount(context);
+                                  StateContainer.of(context).requestUpdate();
+                                } else {
+                                  return;
+                                }
+                                Navigator.of(context)
+                                    .pushNamed('/intro_import');
+                              })
+                            : AppButton.buildAppButton(
+                                context,
+                                AppButtonType.PRIMARY,
+                                AppLocalization.of(context).goHome,
+                                Dimens.BUTTON_BOTTOM_DIMENS,
+                                onPressed: () async {
+                                if (_validateRequest() == true) {
+                                  updateSharedPrefsUtil();
+                                  await sl.get<DBHelper>().dropAccounts();
+                                  await AppUtil().loginAccount(context);
+                                  StateContainer.of(context).requestUpdate();
+                                } else {
+                                  return;
+                                }
 
-                          String pin = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                            return new PinScreen(
-                              PinOverlayType.NEW_PIN,
-                            );
-                          }));
-                          if (pin != null && pin.length > 5) {
-                            _pinEnteredCallback(pin);
-                          }
-                        }),
+                                String pin = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                  return new PinScreen(
+                                    PinOverlayType.NEW_PIN,
+                                  );
+                                }));
+                                if (pin != null && pin.length > 5) {
+                                  _pinEnteredCallback(pin);
+                                }
+                              }),
                       ],
                     )
                   : Row(
@@ -1244,6 +1269,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
+      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == SHARED_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(SHARED_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_operatorController.text);
@@ -1255,6 +1281,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsIp("");
       await sl.get<SharedPrefsUtil>().setVpsUser("");
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
+      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == NORMAL_VPS_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_VPS_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_vpsTunnelController.text);
@@ -1266,6 +1293,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           .setVpsPassword(_vpsPasswordController.text);
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
+      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == PUBLIC_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(PUBLIC_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
@@ -1275,6 +1303,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
+      await sl.get<SharedPrefsUtil>().setAddress("");
     } else {
       await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_LOCAL_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_apiUrlController.text);
@@ -1284,8 +1313,8 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
+      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     }
-    await sl.get<SharedPrefsUtil>().setAddress(_addressText);
   }
 
   getEnterNodeTypeContainer() {
