@@ -79,18 +79,19 @@ import 'package:dartssh/http.dart' as ssh;
 
 class AppService {
   var logger = Logger();
-  Map<String, String> requestHeaders = {
+  final Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
   };
   String body;
   http.Response responseHttp;
-  Map<String, dynamic> mapParams;
+
   SSHClient sshClient;
 
   Future<DnaGetBalanceResponse> getBalanceGetResponse(
       String address, bool activeBus) async {
     DnaGetBalanceRequest dnaGetBalanceRequest;
     DnaGetBalanceResponse dnaGetBalanceResponse = new DnaGetBalanceResponse();
+    Map<String, dynamic> mapParams;
 
     Completer<DnaGetBalanceResponse> _completer =
         new Completer<DnaGetBalanceResponse>();
@@ -172,6 +173,7 @@ class AppService {
     Completer<BcnTransactionsResponse> _completer =
         new Completer<BcnTransactionsResponse>();
 
+    Map<String, dynamic> mapParams;
     BcnTransactionsRequest bcnTransactionsRequest;
     BcnTransactionsResponse bcnTransactionsResponse;
 
@@ -524,6 +526,7 @@ class AppService {
   Future<bool> getWStatusGetResponse() async {
     DnaIdentityRequest dnaIdentityRequest;
 
+    Map<String, dynamic> mapParams;
     Completer<bool> _completer = new Completer<bool>();
 
     if (await NodeUtil().getNodeType() == DEMO_NODE) {
@@ -588,6 +591,7 @@ class AppService {
   Future<DnaGetCoinbaseAddrResponse> getDnaGetCoinbaseAddr() async {
     DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
     DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
+    Map<String, dynamic> mapParams;
 
     Completer<DnaGetCoinbaseAddrResponse> _completer =
         new Completer<DnaGetCoinbaseAddrResponse>();
@@ -649,6 +653,7 @@ class AppService {
   Future<DnaIdentityResponse> getDnaIdentity(String address) async {
     DnaIdentityRequest dnaIdentityRequest;
     DnaIdentityResponse dnaIdentityResponse;
+    Map<String, dynamic> mapParams;
 
     Completer<DnaIdentityResponse> _completer =
         new Completer<DnaIdentityResponse>();
@@ -751,6 +756,8 @@ class AppService {
     DnaGetEpochRequest dnaGetEpochRequest;
     DnaGetEpochResponse dnaGetEpochResponse;
 
+    Map<String, dynamic> mapParams;
+
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
@@ -824,6 +831,8 @@ class AppService {
   Future<DnaCeremonyIntervalsResponse> getDnaCeremonyIntervals() async {
     DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
     DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
+
+    Map<String, dynamic> mapParams;
 
     Completer<DnaCeremonyIntervalsResponse> _completer =
         new Completer<DnaCeremonyIntervalsResponse>();
@@ -912,6 +921,8 @@ class AppService {
     String currentPeriod = "";
     Completer<String> _completer = new Completer<String>();
 
+    Map<String, dynamic> mapParams;
+
     try {
       DnaGetEpochRequest dnaGetEpochRequest;
       DnaGetEpochResponse dnaGetEpochResponse;
@@ -979,6 +990,8 @@ class AppService {
     DnaBecomeOnlineResponse dnaBecomeOnlineResponse;
     DnaBecomeOnlineRequest dnaBecomeOnlineRequest;
 
+    Map<String, dynamic> mapParams;
+
     Completer<DnaBecomeOnlineResponse> _completer =
         new Completer<DnaBecomeOnlineResponse>();
 
@@ -1033,6 +1046,8 @@ class AppService {
   Future<DnaBecomeOfflineResponse> becomeOffline() async {
     DnaBecomeOfflineResponse dnaBecomeOffLineResponse;
     DnaBecomeOfflineRequest dnaBecomeOffLineRequest;
+
+    Map<String, dynamic> mapParams;
 
     Completer<DnaBecomeOfflineResponse> _completer =
         new Completer<DnaBecomeOfflineResponse>();
@@ -1101,6 +1116,8 @@ class AppService {
       String from, String amount, String to) async {
     DnaSendTransactionRequest dnaSendTransactionRequest;
     DnaSendTransactionResponse dnaSendTransactionResponse;
+
+    Map<String, dynamic> mapParams;
 
     Completer<DnaSendTransactionResponse> _completer =
         new Completer<DnaSendTransactionResponse>();
@@ -1180,6 +1197,8 @@ class AppService {
     BcnSyncingRequest bcnSyncingRequest;
     BcnSyncingResponse bcnSyncingResponse;
 
+    Map<String, dynamic> mapParams;
+
     Completer<BcnSyncingResponse> _completer =
         new Completer<BcnSyncingResponse>();
 
@@ -1257,6 +1276,8 @@ class AppService {
     BcnMempoolResponse bcnMempoolResponse;
     BcnMempoolRequest bcnMempoolRequest;
 
+    Map<String, dynamic> mapParams;
+
     Completer<BcnMempoolResponse> _completer =
         new Completer<BcnMempoolResponse>();
 
@@ -1308,6 +1329,8 @@ class AppService {
       String hash, String address) async {
     BcnTransactionRequest bcnTransactionRequest;
     BcnTransactionResponse bcnTransactionResponse;
+
+    Map<String, dynamic> mapParams;
 
     Completer<BcnTransactionResponse> _completer =
         new Completer<BcnTransactionResponse>();

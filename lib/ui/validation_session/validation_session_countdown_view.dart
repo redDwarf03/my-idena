@@ -59,7 +59,7 @@ class _ValidationSessionCountdownTextState
         await sl.get<AppService>().getDnaCeremonyIntervals();
     _dnaGetEpochResponse = await sl.get<AppService>().getDnaGetEpoch();
 
-    if (_dnaGetEpochResponse.result != null &&
+    if (_dnaGetEpochResponse != null && _dnaGetEpochResponse.result != null &&
         _dnaGetEpochResponse.result.nextValidation != null &&
         _dnaGetEpochResponse.result.nextValidation.compareTo(DateTime.now()) >=
             0 &&
