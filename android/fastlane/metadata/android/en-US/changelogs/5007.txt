@@ -1,0 +1,4 @@
+- Add FAQ and tutorials link to help users (link to idena.site)
+- Shared Node Configuration : add choice of operator
+- Configuration Node access : User Experience improved
+
