@@ -12,7 +12,9 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
-
+import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/model/idena_url.dart';
@@ -423,7 +425,8 @@ class _AppHomePageState extends State<AppHomePage>
             ],
           ));
     } else if (StateContainer.of(context).wallet.history.length == 0 &&
-        _nodeType != SHARED_NODE && _nodeType != PUBLIC_NODE) {
+        _nodeType != SHARED_NODE &&
+        _nodeType != PUBLIC_NODE) {
       _disposeAnimation();
       return ReactiveRefreshIndicator(
         backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
@@ -1322,25 +1325,58 @@ class _AppHomePageState extends State<AppHomePage>
             height: mainCardHeight,
             alignment: AlignmentDirectional(-1, -1),
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              margin: EdgeInsetsDirectional.only(
-                  top: settingsIconMarginTop, start: 5),
-              height: 50,
-              width: 50,
-              child: FlatButton(
-                  highlightColor: StateContainer.of(context).curTheme.text15,
-                  splashColor: StateContainer.of(context).curTheme.text15,
-                  onPressed: () {
-                    _scaffoldKey.currentState.openDrawer();
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0)),
-                  padding: EdgeInsets.all(0.0),
-                  child: Icon(LineariconsFree.menu_circle,
-                      color: StateContainer.of(context).curTheme.icon,
-                      size: 24)),
-            ),
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                margin: EdgeInsetsDirectional.only(
+                    top: settingsIconMarginTop, start: 5),
+                height: 100,
+                width: 50,
+                child: Column(
+                  children: [
+                    FlatButton(
+                        highlightColor:
+                            StateContainer.of(context).curTheme.text15,
+                        splashColor: StateContainer.of(context).curTheme.text15,
+                        onPressed: () {
+                          _scaffoldKey.currentState.openDrawer();
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(LineariconsFree.menu_circle,
+                            color: StateContainer.of(context).curTheme.icon,
+                            size: 24)),
+                    StateContainer.of(context).selectedAccount.state ==
+                            IdentityStatus.Invite
+                        ? FlatButton(
+                            highlightColor:
+                                StateContainer.of(context).curTheme.text15,
+                            splashColor:
+                                StateContainer.of(context).curTheme.text15,
+                            onPressed: () {
+                              AppDialogs.showConfirmDialog(
+                                  context,
+                                  AppLocalization.of(context).invitationHeader,
+                                  AppLocalization.of(context)
+                                      .invitationActivateHeader,
+                                  CaseChange.toUpperCase(
+                                      AppLocalization.of(context)
+                                          .invitationActivateButton,
+                                      context), () async {
+                                await sl.get<AppService>().activateInvitation(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .address);
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Icon(Icons.circle_notifications,
+                                color: Colors.red[400], size: 28))
+                        : SizedBox(),
+                  ],
+                )),
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 200),

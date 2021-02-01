@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-27T12:06:46.881510",
+  "@@last_modified": "2021-02-01T13:20:01.279463",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -1814,6 +1814,24 @@
   },
   "validationBasicsBadFlipItem7": "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation",
   "@validationBasicsBadFlipItem7": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invitationHeader": "Invitation",
+  "@invitationHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invitationActivateHeader": "You received an invitation.\nClick the button to activate it.",
+  "@invitationActivateHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "invitationActivateButton": "Activate",
+  "@invitationActivateButton": {
     "description": "",
     "type": "text",
     "placeholders": {}

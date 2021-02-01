@@ -304,6 +304,15 @@ class StateContainerState extends State<StateContainer> {
             .get<AppService>()
             .getAddressTxsResponse(wallet.address, count);
 
+        DnaIdentityResponse dnaIdentityResponse = new DnaIdentityResponse();
+        dnaIdentityResponse = await sl
+            .get<AppService>()
+            .getDnaIdentity(wallet.address.toString());
+            selectedAccount.state =
+            dnaIdentityResponse == null || dnaIdentityResponse.result == null
+                ? ""
+                : dnaIdentityResponse.result.state;
+
         wallet.history.clear();
 
         // Iterate list in reverse (oldest to newest block)

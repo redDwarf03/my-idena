@@ -199,5 +199,8 @@
   "enterOperator": "Saisir l'opérateur",
   "enterOperatorExample": "ex: 'https://node.idena.io'",
   "operatorMissing": "Veuillez entrer l'opérateur",
-  "faq": "FAQ et Tutoriaux"
+  "faq": "FAQ et Tutoriaux",
+  "invitationHeader": "Invitation",
+  "invitationActivateHeader": "Vous avez reçu une invitation.\nCliquez sur le bouton pour l'activer.",
+  "invitationActivateButton": "Activer"
 }

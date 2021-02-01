@@ -7,9 +7,11 @@ import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
 import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
+import 'package:my_idena/network/model/request/bcn_send_raw_tx_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
 import 'package:my_idena/network/model/request/bcn_transaction_request.dart';
 import 'package:my_idena/network/model/request/bcn_transactions_request.dart';
+import 'package:my_idena/network/model/request/dna_activate_invite_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOffline_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOnline_request.dart';
 import 'package:my_idena/network/model/request/dna_ceremonyIntervals_request.dart';
@@ -19,7 +21,9 @@ import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
+import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
+import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -31,6 +35,7 @@ import 'package:my_idena/network/model/response/dna_getCoinbaseAddr_response.dar
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/network/model/response/dna_sendTransaction_response.dart';
+import 'package:my_idena/model/transaction.dart' as model;
 import 'package:my_idena/network/model/response/simple_price_response.dart';
 import 'package:my_idena/network/model/response/simple_price_response_aed.dart';
 import 'package:my_idena/network/model/response/simple_price_response_ars.dart';
@@ -76,6 +81,7 @@ import 'package:http/http.dart' as http;
 import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
 import 'package:dartssh/http.dart' as ssh;
+import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 
 class AppService {
   var logger = Logger();
@@ -1401,6 +1407,140 @@ class AppService {
     }
 
     _completer.complete(bcnTransactionResponse);
+    return _completer.future;
+  }
+
+  Future<BcnSendRawTxResponse> sendRawTx(model.Transaction transaction) async {
+    BcnSendRawTxRequest bcnSendRawTxRequest;
+    BcnSendRawTxResponse bcnSendRawTxResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<BcnSendRawTxResponse> _completer =
+        new Completer<BcnSendRawTxResponse>();
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(bcnSendRawTxResponse);
+        return _completer.future;
+      }
+
+      print("transaction.toHex : " + transaction.toHex());
+      mapParams = {
+        'method': BcnSendRawTxRequest.METHOD_NAME,
+        "params": [ethereum_util.addHexPrefix(transaction.toHex())],
+        'id': 101,
+        'key': keyApp
+      };
+
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          bcnSendRawTxResponse = bcnSendRawTxResponseFromJson(response.text);
+
+          if (bcnSendRawTxResponse.error != null) {
+            EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                response: bcnSendRawTxResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(TransactionSendEvent(response: "Success"));
+          }
+        } else {
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: responseHttp.body));
+        }
+      } else {
+        bcnSendRawTxRequest = BcnSendRawTxRequest.fromJson(mapParams);
+        body = json.encode(bcnSendRawTxRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          bcnSendRawTxResponse =
+              bcnSendRawTxResponseFromJson(responseHttp.body);
+
+          if (bcnSendRawTxResponse.error != null) {
+            EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                response: bcnSendRawTxResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(TransactionSendEvent(response: "Success"));
+          }
+        } else {
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: responseHttp.body));
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(bcnSendRawTxResponse);
+    return _completer.future;
+  }
+
+  Future<DnaActivateInviteResponse> activateInvitation(String address) async {
+    DnaActivateInviteRequest dnaActivateInviteRequest;
+    DnaActivateInviteResponse dnaActivateInviteResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<DnaActivateInviteResponse> _completer =
+        new Completer<DnaActivateInviteResponse>();
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(dnaActivateInviteResponse);
+        return _completer.future;
+      }
+
+      mapParams = {
+        'method': DnaActivateInviteRequest.METHOD_NAME,
+        "params": [
+          {"to": address}
+        ],
+        'id': 101,
+        'key': keyApp
+      };
+
+      if (await VpsUtil().isVpsUsed()) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaActivateInviteResponse =
+              dnaActivateInviteResponseFromJson(response.text);
+        }
+      } else {
+        dnaActivateInviteRequest = DnaActivateInviteRequest.fromJson(mapParams);
+        body = json.encode(dnaActivateInviteRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaActivateInviteResponse =
+              dnaActivateInviteResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(dnaActivateInviteResponse);
     return _completer.future;
   }
 }

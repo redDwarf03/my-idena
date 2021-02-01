@@ -1616,6 +1616,25 @@ class AppLocalization {
 
   /// HEADERS END
 
+  /// INVITATIONS
+  String get invitationHeader {
+    return Intl.message("Invitation",
+        desc: '', name: 'invitationHeader');
+  }
+
+  String get invitationActivateHeader {
+    return Intl.message("You received an invitation.\nClick the button to activate it.",
+        desc: '', name: 'invitationActivateHeader');
+  }
+
+  String get invitationActivateButton {
+    return Intl.message("Activate",
+        desc: '', name: 'invitationActivateButton');
+  }
+
+  /// INVITATIONS END
+  
+  
   /// BUTTONS
   String get noSkipButton {
     return Intl.message("No, Skip",
