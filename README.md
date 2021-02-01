@@ -8,19 +8,6 @@ Idena iOS and Android app based on Flutter framework .
 
 [![Get it on Apple Store](/assets/images/apple-store-badge.png)](https://apps.apple.com/app/my-idena/id1535914607)
 
-## Configuration
-##### for a Windows PC:
-* execute **idena-go.exe** with ``--rpcaddr {ip_address} --rpcport {port_number}`` (don't run the windows client application)
-* in the first launch, go to "Parameters" page
-* type ``http://{ip_address}:{port_number}`` to connect to your node
-* type the api.key (cf ``%appdata%\Idena\node\datadir\api.key``)
-
-##### for a remote server and Android phone:
-* install [Termux](https://play.google.com/store/apps/details?id=com.termux&hl=en) or equivalent on your Android phone
-* install ssh ``pkg install openssh -y``
-* setup tunnel connection using ssh ``ssh -L 9999:localhost:9009 YOUR_VPS_IP``
-* open **my_idena**, go to "Parameters" page and type ``http://localhost:9999`` and your api key in the following file ``./datadir/api.key``
-
 ## Help
 
 Consider supporting my-idena by donating to **0xf429e36d68be10428d730784391589572ee0f72b**
