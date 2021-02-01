@@ -19,6 +19,7 @@ import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/util_identity.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
+import 'package:my_idena/util/util_node.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
   const ValidationSessionCountdownText({
@@ -41,6 +42,7 @@ class _ValidationSessionCountdownTextState
   int endTime;
   Timer _timer;
   bool wait = false;
+  int _nodeType;
   CountdownTimerController controller;
   DnaCeremonyIntervalsResponse _dnaCeremonyIntervalsResponse;
   DnaGetEpochResponse _dnaGetEpochResponse;
@@ -48,18 +50,20 @@ class _ValidationSessionCountdownTextState
   @override
   void initState() {
     super.initState();
-
+    _nodeType = UNKOWN_NODE;
     loadInfos();
 
     _timerUpdate();
   }
 
   Future<void> loadInfos() async {
+    int _nt = await NodeUtil().getNodeType();
     _dnaCeremonyIntervalsResponse =
         await sl.get<AppService>().getDnaCeremonyIntervals();
     _dnaGetEpochResponse = await sl.get<AppService>().getDnaGetEpoch();
 
-    if (_dnaGetEpochResponse != null && _dnaGetEpochResponse.result != null &&
+    if (_dnaGetEpochResponse != null &&
+        _dnaGetEpochResponse.result != null &&
         _dnaGetEpochResponse.result.nextValidation != null &&
         _dnaGetEpochResponse.result.nextValidation.compareTo(DateTime.now()) >=
             0 &&
@@ -68,6 +72,9 @@ class _ValidationSessionCountdownTextState
           _dnaGetEpochResponse.result.nextValidation.millisecondsSinceEpoch;
       controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
     }
+    setState(() {
+      _nodeType = _nt;
+    });
   }
 
   void onEnd() {
@@ -116,7 +123,7 @@ class _ValidationSessionCountdownTextState
                     blurRadius: 5.0),
               ],
             ),
-            height: 130,
+            height: 150,
             width: (MediaQuery.of(context).size.width - 14),
             margin: EdgeInsetsDirectional.only(start: 7, top: 0.0, end: 7.0),
             child: _buildChild(context));
@@ -381,9 +388,6 @@ class _ValidationSessionCountdownTextState
                           children: [
                             displayNextValidationDate(
                                 _dnaGetEpochResponse.result.nextValidation),
-                            SizedBox(
-                              height: 10,
-                            ),
                             canValidate == 1
                                 ? RaisedButton.icon(
                                     onPressed: () {},
@@ -424,6 +428,14 @@ class _ValidationSessionCountdownTextState
                                     splashColor: Colors.green,
                                     color: Colors.green[300],
                                   ),
+                            _nodeType != DEMO_NODE
+                                ? Text(
+                                    "The validation session is being tested on this application. Only use it if you want to participate in the testing phase with the associated risks",
+                                    style:
+                                        AppStyles.textStyleHomeInfoWarningRed(
+                                            context),
+                                  )
+                                : SizedBox()
                           ],
                         ))
                       ])));
