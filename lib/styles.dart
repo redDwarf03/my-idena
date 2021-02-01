@@ -225,6 +225,15 @@ class AppStyles {
         color: StateContainer.of(context).curTheme.overlay);
   }
 
+
+ static TextStyle textStyleHomeInfoWarningRed(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.smallest,
+        fontWeight: FontWeight.w600,
+        color: Colors.red[700]);
+  }
+
  static TextStyle textStyleHomeInfoDetail(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",
