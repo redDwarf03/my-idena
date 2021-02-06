@@ -1,4 +1,7 @@
+my Idena mobile app - new version 2.0.8 available on android
 - Public Node : Address management with mnemonic/seed informations
 - Add "hot reload" button in session validation if the displaying of list of flips has an issue
 - Fix issue when you want to display profile infos with a public node
 - UI : Addition of an arrow in the list of node types to improve readability
+It's recommended to uninstall the application is your actual configuration in the app is "public node"
+available tomorrow on apple store

@@ -1,0 +1,1 @@
+- New information message for local node/VPS users to explain the context of the validation session 
