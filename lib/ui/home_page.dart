@@ -13,6 +13,7 @@ import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/themes.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:intl/intl.dart';
@@ -319,6 +320,7 @@ class _AppHomePageState extends State<AppHomePage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Handle websocket connection when app is in background
     // terminate it to be eco-friendly
+    setBrightnessMode();
     switch (state) {
       case AppLifecycleState.paused:
         setAppLockEvent();
@@ -363,6 +365,12 @@ class _AppHomePageState extends State<AppHomePage>
     if (lockStreamListener != null) {
       lockStreamListener.cancel();
     }
+  }
+
+  void setBrightnessMode() {
+    setState(() {
+      StateContainer.of(context).curTheme = MediaQuery.of(context).platformBrightness == Brightness.dark ? IdenaDarkTheme() : IdenaTheme();
+    });
   }
 
   // Used to build list items that haven't been removed.

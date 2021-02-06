@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/model/available_language.dart';
 import 'package:my_idena/network/model/dictWords.dart';
+import 'package:my_idena/themes.dart';
 import 'package:my_idena/ui/before_scan_screen.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
@@ -86,14 +87,23 @@ class _AppState extends State<App> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'my Idena',
+        darkTheme: ThemeData(
+          dialogBackgroundColor:
+              StateContainer.of(context).curTheme.backgroundDark,
+          primaryColor: StateContainer.of(context).curTheme.primary,
+          accentColor: StateContainer.of(context).curTheme.primary10,
+          backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
+          fontFamily: StateContainer.of(context).curTheme.fontFamily,
+          brightness: StateContainer.of(context).curTheme.brightness,
+        ),
         theme: ThemeData(
           dialogBackgroundColor:
               StateContainer.of(context).curTheme.backgroundDark,
           primaryColor: StateContainer.of(context).curTheme.primary,
           accentColor: StateContainer.of(context).curTheme.primary10,
           backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
-          fontFamily: 'Roboto',
-          brightness: Brightness.dark,
+          fontFamily: StateContainer.of(context).curTheme.fontFamily,
+          brightness: StateContainer.of(context).curTheme.brightness,
         ),
         localizationsDelegates: [
           AppLocalizationsDelegate(StateContainer.of(context).curLanguage),
@@ -441,10 +451,17 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
     });
   }
 
+  void setBrightnessMode() {
+    setState(() {
+      StateContainer.of(context).curTheme = MediaQuery.of(context).platformBrightness == Brightness.dark ? IdenaDarkTheme() : IdenaTheme();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This seems to be the earliest place we can retrieve the device Locale
     setLanguage();
+    setBrightnessMode();
     sl
         .get<SharedPrefsUtil>()
         .getCurrency(StateContainer.of(context).deviceLocale)
