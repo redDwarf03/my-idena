@@ -70,8 +70,6 @@ class _ValidationSessionStep2PageState
               .inSeconds -
           5;
       print("Duration : " +
-          dnaCeremonyIntervalsResponse.result.longSessionDuration.toString() +
-          "-" +
           dnaGetEpochResponse.result.nextValidation
               .add(new Duration(
                   seconds:
