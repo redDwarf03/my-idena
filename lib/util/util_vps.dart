@@ -20,13 +20,6 @@ SSHClient client;
 Channel forwardChannel;
 
 class VpsUtil {
-  Future<bool> isVpsUsed() async {
-    if (await sl.get<SharedPrefsUtil>().getVpsIp() != "") {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   Future<SSHClient> connectVps(String tunnel, String keyApp) async {
 

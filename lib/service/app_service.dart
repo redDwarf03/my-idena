@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dartssh/client.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
 import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
@@ -20,10 +21,12 @@ import 'package:my_idena/network/model/request/dna_getCoinbaseAddr_request.dart'
 import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
+import 'package:my_idena/network/model/request/dna_send_invite_request.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
 import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
+import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -137,7 +140,7 @@ class AppService {
       }
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -222,7 +225,7 @@ class AppService {
       };
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -576,7 +579,7 @@ class AppService {
     };
 
     try {
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -638,7 +641,7 @@ class AppService {
       };
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -742,7 +745,7 @@ class AppService {
       }
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -820,7 +823,7 @@ class AppService {
       }
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -887,7 +890,7 @@ class AppService {
       };
 
       try {
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -967,7 +970,7 @@ class AppService {
           'key': keyApp
         };
 
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1036,7 +1039,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1093,7 +1096,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1123,20 +1126,20 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaSendTransactionResponse> sendTip(String from, String amount) async {
+  Future<DnaSendTransactionResponse> sendTip(String from, String amount, String seed) async {
     DnaSendTransactionResponse dnaSendTransactionResponse;
     Completer<DnaSendTransactionResponse> _completer =
         new Completer<DnaSendTransactionResponse>();
 
     dnaSendTransactionResponse = await sendTx(
-        from, amount, "0xf429e36D68BE10428D730784391589572Ee0f72B");
+        from, amount, "0xf429e36D68BE10428D730784391589572Ee0f72B", seed);
 
     _completer.complete(dnaSendTransactionResponse);
     return _completer.future;
   }
 
   Future<DnaSendTransactionResponse> sendTx(
-      String from, String amount, String to) async {
+      String from, String amount, String to, String seed) async {
     DnaSendTransactionRequest dnaSendTransactionRequest;
     DnaSendTransactionResponse dnaSendTransactionResponse;
 
@@ -1163,7 +1166,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1187,25 +1190,49 @@ class AppService {
               .fire(TransactionSendEvent(response: responseHttp.body));
         }
       } else {
-        dnaSendTransactionRequest =
-            DnaSendTransactionRequest.fromJson(mapParams);
-        body = json.encode(dnaSendTransactionRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          dnaSendTransactionResponse =
-              dnaSendTransactionResponseFromJson(responseHttp.body);
-
-          if (dnaSendTransactionResponse.error != null) {
+        if (await NodeUtil().getNodeType() == SHARED_NODE ||
+            await NodeUtil().getNodeType() == PUBLIC_NODE) {
+          int nonce = await getLastNonce(from);
+          DnaGetEpochResponse dnaGetEpochResponse = await getDnaGetEpoch();
+          int epoch = 0;
+          if (dnaGetEpochResponse != null &&
+              dnaGetEpochResponse.result != null &&
+              dnaGetEpochResponse.result.epoch != null) {
+            epoch = dnaGetEpochResponse.result.epoch;
+          }
+          model.Transaction transaction =
+              new model.Transaction(nonce, epoch, 0, to, amount, 0, null, null);
+          transaction.sign(seed).toHex();
+          BcnSendRawTxResponse bcnSendRawTxResponse =
+              await sendRawTx(transaction);
+          if (bcnSendRawTxResponse.error != null) {
             EventTaxiImpl.singleton().fire(TransactionSendEvent(
-                response: dnaSendTransactionResponse.error.message));
+                response: bcnSendRawTxResponse.error.message));
           } else {
             EventTaxiImpl.singleton()
                 .fire(TransactionSendEvent(response: "Success"));
           }
         } else {
-          EventTaxiImpl.singleton()
-              .fire(TransactionSendEvent(response: responseHttp.body));
+          dnaSendTransactionRequest =
+              DnaSendTransactionRequest.fromJson(mapParams);
+          body = json.encode(dnaSendTransactionRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            dnaSendTransactionResponse =
+                dnaSendTransactionResponseFromJson(responseHttp.body);
+
+            if (dnaSendTransactionResponse.error != null) {
+              EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                  response: dnaSendTransactionResponse.error.message));
+            } else {
+              EventTaxiImpl.singleton()
+                  .fire(TransactionSendEvent(response: "Success"));
+            }
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(TransactionSendEvent(response: responseHttp.body));
+          }
         }
       }
     } catch (e) {
@@ -1262,7 +1289,7 @@ class AppService {
           };
         }
 
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1320,7 +1347,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1387,7 +1414,7 @@ class AppService {
         };
       }
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1453,7 +1480,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1531,7 +1558,7 @@ class AppService {
         'key': keyApp
       };
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -1558,6 +1585,63 @@ class AppService {
     }
 
     _completer.complete(dnaActivateInviteResponse);
+    return _completer.future;
+  }
+
+  Future<DnaSendInviteResponse> sendInvitation(
+      String address, String amount, int nonce, int epoch) async {
+    DnaSendInviteRequest dnaSendInviteRequest;
+    DnaSendInviteResponse dnaSendInviteResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<DnaSendInviteResponse> _completer =
+        new Completer<DnaSendInviteResponse>();
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(dnaSendInviteResponse);
+        return _completer.future;
+      }
+
+      mapParams = {
+        'method': DnaSendInviteRequest.METHOD_NAME,
+        'params': [
+          {'to': address, 'amount': amount, 'nonce': nonce, 'epoch': epoch}
+        ],
+        'id': 101,
+        'key': keyApp
+      };
+
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaSendInviteResponse = dnaSendInviteResponseFromJson(response.text);
+        }
+      } else {
+        dnaSendInviteRequest = DnaSendInviteRequest.fromJson(mapParams);
+        body = json.encode(dnaSendInviteRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaSendInviteResponse =
+              dnaSendInviteResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(dnaSendInviteResponse);
     return _completer.future;
   }
 }
