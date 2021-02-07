@@ -10,6 +10,21 @@ class UtilCrypto {
   Future<String> encryptedPrivateKeyToAddress(
       String encPrivateKey, String password) async {
     try {
+      EthPrivateKey ethPrivateKey = EthPrivateKey.fromHex(
+          await encryptedPrivateKeyToSeed(encPrivateKey, password));
+      final address = await ethPrivateKey.extractAddress();
+
+      //print("address.hex : " + address.hex);
+      return address.hex;
+    } catch (e) {
+      print(e);
+      return "";
+    }
+  }
+
+  Future<String> encryptedPrivateKeyToSeed(
+      String encPrivateKey, String password) async {
+    try {
       if (encPrivateKey == null ||
           encPrivateKey.length == 0 ||
           password == null ||
@@ -42,13 +57,8 @@ class UtilCrypto {
           aesGcm.decryptSync(cypherText, secretKey: secretKey, nonce: nonce);
       //print("decrypted: " + HEX.encode(decrypted));
 
-      EthPrivateKey ethPrivateKey =
-          EthPrivateKey.fromHex(HEX.encode(decrypted));
-      final address = await ethPrivateKey.extractAddress();
-
-      //print("address.hex : " + address.hex);
-      return address.hex;
-    } catch(e) {
+      return HEX.encode(decrypted);
+    } catch (e) {
       print(e);
       return "";
     }

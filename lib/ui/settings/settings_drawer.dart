@@ -1207,13 +1207,13 @@ class _SettingsSheetState extends State<SettingsSheet>
                       });
                       _controller.forward();
                     }),
-                    _nodeType != PUBLIC_NODE
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE 
                         ? SizedBox()
                         : Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           ),
-                    _nodeType != PUBLIC_NODE
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE 
                         ? SizedBox()
                         : AppSettings.buildSettingsListItemSingleLine(
                             context,

@@ -3,6 +3,7 @@ import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/account.dart' as Account;
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
+import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/network/model/response/dna_getCoinbaseAddr_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service_locator.dart';
@@ -35,6 +36,11 @@ class AppUtil {
                   await sl.get<SharedPrefsUtil>().getEncryptedPk(),
                   await sl.get<SharedPrefsUtil>().getPasswordPk())
               .then((value) => address = value);
+          await UtilCrypto()
+              .encryptedPrivateKeyToSeed(
+                  await sl.get<SharedPrefsUtil>().getEncryptedPk(),
+                  await sl.get<SharedPrefsUtil>().getPasswordPk())
+              .then((value) => sl.get<Vault>().setSeed(value));
         }
       }
     }
@@ -46,8 +52,9 @@ class AppUtil {
   Future<String> seedToAddress(String seed, int index) async {
     String mnemonic = bip39.entropyToMnemonic(seed);
     //print('mnemonic: ' + mnemonic);
-    
-    Credentials fromHex = EthPrivateKey.fromHex(AppMnemomics.mnemonicListToSeed(mnemonic.split(' ')));
+
+    Credentials fromHex = EthPrivateKey.fromHex(
+        AppMnemomics.mnemonicListToSeed(mnemonic.split(' ')));
     var address = await fromHex.extractAddress();
     //print(address.hex);
 
