@@ -232,9 +232,24 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       }
 
       if (_selectedNodeType != DEMO_NODE && _selectedNodeType != PUBLIC_NODE) {
-        status = await sl.get<AppService>().getWStatusGetResponse();
-        if (status) {
-          _addressText = await AppUtil().getAddress();
+        if ((_selectedNodeType == NORMAL_VPS_NODE &&
+                _vpsTunnelController.text != "" &&
+                _keyAppController.text != "" &&
+                _vpsIpController.text != "" &&
+                _vpsUserController.text != "" &&
+                _vpsPasswordController.text != "") ||
+            (_selectedNodeType == SHARED_NODE &&
+                _operatorController.text != "" &&
+                _keyAppController.text != "" &&
+                _encryptedPkController.text != "" &&
+                _passwordPkController.text != "") ||
+            (_selectedNodeType == NORMAL_LOCAL_NODE &&
+                _apiUrlController.text != "" &&
+                _keyAppController.text != "")) {
+          status = await sl.get<AppService>().getWStatusGetResponse();
+          if (status) {
+            _addressText = await AppUtil().getAddress();
+          }
         }
       } else {
         if (_selectedNodeType == DEMO_NODE) {
