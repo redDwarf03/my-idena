@@ -174,6 +174,23 @@ class AppService {
     return _completer.future;
   }
 
+  Future<int> getLastNonce(String address) async {
+    DnaGetBalanceResponse dnaGetBalanceResponse = new DnaGetBalanceResponse();
+    dnaGetBalanceResponse = await getBalanceGetResponse(address, false);
+
+    Completer<int> _completer = new Completer<int>();
+
+    if (dnaGetBalanceResponse != null &&
+        dnaGetBalanceResponse.result != null &&
+        dnaGetBalanceResponse.result.nonce != null) {
+      _completer.complete(dnaGetBalanceResponse.result.nonce);
+    } else {
+      _completer.complete(1);
+    }
+
+    return _completer.future;
+  }
+
   Future<BcnTransactionsResponse> getAddressTxsResponse(
       String address, int count) async {
     Completer<BcnTransactionsResponse> _completer =
@@ -1466,7 +1483,7 @@ class AppService {
         if (responseHttp.statusCode == 200) {
           bcnSendRawTxResponse =
               bcnSendRawTxResponseFromJson(responseHttp.body);
- 
+
           if (bcnSendRawTxResponse.error != null) {
             EventTaxiImpl.singleton().fire(TransactionSendEvent(
                 response: bcnSendRawTxResponse.error.message));
