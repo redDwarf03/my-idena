@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:my_idena/util/random_util.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_idena/service_locator.dart';
@@ -9,7 +10,10 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 
 // Singleton for keystore access methods in android/iOS
 class Vault {
+  static const String seedKey = 'fidena_seed';
+  static const String encryptionKey = 'fidena_secret_phrase';
   static const String pinKey = 'fidena_pin';
+  static const String sessionKey = 'fencsess_key';
   final FlutterSecureStorage secureStorage = new FlutterSecureStorage();
 
   Future<bool> legacy() async {
@@ -36,10 +40,65 @@ class Vault {
   Future<void> deleteAll() async {
     if (await legacy()) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(encryptionKey);
+      await prefs.remove(seedKey);
       await prefs.remove(pinKey);
+      await prefs.remove(sessionKey);
       return;
     }
     return await secureStorage.deleteAll();
+  }
+
+  // Specific keys
+  Future<String> getSeed() async {
+    return await _read(seedKey);
+  }
+
+  Future<String> setSeed(String seed) async {
+    return await _write(seedKey, seed);
+  }
+
+  Future<void> deleteSeed() async {
+    if (await legacy()) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(seedKey);
+    }
+    return await secureStorage.delete(key: seedKey);
+  }
+
+  Future<String> getEncryptionPhrase() async {
+    return await _read(encryptionKey);
+  }
+
+  Future<String> writeEncryptionPhrase(String secret) async {
+    return await _write(encryptionKey, secret);
+  }
+
+  /// Used to keep the seed in-memory in the session without being plaintext
+  Future<String> getSessionKey() async {
+    String key = await _read(sessionKey);
+    if (key == null) {
+      key = await updateSessionKey();
+    }
+    return key;
+  }
+
+  Future<String> updateSessionKey() async {
+    String key = RandomUtil.generateEncryptionSecret(25);
+    await writeSessionKey(key);
+    return key;
+  }
+
+  Future<String> writeSessionKey(String key) async {
+    return await _write(sessionKey, key);
+  }
+
+  Future<void> deleteEncryptionPhrase() async {
+    if (await legacy()) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(encryptionKey);
+    }
+    return await secureStorage.delete(key: encryptionKey);
   }
 
   Future<String> getPin() async {

@@ -545,6 +545,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 await sl
                                     .get<SharedPrefsUtil>()
                                     .setAddress(address);
+                                await sl.get<Vault>().setSeed(_seedInputController.text);
                                 await sl.get<DBHelper>().dropAccounts();
                                 await AppUtil().loginAccount(context);
                                 StateContainer.of(context).requestUpdate();
@@ -570,9 +571,10 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                               _mnemonicFocusNode.unfocus();
                               if (AppMnemomics.validateMnemonic(
                                   _mnemonicController.text.split(' '))) {
+                                    String seed = AppMnemomics.mnemonicListToSeed(
+                                        _mnemonicController.text.split(' '));
                                 String address = await AppUtil().seedToAddress(
-                                    AppMnemomics.mnemonicListToSeed(
-                                        _mnemonicController.text.split(' ')),
+                                    seed,
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .index);
@@ -580,6 +582,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 await sl
                                     .get<SharedPrefsUtil>()
                                     .setAddress(address);
+                                await sl.get<Vault>().setSeed(seed);
                                 await sl.get<DBHelper>().dropAccounts();
                                 await AppUtil().loginAccount(context);
                                 StateContainer.of(context).requestUpdate();

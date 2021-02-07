@@ -12,10 +12,12 @@ import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
+import 'package:my_idena/ui/settings/backupseed_sheet.dart';
 import 'package:my_idena/ui/settings/profile_infos_widget.dart';
 import 'package:my_idena/ui/settings/validation_basics_widget.dart';
 import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/util_identity.dart';
 import 'package:my_idena/util/util_node.dart';
 import 'package:package_info/package_info.dart';
@@ -1028,7 +1030,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != SHARED_NODE &&  _nodeType != PUBLIC_NODE
+                            _nodeType != SHARED_NODE &&
+                            _nodeType != PUBLIC_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,
@@ -1204,6 +1207,48 @@ class _SettingsSheetState extends State<SettingsSheet>
                       });
                       _controller.forward();
                     }),
+                    _nodeType != PUBLIC_NODE
+                        ? SizedBox()
+                        : Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          ),
+                    _nodeType != PUBLIC_NODE
+                        ? SizedBox()
+                        : AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).backupSecretPhrase,
+                            AppIcons.backupseed, onPressed: () async {
+                            // Authenticate
+                            AuthenticationMethod authMethod =
+                                await sl.get<SharedPrefsUtil>().getAuthMethod();
+                            bool hasBiometrics =
+                                await sl.get<BiometricUtil>().hasBiometrics();
+                            if (authMethod.method == AuthMethod.BIOMETRICS &&
+                                hasBiometrics) {
+                              try {
+                                bool authenticated = await sl
+                                    .get<BiometricUtil>()
+                                    .authenticateWithBiometrics(
+                                        context,
+                                        AppLocalization.of(context)
+                                            .fingerprintSeedBackup);
+                                if (authenticated) {
+                                  sl.get<HapticUtil>().fingerprintSucess();
+                                  StateContainer.of(context)
+                                      .getSeed()
+                                      .then((seed) {
+                                    AppSeedBackupSheet(seed)
+                                        .mainBottomSheet(context);
+                                  });
+                                }
+                              } catch (e) {
+                                await authenticateWithPin();
+                              }
+                            } else {
+                              await authenticateWithPin();
+                            }
+                          }),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1457,6 +1502,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     if (auth != null && auth) {
       await Future.delayed(Duration(milliseconds: 200));
       Navigator.of(context).pop();
+      StateContainer.of(context).getSeed().then((seed) {
+        AppSeedBackupSheet(seed).mainBottomSheet(context);
+      });
     }
   }
 }
