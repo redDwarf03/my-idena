@@ -114,7 +114,7 @@ class VpsUtil {
       return null;
     }
 
-    final String host = args.rest.first,
+    String host = args.rest.first,
         login = args['login'],
         identityFile = args['identity'],
         tunnel = args['tunnel'];
@@ -122,6 +122,11 @@ class VpsUtil {
     if (login == null || login.isEmpty) {
       print('no login specified');
       return null;
+    }
+
+    if (host != null && host.split(":").length == 1)
+    {
+      host = host + ":22";
     }
 
     if (tunnel != null && tunnel.split(':').length != 2) {
