@@ -1428,7 +1428,7 @@ class AppService {
         return _completer.future;
       }
 
-      print("transaction.toHex : " + transaction.toHex());
+      print("transaction.toHex : 0x" + transaction.toHex());
       mapParams = {
         'method': BcnSendRawTxRequest.METHOD_NAME,
         "params": [ethereum_util.addHexPrefix(transaction.toHex())],
@@ -1466,7 +1466,7 @@ class AppService {
         if (responseHttp.statusCode == 200) {
           bcnSendRawTxResponse =
               bcnSendRawTxResponseFromJson(responseHttp.body);
-
+ 
           if (bcnSendRawTxResponse.error != null) {
             EventTaxiImpl.singleton().fire(TransactionSendEvent(
                 response: bcnSendRawTxResponse.error.message));
