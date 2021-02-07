@@ -1408,6 +1408,16 @@ class AppLocalization {
         name: 'importSecretPhraseHint');
   }
 
+  String get secretPhraseCopy {
+    return Intl.message("Copy Secret Phrase",
+        desc: 'Copy secret phrase to clipboard', name: 'secretPhraseCopy');
+  }
+
+  String get secretPhraseCopied {
+    return Intl.message("Secret Phrase Copied",
+        desc: 'Copied secret phrase to clipboard', name: 'secretPhraseCopied');
+  }
+
   String get qrMnemonicError {
     return Intl.message("QR does not contain a valid secret phrase",
         desc: 'When QR does not contain a valid mnemonic phrase',
@@ -1423,6 +1433,7 @@ class AppLocalization {
     return Intl.message("Secret phrase may only contain 24 words",
         desc: 'err', name: 'mnemonicSizeError');
   }
+
 
   String get secretPhrase {
     return Intl.message("Secret Phrase",

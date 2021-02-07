@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-01T13:20:01.279463",
+  "@@last_modified": "2021-02-07T11:08:48.731872",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -1563,6 +1563,18 @@
   "importSecretPhraseHint": "Please enter your 24-word secret phrase below. Each word should be separated by a space.",
   "@importSecretPhraseHint": {
     "description": "helper message for importing mnemnic",
+    "type": "text",
+    "placeholders": {}
+  },
+  "secretPhraseCopy": "Copy Secret Phrase",
+  "@secretPhraseCopy": {
+    "description": "Copy secret phrase to clipboard",
+    "type": "text",
+    "placeholders": {}
+  },
+  "secretPhraseCopied": "Secret Phrase Copied",
+  "@secretPhraseCopied": {
+    "description": "Copied secret phrase to clipboard",
     "type": "text",
     "placeholders": {}
   },

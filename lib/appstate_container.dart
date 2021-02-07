@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/model/wallet.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +11,7 @@ import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
 import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/util/app_ffi/encrypt/crypter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:my_idena/themes.dart';
 import 'package:my_idena/service_locator.dart';
@@ -89,6 +92,9 @@ class StateContainerState extends State<StateContainer> {
   String initialDeepLink;
   // Deep link changes
   StreamSubscription _deepLinkSub;
+
+  // When wallet is encrypted
+  String encryptedSecret;
 
   @override
   void initState() {
@@ -268,6 +274,20 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
+  // Set encrypted secret
+  void setEncryptedSecret(String secret) {
+    setState(() {
+      encryptedSecret = secret;
+    });
+  }
+
+  // Reset encrypted secret
+  void resetEncryptedSecret() {
+    setState(() {
+      encryptedSecret = null;
+    });
+  }
+  
   /// Handle address response
   void handleAddressResponse(DnaGetBalanceResponse response) {
     // Set currency locale here for the UI to access
@@ -349,6 +369,7 @@ class StateContainerState extends State<StateContainer> {
   void logOut() {
     setState(() {
       wallet = AppWallet();
+      encryptedSecret = null;
     });
     sl.get<DBHelper>().dropAccounts();
   }
@@ -361,5 +382,16 @@ class StateContainerState extends State<StateContainer> {
       data: this,
       child: widget.child,
     );
+  }
+
+    Future<String> getSeed() async {
+    String seed;
+    if (encryptedSecret != null) {
+      seed = HEX.encode(AppCrypt.decrypt(
+          encryptedSecret, await sl.get<Vault>().getSessionKey()));
+    } else {
+      seed = await sl.get<Vault>().getSeed();
+    }
+    return seed;
   }
 }

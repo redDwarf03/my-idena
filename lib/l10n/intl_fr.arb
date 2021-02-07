@@ -202,5 +202,7 @@
   "faq": "FAQ et Tutoriaux",
   "invitationHeader": "Invitation",
   "invitationActivateHeader": "Vous avez reçu une invitation.\nCliquez sur le bouton pour l'activer.",
-  "invitationActivateButton": "Activer"
+  "invitationActivateButton": "Activer",
+  "secretPhraseCopy": "Copier la phrase secrète",
+  "secretPhraseCopied": "La phrase secrète a été copiée"
 }
