@@ -29,6 +29,7 @@ import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
 import 'package:dartssh/http.dart' as ssh;
 import 'package:dartssh/client.dart';
@@ -96,7 +97,7 @@ class ValidationService {
         mapParams = {'method': method, "params": [], 'id': 101, 'key': keyApp};
 
         if (typeSession == EpochPeriod.ShortSession) {
-          if (await VpsUtil().isVpsUsed()) {
+          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
             sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
             var response = await ssh.HttpClientImpl(
                     clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -122,7 +123,7 @@ class ValidationService {
           }
         }
         if (typeSession == EpochPeriod.LongSession) {
-          if (await VpsUtil().isVpsUsed()) {
+          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
             sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
             var response = await ssh.HttpClientImpl(
                     clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -237,7 +238,7 @@ class ValidationService {
           'key': keyApp
         };
 
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -395,7 +396,7 @@ class ValidationService {
           'key': keyApp
         };
 
-        if (await VpsUtil().isVpsUsed()) {
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
           sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
           var response = await ssh.HttpClientImpl(
                   clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -488,7 +489,7 @@ class ValidationService {
       flipSubmitShortAnswersRequest.id = 101;
       flipSubmitShortAnswersRequest.key = keyApp;
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
@@ -567,7 +568,7 @@ class ValidationService {
       flipSubmitLongAnswersRequest.id = 101;
       flipSubmitLongAnswersRequest.key = keyApp;
 
-      if (await VpsUtil().isVpsUsed()) {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
         var response = await ssh.HttpClientImpl(
                 clientFactory: () => ssh.SSHTunneledBaseClient(client))
