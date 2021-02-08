@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dartssh/client.dart';
+import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/appstate_container.dart';
@@ -1126,7 +1127,8 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaSendTransactionResponse> sendTip(String from, String amount, String seed) async {
+  Future<DnaSendTransactionResponse> sendTip(
+      String from, String amount, String seed) async {
     DnaSendTransactionResponse dnaSendTransactionResponse;
     Completer<DnaSendTransactionResponse> _completer =
         new Completer<DnaSendTransactionResponse>();
@@ -1200,11 +1202,25 @@ class AppService {
               dnaGetEpochResponse.result.epoch != null) {
             epoch = dnaGetEpochResponse.result.epoch;
           }
-          model.Transaction transaction =
-              new model.Transaction(nonce, epoch, 0, to, amount, 0, null, null);
-          transaction.sign(seed).toHex();
+          var amountNumber = 1000000000000000000;
+          var maxFee = 1000000000000000000;
+          // Create Transaction
+          model.Transaction transaction = new model.Transaction(
+              nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
+
+          // Encode a RawTx
+          //var rawTxEncoded = ethereum_util.addHexPrefix(transaction.toHex());
+          //print("rawTxEncoded: " + rawTxEncoded);
+
+          //transaction = new model.Transaction(
+          //        null, null, null, null, null, null, null, null)
+          //    .fromHex(rawTxEncoded);
+          transaction.sign(seed);
+          var rawTxSigned = ethereum_util.addHexPrefix(transaction.toHex());
+          print("rawTxSigned : " + rawTxSigned);
+          // Sign Raw Tx
           BcnSendRawTxResponse bcnSendRawTxResponse =
-              await sendRawTx(transaction);
+              await sendRawTx(rawTxSigned);
           if (bcnSendRawTxResponse.error != null) {
             EventTaxiImpl.singleton().fire(TransactionSendEvent(
                 response: bcnSendRawTxResponse.error.message));
@@ -1454,7 +1470,7 @@ class AppService {
     return _completer.future;
   }
 
-  Future<BcnSendRawTxResponse> sendRawTx(model.Transaction transaction) async {
+  Future<BcnSendRawTxResponse> sendRawTx(String rawTxSigned) async {
     BcnSendRawTxRequest bcnSendRawTxRequest;
     BcnSendRawTxResponse bcnSendRawTxResponse;
 
@@ -1472,10 +1488,10 @@ class AppService {
         return _completer.future;
       }
 
-      print("transaction.toHex : 0x" + transaction.toHex());
+      print("transaction.toHex : " + rawTxSigned);
       mapParams = {
         'method': BcnSendRawTxRequest.METHOD_NAME,
-        "params": [ethereum_util.addHexPrefix(transaction.toHex())],
+        "params": [rawTxSigned],
         'id': 101,
         'key': keyApp
       };

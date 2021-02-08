@@ -1021,7 +1021,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != SHARED_NODE
+                            _nodeType != PUBLIC_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
@@ -1030,7 +1030,6 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != SHARED_NODE &&
                             _nodeType != PUBLIC_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,

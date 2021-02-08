@@ -61,14 +61,6 @@ class AppUtil {
     return address.hex;
   }
 
-  Future<String> seedToPublicKeyBase64(String seed, int index) async {
-    return "";
-  }
-
-  Future<String> seedToPrivateKey(String seed, int index) async {
-    return "";
-  }
-
   Future<void> loginAccount(BuildContext context) async {
     Account.Account selectedAcct =
         await sl.get<DBHelper>().getSelectedAccount();

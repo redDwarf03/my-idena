@@ -17,7 +17,6 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/biometrics.dart';
@@ -387,7 +386,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
 
       //print("send tx");
       sl.get<AppService>().sendTx(StateContainer.of(context).wallet.address,
-              widget.amountRaw, destinationAltered);
+              widget.amountRaw, destinationAltered, await StateContainer.of(context).getSeed());
              
     } catch (e) {
       // Send failed

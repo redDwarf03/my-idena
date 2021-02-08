@@ -496,10 +496,10 @@ class _ValidationSessionCountdownTextState
                   " iDNA ?",
               CaseChange.toUpperCase(
                   AppLocalization.of(context).yesButton, context), () {
-            setState(() {
+            setState(() async {
               sl.get<AppService>().sendTip(
                   StateContainer.of(context).selectedAccount.address,
-                  amount.toDouble().toString());
+                  amount.toDouble().toString(), await StateContainer.of(context).getSeed());
               AppDialogs.showConfirmDialog(
                   context,
                   AppLocalization.of(context).validationTipThxHeader,
