@@ -67,6 +67,11 @@ class _ChartsPriceViewState extends State<ChartsPriceView> {
 
             return Container(
                 height: 200,
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.0750,
+                  right: MediaQuery.of(context).size.width * 0.0750,
+                ),
                 child: Center(
                     child: Column(children: <Widget>[
                   Expanded(

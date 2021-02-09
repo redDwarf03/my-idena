@@ -70,6 +70,11 @@ class _ChartsVolumeViewState extends State<ChartsVolumeView> {
 
             return Container(
                 height: 150,
+                width: double.infinity,
+                margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.0750,
+                  right: MediaQuery.of(context).size.width * 0.0750,
+                ),
                 child: Center(
                     child: Column(children: <Widget>[
                   Expanded(
@@ -109,7 +114,7 @@ class _ChartsVolumeViewState extends State<ChartsVolumeView> {
                             ),
                             behaviorPosition: charts.BehaviorPosition.start,
                             titleOutsideJustification:
-                                charts.OutsideJustification.middleDrawArea),
+                                charts.OutsideJustification.end),
                       ]))
                 ])));
           }
