@@ -13,6 +13,8 @@ class Contact {
   String name;
   @JsonKey(name:'address')
   String address;
+  String status;
+  bool online;
 
   Contact({@required this.name, @required this.address, int id});
 

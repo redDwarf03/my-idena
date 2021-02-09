@@ -7,6 +7,8 @@ import 'package:event_taxi/event_taxi.dart';
 
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/network/model/response/dna_identity_response.dart';
+import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/service_locator.dart';
@@ -18,6 +20,7 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 
 // Contact Details Sheet
 class ContactDetailsSheet {
@@ -37,6 +40,7 @@ class ContactDetailsSheet {
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
+            getStatus();
             return SafeArea(
                 minimum: EdgeInsets.only(
                     bottom: MediaQuery.of(context).size.height * 0.035),
@@ -46,63 +50,74 @@ class ContactDetailsSheet {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        contact.address == AppLocalization.of(context).donationsUrl ?
-                        SizedBox() :
-                        // Trashcan Button
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsetsDirectional.only(
-                              top: 10.0, start: 10.0),
-                          child: FlatButton(
-                            highlightColor:
-                                StateContainer.of(context).curTheme.text15,
-                            splashColor:
-                                StateContainer.of(context).curTheme.text15,
-                            onPressed: () {
-                              AppDialogs.showConfirmDialog(
-                                  context,
-                                  AppLocalization.of(context).removeContact,
-                                  AppLocalization.of(context)
-                                      .removeContactConfirmation
-                                      .replaceAll('%1', contact.name),
-                                  CaseChange.toUpperCase(
-                                      AppLocalization.of(context).yes, context),
-                                  () {
-                                sl
-                                    .get<DBHelper>()
-                                    .deleteContact(contact)
-                                    .then((deleted) {
-                                  if (deleted) {
-                                    
-                                    EventTaxiImpl.singleton().fire(
-                                        ContactRemovedEvent(contact: contact));
-                                    EventTaxiImpl.singleton().fire(
-                                        ContactModifiedEvent(contact: contact));
-                                    UIUtil.showSnackbar(
+                        contact.address ==
+                                AppLocalization.of(context).donationsUrl
+                            ? SizedBox()
+                            :
+                            // Trashcan Button
+                            Container(
+                                width: 50,
+                                height: 50,
+                                margin: EdgeInsetsDirectional.only(
+                                    top: 10.0, start: 10.0),
+                                child: FlatButton(
+                                  highlightColor: StateContainer.of(context)
+                                      .curTheme
+                                      .text15,
+                                  splashColor: StateContainer.of(context)
+                                      .curTheme
+                                      .text15,
+                                  onPressed: () {
+                                    AppDialogs.showConfirmDialog(
+                                        context,
                                         AppLocalization.of(context)
-                                            .contactRemoved
-                                            .replaceAll("%1", contact.name),
-                                        context);
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    // TODO - error for failing to delete contact
-                                  }
-                                });
-                              },
-                                  cancelText: CaseChange.toUpperCase(
-                                      AppLocalization.of(context).no, context));
-                            },
-                            child: Icon(AppIcons.trashcan,
-                                size: 24,
-                                color:
-                                    StateContainer.of(context).curTheme.text),
-                            padding: EdgeInsets.all(13.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0)),
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                          ),
-                        ),
+                                            .removeContact,
+                                        AppLocalization.of(context)
+                                            .removeContactConfirmation
+                                            .replaceAll('%1', contact.name),
+                                        CaseChange.toUpperCase(
+                                            AppLocalization.of(context).yes,
+                                            context), () {
+                                      sl
+                                          .get<DBHelper>()
+                                          .deleteContact(contact)
+                                          .then((deleted) {
+                                        if (deleted) {
+                                          EventTaxiImpl.singleton().fire(
+                                              ContactRemovedEvent(
+                                                  contact: contact));
+                                          EventTaxiImpl.singleton().fire(
+                                              ContactModifiedEvent(
+                                                  contact: contact));
+                                          UIUtil.showSnackbar(
+                                              AppLocalization.of(context)
+                                                  .contactRemoved
+                                                  .replaceAll(
+                                                      "%1", contact.name),
+                                              context);
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          // TODO - error for failing to delete contact
+                                        }
+                                      });
+                                    },
+                                        cancelText: CaseChange.toUpperCase(
+                                            AppLocalization.of(context).no,
+                                            context));
+                                  },
+                                  child: Icon(AppIcons.trashcan,
+                                      size: 24,
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .text),
+                                  padding: EdgeInsets.all(13.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0)),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.padded,
+                                ),
+                              ),
                         // The header of the sheet
                         Container(
                           margin: EdgeInsets.only(top: 25.0),
@@ -137,7 +152,7 @@ class ContactDetailsSheet {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                return UIUtil.showAccountWebview( 
+                                return UIUtil.showAccountWebview(
                                     context, contact.address);
                               }));
                             },
@@ -163,17 +178,45 @@ class ContactDetailsSheet {
                           children: <Widget>[
                             Container(
                               width: 128.0,
-                                  height: 128.0,
+                              height: 128.0,
                               child: CircleAvatar(
-                                backgroundColor: StateContainer.of(context).curTheme.text05,
-                                backgroundImage: UIUtil.getRobohashURL(
-                                      contact.address
-                                ),
+                                backgroundColor:
+                                    StateContainer.of(context).curTheme.text05,
+                                backgroundImage: contact.status ==
+                                        IdentityStatus.NonExistentAddress
+                                    ? UIUtil.getRobohashURL(null)
+                                    : UIUtil.getRobohashURL(contact.address),
                                 radius: 50.0,
                               ),
                             ),
-                            SizedBox(height:12),
-
+                            SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                contact.online != null
+                                    ? contact.online
+                                        ? Icon(
+                                            Icons.signal_cellular_alt_rounded,
+                                            color: Colors.green,
+                                            size: 18)
+                                        : Icon(
+                                            Icons.signal_cellular_alt_rounded,
+                                            color: Colors.red,
+                                            size: 18)
+                                    : Icon(Icons.signal_cellular_alt_rounded,
+                                        color: Colors.grey, size: 18),
+                                SizedBox(width: 10),
+                                contact.status != null
+                                    ? Text(contact.status,
+                                        style: AppStyles
+                                            .textStyleTransactionAddress(
+                                                context))
+                                    : Text(IdentityStatus.Undefined,
+                                        style: AppStyles
+                                            .textStyleTransactionAddress(
+                                                context)),
+                              ],
+                            ),
                             // Contact Name container
                             Container(
                               width: double.infinity,
@@ -287,5 +330,23 @@ class ContactDetailsSheet {
                 ));
           });
         });
+  }
+
+  Future<void> getStatus() async {
+    DnaIdentityResponse dnaIdentityResponse = new DnaIdentityResponse();
+    dnaIdentityResponse =
+        await sl.get<AppService>().getDnaIdentity(contact.address);
+    if (dnaIdentityResponse != null && dnaIdentityResponse.error != null) {
+      contact.online = null;
+      contact.status = IdentityStatus.NonExistentAddress;
+    } else {
+      if (dnaIdentityResponse != null && dnaIdentityResponse.result != null) {
+        contact.online = dnaIdentityResponse.result.online;
+        contact.status = dnaIdentityResponse.result.state;
+      } else {
+        contact.online = false;
+        contact.status = IdentityStatus.Undefined;
+      }
+    }
   }
 }

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/network/model/response/dna_identity_response.dart';
+import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:my_idena/service_locator.dart';
@@ -19,6 +21,7 @@ import 'package:my_idena/ui/contacts/add_contact.dart';
 import 'package:my_idena/ui/contacts/contact_details.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 
 class ContactsList extends StatefulWidget {
   final AnimationController contactsController;
@@ -76,6 +79,7 @@ class _ContactsListState extends State<ContactsList> {
       });
       // Full update
       _updateContacts();
+      getStatus();
     });
     // Contact removed bus event
     _contactRemovedSub = EventTaxiImpl.singleton()
@@ -93,6 +97,7 @@ class _ContactsListState extends State<ContactsList> {
         if (!_contacts.contains(c)) {
           setState(() {
             _contacts.add(c);
+            getStatus();
           });
         }
       }
@@ -246,6 +251,29 @@ class _ContactsListState extends State<ContactsList> {
         ));
   }
 
+  Future<void> getStatus() async {
+    for (int i = 0; i < _contacts.length; i++) {
+      DnaIdentityResponse dnaIdentityResponse = new DnaIdentityResponse();
+      dnaIdentityResponse =
+          await sl.get<AppService>().getDnaIdentity(_contacts[i].address);
+      setState(() {
+        if (dnaIdentityResponse != null && dnaIdentityResponse.error != null) {
+          _contacts[i].online = null;
+          _contacts[i].status = IdentityStatus.NonExistentAddress;
+        } else {
+          if (dnaIdentityResponse != null &&
+              dnaIdentityResponse.result != null) {
+            _contacts[i].online = dnaIdentityResponse.result.online;
+            _contacts[i].status = dnaIdentityResponse.result.state;
+          } else {
+            _contacts[i].online = false;
+            _contacts[i].status = IdentityStatus.Undefined;
+          }
+        }
+      });
+    }
+  }
+
   Widget buildSingleContact(BuildContext context, Contact contact) {
     return FlatButton(
       onPressed: () {
@@ -273,7 +301,9 @@ class _ContactsListState extends State<ContactsList> {
                   child: CircleAvatar(
                     backgroundColor: StateContainer.of(context).curTheme.text05,
                     backgroundImage:
-                        UIUtil.getRobohashURL(contact.address),
+                        contact.status == IdentityStatus.NonExistentAddress
+                            ? UIUtil.getRobohashURL(null)
+                            : UIUtil.getRobohashURL(contact.address),
                     radius: 50.0,
                   ),
                 ),
@@ -295,6 +325,26 @@ class _ContactsListState extends State<ContactsList> {
                         Address(contact.address).getShortString(),
                         style: AppStyles.textStyleTransactionAddress(context),
                       ),
+                      Row(
+                        children: [
+                          contact.online != null
+                              ? contact.online
+                                  ? Icon(Icons.signal_cellular_alt_rounded,
+                                      color: Colors.green, size: 18)
+                                  : Icon(Icons.signal_cellular_alt_rounded,
+                                      color: Colors.red, size: 18)
+                              : Icon(Icons.signal_cellular_alt_rounded,
+                                  color: Colors.grey, size: 18),
+                          SizedBox(width: 10),
+                          contact.status != null
+                              ? Text(contact.status,
+                                  style: AppStyles.textStyleTransactionAddress(
+                                      context))
+                              : Text(IdentityStatus.Undefined,
+                                  style: AppStyles.textStyleTransactionAddress(
+                                      context)),
+                        ],
+                      )
                     ],
                   ),
                 ),

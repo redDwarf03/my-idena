@@ -9,5 +9,6 @@ const String Zombie = "Zombie";
 const String Undefined = "Undefined";
 const String Invite = "Invite";
 const String Terminating = "Terminating";
+const String NonExistentAddress = "Non-existent Address";
 
 
