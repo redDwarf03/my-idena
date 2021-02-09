@@ -32,8 +32,6 @@ class SendConfirmSheet extends StatefulWidget {
   final String contactName;
   final String localCurrency;
   final bool maxSend;
-  final String openfield;
-  final String operation;
   final String comment;
 
   SendConfirmSheet(
@@ -41,8 +39,6 @@ class SendConfirmSheet extends StatefulWidget {
       this.destination,
       this.contactName,
       this.localCurrency,
-      this.openfield,
-      this.operation,
       this.comment,
       this.maxSend = false})
       : super();

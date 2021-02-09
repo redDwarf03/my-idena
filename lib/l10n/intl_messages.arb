@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-09T20:48:57.426034",
+  "@@last_modified": "2021-02-09T23:29:20.099467",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -534,18 +534,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterOpenfield": "Enter Openfield",
-  "@enterOpenfield": {
-    "description": "send_openfield_hint",
-    "type": "text",
-    "placeholders": {}
-  },
-  "enterOperation": "Enter Operation",
-  "@enterOperation": {
-    "description": "send_operation_hint",
-    "type": "text",
-    "placeholders": {}
-  },
   "enterTokenQuantity": "Enter Quantity",
   "@enterTokenQuantity": {
     "description": "send_enterTokenQuantity_hint",
@@ -561,24 +549,6 @@
   "available": "available",
   "@available": {
     "description": "available",
-    "type": "text",
-    "placeholders": {}
-  },
-  "openfield": "Openfield",
-  "@openfield": {
-    "description": "openfield",
-    "type": "text",
-    "placeholders": {}
-  },
-  "operation": "Operation",
-  "@operation": {
-    "description": "operation",
-    "type": "text",
-    "placeholders": {}
-  },
-  "diacritic": "Common accents and diacritical signs will be replacing with an equivalent character",
-  "@diacritic": {
-    "description": "diacritic",
     "type": "text",
     "placeholders": {}
   },

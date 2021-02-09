@@ -491,16 +491,6 @@ class AppLocalization {
         desc: 'enter_address', name: 'enterAddress');
   }
 
-  String get enterOpenfield {
-    return Intl.message("Enter Openfield",
-        desc: 'send_openfield_hint', name: 'enterOpenfield');
-  }
-
-  String get enterOperation {
-    return Intl.message("Enter Operation",
-        desc: 'send_operation_hint', name: 'enterOperation');
-  }
-
   String get enterTokenQuantity {
     return Intl.message("Enter Quantity",
         desc: 'send_enterTokenQuantity_hint', name: 'enterTokenQuantity');
@@ -513,21 +503,6 @@ class AppLocalization {
 
   String get available {
     return Intl.message("available", desc: 'available', name: 'available');
-  }
-
-  String get openfield {
-    return Intl.message("Openfield", desc: 'openfield', name: 'openfield');
-  }
-
-  String get operation {
-    return Intl.message("Operation", desc: 'operation', name: 'operation');
-  }
-
-  String get diacritic {
-    return Intl.message(
-        "Common accents and diacritical signs will be replacing with an equivalent character",
-        desc: 'diacritic',
-        name: 'diacritic');
   }
 
   String get optionalParameters {

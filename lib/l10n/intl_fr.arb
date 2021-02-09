@@ -47,11 +47,7 @@
   "sendError": "Une erreur est survenue. Veuillez réessayer plus tard.",
   "enterAmount": "Saisir le montant",
   "enterAddress": "Saisir l’adresse",
-  "enterOpenfield": "Saisir un commentaire",
   "optionalParameters": "Paramètres optionnels",
-  "enterOperation": "Saisir le code opération",
-  "openfield": "Commentaire",
-  "operation": "Code opération",
   "invalidAddress": "Adresse du destinataire invalide",
   "addressMising": "Veuillez entrer une destination",
   "amountMissing": "Veuillez entrer un montant",
@@ -159,10 +155,8 @@
   "currency": "Devise",
   "liveSupportButton": "Support",
   "connectingHeader": "Connexion",
-  "diacritic": "Les accents communs et les signes diacritiques seront remplacés par un caractère équivalent",
   "available": "disponible", 
   "openfield": "Commentaire",
-  "operation": "Opération",
   "insufficientTokenQuantity": "Quantité insuffisante dans votre portefeuille",
   "informations": "Informations", 
   "enterTokenQuantity": "Saisir la quantité",
@@ -208,5 +202,6 @@
   "chartHeader": "Chart",
   "chartDate": "Date",
   "chartPrice": "Prix",
-  "chartVolume": "Volume"
+  "chartVolume": "Volume",
+  "tryValidationSession": "Essayer une session de validation"
 }
