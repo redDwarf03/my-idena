@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
@@ -23,6 +24,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   bool _status = true;
   int _nodeType = UNKOWN_NODE;
   bool _mining;
+  int _nbOfInvites = 0;
   BcnSyncingResponse _bcnSyncingResponse;
   int _initialCurrentBlock = 0;
 
@@ -49,15 +51,16 @@ class _SyncInfoViewState extends State<SyncInfoView> {
         if (_dnaIdentityResponse != null &&
             _dnaIdentityResponse.result != null) {
           _mining = _dnaIdentityResponse.result.online;
+          _nbOfInvites = _dnaIdentityResponse.result.invites;
         }
       }
       _bcnSyncingResponse = await sl.get<AppService>().checkSync();
-      if(_bcnSyncingResponse != null && _bcnSyncingResponse.result != null && _bcnSyncingResponse.result.currentBlock == _bcnSyncingResponse.result.highestBlock)
-      {
+      if (_bcnSyncingResponse != null &&
+          _bcnSyncingResponse.result != null &&
+          _bcnSyncingResponse.result.currentBlock ==
+              _bcnSyncingResponse.result.highestBlock) {
         _status = true;
-      }
-      else
-      {
+      } else {
         _status = false;
       }
       if (_initialCurrentBlock == 0 &&
@@ -86,6 +89,35 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   Widget _buildChild(BuildContext context) {
     return Row(
       children: [
+        Column(
+          children: [
+            _nbOfInvites != null && _nbOfInvites > 0
+                ? Icon(
+                    FontAwesome.user_plus,
+                    color: StateContainer.of(context).curTheme.primary,
+                    size: 15,
+                  )
+                : Icon(
+                    FontAwesome.user_plus,
+                    color: Colors.grey[600],
+                    size: 15,
+                  ),
+            SizedBox(height: 3),
+            _nbOfInvites != null && _nbOfInvites > 0
+                ? _nbOfInvites == 1
+                    ? Text(_nbOfInvites.toString() + " Invite",
+                        style: TextStyle(
+                            color: StateContainer.of(context).curTheme.primary,
+                            fontSize: 8))
+                    : Text(_nbOfInvites.toString() + " Invites",
+                        style: TextStyle(
+                            color: StateContainer.of(context).curTheme.primary,
+                            fontSize: 8))
+                : Text("0 Invite",
+                    style: TextStyle(color: Colors.grey[600], fontSize: 8)),
+          ],
+        ),
+        SizedBox(width: 10),
         Column(
           children: [
             Icon(
@@ -146,9 +178,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                                     color: Colors.orange, fontSize: 8))
                           ])
                 : Text(""),
-        _nodeType == DEMO_NODE
-            ? SizedBox()
-            : SizedBox(width: 10),
+        _nodeType == DEMO_NODE ? SizedBox() : SizedBox(width: 10),
         _nodeType == DEMO_NODE
             ? SizedBox()
             : Column(

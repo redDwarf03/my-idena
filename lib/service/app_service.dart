@@ -703,6 +703,7 @@ class AppService {
       dnaIdentityResponse.result.madeFlips = DM_IDENTITY_MADE_FLIPS;
       dnaIdentityResponse.result.requiredFlips = DM_IDENTITY_REQUIRED_FLIPS;
       dnaIdentityResponse.result.penalty = DM_IDENTITY_PENALTY;
+      dnaIdentityResponse.result.invites = DM_INVITES;
       dnaIdentityResponse.result.totalQualifiedFlips =
           DM_IDENTITY_TOTAL_QUALIFIED_FLIPS;
       dnaIdentityResponse.result.totalShortFlipPoints =

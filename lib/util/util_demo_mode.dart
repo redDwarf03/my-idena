@@ -8,7 +8,7 @@ const String DM_IDENTITY_PENALTY = "";
 const bool DM_IDENTITY_ONLINE = false;
 const int DM_IDENTITY_TOTAL_QUALIFIED_FLIPS = 0;
 const double DM_IDENTITY_TOTAL_SHORT_FLIP_POINTS = 0;
-
+const int DM_INVITES = 2;
 const String DM_PORTOFOLIO_MAIN = "4.5362";
 const String DM_PORTOFOLIO_STAKE = "0.000";
 
