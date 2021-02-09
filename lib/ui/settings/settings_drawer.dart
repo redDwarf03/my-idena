@@ -13,6 +13,7 @@ import 'package:my_idena/ui/receive/receive_sheet.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
 import 'package:my_idena/ui/settings/backupseed_sheet.dart';
+import 'package:my_idena/ui/settings/chart_sheet.dart';
 import 'package:my_idena/ui/settings/profile_infos_widget.dart';
 import 'package:my_idena/ui/settings/validation_basics_widget.dart';
 import 'package:my_idena/ui/widgets/app_simpledialog.dart';
@@ -939,6 +940,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     _nodeType != SHARED_NODE &&
                             _nodeType != DEMO_NODE &&
+                            _nodeType != PUBLIC_NODE &&
                             _canMine == true
                         ? Divider(
                             height: 2,
@@ -1099,6 +1101,33 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
+                        AppLocalization.of(context).contactsHeader,
+                        Typicons.contacts, onPressed: () {
+                      setState(() {
+                        _contactsOpen = true;
+                      });
+                      _controller.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).chartHeader,
+                        FontAwesome.chart_line, onPressed: () {
+                      Sheets.showAppHeightNineSheet(
+                          context: context,
+                          widget: ChartSheet(
+                              localCurrency:
+                                  StateContainer.of(context).curCurrency));
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
                         AppLocalization.of(context).validationBasicsHeader,
                         Octicons.law, onPressed: () {
                       setState(() {
@@ -1193,26 +1222,14 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLine(
-                        context,
-                        AppLocalization.of(context).contactsHeader,
-                        Typicons.contacts, onPressed: () {
-                      setState(() {
-                        _contactsOpen = true;
-                      });
-                      _controller.forward();
-                    }),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE 
+                    
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
                         ? SizedBox()
                         : Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           ),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE 
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
                         ? SizedBox()
                         : AppSettings.buildSettingsListItemSingleLine(
                             context,

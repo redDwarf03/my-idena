@@ -143,6 +143,29 @@ class AppLocalization {
 
   /// -- END GENERIC ITEMS
 
+  /// -- CHART
+  String get chartHeader {
+    return Intl.message('Chart',
+        desc: '', name: 'chartHeader');
+  }
+
+  String get chartDate {
+    return Intl.message('Date',
+        desc: '', name: 'chartDate');
+  }
+
+  String get chartPrice {
+    return Intl.message('Price',
+        desc: '', name: 'chartPrice');
+  }
+
+  String get chartVolume {
+    return Intl.message('Volume',
+        desc: '', name: 'chartVolume');
+  }
+
+  /// -- END CHART
+
   /// -- CONTACT ITEMS
 
   String get removeContact {
