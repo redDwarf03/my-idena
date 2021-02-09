@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-07T11:08:48.731872",
+  "@@last_modified": "2021-02-09T20:48:57.426034",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -141,6 +141,30 @@
   "qrUnknownError": "Could not Read QR Code",
   "@qrUnknownError": {
     "description": "An unknown error occurred with the QR scanner",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chartHeader": "Chart",
+  "@chartHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chartDate": "Date",
+  "@chartDate": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chartPrice": "Price",
+  "@chartPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chartVolume": "Volume",
+  "@chartVolume": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },

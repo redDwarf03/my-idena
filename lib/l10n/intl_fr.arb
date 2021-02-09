@@ -204,5 +204,9 @@
   "invitationActivateHeader": "Vous avez reçu une invitation.\nCliquez sur le bouton pour l'activer.",
   "invitationActivateButton": "Activer",
   "secretPhraseCopy": "Copier la phrase secrète",
-  "secretPhraseCopied": "La phrase secrète a été copiée"
+  "secretPhraseCopied": "La phrase secrète a été copiée",
+  "chartHeader": "Chart",
+  "chartDate": "Date",
+  "chartPrice": "Prix",
+  "chartVolume": "Volume"
 }
