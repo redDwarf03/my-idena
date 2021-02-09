@@ -8,6 +8,7 @@ import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service/validation_service.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/validation_session/evaluation_flip_widget.dart';
@@ -103,7 +104,7 @@ class _ValidationSessionStep3PageState
   }
 
   Future<void> loadValidationSession() async {
-    validationSessionInfo = await ValidationService()
+    validationSessionInfo = await sl.get<ValidationService>()
         .getValidationSessionFlipsList(EpochPeriod.LongSession,
             widget.paramValidationSessionInfo, widget.simulationMode);
     setState(() {});
@@ -274,7 +275,7 @@ class _ValidationSessionStep3PageState
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
                         if (widget.simulationMode == false) {
-                          ValidationService()
+                          sl.get<ValidationService>()
                               .submitLongAnswers(validationSessionInfo);
                         }
                         Navigator.of(context).pushNamed(
@@ -301,7 +302,7 @@ class _ValidationSessionStep3PageState
                                   AppLocalization.of(context).goHome, context),
                               () {
                             if (widget.simulationMode == false) {
-                              ValidationService()
+                              sl.get<ValidationService>()
                                   .submitLongAnswers(validationSessionInfo);
                             }
                             Navigator.of(context).pushNamed(

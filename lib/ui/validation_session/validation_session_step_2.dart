@@ -8,6 +8,7 @@ import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service/validation_service.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/validation_session/flip_detail_widget.dart';
 import 'package:my_idena/ui/validation_session/validation_thumbnails.dart';
@@ -89,7 +90,7 @@ class _ValidationSessionStep2PageState
   }
 
   Future<void> loadValidationSession() async {
-    ValidationSessionInfo _validationSessionInfo = await ValidationService()
+    ValidationSessionInfo _validationSessionInfo = await sl.get<ValidationService>()
         .getValidationSessionFlipsList(
             EpochPeriod.LongSession, null, widget.simulationMode);
     setState(() {
@@ -245,7 +246,7 @@ class _ValidationSessionStep2PageState
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
                         if (widget.simulationMode == false) {
-                          ValidationService()
+                          sl.get<ValidationService>()
                               .submitLongAnswers(validationSessionInfo);
                         }
                         Navigator.of(context).pushNamed(

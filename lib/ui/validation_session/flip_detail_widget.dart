@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
 import 'package:my_idena/service/validation_service.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 
 class FlipDetail extends StatefulWidget {
@@ -33,7 +34,7 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesLeft.length != 4 ||
             _validationSessionInfoFlips.listImagesRight == null ||
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
-      _validationSessionInfoFlips = await ValidationService()
+      _validationSessionInfoFlips = await sl.get<ValidationService>()
           .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode);
       print("listImagesLeft length : " +
           _validationSessionInfoFlips.listImagesLeft.length.toString());

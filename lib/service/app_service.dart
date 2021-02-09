@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dartssh/client.dart';
-import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
 import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
@@ -1207,7 +1205,7 @@ class AppService {
           // Create Transaction
           model.Transaction transaction = new model.Transaction(
               nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
-
+          print("transaction.toHex() before sign : " + transaction.toHex());
           // Encode a RawTx
           //var rawTxEncoded = ethereum_util.addHexPrefix(transaction.toHex());
           //print("rawTxEncoded: " + rawTxEncoded);
