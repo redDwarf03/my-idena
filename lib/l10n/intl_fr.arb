@@ -10,7 +10,7 @@
   "receive": "Recevoir",
   "sent": "Envoyé",
   "received": "Reçu",
-  "transactions": "Transactions",
+  "transactions": "Tx",
   "addressCopied": "Adresse copiée",
   "copyAddress": "Copier l’adresse",
   "addressShare": "Partager",
@@ -203,5 +203,17 @@
   "chartDate": "Date",
   "chartPrice": "Prix",
   "chartVolume": "Volume",
-  "tryValidationSession": "Essayer une session de validation"
+  "tryValidationSession": "Essayer une session de validation",
+  "invitationActivateTitle": "Activate",
+  "sendInvite": "Envoyer une invitation",
+  "sendInviteConfirmationHeader": "Confirmation d'envoi d'une invitation",
+  "sendInviteConfirmationInfos": "Etes-vous sûr(e)s d'envoyer une invitation à ce contact ?",
+  "sendInviteSuccess": "L'invitation a été envoyée avec succès",
+  "inviteHeader": "Invitation",
+  "enterInviteKey" : "Saisir le invitation",
+  "keyInviteMissing": "Veuillez saisir le code invitation",
+  "activateInviteSuccess": "L'invitation a été activée avec succès",
+  "activationInviteConfirmationHeader": "Confirmation de l'activation d'une invitation",
+  "activationInviteConfirmationInfos":  "Etes-vous sûr(e)s de vouloir activer une invitation ?"
+
 }

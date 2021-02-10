@@ -1546,7 +1546,7 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaActivateInviteResponse> activateInvitation(String address) async {
+  Future<DnaActivateInviteResponse> activateInvitation(String key, String address) async {
     DnaActivateInviteRequest dnaActivateInviteRequest;
     DnaActivateInviteResponse dnaActivateInviteResponse;
 
@@ -1567,7 +1567,7 @@ class AppService {
       mapParams = {
         'method': DnaActivateInviteRequest.METHOD_NAME,
         "params": [
-          {"to": address}
+          {"key": key, "to": address}
         ],
         'id': 101,
         'key': keyApp

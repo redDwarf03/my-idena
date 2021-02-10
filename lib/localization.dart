@@ -73,7 +73,7 @@ class AppLocalization {
   }
 
   String get transactions {
-    return Intl.message('Transactions',
+    return Intl.message('Tx',
         desc: 'transaction_header', name: 'transactions');
   }
 
@@ -1636,9 +1636,56 @@ class AppLocalization {
         desc: '', name: 'invitationActivateHeader');
   }
 
+  String get invitationActivateTitle {
+    return Intl.message("Activate",
+        desc: '', name: 'invitationActivateTitle');
+  }
+
   String get invitationActivateButton {
     return Intl.message("Activate",
         desc: '', name: 'invitationActivateButton');
+  }
+
+  String get sendInvite {
+    return Intl.message('Send Invite', desc: '', name: 'sendInvite');
+  }
+
+  String get sendInviteConfirmationHeader {
+    return Intl.message('Send Invite confirmation', desc: '', name: 'sendInviteConfirmationHeader');
+  }
+
+  String get sendInviteConfirmationInfos {
+    return Intl.message('Are you sure you want to send an invitation to this contact ?', desc: '', name: 'sendInviteConfirmationInfos');
+  }
+
+  String get sendInviteSuccess {
+    return Intl.message('The invitation was sent successfully', desc: '', name: 'sendInviteSuccess');
+  }
+
+  String get inviteHeader {
+    return Intl.message('Invite', desc: '', name: 'inviteHeader');
+  }
+
+  String get enterInviteKey {
+    return Intl.message("Enter the code invitation",
+        desc: '', name: 'enterInviteKey');
+  }
+
+  String get keyInviteMissing {
+    return Intl.message("Please Enter the code invitation",
+        desc: '', name: 'keyInviteMissing');
+  }  
+
+  String get activateInviteSuccess {
+    return Intl.message('The invitation was activated successfully', desc: '', name: 'activateInviteSuccess');
+  }
+
+  String get activationInviteConfirmationHeader {
+    return Intl.message('Activation Invite confirmation', desc: '', name: 'activationInviteConfirmationHeader');
+  }
+
+  String get activationInviteConfirmationInfos {
+    return Intl.message('Are you sure you want to activate an invitation ?', desc: '', name: 'activationInviteConfirmationInfos');
   }
 
   /// INVITATIONS END

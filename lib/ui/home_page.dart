@@ -386,8 +386,8 @@ class _AppHomePageState extends State<AppHomePage>
             .history[index]
             .getShortString(context);
     _contacts.forEach((contact) {
-      if (contact.address ==
-          StateContainer.of(context).wallet.history[index].to) {
+      if (contact.address.toLowerCase() ==
+          StateContainer.of(context).wallet.history[index].to.toString().toLowerCase()) {
         displayName = contact.name;
       }
     });
@@ -1371,7 +1371,7 @@ class _AppHomePageState extends State<AppHomePage>
                                       AppLocalization.of(context)
                                           .invitationActivateButton,
                                       context), () async {
-                                await sl.get<AppService>().activateInvitation(
+                                await sl.get<AppService>().activateInvitation("", 
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .address);

@@ -1,0 +1,15 @@
+- Global 
+    - Status bar color changed
+    - Dark mode
+- Invites 
+    - Home page : Add activate button when you receive an invitation
+    - Home page : Display nb of invites avalaible
+    - Contact Detail : Add send invite button (Local / VPS nodes)
+- VPS Node : add port address if the user don't enter it
+- New menus
+    - Display seed with public node or shared node
+    - New Charts added
+    - Invite management added  
+        - Activate invite with a code given
+- Contacts
+    - Display identity status and online status for each contact

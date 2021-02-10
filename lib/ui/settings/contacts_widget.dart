@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/util_node.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/dimens.dart';
@@ -36,6 +37,8 @@ class _ContactsListState extends State<ContactsList> {
   final Logger log = sl.get<Logger>();
 
   List<Contact> _contacts;
+  int nbInvites = 0;
+  int nodeType;
   String documentsDirectory;
   @override
   void initState() {
@@ -252,6 +255,7 @@ class _ContactsListState extends State<ContactsList> {
   }
 
   Future<void> getStatus() async {
+    nodeType = await NodeUtil().getNodeType();
     for (int i = 0; i < _contacts.length; i++) {
       DnaIdentityResponse dnaIdentityResponse = new DnaIdentityResponse();
       dnaIdentityResponse =
@@ -265,6 +269,7 @@ class _ContactsListState extends State<ContactsList> {
               dnaIdentityResponse.result != null) {
             _contacts[i].online = dnaIdentityResponse.result.online;
             _contacts[i].status = dnaIdentityResponse.result.state;
+            nbInvites = dnaIdentityResponse.result.invites;
           } else {
             _contacts[i].online = false;
             _contacts[i].status = IdentityStatus.Undefined;
@@ -277,7 +282,7 @@ class _ContactsListState extends State<ContactsList> {
   Widget buildSingleContact(BuildContext context, Contact contact) {
     return FlatButton(
       onPressed: () {
-        ContactDetailsSheet(contact, documentsDirectory)
+        ContactDetailsSheet(contact, documentsDirectory, nbInvites, nodeType)
             .mainBottomSheet(context);
       },
       padding: EdgeInsets.all(0.0),

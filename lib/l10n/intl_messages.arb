@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-09T23:29:20.099467",
+  "@@last_modified": "2021-02-10T17:46:17.565198",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -66,7 +66,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "transactions": "Transactions",
+  "transactions": "Tx",
   "@transactions": {
     "description": "transaction_header",
     "type": "text",
@@ -1836,8 +1836,74 @@
     "type": "text",
     "placeholders": {}
   },
+  "invitationActivateTitle": "Activate",
+  "@invitationActivateTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "invitationActivateButton": "Activate",
   "@invitationActivateButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendInvite": "Send Invite",
+  "@sendInvite": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendInviteConfirmationHeader": "Send Invite confirmation",
+  "@sendInviteConfirmationHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendInviteConfirmationInfos": "Are you sure you want to send an invitation to this contact ?",
+  "@sendInviteConfirmationInfos": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendInviteSuccess": "The invitation was sent successfully",
+  "@sendInviteSuccess": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "inviteHeader": "Invite",
+  "@inviteHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterInviteKey": "Enter the code invitation",
+  "@enterInviteKey": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "keyInviteMissing": "Please Enter the code invitation",
+  "@keyInviteMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "activateInviteSuccess": "The invitation was activated successfully",
+  "@activateInviteSuccess": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "activationInviteConfirmationHeader": "Activation Invite confirmation",
+  "@activationInviteConfirmationHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "activationInviteConfirmationInfos": "Are you sure you want to activate an invitation ?",
+  "@activationInviteConfirmationInfos": {
     "description": "",
     "type": "text",
     "placeholders": {}

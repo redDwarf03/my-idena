@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
+import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
@@ -69,7 +70,8 @@ class _SettingsSheetState extends State<SettingsSheet>
   Animation<Offset> _aboutOffsetFloat;
   AnimationController _profileInfosController;
   Animation<Offset> _profileInfosOffsetFloat;
-
+  AnimationController _inviteController;
+  Animation<Offset> _inviteOffsetFloat;
   String versionString = "";
 
   final Logger log = sl.get<Logger>();
@@ -81,6 +83,9 @@ class _SettingsSheetState extends State<SettingsSheet>
       LockTimeoutSetting(LockTimeoutOption.ONE);
 
   bool _securityOpen;
+
+  bool _inviteOpen;
+
   bool _loadingAccounts;
 
   bool _contactsOpen;
@@ -127,6 +132,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _validationBasicsOpen = false;
     _aboutOpen = false;
     _securityOpen = false;
+    _inviteOpen = false;
     _profileInfosOpen = false;
     _loadingAccounts = false;
     _miningActive = false;
@@ -170,6 +176,10 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
+    _inviteController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
 
     _validationBasicsController = AnimationController(
       vsync: this,
@@ -188,7 +198,8 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_securityController);
-
+    _inviteOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+        .animate(_inviteController);
     _validationBasicsOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_validationBasicsController);
@@ -212,6 +223,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   void dispose() {
     _controller.dispose();
     _securityController.dispose();
+    _inviteController.dispose();
     _validationBasicsController.dispose();
     _aboutController.dispose();
     _profileInfosController.dispose();
@@ -512,6 +524,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _securityController.reverse();
       return false;
+    } else if (_inviteOpen) {
+      setState(() {
+        _inviteOpen = false;
+      });
+      _inviteController.reverse();
+      return false;
     } else if (_validationBasicsOpen) {
       setState(() {
         _validationBasicsOpen = false;
@@ -555,6 +573,8 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _securityOffsetFloat,
                 child: buildSecurityMenu(context)),
+            SlideTransition(
+                position: _inviteOffsetFloat, child: buildInviteMenu(context)),
             SlideTransition(
                 position: _validationBasicsOffsetFloat,
                 child: ValidationBasics(
@@ -1023,7 +1043,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != PUBLIC_NODE
+                            _nodeType != PUBLIC_NODE &&
+                            _nodeType != SHARED_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
@@ -1032,7 +1053,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
                                 0 &&
-                            _nodeType != PUBLIC_NODE
+                            _nodeType != PUBLIC_NODE &&
+                            _nodeType != SHARED_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,
@@ -1122,6 +1144,23 @@ class _SettingsSheetState extends State<SettingsSheet>
                               localCurrency:
                                   StateContainer.of(context).curCurrency));
                     }),
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                        ? Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          )
+                        : SizedBox(),
+                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                        ? AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).inviteHeader,
+                            FontAwesome.user_plus, onPressed: () {
+                            setState(() {
+                              _inviteOpen = true;
+                            });
+                            _inviteController.forward();
+                          })
+                        : SizedBox(),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1222,7 +1261,6 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    
                     _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
                         ? SizedBox()
                         : Divider(
@@ -1476,6 +1514,119 @@ class _SettingsSheetState extends State<SettingsSheet>
                     Divider(
                         height: 2,
                         color: StateContainer.of(context).curTheme.text15),
+                  ].where(notNull).toList(),
+                ),
+                //List Top Gradient End
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    height: 20.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          StateContainer.of(context).curTheme.backgroundDark,
+                          StateContainer.of(context).curTheme.backgroundDark00
+                        ],
+                        begin: AlignmentDirectional(0.5, -1.0),
+                        end: AlignmentDirectional(0.5, 1.0),
+                      ),
+                    ),
+                  ),
+                ), //List Top Gradient End
+              ],
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildInviteMenu(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: StateContainer.of(context).curTheme.backgroundDark,
+        boxShadow: [
+          BoxShadow(
+              color: StateContainer.of(context).curTheme.overlay30,
+              offset: Offset(-5, 0),
+              blurRadius: 20),
+        ],
+      ),
+      child: SafeArea(
+        minimum: EdgeInsets.only(
+          top: 60,
+        ),
+        child: Column(
+          children: <Widget>[
+            // Back button
+            Container(
+              margin: EdgeInsets.only(bottom: 10.0, top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      //Back button
+                      Container(
+                        height: 40,
+                        width: 40,
+                        margin: EdgeInsets.only(right: 10, left: 10),
+                        child: FlatButton(
+                            highlightColor:
+                                StateContainer.of(context).curTheme.text15,
+                            splashColor:
+                                StateContainer.of(context).curTheme.text15,
+                            onPressed: () {
+                              setState(() {
+                                _inviteOpen = false;
+                              });
+                              _inviteController.reverse();
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(AppIcons.back,
+                                color: StateContainer.of(context).curTheme.text,
+                                size: 24)),
+                      ),
+                      //Security Header Text
+                      Text(
+                        AppLocalization.of(context).inviteHeader,
+                        style: AppStyles.textStyleSettingsHeader(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: EdgeInsets.only(top: 15.0),
+                  children: <Widget>[
+                    Container(
+                      margin:
+                          EdgeInsetsDirectional.only(start: 30.0, bottom: 10),
+                      child: Text(AppLocalization.of(context).manage,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).invitationActivateTitle,
+                        FontAwesome.check, onPressed: () {
+                      Sheets.showAppHeightNineSheet(
+                          context: context, widget: ActivateInvite());
+                    }),
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End
