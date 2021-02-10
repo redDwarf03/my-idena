@@ -18,9 +18,8 @@ class ChartSheet extends StatefulWidget {
   _ChartSheetState createState() => _ChartSheetState();
 }
 
-enum AddressStyle { TEXT60, TEXT90, PRIMARY }
-
 class _ChartSheetState extends State<ChartSheet> {
+  int nbDaysSelected = 7;
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +82,77 @@ class _ChartSheetState extends State<ChartSheet> {
               ],
             ),
             SizedBox(height: 30),
-            ChartsPriceView(localCurrency: widget.localCurrency,),
-            ChartsVolumeView(localCurrency: widget.localCurrency,)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+              RaisedButton(
+                elevation: 5.0,
+                onPressed: () {
+                  setState(() {
+                    nbDaysSelected = 1;
+                  });
+                },
+                padding: EdgeInsets.all(5.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: nbDaysSelected == 1 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                child: Text("1d",
+                    style: TextStyle(
+                      color: nbDaysSelected == 1 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      letterSpacing: 1.5,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    )),
+              ),
+              RaisedButton(
+                elevation: 5.0,
+                onPressed: () {
+                  setState(() {
+                    nbDaysSelected = 7;
+                  });
+                },
+                padding: EdgeInsets.all(5.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: nbDaysSelected == 7 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                child: Text("7d",
+                    style: TextStyle(
+                      color: nbDaysSelected == 7 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      letterSpacing: 1.5,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    )),
+              ),
+              RaisedButton(
+                elevation: 5.0,
+                onPressed: () {
+                  setState(() {
+                    nbDaysSelected = 30;
+                  });
+                },
+                padding: EdgeInsets.all(5.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: nbDaysSelected == 30 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                child: Text("30d",
+                    style: TextStyle(
+                      color: nbDaysSelected == 30 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      letterSpacing: 1.5,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    )),
+              ),
+            ]),
+            new ChartsPriceView(
+                localCurrency: widget.localCurrency, nbDays: nbDaysSelected),
+            new ChartsVolumeView(
+                localCurrency: widget.localCurrency, nbDays: nbDaysSelected)
           ],
         ));
   }
