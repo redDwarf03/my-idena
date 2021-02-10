@@ -454,7 +454,7 @@ class UIUtil {
         ),
       ),
       dismissOtherToast: true,
-      duration: Duration(milliseconds: 2500),
+      duration: Duration(milliseconds: 3000),
     );
   }
 
