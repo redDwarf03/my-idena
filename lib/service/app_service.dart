@@ -1153,19 +1153,42 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(dnaSendTransactionResponse);
-        return _completer.future;
-      }
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(dnaSendTransactionResponse);
 
-      mapParams = {
-        'method': DnaSendTransactionRequest.METHOD_NAME,
-        "params": [
-          {"from": from, "to": to, 'amount': amount}
-        ],
-        'id': 101,
-        'key': keyApp
-      };
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: "Connection error"));
+
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaSendTransactionRequest.METHOD_NAME,
+          "params": [
+            {"from": from, "to": to, 'amount': amount}
+          ],
+          'id': 101
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(dnaSendTransactionResponse);
+
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: "Connection error"));
+
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaSendTransactionRequest.METHOD_NAME,
+          "params": [
+            {"from": from, "to": to, 'amount': amount}
+          ],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
@@ -1482,18 +1505,32 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(bcnSendRawTxResponse);
-        return _completer.future;
-      }
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(bcnSendRawTxResponse);
+          return _completer.future;
+        }
 
-      print("transaction.toHex : " + rawTxSigned);
-      mapParams = {
-        'method': BcnSendRawTxRequest.METHOD_NAME,
-        "params": [rawTxSigned],
-        'id': 101,
-        'key': keyApp
-      };
+        print("transaction.toHex : " + rawTxSigned);
+        mapParams = {
+          'method': BcnSendRawTxRequest.METHOD_NAME,
+          "params": [rawTxSigned],
+          'id': 101
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(bcnSendRawTxResponse);
+          return _completer.future;
+        }
+
+        print("transaction.toHex : " + rawTxSigned);
+        mapParams = {
+          'method': BcnSendRawTxRequest.METHOD_NAME,
+          "params": [rawTxSigned],
+          'id': 101,
+          'key': keyApp
+        };
+      }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
         sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
@@ -1546,7 +1583,8 @@ class AppService {
     return _completer.future;
   }
 
-  Future<DnaActivateInviteResponse> activateInvitation(String key, String address) async {
+  Future<DnaActivateInviteResponse> activateInvitation(
+      String key, String address) async {
     DnaActivateInviteRequest dnaActivateInviteRequest;
     DnaActivateInviteResponse dnaActivateInviteResponse;
 

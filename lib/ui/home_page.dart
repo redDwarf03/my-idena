@@ -536,7 +536,7 @@ class _AppHomePageState extends State<AppHomePage>
       drawer: SizedBox(
         width: UIUtil.drawerWidth(context),
         child: Drawer(
-          child: SettingsSheet(receive),
+          child: SettingsSheet(receive, _nodeType, context),
         ),
       ),
       body: SafeArea(

@@ -57,10 +57,13 @@ class UtilIdentity {
       bool shouldSendFlips = true;
       if (identityStatus1.contains(dnaIdentityResponse.result.state)) {
         try {
-          int numOfFlipsToSubmit =
-              dnaIdentityResponse.result.requiredFlips -
-                  dnaIdentityResponse.result.flips.length;
-          shouldSendFlips = numOfFlipsToSubmit > 0;
+          if (dnaIdentityResponse.result.flips != null) {
+            int numOfFlipsToSubmit = dnaIdentityResponse.result.requiredFlips -
+                dnaIdentityResponse.result.flips.length;
+            shouldSendFlips = numOfFlipsToSubmit > 0;
+          } else {
+            shouldSendFlips = false;
+          }
         } catch (e) {}
       }
 
@@ -104,10 +107,10 @@ class UtilIdentity {
       IdentityStatus.Human
     ];
     return (identityStatus1.contains(dnaIdentityResponse.result.state) &&
-        dnaIdentityResponse.result.requiredFlips > 0 && (
-          dnaIdentityResponse.result.flips == null ||
-        (dnaIdentityResponse.result.flips.length <
-            dnaIdentityResponse.result.availableFlips)));
+        dnaIdentityResponse.result.requiredFlips > 0 &&
+        (dnaIdentityResponse.result.flips == null ||
+            (dnaIdentityResponse.result.flips.length <
+                dnaIdentityResponse.result.availableFlips)));
   }
 
   bool canActivateInvite(String state) {

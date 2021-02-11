@@ -51,9 +51,11 @@ import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
 
 class SettingsSheet extends StatefulWidget {
-  ReceiveSheet receive;
+  final ReceiveSheet receive;
+  final int nodeType;
+  final BuildContext contextInput;
 
-  SettingsSheet(this.receive);
+  SettingsSheet(this.receive, this.nodeType, this.contextInput);
 
   _SettingsSheetState createState() => _SettingsSheetState();
 }
@@ -99,15 +101,13 @@ class _SettingsSheetState extends State<SettingsSheet>
   bool notNull(Object o) => o != null;
 
   bool _miningActive;
-  int _nodeType;
   bool _canMine;
   List _flipKeyWordPairs;
 
   void loadCtx() async {
-    int _nt = await NodeUtil().getNodeType();
     DnaIdentityResponse _dnaIdentityResponse = await sl
         .get<AppService>()
-        .getDnaIdentity(StateContainer.of(context).selectedAccount.address);
+        .getDnaIdentity(StateContainer.of(widget.contextInput).selectedAccount.address);
     bool _m = false;
     List _fk = new List();
     bool cm = false;
@@ -119,7 +119,6 @@ class _SettingsSheetState extends State<SettingsSheet>
 
     setState(() {
       _miningActive = _m;
-      _nodeType = _nt;
       _canMine = cm;
       _flipKeyWordPairs = _fk;
     });
@@ -136,7 +135,6 @@ class _SettingsSheetState extends State<SettingsSheet>
     _profileInfosOpen = false;
     _loadingAccounts = false;
     _miningActive = false;
-    _nodeType = UNKOWN_NODE;
     _canMine = false;
 
     loadCtx();
@@ -958,18 +956,18 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    _nodeType != SHARED_NODE &&
-                            _nodeType != DEMO_NODE &&
-                            _nodeType != PUBLIC_NODE &&
+                    widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE &&
+                            widget.nodeType != PUBLIC_NODE &&
                             _canMine == true
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
-                    _nodeType != SHARED_NODE &&
-                            _nodeType != DEMO_NODE &&
-                            _nodeType != PUBLIC_NODE &&
+                    widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE &&
+                            widget.nodeType != PUBLIC_NODE &&
                             _canMine == true
                         ? AppSettings.buildSettingsListItemSwitch(
                             context,
@@ -1042,9 +1040,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     }),
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
-                                0 &&
-                            _nodeType != PUBLIC_NODE &&
-                            _nodeType != SHARED_NODE
+                                0 
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
@@ -1052,9 +1048,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         : SizedBox(),
                     StateContainer.of(context).wallet != null &&
                             StateContainer.of(context).wallet.accountBalance >
-                                0 &&
-                            _nodeType != PUBLIC_NODE &&
-                            _nodeType != SHARED_NODE
+                                0 
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,
@@ -1091,7 +1085,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    _nodeType == PUBLIC_NODE
+                    widget.nodeType == PUBLIC_NODE
                         ? SizedBox()
                         : StateContainer.of(context).selectedAccount.address !=
                                 null
@@ -1144,13 +1138,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                               localCurrency:
                                   StateContainer.of(context).curCurrency));
                     }),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                    widget.nodeType != PUBLIC_NODE &&
+                            widget.nodeType != SHARED_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                    widget.nodeType != PUBLIC_NODE &&
+                            widget.nodeType != SHARED_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).inviteHeader,
@@ -1261,13 +1257,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                    widget.nodeType != PUBLIC_NODE &&
+                            widget.nodeType != SHARED_NODE
                         ? SizedBox()
                         : Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           ),
-                    _nodeType != PUBLIC_NODE && _nodeType != SHARED_NODE
+                    widget.nodeType != PUBLIC_NODE &&
+                            widget.nodeType != SHARED_NODE
                         ? SizedBox()
                         : AppSettings.buildSettingsListItemSingleLine(
                             context,
