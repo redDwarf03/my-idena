@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dartssh/client.dart';
+import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
@@ -1224,22 +1225,17 @@ class AppService {
               dnaGetEpochResponse.result.epoch != null) {
             epoch = dnaGetEpochResponse.result.epoch;
           }
-          var amountNumber = 1000000000000000000;
-          var maxFee = 1000000000000000000;
+          
+          var amountNumber = (Decimal.parse(amount) * Decimal.parse("1000000000000000000")).toInt();
+          //print('amountNumber: ' + amountNumber.toString());
+          var maxFee = 250000000000000000;
           // Create Transaction
           model.Transaction transaction = new model.Transaction(
               nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
-          print("transaction.toHex() before sign : " + transaction.toHex());
-          // Encode a RawTx
-          //var rawTxEncoded = ethereum_util.addHexPrefix(transaction.toHex());
-          //print("rawTxEncoded: " + rawTxEncoded);
-
-          //transaction = new model.Transaction(
-          //        null, null, null, null, null, null, null, null)
-          //    .fromHex(rawTxEncoded);
+          //print("transaction.toHex() before sign : " + transaction.toHex());
           transaction.sign(seed);
           var rawTxSigned = ethereum_util.addHexPrefix(transaction.toHex());
-          print("rawTxSigned : " + rawTxSigned);
+          //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
           BcnSendRawTxResponse bcnSendRawTxResponse =
               await sendRawTx(rawTxSigned);
@@ -1275,6 +1271,9 @@ class AppService {
       }
     } catch (e) {
       logger.e(e.toString());
+
+      EventTaxiImpl.singleton()
+          .fire(TransactionSendEvent(response: e.toString()));
     }
 
     _completer.complete(dnaSendTransactionResponse);

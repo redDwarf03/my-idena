@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:convert/convert.dart' show hex;
 import 'package:my_idena/util/crypto/bigint.dart';
+import 'package:pointycastle/pointycastle.dart';
 import 'package:quiver/check.dart';
 
 bool isHexPrefixed(String str) {

@@ -5,7 +5,6 @@
 import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
-import 'package:my_idena/util/crypto/ecurve.dart';
 import 'package:web3dart/crypto.dart' as crypto;
 import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 import 'package:my_idena/protos/models.pb.dart';
@@ -34,9 +33,7 @@ class Transaction {
   var signature;
 
   String toHex() {
-   
     return hex.encode(this.toBytes());
-    
   }
 
   Uint8List toBytes() {
@@ -50,25 +47,31 @@ class Transaction {
 
   ProtoTransaction_Data _createProtoTxData() {
     ProtoTransaction_Data data = new ProtoTransaction_Data();
-    data.nonce = this.nonce;
-    data.epoch = this.epoch;
-    data.type = this.type;
+    if (this.nonce != null && this.amount != 0) {
+      data.nonce = this.nonce;
+    }
+    if (this.epoch != null && this.amount != 0) {
+      data.epoch = this.epoch;
+    }
+    if (this.type != null && this.type != 0) {
+      data.type = this.type;
+    }
     if (this.to != null) {
       data.to = ethereum_util.toBuffer(this.to);
     }
-    if (this.amount != null) {
-      data.amount = ethereum_util.toBuffer(this.amount);
+    if (this.amount != null && this.amount != 0) {
+      data.amount = ethereum_util.intToBuffer(this.amount);
     }
-    if (this.maxFee != null) {
-      data.maxFee = ethereum_util.toBuffer(this.maxFee);
+    if (this.maxFee != null && this.maxFee != 0) {
+      data.maxFee = ethereum_util.intToBuffer(this.maxFee);
     }
-    if (this.tips != null) {
-      data.tips = ethereum_util.toBuffer(this.tips);
+    if (this.tips != null && this.tips != 0) {
+      data.tips = ethereum_util.intToBuffer(this.tips);
     }
     if (this.payload != null) {
       data.payload = ethereum_util.toBuffer(this.payload);
     }
-    
+
     return data;
   }
 
@@ -87,17 +90,18 @@ class Transaction {
         crypto.keccak256(this._createProtoTxData().writeToBuffer());
 
     //print("messageHash: " + messageHash.toString());
-    print("messageHash: " + hex.encode(messageHash));
-    this.signature =
-        signECSignature(messageHash, crypto.hexToBytes(privateKey));
+    //print("messageHash: " + hex.encode(messageHash));
+    crypto.MsgSignature msgSignature =
+        crypto.sign(messageHash, crypto.hexToBytes(privateKey));
 
     //print("signature: " + signature.toString());
+    final header = msgSignature.v & 0xFF;
+    var recId = header - 27;
+    this.signature = Uint8List.fromList(
+        ([...padUint8ListTo32(crypto.intToBytes(msgSignature.r)), ...padUint8ListTo32(crypto.intToBytes(msgSignature.s)), recId]));
 
-    this.signature = Uint8List.fromList(([...this.signature, 0]));
+    //print("signature: " + hex.encode(this.signature));
     
-    print("signature: " + hex.encode(this.signature));
-    //print("signature: " + signature.toString());
-
     return this;
   }
 
@@ -120,5 +124,13 @@ class Transaction {
     this.signature = HEX.encode(protoTx.signature);
 
     return this;
+  }
+
+  Uint8List padUint8ListTo32(Uint8List data) {
+    assert(data.length <= 32);
+    if (data.length == 32) return data;
+
+    // todo there must be a faster way to do this?
+    return Uint8List(32)..setRange(32 - data.length, 32, data);
   }
 }

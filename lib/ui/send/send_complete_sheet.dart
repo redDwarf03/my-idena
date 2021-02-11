@@ -101,7 +101,7 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
                             ),
                           ),
                           TextSpan(
-                            text: " BIS",
+                            text: " iDNA",
                             style: TextStyle(
                               color:
                                   StateContainer.of(context).curTheme.success,

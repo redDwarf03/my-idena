@@ -4,50 +4,60 @@
 
 import 'dart:convert';
 
-BcnSendRawTxResponse bcnSendRawTxResponseFromJson(String str) => BcnSendRawTxResponse.fromJson(json.decode(str));
+BcnSendRawTxResponse bcnSendRawTxResponseFromJson(String str) =>
+    BcnSendRawTxResponse.fromJson(json.decode(str));
 
-String bcnSendRawTxResponseToJson(BcnSendRawTxResponse data) => json.encode(data.toJson());
+String bcnSendRawTxResponseToJson(BcnSendRawTxResponse data) =>
+    json.encode(data.toJson());
 
 class BcnSendRawTxResponse {
-    BcnSendRawTxResponse({
-        this.jsonrpc,
-        this.id,
-        this.error,
-    });
+  BcnSendRawTxResponse({
+    this.jsonrpc,
+    this.id,
+    this.error,
+    this.result,
+  });
 
-    String jsonrpc;
-    int id;
-    BcnSendRawTxResponseError error;
+  String jsonrpc;
+  int id;
+  BcnSendRawTxResponseError error;
+  String result;
 
-    factory BcnSendRawTxResponse.fromJson(Map<String, dynamic> json) => BcnSendRawTxResponse(
+  factory BcnSendRawTxResponse.fromJson(Map<String, dynamic> json) =>
+      BcnSendRawTxResponse(
         jsonrpc: json["jsonrpc"],
         id: json["id"],
-        error: BcnSendRawTxResponseError.fromJson(json["error"]),
-    );
+        error: json["error"] == null
+            ? null
+            : BcnSendRawTxResponseError.fromJson(json["error"]),
+        result: json["result"] == null ? null : json["result"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "jsonrpc": jsonrpc,
         "id": id,
         "error": error.toJson(),
-    };
+        "result": result,
+      };
 }
 
 class BcnSendRawTxResponseError {
-    BcnSendRawTxResponseError({
-        this.code,
-        this.message,
-    });
+  BcnSendRawTxResponseError({
+    this.code,
+    this.message,
+  });
 
-    int code;
-    String message;
+  int code;
+  String message;
 
-    factory BcnSendRawTxResponseError.fromJson(Map<String, dynamic> json) => BcnSendRawTxResponseError(
+  factory BcnSendRawTxResponseError.fromJson(Map<String, dynamic> json) =>
+      BcnSendRawTxResponseError(
         code: json["code"],
         message: json["message"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "code": code,
         "message": message,
-    };
+      };
 }
