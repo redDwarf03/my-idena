@@ -1,0 +1,3 @@
+- Send Transaction feature : you can now send iDna with shared node and public node
+- Fix bug when the node is not synchronized
+- Fix bug when the menu appeared with wrong items
