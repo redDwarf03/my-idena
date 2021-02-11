@@ -223,65 +223,68 @@ class _ValidationSessionCountdownTextState
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                              CountdownTimer(
-                                controller: controller,
-                                widgetBuilder: (_, CurrentRemainingTime time) {
-                                  if (time == null) {
-                                    return Text("");
-                                  } else {
-                                    return RaisedButton.icon(
-                                      onPressed: () {},
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10.0))),
-                                      label: Row(
-                                        children: [
-                                          Text(
-                                            AppLocalization.of(context)
-                                                .validationWillStartSoon,
-                                            style: AppStyles
-                                                .textStyleHomeInfoWarning(
-                                                    context),
-                                          ),
-                                          Text(
-                                              time.min != null
-                                                  ? "${time.min}" +
-                                                      AppLocalization.of(
-                                                              context)
-                                                          .timeMin
-                                                  : "0" +
-                                                      AppLocalization.of(
-                                                              context)
-                                                          .timeMin,
-                                              style: AppStyles
-                                                  .textStyleHomeInfoWarning(
-                                                      context)),
-                                          Text(
-                                              time.sec != null
-                                                  ? " ${time.sec}" +
-                                                      AppLocalization.of(
-                                                              context)
-                                                          .timeSec
-                                                  : " 0" +
-                                                      AppLocalization.of(
-                                                              context)
-                                                          .timeSec,
-                                              style: AppStyles
-                                                  .textStyleHomeInfoWarning(
-                                                      context)),
-                                        ],
-                                      ),
-                                      icon: Icon(
-                                        Icons.warning,
-                                        color: Colors.white,
-                                      ),
-                                      textColor: Colors.white,
-                                      splashColor: Colors.red,
-                                      color: Colors.red[300],
-                                    );
-                                  }
-                                },
-                              ),
+                              controller == null
+                                  ? SizedBox()
+                                  : CountdownTimer(
+                                      controller: controller,
+                                      widgetBuilder:
+                                          (_, CurrentRemainingTime time) {
+                                        if (time == null) {
+                                          return Text("");
+                                        } else {
+                                          return RaisedButton.icon(
+                                            onPressed: () {},
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0))),
+                                            label: Row(
+                                              children: [
+                                                Text(
+                                                  AppLocalization.of(context)
+                                                      .validationWillStartSoon,
+                                                  style: AppStyles
+                                                      .textStyleHomeInfoWarning(
+                                                          context),
+                                                ),
+                                                Text(
+                                                    time.min != null
+                                                        ? "${time.min}" +
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .timeMin
+                                                        : "0" +
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .timeMin,
+                                                    style: AppStyles
+                                                        .textStyleHomeInfoWarning(
+                                                            context)),
+                                                Text(
+                                                    time.sec != null
+                                                        ? " ${time.sec}" +
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .timeSec
+                                                        : " 0" +
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .timeSec,
+                                                    style: AppStyles
+                                                        .textStyleHomeInfoWarning(
+                                                            context)),
+                                              ],
+                                            ),
+                                            icon: Icon(
+                                              Icons.warning,
+                                              color: Colors.white,
+                                            ),
+                                            textColor: Colors.white,
+                                            splashColor: Colors.red,
+                                            color: Colors.red[300],
+                                          );
+                                        }
+                                      },
+                                    ),
                             ]))
                       ])));
                 }
@@ -491,7 +494,8 @@ class _ValidationSessionCountdownTextState
             setState(() async {
               sl.get<AppService>().sendTip(
                   StateContainer.of(context).selectedAccount.address,
-                  amount.toDouble().toString(), await StateContainer.of(context).getSeed());
+                  amount.toDouble().toString(),
+                  await StateContainer.of(context).getSeed());
               AppDialogs.showConfirmDialog(
                   context,
                   AppLocalization.of(context).validationTipThxHeader,

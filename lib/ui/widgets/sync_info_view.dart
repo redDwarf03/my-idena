@@ -56,9 +56,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
       }
       _bcnSyncingResponse = await sl.get<AppService>().checkSync();
       if (_bcnSyncingResponse != null &&
-          _bcnSyncingResponse.result != null &&
-          _bcnSyncingResponse.result.currentBlock ==
-              _bcnSyncingResponse.result.highestBlock) {
+          _bcnSyncingResponse.result != null) {
         _status = true;
       } else {
         _status = false;
@@ -144,6 +142,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
+             SizedBox(width: 10),
         _nodeType == DEMO_NODE
             ? SizedBox()
             : _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing
