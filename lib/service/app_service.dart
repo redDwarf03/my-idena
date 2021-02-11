@@ -1356,7 +1356,7 @@ class AppService {
   double getFeesEstimation() {
     // TODO
     //print("getFeesEstimation: " + fees.toString());
-    return 0;
+    return 0.25;
   }
 
   Future<BcnMempoolResponse> getMemPool(String address) async {
