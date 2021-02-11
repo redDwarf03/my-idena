@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
@@ -65,7 +66,33 @@ class _IntroBackupConfirmState extends State<IntroBackupConfirm> {
                           ],
                         ),
                         // The header
-                       
+                        Container(
+                          margin: EdgeInsetsDirectional.only(
+                            start: smallScreen(context) ? 30 : 40,
+                            end: smallScreen(context) ? 30 : 40,
+                            top: 10,
+                          ),
+                          alignment: AlignmentDirectional(-1, 0),
+                          child: AutoSizeText(
+                            AppLocalization.of(context).ackBackedUp,
+                            maxLines: 4,
+                            stepGranularity: 0.5,
+                            style: AppStyles.textStyleHeaderColored(context),
+                          ),
+                        ),
+                        // The paragraph
+                        Container(
+                          margin: EdgeInsetsDirectional.only(
+                                  start: smallScreen(context) ? 30 : 40,
+                                  end: smallScreen(context) ? 30 : 40,
+                                  top: 15.0),
+                          child: AutoSizeText(
+                            AppLocalization.of(context).secretWarning,
+                            style: AppStyles.textStyleParagraph(context),
+                            maxLines: 5,
+                            stepGranularity: 0.5,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -92,7 +119,18 @@ class _IntroBackupConfirmState extends State<IntroBackupConfirm> {
                           }),
                         ],
                       ),
-                    
+                      Row(
+                        children: <Widget>[
+                          // NO BUTTON
+                          AppButton.buildAppButton(
+                              context,
+                              AppButtonType.PRIMARY_OUTLINE,
+                              AppLocalization.of(context).no.toUpperCase(),
+                              Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -103,7 +141,6 @@ class _IntroBackupConfirmState extends State<IntroBackupConfirm> {
   }
 
   void _pinEnteredCallback(String pin) async {
-    await sl.get<SharedPrefsUtil>().setSeedBackedUp(true);
     await sl.get<Vault>().writePin(pin);
     PriceConversion conversion = await sl.get<SharedPrefsUtil>().getPriceConversion();
 

@@ -15,6 +15,7 @@ import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_3.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_4.dart';
+import 'package:my_idena/ui/intro/intro_backup_seed.dart';
 import 'package:my_idena/ui/intro/intro_import_seed.dart';
 import 'package:my_idena/ui/settings/configure_access_node.dart';
 import 'package:my_idena/ui/password_lock_screen.dart';
@@ -207,6 +208,12 @@ class _AppState extends State<App> {
             case '/configure_access_node':
               return MaterialPageRoute(
                 builder: (_) => ConfigureAccessNodePage(),
+                settings: settings,
+              );
+            case '/intro_backup':
+              return MaterialPageRoute(
+                builder: (_) =>
+                    IntroBackupSeedPage(encryptedSeed: settings.arguments),
                 settings: settings,
               );
             case '/intro_backup_confirm':

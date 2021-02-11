@@ -53,7 +53,7 @@
   "amountMissing": "Veuillez entrer un montant",
   "insufficientBalance": "Solde insuffisant",
   "sendFrom": "Envoyer depuis",
-  "fees": "Frais",
+  "fees": "Frais max",
   "pinCreateTitle": "Créer un code pin à 6 chiffres",
   "pinConfirmTitle": "Confirmer votre pin",
   "pinEnterTitle": "Saisir le pin",
@@ -214,6 +214,8 @@
   "keyInviteMissing": "Veuillez saisir le code invitation",
   "activateInviteSuccess": "L'invitation a été activée avec succès",
   "activationInviteConfirmationHeader": "Confirmation de l'activation d'une invitation",
-  "activationInviteConfirmationInfos":  "Etes-vous sûr(e)s de vouloir activer une invitation ?"
-
+  "activationInviteConfirmationInfos":  "Etes-vous sûr(e)s de vouloir activer une invitation ?",
+  "newSeed": "Nouvelle clé privée",
+  "ackBackedUp": "Etes-vous sûr(e)s d'avoir conservé votre phrase secrète ou votre clé privée ?",
+  "secretWarning": "Si vous perdez votre mobile ou désintallez l'appication, vous devrez avoir besoin de ces informations pour retrouver vos fonds!"
 }

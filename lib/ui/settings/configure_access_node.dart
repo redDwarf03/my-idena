@@ -18,6 +18,7 @@ import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
@@ -589,69 +590,98 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                           )),
                     )
                   : SizedBox(),
-
-              (status && _addressText != null && _addressText != "") ||
-                      (_selectedNodeType == PUBLIC_NODE)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _selectedNodeType == PUBLIC_NODE
-                            ? AppButton.buildAppButton(
-                                context,
-                                AppButtonType.PRIMARY,
-                                AppLocalization.of(context).importSeed,
-                                Dimens.BUTTON_BOTTOM_DIMENS,
-                                onPressed: () async {
-                                if (_validateRequest() == true) {
-                                  updateSharedPrefsUtil();
-                                  await sl.get<DBHelper>().dropAccounts();
-                                  await AppUtil().loginAccount(context);
+              Column(children: <Widget>[
+                _selectedNodeType != _selectedNodeType
+                    ? Row(
+                        children: <Widget>[
+                          // New Wallet Button
+                          AppButton.buildAppButton(
+                              context,
+                              AppButtonType.PRIMARY,
+                              AppLocalization.of(context).newSeed,
+                              Dimens.BUTTON_TOP_DIMENS, onPressed: () {
+                            sl
+                                .get<Vault>()
+                                .setSeed(AppSeeds.generateSeed())
+                                .then((result) {
+                              // Update wallet
+                              StateContainer.of(context).getSeed().then((seed) {
+                                AppUtil().loginAccount(context).then((_) {
                                   StateContainer.of(context).requestUpdate();
-                                } else {
-                                  return;
-                                }
-                                Navigator.of(context)
-                                    .pushNamed('/intro_import');
-                              })
-                            : AppButton.buildAppButton(
-                                context,
-                                AppButtonType.PRIMARY,
-                                AppLocalization.of(context).goHome,
-                                Dimens.BUTTON_BOTTOM_DIMENS,
-                                onPressed: () async {
-                                if (_validateRequest() == true) {
-                                  updateSharedPrefsUtil();
-                                  await sl.get<DBHelper>().dropAccounts();
-                                  await AppUtil().loginAccount(context);
-                                  StateContainer.of(context).requestUpdate();
-                                } else {
-                                  return;
-                                }
+                                  Navigator.of(context).pushNamed(
+                                      '/intro_backup',
+                                      arguments: StateContainer.of(context)
+                                          .encryptedSecret);
+                                });
+                              });
+                            });
+                          }),
+                        ],
+                      )
+                    : SizedBox(),
+                (status && _addressText != null && _addressText != "") ||
+                        (_selectedNodeType == PUBLIC_NODE)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          _selectedNodeType == PUBLIC_NODE
+                              ? AppButton.buildAppButton(
+                                  context,
+                                  AppButtonType.PRIMARY,
+                                  AppLocalization.of(context).importSeed,
+                                  Dimens.BUTTON_BOTTOM_DIMENS,
+                                  onPressed: () async {
+                                  if (_validateRequest() == true) {
+                                    updateSharedPrefsUtil();
+                                    await sl.get<DBHelper>().dropAccounts();
+                                    await AppUtil().loginAccount(context);
+                                    StateContainer.of(context).requestUpdate();
+                                  } else {
+                                    return;
+                                  }
+                                  Navigator.of(context)
+                                      .pushNamed('/intro_import');
+                                })
+                              : AppButton.buildAppButton(
+                                  context,
+                                  AppButtonType.PRIMARY,
+                                  AppLocalization.of(context).goHome,
+                                  Dimens.BUTTON_BOTTOM_DIMENS,
+                                  onPressed: () async {
+                                  if (_validateRequest() == true) {
+                                    updateSharedPrefsUtil();
+                                    await sl.get<DBHelper>().dropAccounts();
+                                    await AppUtil().loginAccount(context);
+                                    StateContainer.of(context).requestUpdate();
+                                  } else {
+                                    return;
+                                  }
 
-                                String pin = await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                  return new PinScreen(
-                                    PinOverlayType.NEW_PIN,
-                                  );
-                                }));
-                                if (pin != null && pin.length > 5) {
-                                  _pinEnteredCallback(pin);
-                                }
-                              }),
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AppButton.buildAppButton(
-                            context,
-                            AppButtonType.TEXT_OUTLINE,
-                            AppLocalization.of(context).notConnected,
-                            Dimens.BUTTON_BOTTOM_DIMENS,
-                            onPressed: () async {}),
-                      ],
-                    ),
+                                  String pin = await Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                    return new PinScreen(
+                                      PinOverlayType.NEW_PIN,
+                                    );
+                                  }));
+                                  if (pin != null && pin.length > 5) {
+                                    _pinEnteredCallback(pin);
+                                  }
+                                }),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          AppButton.buildAppButton(
+                              context,
+                              AppButtonType.TEXT_OUTLINE,
+                              AppLocalization.of(context).notConnected,
+                              Dimens.BUTTON_BOTTOM_DIMENS,
+                              onPressed: () async {}),
+                        ],
+                      ),
+              ])
             ],
           ),
         ),

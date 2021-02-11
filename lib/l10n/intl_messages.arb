@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-10T17:46:17.565198",
+  "@@last_modified": "2021-02-11T23:52:41.163131",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -420,6 +420,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "newSeed": "New Seed",
+  "@newSeed": {
+    "description": "intro_welcome_new_seed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ackBackedUp": "Are you sure that you've backed up your secret phrase or seed?",
+  "@ackBackedUp": {
+    "description": "Ack backed up",
+    "type": "text",
+    "placeholders": {}
+  },
+  "secretWarning": "If you lose your device or uninstall the application, you'll need your secret phrase or seed to recover your funds!",
+  "@secretWarning": {
+    "description": "Secret warning",
+    "type": "text",
+    "placeholders": {}
+  },
   "welcomeText": "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
   "@welcomeText": {
     "description": "intro_welcome_title",
@@ -612,7 +630,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "fees": "Fees",
+  "fees": "Max Fees",
   "@fees": {
     "description": "fees",
     "type": "text",

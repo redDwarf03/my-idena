@@ -386,6 +386,25 @@ class AppLocalization {
         desc: 'intro_seed_info', name: 'importSeedHint');
   }
 
+  String get newSeed {
+    return Intl.message("New Seed",
+        desc: 'intro_welcome_new_seed', name: 'newSeed');
+  }
+
+  String get ackBackedUp {
+    return Intl.message(
+        "Are you sure that you've backed up your secret phrase or seed?",
+        desc: 'Ack backed up',
+        name: 'ackBackedUp');
+  }
+
+  String get secretWarning {
+    return Intl.message(
+        "If you lose your device or uninstall the application, you'll need your secret phrase or seed to recover your funds!",
+        desc: 'Secret warning',
+        name: 'secretWarning');
+  }
+  
   String get welcomeText {
     return Intl.message(
         "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
@@ -556,7 +575,7 @@ class AppLocalization {
   }
 
   String get fees {
-    return Intl.message("Fees", desc: 'fees', name: 'fees');
+    return Intl.message("Max Fees", desc: 'fees', name: 'fees');
   }
 
   /// -- END SEND ITEMS
