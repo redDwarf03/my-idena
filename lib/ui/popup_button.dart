@@ -1,13 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/address.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/user_data_util.dart';
 
 class AppPopupButton extends StatefulWidget {
