@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/network/model/dictWords.dart';
 import 'package:my_idena/network/model/flip_examples.dart';
+import 'package:my_idena/network/model/request/flip_get_key_request.dart';
 import 'package:my_idena/network/model/request/flip_get_request.dart';
 import 'package:my_idena/network/model/request/flip_longHashes_request.dart';
 import 'package:my_idena/network/model/request/flip_shortHashes_request.dart';
@@ -23,6 +24,7 @@ import 'package:my_idena/network/model/response/flip_submitShortAnswers_response
 import 'package:my_idena/network/model/response/flip_words_response.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
 import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/util/app_ffi/decrypt_flip.dart';
 import 'package:my_idena/util/crypto/rlp.dart';
 import 'package:my_idena/util/crypto/utils_crypto.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
@@ -231,48 +233,53 @@ class ValidationService {
         Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
         String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-        mapParams = {
-          'method': FlipGetRequest.METHOD_NAME,
-          'params': [validationSessionInfoFlips.hash],
-          'id': 101,
-          'key': keyApp
-        };
+        if (await NodeUtil().getNodeType() == SHARED_NODE) {
+          mapParams = {
+            'method': FlipGetKeyRequest.METHOD_NAME,
+            'params': [validationSessionInfoFlips.hash],
+            'id': 101,
+            'key': keyApp
+          };
 
-        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
-          var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
-              .request(url.toString(),
-                  method: 'POST',
-                  data: jsonEncode(mapParams),
-                  headers: requestHeaders);
-          if (response.status == 200) {
-            flipGetResponse = flipGetResponseFromJson(response.text);
-          }
-        } else {
-          flipGetRequest = FlipGetRequest.fromJson(mapParams);
-          body = json.encode(flipGetRequest.toJson());
+          FlipGetKeyRequest flipGetKeyRequest =
+              FlipGetKeyRequest.fromJson(mapParams);
+          body = json.encode(flipGetKeyRequest.toJson());
           responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
-            flipGetResponse = flipGetResponseFromJson(responseHttp.body);
+            flipGetKeyResponse = flipGetKeyResponseFromJson(responseHttp.body);
+
+            print(decryptFlip(validationSessionInfoFlips.hash,
+                flipGetKeyResponse.result.privateKey));
+          }
+        } else {
+          mapParams = {
+            'method': FlipGetRequest.METHOD_NAME,
+            'params': [validationSessionInfoFlips.hash],
+            'id': 101,
+            'key': keyApp
+          };
+          if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            var response = await ssh.HttpClientImpl(
+                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                .request(url.toString(),
+                    method: 'POST',
+                    data: jsonEncode(mapParams),
+                    headers: requestHeaders);
+            if (response.status == 200) {
+              flipGetResponse = flipGetResponseFromJson(response.text);
+            }
+          } else {
+            flipGetRequest = FlipGetRequest.fromJson(mapParams);
+            body = json.encode(flipGetRequest.toJson());
+            responseHttp =
+                await http.post(url, body: body, headers: requestHeaders);
+            if (responseHttp.statusCode == 200) {
+              flipGetResponse = flipGetResponseFromJson(responseHttp.body);
+            }
           }
         }
-
-        /*mapParams = {
-          'method': FlipGetKeyRequest.METHOD_NAME,
-          'params': [validationSessionInfoFlips.hash] ,
-          'id': 101,
-          'key': keyApp
-        };
-
-        FlipGetKeyRequest flipGetKeyRequest = FlipGetKeyRequest.fromJson(mapParams);
-        body = json.encode(flipGetKeyRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          flipGetKeyResponse = flipGetKeyResponseFromJson(responseHttp.body);
-        }*/
       }
 
       Uint8List imageUint8_1;
