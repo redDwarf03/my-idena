@@ -1226,7 +1226,7 @@ class AppService {
             epoch = dnaGetEpochResponse.result.epoch;
           }
           
-          var amountNumber = (Decimal.parse(amount) * Decimal.parse("1000000000000000000")).toInt();
+          var amountNumber = BigInt.parse((Decimal.parse(amount) * Decimal.parse("1000000000000000000")).toString());
           //print('amountNumber: ' + amountNumber.toString());
           var maxFee = 250000000000000000;
           // Create Transaction
@@ -1510,7 +1510,7 @@ class AppService {
           return _completer.future;
         }
 
-        print("transaction.toHex : " + rawTxSigned);
+        //print("transaction.toHex : " + rawTxSigned);
         mapParams = {
           'method': BcnSendRawTxRequest.METHOD_NAME,
           "params": [rawTxSigned],
@@ -1522,7 +1522,7 @@ class AppService {
           return _completer.future;
         }
 
-        print("transaction.toHex : " + rawTxSigned);
+        //print("transaction.toHex : " + rawTxSigned);
         mapParams = {
           'method': BcnSendRawTxRequest.METHOD_NAME,
           "params": [rawTxSigned],
