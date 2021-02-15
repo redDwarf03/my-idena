@@ -1,17 +1,12 @@
-import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:decimal/decimal.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service_locator.dart';
@@ -20,18 +15,11 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/ui/send/send_confirm_sheet.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
-import 'package:my_idena/ui/util/formatters.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/user_data_util.dart';
 
 class ActivateInvite extends StatefulWidget {
   final String keyInvite;
