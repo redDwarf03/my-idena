@@ -73,8 +73,7 @@ class AppLocalization {
   }
 
   String get transactions {
-    return Intl.message('Tx',
-        desc: 'transaction_header', name: 'transactions');
+    return Intl.message('Tx', desc: 'transaction_header', name: 'transactions');
   }
 
   String get addressCopied {
@@ -145,26 +144,30 @@ class AppLocalization {
 
   /// -- CHART
   String get chartHeader {
-    return Intl.message('Chart',
-        desc: '', name: 'chartHeader');
+    return Intl.message('Chart', desc: '', name: 'chartHeader');
   }
 
   String get chartDate {
-    return Intl.message('Date',
-        desc: '', name: 'chartDate');
+    return Intl.message('Date', desc: '', name: 'chartDate');
   }
 
   String get chartPrice {
-    return Intl.message('Price',
-        desc: '', name: 'chartPrice');
+    return Intl.message('Price', desc: '', name: 'chartPrice');
   }
 
   String get chartVolume {
-    return Intl.message('Volume',
-        desc: '', name: 'chartVolume');
+    return Intl.message('Volume', desc: '', name: 'chartVolume');
   }
 
   /// -- END CHART
+
+  /// -- DEEP LINKS
+  String get signinConfirmation {
+    return Intl.message('Signin confirmation',
+        desc: '', name: 'signinConfirmation');
+  }
+
+  /// -- DEEP LINKS END
 
   /// -- CONTACT ITEMS
 
@@ -229,126 +232,118 @@ class AppLocalization {
   String get configureAccessNodeHeader {
     return Intl.message("Configure your access",
         desc: '', name: 'configureAccessNodeHeader');
-  }  
+  }
 
   String get enterApiUrl {
-    return Intl.message("Enter your API url",
-        desc: '', name: 'enterApiUrl');
-  }  
+    return Intl.message("Enter your API url", desc: '', name: 'enterApiUrl');
+  }
 
   String get enterDemoMode {
     return Intl.message("Demo mode activation ?",
         desc: '', name: 'enterDemoMode');
-  }  
+  }
 
   String get enterSharedNode {
     return Intl.message("Access to a Shared Node ?",
         desc: '', name: 'enterSharedNode');
-  }  
+  }
 
   String get enterKeyApp {
-    return Intl.message("Enter your key app",
-        desc: '', name: 'enterKeyApp');
-  }  
+    return Intl.message("Enter your key app", desc: '', name: 'enterKeyApp');
+  }
 
   String get enterOperator {
-    return Intl.message("Enter your operator",
-        desc: '', name: 'enterOperator');
-  }  
+    return Intl.message("Enter your operator", desc: '', name: 'enterOperator');
+  }
 
   String get enterEncryptedPk {
     return Intl.message("Enter your private key backup",
         desc: '', name: 'enterEncryptedPk');
-  }  
+  }
 
- String get enterPasswordPk {
+  String get enterPasswordPk {
     return Intl.message("Enter your password",
         desc: '', name: 'enterPasswordPk');
-  }  
+  }
 
- String get enterVps {
-    return Intl.message("Access to a VPS ?",
-        desc: '', name: 'enterVps');
-  }  
- String get enterPublicNode {
+  String get enterVps {
+    return Intl.message("Access to a VPS ?", desc: '', name: 'enterVps');
+  }
+
+  String get enterPublicNode {
     return Intl.message("Access to a Public Node ?",
         desc: '', name: 'enterPublicNode');
-  }  
+  }
 
- String get enterVpsUser {
-    return Intl.message("Enter a user",
-        desc: '', name: 'enterVpsUser');
-  }  
+  String get enterVpsUser {
+    return Intl.message("Enter a user", desc: '', name: 'enterVpsUser');
+  }
 
- String get enterVpsIp {
-    return Intl.message("Enter the VPS Address",
-        desc: '', name: 'enterVpsIp');
-  }  
+  String get enterVpsIp {
+    return Intl.message("Enter the VPS Address", desc: '', name: 'enterVpsIp');
+  }
 
- String get enterVpsTunnel {
+  String get enterVpsTunnel {
     return Intl.message("Enter the Tunnel Address",
         desc: '', name: 'enterVpsTunnel');
-  }  
-  
- String get enterVpsPassword {
+  }
+
+  String get enterVpsPassword {
     return Intl.message("Enter the password",
         desc: '', name: 'enterVpsPassword');
-  }   
+  }
 
- String get enterVpsTunnelExample {
+  String get enterVpsTunnelExample {
     return Intl.message("ex: 'http://localhost:9009' with http or https",
         desc: '', name: 'enterVpsTunnelExample');
-  }  
+  }
 
- String get enterVpsIpExample {
+  String get enterVpsIpExample {
     return Intl.message("ex: '11.22.33.44:22'",
         desc: '', name: 'enterVpsIpExample');
-  }  
+  }
 
- String get enterVpsUserExample {
-    return Intl.message("ex: 'root'",
-        desc: '', name: 'enterVpsUserExample');
-  }  
+  String get enterVpsUserExample {
+    return Intl.message("ex: 'root'", desc: '', name: 'enterVpsUserExample');
+  }
 
- String get enterOperatorExample {
+  String get enterOperatorExample {
     return Intl.message("ex: 'https://node.idena.io'",
         desc: '', name: 'enterOperatorExample');
-  }  
+  }
 
   String get apiUrlMissing {
     return Intl.message("Please Enter your API url",
         desc: '', name: 'apiUrlMissing');
-  }  
+  }
 
   String get operatorMissing {
     return Intl.message("Please Enter your operator",
         desc: '', name: 'operatorMissing');
-  }  
+  }
 
   String get encryptedPkMissing {
     return Intl.message("Please Enter your private key backup",
         desc: '', name: 'encryptedPkMissing');
-  }  
+  }
 
   String get passwordPkMissing {
     return Intl.message("Please Enter your password",
         desc: '', name: 'passwordPkMissing');
-  }  
+  }
 
   String get wrongApiUrl {
     return Intl.message("The Api Url is not an url valid",
         desc: '', name: 'wrongApiUrl');
-  }  
+  }
 
   String get keyAppMissing {
     return Intl.message("Please Enter your key app",
         desc: '', name: 'keyAppMissing');
-  }  
-
-
+  }
 
   /// -- AND CONFIGURE NODE
-  
+
   /// -- INTRO ITEMS
   String get backupYourSeed {
     return Intl.message('Backup your seed',
@@ -404,7 +399,7 @@ class AppLocalization {
         desc: 'Secret warning',
         name: 'secretWarning');
   }
-  
+
   String get welcomeText {
     return Intl.message(
         "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
@@ -420,7 +415,7 @@ class AppLocalization {
   /// -- END INTRO ITEMS
 
   /// -- TRANSACTION DETAILS
-  
+
   String get transactionDetailBlock {
     return Intl.message('Block',
         desc: 'transaction_detail', name: 'transactionDetailBlock');
@@ -471,7 +466,7 @@ class AppLocalization {
         desc: 'transaction_detail', name: 'transactionDetailUnconfirmed');
   }
 
-  /// 
+  ///
 
   /// -- SEND ITEMS
   String get sentTo {
@@ -609,72 +604,60 @@ class AppLocalization {
   /// -- END PIN SCREEN
 
   /// -- PROFILE INFOS
-  
+
   String get profileInfosHeader {
-    return Intl.message("Profile Infos",
-        desc: '', name: 'profileInfosHeader');
+    return Intl.message("Profile Infos", desc: '', name: 'profileInfosHeader');
   }
-  
+
   String get profileInfosAddress {
-    return Intl.message("Address",
-        desc: '', name: 'profileInfosAddress');
+    return Intl.message("Address", desc: '', name: 'profileInfosAddress');
   }
-  
+
   String get profileInfosAge {
-    return Intl.message("Age",
-        desc: '', name: 'profileInfosAge');
+    return Intl.message("Age", desc: '', name: 'profileInfosAge');
   }
-  
+
   String get profileInfosEpoch {
-    return Intl.message("Epoch",
-        desc: '', name: 'profileInfosEpoch');
+    return Intl.message("Epoch", desc: '', name: 'profileInfosEpoch');
   }
-  
+
   String get profileInfosState {
-    return Intl.message("State",
-        desc: '', name: 'profileInfosState');
+    return Intl.message("State", desc: '', name: 'profileInfosState');
   }
-  
+
   String get profileInfosScore {
-    return Intl.message("Score",
-        desc: '', name: 'profileInfosScore');
+    return Intl.message("Score", desc: '', name: 'profileInfosScore');
   }
-  
+
   String get profileInfosRequiredFlips {
     return Intl.message("Required flips",
         desc: '', name: 'profileInfosRequiredFlips');
   }
-  
+
   String get profileInfosMadeFlips {
-    return Intl.message("Made flips",
-        desc: '', name: 'profileInfosMadeFlips');
+    return Intl.message("Made flips", desc: '', name: 'profileInfosMadeFlips');
   }
-  
+
   /// -- END PROFILE INFOS
- String get timeDays {
-    return Intl.message("d",
-        desc: '', name: 'timeDays');
+  String get timeDays {
+    return Intl.message("d", desc: '', name: 'timeDays');
   }
 
- String get timeHours {
-    return Intl.message("h",
-        desc: '', name: 'timeHours');
+  String get timeHours {
+    return Intl.message("h", desc: '', name: 'timeHours');
   }
 
- String get timeMin {
-    return Intl.message("m",
-        desc: '', name: 'timeMin');
+  String get timeMin {
+    return Intl.message("m", desc: '', name: 'timeMin');
   }
 
- String get timeSec {
-    return Intl.message("s",
-        desc: '', name: 'timeSec');
+  String get timeSec {
+    return Intl.message("s", desc: '', name: 'timeSec');
   }
 
-  /// -- TYPE TX 
+  /// -- TYPE TX
   String get typeTransfer {
-    return Intl.message("Transfer",
-        desc: '', name: 'typeTransfer');
+    return Intl.message("Transfer", desc: '', name: 'typeTransfer');
   }
 
   String get typeInvitationActivated {
@@ -691,127 +674,136 @@ class AppLocalization {
     return Intl.message("Invitation terminated",
         desc: '', name: 'typeInvitationTerminated');
   }
-  
+
   String get typeIdentityTerminated {
     return Intl.message("Identity terminated",
         desc: '', name: 'typeIdentityTerminated');
   }
-  
+
   String get typeFlipSubmitted {
-    return Intl.message("Flip submitted",
-        desc: '', name: 'typeFlipSubmitted');
+    return Intl.message("Flip submitted", desc: '', name: 'typeFlipSubmitted');
   }
 
   String get typeDeploy {
-    return Intl.message("Deploy",
-        desc: '', name: 'typeDeploy');
+    return Intl.message("Deploy", desc: '', name: 'typeDeploy');
   }
 
   String get typeMiningStatusOff {
     return Intl.message("Mining status Off",
         desc: '', name: 'typeMiningStatusOff');
-  } 
- 
+  }
+
   String get typeMiningStatusOn {
     return Intl.message("Mining status On",
         desc: '', name: 'typeMiningStatusOn');
-  } 
+  }
 
   String get typeCallContractSendVote {
     return Intl.message("Send public vote",
         desc: '', name: 'typeCallContractSendVote');
-  } 
+  }
 
   String get typeCallContractSendVoteProof {
     return Intl.message("Send secret vote",
         desc: '', name: 'typeCallContractSendVoteProof');
-  } 
+  }
 
   String get typeCallContractStartVoting {
     return Intl.message("Start voting",
         desc: '', name: 'typeCallContractStartVoting');
-  } 
+  }
 
   String get typeCallContractFinishVoting {
     return Intl.message("Finish voting",
         desc: '', name: 'typeCallContractFinishVoting');
-  } 
+  }
 
   String get typeCallContractProlongVoting {
     return Intl.message("Prolong voting",
         desc: '', name: 'typeCallContractProlongVoting');
-  } 
+  }
 
   ///  -- END TYPE TX
 
   /// -- VALIDATION
-  
- String get validationDoesntAllow {
-    return Intl.message("Your status doesn\'t allow you\nto participate in the validation session",
-        desc: '', name: 'validationDoesntAllow');
+
+  String get validationDoesntAllow {
+    return Intl.message(
+        "Your status doesn\'t allow you\nto participate in the validation session",
+        desc: '',
+        name: 'validationDoesntAllow');
   }
 
- String get validationMustProvideFlips {
-    return Intl.message("To participate in the validation session\nyou must provide your flips",
-        desc: '', name: 'validationMustProvideFlips');
+  String get validationMustProvideFlips {
+    return Intl.message(
+        "To participate in the validation session\nyou must provide your flips",
+        desc: '',
+        name: 'validationMustProvideFlips');
   }
 
- String get validationWillStartSoon {
-    return Intl.message("Idena validation will start soon\nPlease, stay on this page until launch.",
-        desc: '', name: 'validationWillStartSoon');
+  String get validationWillStartSoon {
+    return Intl.message(
+        "Idena validation will start soon\nPlease, stay on this page until launch.",
+        desc: '',
+        name: 'validationWillStartSoon');
   }
 
- String get validationNextDate {
+  String get validationNextDate {
     return Intl.message("Next validation",
         desc: '', name: 'validationNextDate');
   }
 
- String get validationWaitingEnd {
+  String get validationWaitingEnd {
     return Intl.message("Waiting for the end of long session",
         desc: '', name: 'validationWaitingEnd');
   }
 
- String get validationReachingConsensus {
-    return Intl.message("Please wait. The network is reaching consensus about validated identities",
-        desc: '', name: 'validationReachingConsensus');
+  String get validationReachingConsensus {
+    return Intl.message(
+        "Please wait. The network is reaching consensus about validated identities",
+        desc: '',
+        name: 'validationReachingConsensus');
   }
 
- String get validationNextAllowed {
+  String get validationNextAllowed {
     return Intl.message("You can participate in the next validation session",
         desc: '', name: 'validationNextAllowed');
   }
 
- String get validationTipInfo {
-    return Intl.message("If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
-        desc: '', name: 'validationTipInfo');
+  String get validationTipInfo {
+    return Intl.message(
+        "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
+        desc: '',
+        name: 'validationTipInfo');
   }
 
- String get validationTipThxHeader {
+  String get validationTipThxHeader {
     return Intl.message("Thank you !",
         desc: '', name: 'validationTipThxHeader');
   }
 
- String get validationTipConfirmationHeader {
+  String get validationTipConfirmationHeader {
     return Intl.message("Confirmation",
         desc: '', name: 'validationTipConfirmationHeader');
   }
 
- String get validationTipConfirmationQuestion {
+  String get validationTipConfirmationQuestion {
     return Intl.message("Are you sure you want to send a tip",
         desc: '', name: 'validationTipConfirmationQuestion');
   }
 
-
- String get validationForceStart {
-    return Intl.message("Idena validation started.\nPlease, click here to force the launch",
-        desc: '', name: 'validationForceStart');
+  String get validationForceStart {
+    return Intl.message(
+        "Idena validation started.\nPlease, click here to force the launch",
+        desc: '',
+        name: 'validationForceStart');
   }
 
   String get validationHeader {
     return Intl.message("Validation Session",
         desc: '', name: 'validationHeader');
   }
-  
+
   String get validationStep1Header {
     return Intl.message("Select meaningful story: left or right",
         desc: '', name: 'validationStep1Header');
@@ -823,8 +815,7 @@ class AppLocalization {
   }
 
   String get submitAnswers {
-    return Intl.message("Submit Answers",
-        desc: '', name: 'submitAnswers');
+    return Intl.message("Submit Answers", desc: '', name: 'submitAnswers');
   }
 
   String get startCheckingKeywords {
@@ -833,38 +824,31 @@ class AppLocalization {
   }
 
   String get demoMode {
-    return Intl.message("Demo mode",
-        desc: '', name: 'demoMode');
+    return Intl.message("Demo mode", desc: '', name: 'demoMode');
   }
 
   String get sharedNode {
-    return Intl.message("Shared Node",
-        desc: '', name: 'sharedNode');
+    return Intl.message("Shared Node", desc: '', name: 'sharedNode');
   }
 
   String get synchronized {
-    return Intl.message("Synchronized",
-        desc: '', name: 'synchronized');
+    return Intl.message("Synchronized", desc: '', name: 'synchronized');
   }
 
   String get notSynchronized {
-    return Intl.message("Not Synchronized",
-        desc: '', name: 'notSynchronized');
+    return Intl.message("Not Synchronized", desc: '', name: 'notSynchronized');
   }
 
   String get notConnected {
-    return Intl.message("Not Connected",
-        desc: '', name: 'notConnected');
+    return Intl.message("Not Connected", desc: '', name: 'notConnected');
   }
 
   String get connected {
-    return Intl.message("Connected",
-        desc: '', name: 'connected');
+    return Intl.message("Connected", desc: '', name: 'connected');
   }
 
   String get peersNotFound {
-    return Intl.message("Peers are not found",
-        desc: '', name: 'peersNotFound');
+    return Intl.message("Peers are not found", desc: '', name: 'peersNotFound');
   }
 
   String get synchronizingBlocks {
@@ -873,8 +857,7 @@ class AppLocalization {
   }
 
   String get goHome {
-    return Intl.message("Go home",
-        desc: '', name: 'goHome');
+    return Intl.message("Go home", desc: '', name: 'goHome');
   }
 
   String get validationUnderstand {
@@ -908,8 +891,10 @@ class AppLocalization {
   }
 
   String get validationQualifyKeywords {
-    return Intl.message("Please qualify the keywords relevance and submit the answers.",
-        desc: '', name: 'validationQualifyKeywords');
+    return Intl.message(
+        "Please qualify the keywords relevance and submit the answers.",
+        desc: '',
+        name: 'validationQualifyKeywords');
   }
 
   String get validationFlipsIrrelevantKeywordsWarning {
@@ -918,15 +903,18 @@ class AppLocalization {
   }
 
   String get validationFlipsIrrelevantLimitControl {
-    return Intl.message("The number of flips that can be reported\nshould be limited to 1/3",
-        desc: '', name: 'validationFlipsIrrelevantLimitControl');
+    return Intl.message(
+        "The number of flips that can be reported\nshould be limited to 1/3",
+        desc: '',
+        name: 'validationFlipsIrrelevantLimitControl');
   }
 
- String get validationFlipsSubmitOk {
-    return Intl.message("Your answers for the validation session have been submitted successfully!",
-        desc: '', name: 'validationFlipsSubmitOk');
+  String get validationFlipsSubmitOk {
+    return Intl.message(
+        "Your answers for the validation session have been submitted successfully!",
+        desc: '',
+        name: 'validationFlipsSubmitOk');
   }
-
 
   /// -- END VALIDATION
 
@@ -934,65 +922,73 @@ class AppLocalization {
   String get flipsCreatorStep1Header {
     return Intl.message("Think up a story",
         desc: '', name: 'flipsCreatorStep1Header');
-  } 
+  }
+
   String get flipsCreatorHeader {
-    return Intl.message("Flips Creator",
-        desc: '', name: 'flipsCreatorHeader');
-  } 
+    return Intl.message("Flips Creator", desc: '', name: 'flipsCreatorHeader');
+  }
 
   String get flipsCreatorStep1Info {
-    return Intl.message("Think up a short story about someone/something related to the two key words below according to the template",
-        desc: '', name: 'flipsCreatorStep1Info');
-  } 
+    return Intl.message(
+        "Think up a short story about someone/something related to the two key words below according to the template",
+        desc: '',
+        name: 'flipsCreatorStep1Info');
+  }
 
   String get flipsCreatorStep1ChangeWords {
     return Intl.message("Change words",
         desc: '', name: 'flipsCreatorStep1ChangeWords');
-  } 
+  }
 
   String get flipsCreatorStep1NextStep {
     return Intl.message("Next step",
         desc: '', name: 'flipsCreatorStep1NextStep');
-  } 
+  }
 
   String get flipsCreatorStep2Header {
     return Intl.message("Select 4 images to tell your story",
         desc: '', name: 'flipsCreatorStep2Header');
-  } 
+  }
 
   String get flipsCreatorStep2Info1 {
     return Intl.message("Use keywords for the story",
         desc: '', name: 'flipsCreatorStep2Info1');
-  } 
+  }
 
   String get flipsCreatorStep2Info2 {
-    return Intl.message("and template \"Before – Something happens – After\".\nPlease no text on images to explain your story.",
-        desc: '', name: 'flipsCreatorStep2Info2');
-  } 
+    return Intl.message(
+        "and template \"Before – Something happens – After\".\nPlease no text on images to explain your story.",
+        desc: '',
+        name: 'flipsCreatorStep2Info2');
+  }
 
   String get flipsCreatorStep2PickImages {
     return Intl.message("Pick images",
         desc: '', name: 'flipsCreatorStep2PickImages');
-  } 
-  
+  }
+
   String get flipsCreatorStep3Header {
     return Intl.message("Shuffle images",
         desc: '', name: 'flipsCreatorStep3Header');
-  } 
+  }
 
   String get flipsCreatorStep3Info1 {
-    return Intl.message("Shuffle images in order to make a nonsense sequence of images",
-        desc: '', name: 'flipsCreatorStep3Info1');
-  } 
-  
+    return Intl.message(
+        "Shuffle images in order to make a nonsense sequence of images",
+        desc: '',
+        name: 'flipsCreatorStep3Info1');
+  }
+
   String get flipsCreatorStep4Header {
     return Intl.message("Submit flip",
         desc: '', name: 'flipsCreatorStep4Header');
-  } 
+  }
 
   String get flipsCreatorStep4Info1 {
-    return Intl.message("Make sure it is not possible to read the shuffled images as a meaningful story",
-        desc: '', name: 'flipsCreatorStep4Info1');
+    return Intl.message(
+        "Make sure it is not possible to read the shuffled images as a meaningful story",
+        desc: '',
+        name: 'flipsCreatorStep4Info1');
   }
 
   String get flipsCreatorStep4Info2 {
@@ -1001,18 +997,19 @@ class AppLocalization {
   }
 
   String get flipsCreatorStep4Warning1 {
-    return Intl.message("If you make BAD flip, you will lose all iDNA rewards !\nThe cost of deleting a flip is about 8 iDNA",
-        desc: '', name: 'flipsCreatorStep4Warning1');
+    return Intl.message(
+        "If you make BAD flip, you will lose all iDNA rewards !\nThe cost of deleting a flip is about 8 iDNA",
+        desc: '',
+        name: 'flipsCreatorStep4Warning1');
   }
-  
+
   String get flipsCreatorStep4Submit {
     return Intl.message("Submit flip",
         desc: '', name: 'flipsCreatorStep4Submit');
   }
-  
 
   /// -- END FLIPS CREATOR
-  
+
   /// -- SETTINGS ITEMS
 
   String get pickFromList {
@@ -1109,10 +1106,8 @@ class AppLocalization {
   }
 
   String get logoutReassurance {
-    return Intl.message(
-        "",
-        desc: 'settings_logout_warning_message',
-        name: 'logoutReassurance');
+    return Intl.message("",
+        desc: 'settings_logout_warning_message', name: 'logoutReassurance');
   }
 
   String get settingsHeader {
@@ -1151,8 +1146,7 @@ class AppLocalization {
   }
 
   String get myTokens {
-    return Intl.message("Tokens",
-        desc: 'my_tokens_button', name: 'myTokens');
+    return Intl.message("Tokens", desc: 'my_tokens_button', name: 'myTokens');
   }
 
   String get manage {
@@ -1183,25 +1177,29 @@ class AppLocalization {
   /// -- END SETTINGS ITEMS
 
   /// -- MINING
-  
-   String get activateMiningHeader {
+
+  String get activateMiningHeader {
     return Intl.message("Activate mining status",
         desc: 'mining_infos', name: 'activateMiningHeader');
   }
 
-   String get deactivateMiningHeader {
+  String get deactivateMiningHeader {
     return Intl.message("Deactivate mining status",
         desc: 'mining_infos', name: 'deactivateMiningHeader');
   }
 
-   String get activateMiningInfos {
-    return Intl.message("Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.\n\nPlease, wait few seconds before the activation...",
-        desc: 'mining_infos', name: 'activateMiningInfos');
+  String get activateMiningInfos {
+    return Intl.message(
+        "Submit the form to start mining. Your node has to be online unless you deactivate your status. Otherwise penalties might be charged after being offline more than 1 hour.\nYou can deactivate your online status at any time.\n\nPlease, wait few seconds before the activation...",
+        desc: 'mining_infos',
+        name: 'activateMiningInfos');
   }
 
-   String get deactivateMiningInfos {
-    return Intl.message("Submit the form to deactivate your mining status.\nYou can activate it again afterwards.\n\nPlease, wait few seconds before the desactivation...",
-        desc: 'mining_infos', name: 'deactivateMiningInfos');
+  String get deactivateMiningInfos {
+    return Intl.message(
+        "Submit the form to deactivate your mining status.\nYou can activate it again afterwards.\n\nPlease, wait few seconds before the desactivation...",
+        desc: 'mining_infos',
+        name: 'deactivateMiningInfos');
   }
 
   /// -- END MINING
@@ -1451,7 +1449,6 @@ class AppLocalization {
         desc: 'err', name: 'mnemonicSizeError');
   }
 
-
   String get secretPhrase {
     return Intl.message("Secret Phrase",
         desc: 'Secret (mnemonic) phrase', name: 'secretPhrase');
@@ -1554,115 +1551,157 @@ class AppLocalization {
   }
 
   String get thanksForHelp {
-    return Intl.message("Thanks for help", desc: 'thanks_label', name: 'thanksForHelp');
+    return Intl.message("Thanks for help",
+        desc: 'thanks_label', name: 'thanksForHelp');
   }
 
   String get thanksAuthor {
-    return Intl.message("Created by", desc: 'thanks_author_label', name: 'thanksAuthor');
+    return Intl.message("Created by",
+        desc: 'thanks_author_label', name: 'thanksAuthor');
   }
 
   String get validationBasicsHeader {
-    return Intl.message("Validation Basics", desc: '', name: 'validationBasicsHeader');
+    return Intl.message("Validation Basics",
+        desc: '', name: 'validationBasicsHeader');
   }
 
   String get validationBasicsGoodFlipHeader {
-    return Intl.message("What is a Good Flip ?", desc: '', name: 'validationBasicsGoodFlipHeader');
+    return Intl.message("What is a Good Flip ?",
+        desc: '', name: 'validationBasicsGoodFlipHeader');
   }
 
   String get validationBasicsBadFlipHeader {
-    return Intl.message("What is a Bad Flip ?", desc: '', name: 'validationBasicsBadFlipHeader');
+    return Intl.message("What is a Bad Flip ?",
+        desc: '', name: 'validationBasicsBadFlipHeader');
   }
 
   String get validationBasicsGoodFlipRewardHeader {
-    return Intl.message("A good flip earns you rewards in iDNA", desc: '', name: 'validationBasicsGoodFlipRewardHeader');
+    return Intl.message("A good flip earns you rewards in iDNA",
+        desc: '', name: 'validationBasicsGoodFlipRewardHeader');
   }
 
   String get validationBasicsBadFlipRewardHeader {
-    return Intl.message("A bad flip penalizes you in iDNA", desc: '', name: 'validationBasicsBadFlipRewardHeader');
+    return Intl.message("A bad flip penalizes you in iDNA",
+        desc: '', name: 'validationBasicsBadFlipRewardHeader');
   }
 
   String get validationBasicsGoodFlipItem1 {
-    return Intl.message("A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.", desc: '', name: 'validationBasicsGoodFlipItem1');
+    return Intl.message(
+        "A good flip tells a story, assembled chronologically, to represent an event or a process from beginning to end.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem1');
   }
 
   String get validationBasicsGoodFlipItem2 {
-    return Intl.message("A good flip is EASY to solve for humans, but hard for robots.", desc: '', name: 'validationBasicsGoodFlipItem2');
+    return Intl.message(
+        "A good flip is EASY to solve for humans, but hard for robots.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem2');
   }
 
   String get validationBasicsGoodFlipItem3 {
-    return Intl.message("A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.", desc: '', name: 'validationBasicsGoodFlipItem3');
+    return Intl.message(
+        "A good flip uses clear, simple images, and lets the story be obvious, with no ambiguity.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem3');
   }
 
   String get validationBasicsGoodFlipItem4 {
-    return Intl.message("A good flip uses no text.", desc: '', name: 'validationBasicsGoodFlipItem4');
+    return Intl.message("A good flip uses no text.",
+        desc: '', name: 'validationBasicsGoodFlipItem4');
   }
 
   String get validationBasicsGoodFlipItem5 {
-    return Intl.message("A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.", desc: '', name: 'validationBasicsGoodFlipItem5');
+    return Intl.message(
+        "A good flip uses simple concepts that ANYONE IN THE WORLD will easily understand, regardless of their native language or culture.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem5');
   }
 
   String get validationBasicsGoodFlipItem6 {
-    return Intl.message("A good flip should be relevant to both of the seed words.", desc: '', name: 'validationBasicsGoodFlipItem6');
+    return Intl.message(
+        "A good flip should be relevant to both of the seed words.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem6');
   }
 
   String get validationBasicsGoodFlipItem7 {
-    return Intl.message("A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.", desc: '', name: 'validationBasicsGoodFlipItem7');
+    return Intl.message(
+        "A good flip makes use of the tools available including DRAWING and COLLAGE to help battle against AI and add creativity.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem7');
   }
 
   String get validationBasicsGoodFlipItem8 {
-    return Intl.message("A good flip uses the shuffle to create a 100% non logical alternative.", desc: '', name: 'validationBasicsGoodFlipItem8');
+    return Intl.message(
+        "A good flip uses the shuffle to create a 100% non logical alternative.",
+        desc: '',
+        name: 'validationBasicsGoodFlipItem8');
   }
 
   String get validationBasicsBadFlipItem1 {
-    return Intl.message("A bad flip has NO logical story, even if it uses both keywords.", desc: '', name: 'validationBasicsBadFlipItem1');
+    return Intl.message(
+        "A bad flip has NO logical story, even if it uses both keywords.",
+        desc: '',
+        name: 'validationBasicsBadFlipItem1');
   }
 
   String get validationBasicsBadFlipItem2 {
-    return Intl.message("A bad flip contains numbers or letters on images.", desc: '', name: 'validationBasicsBadFlipItem2');
+    return Intl.message("A bad flip contains numbers or letters on images.",
+        desc: '', name: 'validationBasicsBadFlipItem2');
   }
 
   String get validationBasicsBadFlipItem3 {
-    return Intl.message("A bad flip is hard to understand.", desc: '', name: 'validationBasicsBadFlipItem3');
+    return Intl.message("A bad flip is hard to understand.",
+        desc: '', name: 'validationBasicsBadFlipItem3');
   }
 
   String get validationBasicsBadFlipItem4 {
-    return Intl.message("A bad flip contains hateful, inappropriate or NSFW content.", desc: '', name: 'validationBasicsBadFlipItem4');
+    return Intl.message(
+        "A bad flip contains hateful, inappropriate or NSFW content.",
+        desc: '',
+        name: 'validationBasicsBadFlipItem4');
   }
 
   String get validationBasicsBadFlipItem5 {
-    return Intl.message("A bad flip does NOT USE BOTH keywords in the story.", desc: '', name: 'validationBasicsBadFlipItem5');
+    return Intl.message("A bad flip does NOT USE BOTH keywords in the story.",
+        desc: '', name: 'validationBasicsBadFlipItem5');
   }
 
   String get validationBasicsBadFlipItem6 {
-    return Intl.message("A bad flip uses objects in images in sequence (1-2-3-4).", desc: '', name: 'validationBasicsBadFlipItem6');
+    return Intl.message(
+        "A bad flip uses objects in images in sequence (1-2-3-4).",
+        desc: '',
+        name: 'validationBasicsBadFlipItem6');
   }
 
   String get validationBasicsBadFlipItem7 {
-    return Intl.message("If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation", desc: '', name: 'validationBasicsBadFlipItem7');
+    return Intl.message(
+        "If even one of your submitted flips are reported during validation, you loose 100% of your rewards including invitation rewards for that validation",
+        desc: '',
+        name: 'validationBasicsBadFlipItem7');
   }
-
 
   /// HEADERS END
 
   /// INVITATIONS
   String get invitationHeader {
-    return Intl.message("Invitation",
-        desc: '', name: 'invitationHeader');
+    return Intl.message("Invitation", desc: '', name: 'invitationHeader');
   }
 
   String get invitationActivateHeader {
-    return Intl.message("You received an invitation.\nClick the button to activate it.",
-        desc: '', name: 'invitationActivateHeader');
+    return Intl.message(
+        "You received an invitation.\nClick the button to activate it.",
+        desc: '',
+        name: 'invitationActivateHeader');
   }
 
   String get invitationActivateTitle {
-    return Intl.message("Activate",
-        desc: '', name: 'invitationActivateTitle');
+    return Intl.message("Activate", desc: '', name: 'invitationActivateTitle');
   }
 
   String get invitationActivateButton {
-    return Intl.message("Activate",
-        desc: '', name: 'invitationActivateButton');
+    return Intl.message("Activate", desc: '', name: 'invitationActivateButton');
   }
 
   String get sendInvite {
@@ -1670,15 +1709,20 @@ class AppLocalization {
   }
 
   String get sendInviteConfirmationHeader {
-    return Intl.message('Send Invite confirmation', desc: '', name: 'sendInviteConfirmationHeader');
+    return Intl.message('Send Invite confirmation',
+        desc: '', name: 'sendInviteConfirmationHeader');
   }
 
   String get sendInviteConfirmationInfos {
-    return Intl.message('Are you sure you want to send an invitation to this contact ?', desc: '', name: 'sendInviteConfirmationInfos');
+    return Intl.message(
+        'Are you sure you want to send an invitation to this contact ?',
+        desc: '',
+        name: 'sendInviteConfirmationInfos');
   }
 
   String get sendInviteSuccess {
-    return Intl.message('The invitation was sent successfully', desc: '', name: 'sendInviteSuccess');
+    return Intl.message('The invitation was sent successfully',
+        desc: '', name: 'sendInviteSuccess');
   }
 
   String get inviteHeader {
@@ -1693,23 +1737,25 @@ class AppLocalization {
   String get keyInviteMissing {
     return Intl.message("Please Enter the code invitation",
         desc: '', name: 'keyInviteMissing');
-  }  
+  }
 
   String get activateInviteSuccess {
-    return Intl.message('The invitation was activated successfully', desc: '', name: 'activateInviteSuccess');
+    return Intl.message('The invitation was activated successfully',
+        desc: '', name: 'activateInviteSuccess');
   }
 
   String get activationInviteConfirmationHeader {
-    return Intl.message('Activation Invite confirmation', desc: '', name: 'activationInviteConfirmationHeader');
+    return Intl.message('Activation Invite confirmation',
+        desc: '', name: 'activationInviteConfirmationHeader');
   }
 
   String get activationInviteConfirmationInfos {
-    return Intl.message('Are you sure you want to activate an invitation ?', desc: '', name: 'activationInviteConfirmationInfos');
+    return Intl.message('Are you sure you want to activate an invitation ?',
+        desc: '', name: 'activationInviteConfirmationInfos');
   }
 
   /// INVITATIONS END
-  
-  
+
   /// BUTTONS
   String get noSkipButton {
     return Intl.message("No, Skip",
@@ -1775,6 +1821,7 @@ class AppLocalization {
   String get donationsName {
     return '@Donations';
   }
+
   /// -- END NON-TRANSLATABLE ITEMS
 }
 

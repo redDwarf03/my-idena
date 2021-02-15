@@ -15,6 +15,7 @@ import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_3.dart';
 import 'package:my_idena/ui/createFlips/creation_flips_step_4.dart';
+import 'package:my_idena/ui/deep_link_signin_screen.dart';
 import 'package:my_idena/ui/intro/intro_backup_seed.dart';
 import 'package:my_idena/ui/intro/intro_import_seed.dart';
 import 'package:my_idena/ui/settings/configure_access_node.dart';
@@ -198,6 +199,11 @@ class _AppState extends State<App> {
               return NoPopTransitionRoute(
                 builder: (_) =>
                     AppHomePage(priceConversion: settings.arguments),
+                settings: settings,
+              );
+             case '/signin':
+              return NoTransitionRoute(
+                builder: (_) => DeepLinkSigninScreen(deepLinkParam: settings.arguments,),
                 settings: settings,
               );
             case '/intro_welcome':

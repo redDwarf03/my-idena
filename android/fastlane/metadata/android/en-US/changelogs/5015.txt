@@ -1,0 +1,2 @@
+- Sign-in with deep link (dna://signin) (works with Shared Node, VPS Node, Public Node, Local Node)
+- Send transaction with deep link (dna://send) (works with Shared Node, VPS Node, Public Node, Local Node)

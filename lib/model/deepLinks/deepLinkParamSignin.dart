@@ -1,5 +1,6 @@
 
-class DeepLinkParam {
+class DeepLinkParamSignin {
+  static const String HOST = "signin";
   String nonceEndpoint;
   String token;
   String callbackUrl;
@@ -9,5 +10,5 @@ class DeepLinkParam {
   String address;
   String signature;
   bool authenticated;
-  DeepLinkParam();
+  DeepLinkParamSignin();
 }

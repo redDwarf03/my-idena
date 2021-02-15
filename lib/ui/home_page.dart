@@ -12,13 +12,14 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
+import 'package:my_idena/model/deepLinks/idena_url.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/themes.dart';
+import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/model/idena_url.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
@@ -369,7 +370,10 @@ class _AppHomePageState extends State<AppHomePage>
 
   void setBrightnessMode() {
     setState(() {
-      StateContainer.of(context).curTheme = MediaQuery.of(context).platformBrightness == Brightness.dark ? IdenaDarkTheme() : IdenaTheme();
+      StateContainer.of(context).curTheme =
+          MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? IdenaDarkTheme()
+              : IdenaTheme();
     });
   }
 
@@ -387,7 +391,12 @@ class _AppHomePageState extends State<AppHomePage>
             .getShortString(context);
     _contacts.forEach((contact) {
       if (contact.address.toLowerCase() ==
-          StateContainer.of(context).wallet.history[index].to.toString().toLowerCase()) {
+          StateContainer.of(context)
+              .wallet
+              .history[index]
+              .to
+              .toString()
+              .toLowerCase()) {
         displayName = contact.name;
       }
     });
@@ -491,11 +500,20 @@ class _AppHomePageState extends State<AppHomePage>
     });
   }
 
-  Future<void> handleDeepLink(String link) async {
-    IdenaUrl idenaUrl = await new IdenaUrl().getInfo(Uri.decodeFull(link));
+  void handleDeepLink(String link) {
+    IdenaUrl idenaUrl = new IdenaUrl().getInfo(Uri.decodeFull(link));
 
-    // Remove any other screens from stack
-    Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
+    if (idenaUrl.deepLinkParamSignin != null) {
+      Navigator.of(context)
+          .pushNamed('/signin', arguments: idenaUrl.deepLinkParamSignin);
+    } else if (idenaUrl.deepLinkParamSend != null) {
+      Sheets.showAppHeightNineSheet(
+          context: context,
+          widget: SendSheet(
+              quickSendAmount: idenaUrl.deepLinkParamSend.amount,
+              address: idenaUrl.deepLinkParamSend.address,
+              localCurrency: StateContainer.of(context).curCurrency));
+    }
   }
 
   void paintQrCode({String address}) {
@@ -1371,7 +1389,8 @@ class _AppHomePageState extends State<AppHomePage>
                                       AppLocalization.of(context)
                                           .invitationActivateButton,
                                       context), () async {
-                                await sl.get<AppService>().activateInvitation("", 
+                                await sl.get<AppService>().activateInvitation(
+                                    "",
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .address);

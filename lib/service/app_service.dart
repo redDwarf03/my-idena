@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:convert/convert.dart';
 import 'package:dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
+import 'package:my_idena/model/deepLinks/deepLinkParamSignin.dart';
+import 'package:my_idena/model/deepLinks/idena_url.dart';
 import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
 import 'package:my_idena/network/model/request/bcn_send_raw_tx_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
@@ -22,11 +25,13 @@ import 'package:my_idena/network/model/request/dna_getEpoch_request.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
 import 'package:my_idena/network/model/request/dna_send_invite_request.dart';
+import 'package:my_idena/network/model/request/dna_signin_request.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
 import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
+import 'package:my_idena/network/model/response/dna_signin_response.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -1225,8 +1230,10 @@ class AppService {
               dnaGetEpochResponse.result.epoch != null) {
             epoch = dnaGetEpochResponse.result.epoch;
           }
-          
-          var amountNumber = BigInt.parse((Decimal.parse(amount) * Decimal.parse("1000000000000000000")).toString());
+
+          var amountNumber = BigInt.parse(
+              (Decimal.parse(amount) * Decimal.parse("1000000000000000000"))
+                  .toString());
           //print('amountNumber: ' + amountNumber.toString());
           var maxFee = 250000000000000000;
           // Create Transaction
@@ -1694,6 +1701,70 @@ class AppService {
     }
 
     _completer.complete(dnaSendInviteResponse);
+    return _completer.future;
+  }
+
+  Future<DeepLinkParamSignin> signin(
+      DeepLinkParamSignin deepLinkParam, String privateKey) async {
+    DnaSignInResponse dnaSignInResponse;
+    DnaSignInRequest dnaSignInRequest;
+
+    Completer<DeepLinkParamSignin> _completer =
+        new Completer<DeepLinkParamSignin>();
+
+    Map<String, dynamic> mapParams;
+
+    try {
+      Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+      String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE || await NodeUtil().getNodeType() == SHARED_NODE)  {
+        deepLinkParam.signature = IdenaUrl().toHexString(
+            IdenaUrl().getNonceInternal(deepLinkParam.nonce, privateKey), true);
+        _completer.complete(deepLinkParam);
+        return _completer.future;
+
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(deepLinkParam);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaSignInRequest.METHOD_NAME,
+          "params": [deepLinkParam.nonce != null ? deepLinkParam.nonce : ""],
+          'id': 101,
+          'key': keyApp
+        };
+      }
+
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          dnaSignInResponse = dnaSignInResponseFromJson(response.text);
+          deepLinkParam.signature = dnaSignInResponse.result;
+        }
+      } else {
+        dnaSignInRequest = DnaSignInRequest.fromJson(mapParams);
+        body = json.encode(dnaSignInRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          dnaSignInResponse = dnaSignInResponseFromJson(responseHttp.body);
+          deepLinkParam.signature = dnaSignInResponse.result;
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    print("signature: " + deepLinkParam.signature);
+    _completer.complete(deepLinkParam);
     return _completer.future;
   }
 }
