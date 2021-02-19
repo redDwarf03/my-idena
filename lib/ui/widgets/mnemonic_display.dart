@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
@@ -147,7 +148,9 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
               padding: EdgeInsets.all(0.0),
               child: OutlineButton(
                 onPressed: () {
-                  UserDataUtil.setSecureClipboardItem(widget.wordList.join(' '));
+                   Clipboard.setData(new ClipboardData(
+                                            text: widget.wordList.join(' ')));
+                  //UserDataUtil.setSecureClipboardItem(widget.wordList.join(' '));
                   setState(() {
                     _seedCopied = true;
                   });

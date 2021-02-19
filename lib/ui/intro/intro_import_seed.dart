@@ -2,12 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/formatters.dart';
@@ -18,6 +20,7 @@ import 'package:my_idena/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
 import 'package:my_idena/util/app_ffi/keys/seeds.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class IntroImportSeedPage extends StatefulWidget {
@@ -41,6 +44,8 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
   bool _showSeedError = false;
   bool _mnemonicIsValid = false;
   String _mnemonicError;
+  bool _isSwitched = false;
+  String seedOrigin = "";
 
   @override
   Widget build(BuildContext context) {
@@ -513,7 +518,52 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
-                                  ])))
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            left:
+                                                smallScreen(context) ? 30 : 40,
+                                            right:
+                                                smallScreen(context) ? 30 : 40,
+                                            top: 15.0),
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              AppLocalization.of(context)
+                                                  .enterSeedFrom,
+                                              style:
+                                                  AppStyles.textStyleParagraph(
+                                                      context),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                            ),
+                                            AdvancedSwitch(
+                                              activeChild: Text("HD"),
+                                              inactiveChild: Text("PAPER"),
+                                              activeColor:
+                                                  StateContainer.of(context)
+                                                      .curTheme
+                                                      .primary,
+                                              inactiveColor:
+                                                  StateContainer.of(context)
+                                                      .curTheme
+                                                      .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              width: 76,
+                                              value: _isSwitched,
+                                              onChanged: (value) =>
+                                                  setState(() {
+                                                _isSwitched = value;
+                                              }),
+                                            ),
+                                          ],
+                                        )),
+                                  ]))),
                     ],
                   ),
                 ),
@@ -536,16 +586,35 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                               // If seed valid, log them in
                               if (AppSeeds.isValidSeed(
                                   _seedInputController.text)) {
+                                _isSwitched
+                                    ? seedOrigin = HD_WALLET
+                                    : seedOrigin = PAPER_WALLET;
+
                                 String address = await AppUtil().seedToAddress(
                                     _seedInputController.text,
                                     StateContainer.of(context)
                                         .selectedAccount
-                                        .index);
+                                        .index,
+                                    seedOrigin);
+
+                                if (await sl
+                                        .get<AppService>()
+                                        .checkAddressIdena(address) ==
+                                    false) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).addressUnknown, context);
+                                  return;
+                                }
 
                                 await sl
                                     .get<SharedPrefsUtil>()
                                     .setAddress(address);
-                                await sl.get<Vault>().setSeed(_seedInputController.text);
+                                await sl
+                                    .get<SharedPrefsUtil>()
+                                    .setSeedOrigin(seedOrigin);
+                                await sl
+                                    .get<Vault>()
+                                    .setSeed(_seedInputController.text);
                                 await sl.get<DBHelper>().dropAccounts();
                                 await AppUtil().loginAccount(context);
                                 StateContainer.of(context).requestUpdate();
@@ -571,17 +640,35 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                               _mnemonicFocusNode.unfocus();
                               if (AppMnemomics.validateMnemonic(
                                   _mnemonicController.text.split(' '))) {
-                                    String seed = AppMnemomics.mnemonicListToSeed(
-                                        _mnemonicController.text.split(' '));
+                                String seed = AppMnemomics.mnemonicListToSeed(
+                                    _mnemonicController.text.split(' '));
+
+                                _isSwitched
+                                    ? seedOrigin = HD_WALLET
+                                    : seedOrigin = PAPER_WALLET;
+
                                 String address = await AppUtil().seedToAddress(
                                     seed,
                                     StateContainer.of(context)
                                         .selectedAccount
-                                        .index);
+                                        .index,
+                                    seedOrigin);
+
+                                if (await sl
+                                        .get<AppService>()
+                                        .checkAddressIdena(address) ==
+                                    false) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).addressUnknown, context);
+                                  return;
+                                }
 
                                 await sl
                                     .get<SharedPrefsUtil>()
                                     .setAddress(address);
+                                await sl
+                                    .get<SharedPrefsUtil>()
+                                    .setSeedOrigin(seedOrigin);
                                 await sl.get<Vault>().setSeed(seed);
                                 await sl.get<DBHelper>().dropAccounts();
                                 await AppUtil().loginAccount(context);

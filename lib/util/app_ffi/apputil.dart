@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/account.dart' as Account;
 import 'package:my_idena/appstate_container.dart';
@@ -8,11 +9,13 @@ import 'package:my_idena/network/model/response/dna_getCoinbaseAddr_response.dar
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_crypto.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_node.dart';
 import 'package:bip39/bip39.dart' as bip39;
+import 'package:bip32/bip32.dart' as bip32;
 import 'package:web3dart/web3dart.dart';
 
 class AppUtil {
@@ -49,16 +52,32 @@ class AppUtil {
     return address;
   }
 
-  Future<String> seedToAddress(String seed, int index) async {
+  Future<String> seedToAddress(
+      String seed, int index, String seedOrigin) async {
     String mnemonic = bip39.entropyToMnemonic(seed);
     //print('mnemonic: ' + mnemonic);
 
-    Credentials fromHex = EthPrivateKey.fromHex(
-        AppMnemomics.mnemonicListToSeed(mnemonic.split(' ')));
-    var address = await fromHex.extractAddress();
-    //print(address.hex);
+    EthereumAddress address;
+    EthPrivateKey ethPrivateKey;
+    if (seedOrigin == null || seedOrigin == HD_WALLET) {
+      ethPrivateKey = EthPrivateKey.fromHex(
+          await seedToPrivateKey(seed, index));
+    } else {
+      ethPrivateKey = EthPrivateKey.fromHex(
+          AppMnemomics.mnemonicListToSeed(mnemonic.split(' ')));
+    }
+    address = await ethPrivateKey.extractAddress();
+    return address.hexEip55;
+  }
 
-    return address.hex;
+  Future<String> seedToPrivateKey(
+      String seed, int index) async {
+    return HEX.encode(bip32.BIP32
+        .fromBase58(bip32.BIP32
+            .fromSeed(bip39.mnemonicToSeed(bip39.entropyToMnemonic(seed)))
+            .toBase58())
+        .derivePath("m/44'/515'/0'/0/" + index.toString())
+        .privateKey);
   }
 
   Future<void> loginAccount(BuildContext context) async {

@@ -103,11 +103,13 @@ class _SettingsSheetState extends State<SettingsSheet>
   bool _miningActive;
   bool _canMine;
   List _flipKeyWordPairs;
+  String seedOrigin;
 
   void loadCtx() async {
     DnaIdentityResponse _dnaIdentityResponse = await sl
         .get<AppService>()
-        .getDnaIdentity(StateContainer.of(widget.contextInput).selectedAccount.address);
+        .getDnaIdentity(
+            StateContainer.of(widget.contextInput).selectedAccount.address);
     bool _m = false;
     List _fk = new List();
     bool cm = false;
@@ -116,11 +118,13 @@ class _SettingsSheetState extends State<SettingsSheet>
       _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
       cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
     }
+    String _so = await sl.get<SharedPrefsUtil>().getSeedOrigin();
 
     setState(() {
       _miningActive = _m;
       _canMine = cm;
       _flipKeyWordPairs = _fk;
+      seedOrigin = _so;
     });
   }
 
@@ -932,6 +936,19 @@ class _SettingsSheetState extends State<SettingsSheet>
                               ),
                             ),
                           ),
+                          Container(
+                            child: Text(
+                              seedOrigin == null || seedOrigin == ""
+                                  ? ""
+                                  : AppLocalization.of(context).displaySeedOrigin +
+                                      seedOrigin,
+                              style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .text60,
+                                  fontSize: 10),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -1039,16 +1056,14 @@ class _SettingsSheetState extends State<SettingsSheet>
                           context: context, widget: widget.receive);
                     }),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance >
-                                0 
+                            StateContainer.of(context).wallet.accountBalance > 0
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance >
-                                0 
+                            StateContainer.of(context).wallet.accountBalance > 0
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,

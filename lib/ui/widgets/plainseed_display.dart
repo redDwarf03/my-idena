@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 
 import 'package:my_idena/appstate_container.dart';
@@ -108,7 +109,9 @@ class _PlainSeedDisplayState extends State<PlainSeedDisplay> {
                 padding: EdgeInsets.all(0.0),
                 child: OutlineButton(
                   onPressed: () {
-                    UserDataUtil.setSecureClipboardItem(widget.seed);
+                    Clipboard.setData(new ClipboardData(
+                                            text: widget.seed));
+                    //UserDataUtil.setSecureClipboardItem(widget.seed);
                     setState(() {
                       _seedCopied = true;
                     });

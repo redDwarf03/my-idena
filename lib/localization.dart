@@ -386,6 +386,31 @@ class AppLocalization {
         desc: 'intro_welcome_new_seed', name: 'newSeed');
   }
 
+  String get newAccount {
+    return Intl.message("New Account",
+        desc: 'intro_welcome_new_account', name: 'newAccount');
+  }
+
+  String get newAccountInfoDerivationPath {
+    return Intl.message("Please note, the address that will be generated for your new account will use type 515 for derive path and not type 60 dedicated to Ether (cf: Registered coin types for BIP-0044).",
+        desc: 'intro_welcome_new_account', name: 'newAccountInfoDerivationPath');
+  }
+
+  String get enterSeedFrom {
+    return Intl.message("Please specify the origin of your seed (HD Wallet / Paper Wallet).",
+        desc: '', name: 'enterSeedFrom');
+  }
+
+  String get displaySeedOrigin {
+    return Intl.message("Origin : ",
+        desc: '', name: 'displaySeedOrigin');
+  }
+
+  String get addressUnknown {
+    return Intl.message("Address unknown",
+        desc: '', name: 'addressUnknown');
+  }
+
   String get ackBackedUp {
     return Intl.message(
         "Are you sure that you've backed up your secret phrase or seed?",

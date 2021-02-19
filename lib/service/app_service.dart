@@ -15,6 +15,7 @@ import 'package:my_idena/network/model/request/bcn_send_raw_tx_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
 import 'package:my_idena/network/model/request/bcn_transaction_request.dart';
 import 'package:my_idena/network/model/request/bcn_transactions_request.dart';
+import 'package:my_idena/network/model/request/bcn_tx_receipt_request.dart';
 import 'package:my_idena/network/model/request/dna_activate_invite_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOffline_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOnline_request.dart';
@@ -26,9 +27,11 @@ import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart';
 import 'package:my_idena/network/model/request/dna_send_invite_request.dart';
 import 'package:my_idena/network/model/request/dna_signin_request.dart';
+import 'package:my_idena/network/model/response/api_get_address_response.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
 import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
+import 'package:my_idena/network/model/response/bcn_tx_receipt_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_signin_response.dart';
@@ -793,7 +796,7 @@ class AppService {
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE || await NodeUtil().getNodeType() == PUBLIC_NODE) {
       dnaGetEpochResponse = new DnaGetEpochResponse();
       dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
       dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
@@ -869,7 +872,7 @@ class AppService {
     Completer<DnaCeremonyIntervalsResponse> _completer =
         new Completer<DnaCeremonyIntervalsResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE || await NodeUtil().getNodeType() == PUBLIC_NODE) {
       dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
       dnaCeremonyIntervalsResponse.result =
           new DnaCeremonyIntervalsResponseResult();
@@ -883,17 +886,35 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+        if (url.isAbsolute == false) {
+          _completer.complete(dnaCeremonyIntervalsResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+        };
+      } else {
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(dnaCeremonyIntervalsResponse);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+          'key': keyApp
+        };
+      }
+
       if (url.isAbsolute == false || keyApp == "") {
         _completer.complete(dnaCeremonyIntervalsResponse);
         return _completer.future;
       }
-
-      mapParams = {
-        'method': DnaCeremonyIntervalsRequest.METHOD_NAME,
-        'params': [],
-        'id': 101,
-        'key': keyApp
-      };
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
@@ -1146,7 +1167,7 @@ class AppService {
   }
 
   Future<DnaSendTransactionResponse> sendTx(
-      String from, String amount, String to, String seed) async {
+      String from, String amount, String to, String privateKey) async {
     DnaSendTransactionRequest dnaSendTransactionRequest;
     DnaSendTransactionResponse dnaSendTransactionResponse;
 
@@ -1240,7 +1261,7 @@ class AppService {
           model.Transaction transaction = new model.Transaction(
               nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
           //print("transaction.toHex() before sign : " + transaction.toHex());
-          transaction.sign(seed);
+          transaction.sign(privateKey);
           var rawTxSigned = ethereum_util.addHexPrefix(transaction.toHex());
           //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
@@ -1718,12 +1739,12 @@ class AppService {
       Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
       String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-      if (await NodeUtil().getNodeType() == PUBLIC_NODE || await NodeUtil().getNodeType() == SHARED_NODE)  {
+      if (await NodeUtil().getNodeType() == PUBLIC_NODE ||
+          await NodeUtil().getNodeType() == SHARED_NODE) {
         deepLinkParam.signature = IdenaUrl().toHexString(
             IdenaUrl().getNonceInternal(deepLinkParam.nonce, privateKey), true);
         _completer.complete(deepLinkParam);
         return _completer.future;
-
       } else {
         if (url.isAbsolute == false || keyApp == "") {
           _completer.complete(deepLinkParam);
@@ -1765,6 +1786,108 @@ class AppService {
     }
     print("signature: " + deepLinkParam.signature);
     _completer.complete(deepLinkParam);
+    return _completer.future;
+  }
+
+  Future<BcnTxReceiptResponse> getTxReceipt(String txHash) async {
+    BcnTxReceiptRequest bcnTxReceiptRequest;
+    BcnTxReceiptResponse bcnTxReceiptResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<BcnTxReceiptResponse> _completer =
+        new Completer<BcnTxReceiptResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
+      if (url.isAbsolute == false) {
+        _completer.complete(bcnTxReceiptResponse);
+        return _completer.future;
+      }
+
+      mapParams = {
+        'method': BcnTxReceiptRequest.METHOD_NAME,
+        'params': [txHash],
+        'id': 101,
+      };
+    } else {
+      if (url.isAbsolute == false || keyApp == "") {
+        _completer.complete(bcnTxReceiptResponse);
+        return _completer.future;
+      }
+
+      mapParams = {
+        'method': BcnTxReceiptRequest.METHOD_NAME,
+        'params': [txHash],
+        'id': 101,
+        'key': keyApp
+      };
+    }
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          bcnTxReceiptResponse = bcnTxReceiptResponseFromJson(response.text);
+        }
+      } else {
+        bcnTxReceiptRequest = BcnTxReceiptRequest.fromJson(mapParams);
+        body = json.encode(bcnTxReceiptRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          bcnTxReceiptResponse =
+              bcnTxReceiptResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(bcnTxReceiptResponse);
+
+    return _completer.future;
+  }
+
+  Future<bool> checkAddressIdena(String address) async {
+    bool check = false;
+    HttpClient httpClient = new HttpClient();
+
+    Completer<bool> _completer = new Completer<bool>();
+
+    try {
+      HttpClientRequest request = await httpClient
+          .getUrl(Uri.parse("http://api.idena.io/api/Address/" + address));
+      request.headers.set('content-type', 'application/json');
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        ApiGetAddressResponse apiGetAddressResponse =
+            apiGetAddressResponseFromJson(reply);
+        if (apiGetAddressResponse != null &&
+            apiGetAddressResponse.result != null &&
+            apiGetAddressResponse.result.address != null &&
+            apiGetAddressResponse.result.address.toUpperCase() ==
+                address.toUpperCase()) {
+          check = true;
+        }
+      }
+    } catch (e) {
+      print("exception : " + e.toString());
+    } finally {
+      httpClient.close();
+    }
+
+    _completer.complete(check);
+
     return _completer.future;
   }
 }

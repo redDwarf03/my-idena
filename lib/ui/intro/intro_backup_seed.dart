@@ -15,6 +15,7 @@ import 'package:my_idena/util/app_ffi/encrypt/crypter.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/ui/widgets/mnemonic_display.dart';
 import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class IntroBackupSeedPage extends StatefulWidget {
@@ -158,6 +159,24 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
                         ],
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: smallScreen(context) ? 30 : 40,
+                          right: smallScreen(context) ? 30 : 40,
+                          top: 15.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalization.of(context)
+                            .newAccountInfoDerivationPath,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: StateContainer.of(context).curTheme.primary,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
                     // Mnemonic word list
                     _seed != null && _mnemonic != null
                         ? _showMnemonic
@@ -181,7 +200,7 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
                       sl.get<DBHelper>().dropAccounts().then((_) {
                         StateContainer.of(context).getSeed().then((seed) async {
                           String address = await AppUtil().seedToAddress(_seed,
-                              StateContainer.of(context).selectedAccount.index);
+                              StateContainer.of(context).selectedAccount.index, HD_WALLET);
 
                           await sl.get<SharedPrefsUtil>().setAddress(address);
 

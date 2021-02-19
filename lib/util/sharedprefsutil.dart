@@ -43,6 +43,7 @@ class SharedPrefsUtil {
   static const String vps_password = 'fidena_vps_password';
   static const String vps_ip = 'fidena_vps_ip';
   static const String node_type = 'fidena_node_type';
+  static const String seed_origin = 'seed_origin';
 
   // For plain-text data
   Future<void> set(String key, value) async {
@@ -300,6 +301,14 @@ class SharedPrefsUtil {
     return await get(vps_ip, defaultValue: "");
   }
 
+  Future<void> setSeedOrigin(String value) async {
+    return await set(seed_origin, value);
+  }
+
+  Future<String> getSeedOrigin() async {
+    return await get(seed_origin, defaultValue: "");
+  }
+
   // For logging out
   Future<void> deleteConfAccessNode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -312,6 +321,7 @@ class SharedPrefsUtil {
     await prefs.remove(vps_user);
     await prefs.remove(address);
     await prefs.remove(node_type);
+    await prefs.remove(seed_origin);
   }
 
   // For logging out
@@ -336,5 +346,6 @@ class SharedPrefsUtil {
     await prefs.remove(vps_password);
     await prefs.remove(vps_user);
     await prefs.remove(node_type);
+    await prefs.remove(seed_origin);
   }
 }

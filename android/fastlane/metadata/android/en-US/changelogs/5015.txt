@@ -1,2 +1,7 @@
 - Sign-in with deep link (dna://signin) (works with Shared Node, VPS Node, Public Node, Local Node)
 - Send transaction with deep link (dna://send) (works with Shared Node, VPS Node, Public Node, Local Node)
+- Public Node
+    - Create idena address with type 515 for derive path
+    - Import HD Wallet and Paper Wallet address
+- Shared Node  
+    - Session validation available 

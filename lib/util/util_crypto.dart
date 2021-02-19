@@ -59,7 +59,6 @@ class UtilCrypto {
 
       return HEX.encode(decrypted);
     } catch (e) {
-      print(e);
       return "";
     }
   }

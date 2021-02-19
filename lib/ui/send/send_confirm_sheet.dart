@@ -17,6 +17,8 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/biometrics.dart';
@@ -242,7 +244,6 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                 ),
                               )
                             : SizedBox(),
-                        
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 30),
                           child: Text(
@@ -251,8 +252,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                 ": " +
                                 sl
                                     .get<AppService>()
-                                    .getFeesEstimation(
-                                        )
+                                    .getFeesEstimation()
                                     .toStringAsFixed(5) +
                                 " iDNA",
                             style: TextStyle(
@@ -306,7 +306,6 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                       child: UIUtil.threeLineAddressText(
                           context, destinationAltered,
                           contactName: widget.contactName)),
-
                 ],
               ),
             ),
@@ -379,11 +378,20 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   Future<void> _doSend() async {
     try {
       _showSendingAnimation(context);
-
+      String privateKey;
+      String seedOrigin = await sl.get<SharedPrefsUtil>().getSeedOrigin();
+      String seed = await StateContainer.of(context).getSeed();
+      if (seedOrigin == HD_WALLET) {
+        if (seed != null) {
+          int index = StateContainer.of(context).selectedAccount.index;
+          privateKey =
+              await AppUtil().seedToPrivateKey(seed, index);
+          print("privateKey : " + privateKey);
+        }
+      }
       //print("send tx");
       sl.get<AppService>().sendTx(StateContainer.of(context).wallet.address,
-              widget.amountRaw, destinationAltered, await StateContainer.of(context).getSeed());
-             
+          widget.amountRaw, destinationAltered, privateKey == null ? seed : privateKey);
     } catch (e) {
       // Send failed
       //print("send failed" + e.toString());

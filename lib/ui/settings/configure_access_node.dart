@@ -591,14 +591,14 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
                     )
                   : SizedBox(),
               Column(children: <Widget>[
-                _selectedNodeType != _selectedNodeType
+                _selectedNodeType == PUBLIC_NODE
                     ? Row(
                         children: <Widget>[
                           // New Wallet Button
                           AppButton.buildAppButton(
                               context,
                               AppButtonType.PRIMARY,
-                              AppLocalization.of(context).newSeed,
+                              AppLocalization.of(context).newAccount,
                               Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                             sl
                                 .get<Vault>()

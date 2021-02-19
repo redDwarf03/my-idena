@@ -259,9 +259,12 @@ class _AppState extends State<App> {
                 settings: settings,
               );
             case '/validation_session_step_2':
+              var map = Map<String, dynamic>.from(settings.arguments);
               return NoTransitionRoute(
                 builder: (_) => ValidationSessionStep2Page(
-                    simulationMode: settings.arguments),
+                    simulationMode: map['simulationMode'],
+                    privateKey: map['privateKey'],
+                ),
                 settings: settings,
               );
             case '/validation_session_step_3':
@@ -270,6 +273,7 @@ class _AppState extends State<App> {
                 builder: (_) => ValidationSessionStep3Page(
                   simulationMode: map['simulationMode'],
                   paramValidationSessionInfo: map['validationSessionInfo'],
+                  privateKey: map['privateKey'],
                 ),
                 settings: settings,
               );
