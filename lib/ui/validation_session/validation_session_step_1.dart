@@ -16,8 +16,12 @@ import 'package:my_idena/ui/validation_session/validation_thumbnails.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/count_down.dart';
 import 'package:my_idena/ui/widgets/demo_mode_clip_widget.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
+import 'package:my_idena/util/enums/wallet_type.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_node.dart';
 
 class ValidationSessionStep1Page extends StatefulWidget {
   final bool simulationMode;
@@ -57,7 +61,7 @@ class _ValidationSessionStep1PageState
     if (widget.simulationMode) {
       _durationCalculation =
           dnaCeremonyIntervalsResponse.result.shortSessionDuration;
-      print("Duration : " + _durationCalculation.toString());
+      //print("Duration : " + _durationCalculation.toString());
     } else {
       _durationCalculation =
           dnaCeremonyIntervalsResponse.result.shortSessionDuration -
@@ -65,14 +69,14 @@ class _ValidationSessionStep1PageState
                   .difference(dnaGetEpochResponse.result.nextValidation)
                   .inSeconds -
               5;
-      print("Duration : " +
+      /*print("Duration : " +
           dnaCeremonyIntervalsResponse.result.shortSessionDuration.toString() +
           "-" +
           DateTime.now()
               .difference(dnaGetEpochResponse.result.nextValidation)
               .inSeconds
               .toString() +
-          "-5");
+          "-5");*/
     }
 
     setState(() {
@@ -81,9 +85,27 @@ class _ValidationSessionStep1PageState
   }
 
   Future<void> loadValidationSession() async {
-    ValidationSessionInfo _validationSessionInfo = await sl.get<ValidationService>()
+    ValidationSessionInfo _validationSessionInfo = await sl
+        .get<ValidationService>()
         .getValidationSessionFlipsList(
             EpochPeriod.ShortSession, null, widget.simulationMode);
+    String privateKey;
+    if (await NodeUtil().getNodeType() == SHARED_NODE) {
+      String seedOrigin = await sl.get<SharedPrefsUtil>().getSeedOrigin();
+      String seed = await StateContainer.of(context).getSeed();
+      if (seedOrigin == HD_WALLET) {
+        if (seed != null) {
+          int index = StateContainer.of(context).selectedAccount.index;
+          privateKey = await AppUtil().seedToPrivateKey(seed, index);
+          print("privateKey : " + privateKey);
+        }
+      }
+      _validationSessionInfo.privateKey = privateKey == null ? seed : privateKey;
+    }
+    else
+    {
+      _validationSessionInfo.privateKey = null;
+    }
 
     setState(() {
       validationSessionInfo = _validationSessionInfo;
@@ -213,6 +235,7 @@ class _ValidationSessionStep1PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
+                            privateKey: validationSessionInfo.privateKey,
                             address: StateContainer.of(context)
                                 .selectedAccount
                                 .address,
@@ -253,12 +276,16 @@ class _ValidationSessionStep1PageState
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
                         if (widget.simulationMode == false) {
-                           sl.get<ValidationService>()
+                          sl
+                              .get<ValidationService>()
                               .submitShortAnswers(validationSessionInfo);
                         }
                         Navigator.of(context).pushNamed(
                             '/validation_session_step_2',
-                            arguments: widget.simulationMode);
+                            arguments: {
+                              'simulationMode': widget.simulationMode,
+                              'privateKey': validationSessionInfo.privateKey
+                            });
                       })
                   : SizedBox(),
               allSelect
@@ -271,12 +298,16 @@ class _ValidationSessionStep1PageState
                             AppLocalization.of(context).submitAnswers,
                             Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
                           if (widget.simulationMode == false) {
-                             sl.get<ValidationService>()
+                            sl
+                                .get<ValidationService>()
                                 .submitShortAnswers(validationSessionInfo);
                           }
                           Navigator.of(context).pushNamed(
                               '/validation_session_step_2',
-                              arguments: widget.simulationMode);
+                              arguments: {
+                                'simulationMode': widget.simulationMode,
+                                'privateKey': validationSessionInfo.privateKey
+                              });
                         }),
                       ],
                     )

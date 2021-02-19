@@ -26,9 +26,13 @@ import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;
 class ValidationSessionStep3Page extends StatefulWidget {
   final ValidationSessionInfo paramValidationSessionInfo;
   final bool simulationMode;
+  final String privateKey;
 
   ValidationSessionStep3Page(
-      {Key key, this.paramValidationSessionInfo, this.simulationMode})
+      {Key key,
+      this.paramValidationSessionInfo,
+      this.simulationMode,
+      this.privateKey})
       : super(key: key);
 
   @override
@@ -104,9 +108,11 @@ class _ValidationSessionStep3PageState
   }
 
   Future<void> loadValidationSession() async {
-    validationSessionInfo = await sl.get<ValidationService>()
+    validationSessionInfo = await sl
+        .get<ValidationService>()
         .getValidationSessionFlipsList(EpochPeriod.LongSession,
             widget.paramValidationSessionInfo, widget.simulationMode);
+    validationSessionInfo.privateKey = widget.privateKey;
     setState(() {});
   }
 
@@ -178,6 +184,7 @@ class _ValidationSessionStep3PageState
                         return Column(
                           children: [
                             FlipDetail(
+                                privateKey: validationSessionInfo.privateKey,
                                 address: StateContainer.of(context)
                                     .selectedAccount
                                     .address,
@@ -275,7 +282,8 @@ class _ValidationSessionStep3PageState
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
                         if (widget.simulationMode == false) {
-                          sl.get<ValidationService>()
+                          sl
+                              .get<ValidationService>()
                               .submitLongAnswers(validationSessionInfo);
                         }
                         Navigator.of(context).pushNamed(
@@ -302,7 +310,8 @@ class _ValidationSessionStep3PageState
                                   AppLocalization.of(context).goHome, context),
                               () {
                             if (widget.simulationMode == false) {
-                              sl.get<ValidationService>()
+                              sl
+                                  .get<ValidationService>()
                                   .submitLongAnswers(validationSessionInfo);
                             }
                             Navigator.of(context).pushNamed(

@@ -25,19 +25,11 @@ class ValidationSessionInfoFlips {
   int relevanceType;
 }
 
-class ValidationSessionInfoContext {
-  ValidationSessionInfoContext(
-      {this.simulationMode, this.epochPeriod, this.checkFlipsQualityProcess});
-
-  String epochPeriod;
-  bool simulationMode;
-  bool checkFlipsQualityProcess;
-}
-
 class ValidationSessionInfo {
-  ValidationSessionInfo({this.typeSession, this.listSessionValidationFlips});
+  ValidationSessionInfo({this.typeSession, this.listSessionValidationFlips, this.privateKey});
 
   String typeSession;
+  String privateKey;
   List<ValidationSessionInfoFlips> listSessionValidationFlips;
   List<ValidationSessionInfoFlips> listSessionValidationFlipsExtra;
 }

@@ -664,7 +664,7 @@ class _AppHomePageState extends State<AppHomePage>
                     ],
                   ),
                   //
-                  _nodeType != SHARED_NODE &&
+                  //_nodeType != SHARED_NODE &&
                           _nodeType != PUBLIC_NODE &&
                           _nodeType != UNKOWN_NODE
                       ? Row(

@@ -4,13 +4,17 @@ import 'package:convert/convert.dart';
 import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 import 'package:hex/hex.dart';
 import 'package:my_idena/util/app_ffi/encrypt/encrypted.dart';
+import 'package:my_idena/util/crypto/utils_crypto.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:web3dart/crypto.dart' as crypto;
 import 'package:crypto/crypto.dart';
 import 'package:pointycastle/export.dart' as pc;
 
-String decryptFlip(String data, String key) {
+String decryptMessage(String key, String data) {
 
+  key = remove0x(key);
+  data = remove0x(data);
+  
   var ephemKeyLength = 65;
   var ivLength = 16;
   var macLength = 32;

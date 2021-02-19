@@ -42,12 +42,12 @@ class _CountDownState extends State<CountDown> {
       strokeWidth: 5.0,
       strokeCap: StrokeCap.butt,
       textStyle: TextStyle(
-          fontSize: 10.0, color: StateContainer.of(context).curTheme.backgroundDarkest, fontWeight: FontWeight.bold),
+          fontSize: 10.0, color: StateContainer.of(context).curTheme.text60, fontWeight: FontWeight.bold),
       isReverse: true,
       isReverseAnimation: true,
       isTimerTextShown: true,
       onComplete: () {
-        print('Countdown Ended');
+        //print('Countdown Ended');
         widget.isEndCountDown(true);
       },
     );

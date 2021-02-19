@@ -10,8 +10,9 @@ class FlipDetail extends StatefulWidget {
   final Function(ValidationSessionInfoFlips) onSelectFlip;
   final String address;
   final bool simulationMode;
+  final String privateKey;
 
-  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip, this.simulationMode, this.address});
+  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip, this.simulationMode, this.address, this.privateKey});
 
   _FlipDetailState createState() => _FlipDetailState();
 }
@@ -35,7 +36,7 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesRight == null ||
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
       _validationSessionInfoFlips = await sl.get<ValidationService>()
-          .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode);
+          .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode, widget.privateKey);
       print("listImagesLeft length : " +
           _validationSessionInfoFlips.listImagesLeft.length.toString());
       setState(() {});

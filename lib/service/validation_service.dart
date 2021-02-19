@@ -215,7 +215,9 @@ class ValidationService {
   Future<ValidationSessionInfoFlips> getValidationSessionFlipDetail(
       ValidationSessionInfoFlips validationSessionInfoFlips,
       String address,
-      bool simulationMode) async {
+      bool simulationMode,
+      String privateKey
+      ) async {
     Completer<ValidationSessionInfoFlips> _completer =
         new Completer<ValidationSessionInfoFlips>();
 
@@ -225,18 +227,70 @@ class ValidationService {
       FlipGetKeyResponse flipGetKeyResponse;
       FlipGetRequest flipGetRequest;
 
+      Uint8List imageUint8_1;
+      Uint8List imageUint8_2;
+      Uint8List imageUint8_3;
+      Uint8List imageUint8_4;
+
+      Decoded images;
+      Decoded privateImages;
+      List listImages = new List(4);
+      List orders = new List(2);
+
       if (simulationMode) {
         String data =
             await loadAssets(validationSessionInfoFlips.hash + "_images");
         flipGetResponse = flipGetResponseFromJson(data);
+
+        if (flipGetResponse.result.privateHex != null &&
+            flipGetResponse.result.privateHex != '0x') {
+          // ;[images] = decode(publicHex || hex)
+          if (flipGetResponse.result.publicHex != null) {
+            images = decodeRlp(
+                Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
+                true);
+          } else {
+            if (flipGetResponse.result.hex != null) {
+              images = decodeRlp(
+                  Uint8List.fromList(toBuffer(flipGetResponse.result.hex)),
+                  true);
+            }
+          }
+
+          // let privateImages
+          // ;[privateImages, orders] = decode(privateHex)
+          privateImages = decodeRlp(
+              Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+              true);
+        } else {
+          // TODO: implement this case
+          // ;[images, orders] = decode(hex)
+          var images3 = decodeRlp(
+              Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
+        }
       } else {
         Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
         String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
         if (await NodeUtil().getNodeType() == SHARED_NODE) {
           mapParams = {
-            'method': FlipGetKeyRequest.METHOD_NAME,
+            'method': FlipGetRequest.METHOD_NAME_RAW,
             'params': [validationSessionInfoFlips.hash],
+            'id': 101,
+            'key': keyApp
+          };
+
+          flipGetRequest = FlipGetRequest.fromJson(mapParams);
+          body = json.encode(flipGetRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            flipGetResponse = flipGetResponseFromJson(responseHttp.body);
+          }
+
+          mapParams = {
+            'method': FlipGetKeyRequest.METHOD_NAME,
+            'params': [address, validationSessionInfoFlips.hash],
             'id': 101,
             'key': keyApp
           };
@@ -248,10 +302,23 @@ class ValidationService {
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             flipGetKeyResponse = flipGetKeyResponseFromJson(responseHttp.body);
-
-            print(decryptFlip(validationSessionInfoFlips.hash,
-                flipGetKeyResponse.result.privateKey));
           }
+          var decryptedPublicPart = decryptMessage(
+              flipGetKeyResponse.result.publicKey,
+              flipGetResponse.result.publicHex);
+          var decryptedPrivateKey = decryptMessage(
+              privateKey,
+              flipGetKeyResponse.result.privateKey);
+          var decryptedPrivatePart = decryptMessage(
+              decryptedPrivateKey, flipGetResponse.result.privateHex);
+
+          // const [images] = decode(decryptedPublicPart)
+          images = decodeRlp(
+              Uint8List.fromList(toBuffer('0x' + decryptedPublicPart)), true);
+
+          // const [privateImages, orders] = decode(decryptedPrivatePart)
+          privateImages = decodeRlp(
+              Uint8List.fromList(toBuffer('0x' + decryptedPrivatePart)), true);
         } else {
           mapParams = {
             'method': FlipGetRequest.METHOD_NAME,
@@ -279,54 +346,47 @@ class ValidationService {
               flipGetResponse = flipGetResponseFromJson(responseHttp.body);
             }
           }
-        }
-      }
 
-      Uint8List imageUint8_1;
-      Uint8List imageUint8_2;
-      Uint8List imageUint8_3;
-      Uint8List imageUint8_4;
+          if (flipGetResponse.result.privateHex != null &&
+              flipGetResponse.result.privateHex != '0x') {
+            // ;[images] = decode(publicHex || hex)
+            if (flipGetResponse.result.publicHex != null) {
+              images = decodeRlp(
+                  Uint8List.fromList(
+                      toBuffer(flipGetResponse.result.publicHex)),
+                  true);
+            } else {
+              if (flipGetResponse.result.hex != null) {
+                images = decodeRlp(
+                    Uint8List.fromList(toBuffer(flipGetResponse.result.hex)),
+                    true);
+              }
+            }
 
-      Decoded images;
-      Decoded privateImages;
-      List listImages = new List(4);
-      List orders = new List(2);
-      if (flipGetResponse.result.privateHex != null &&
-          flipGetResponse.result.privateHex != '0x') {
-        // ;[images] = decode(publicHex || hex)
-        if (flipGetResponse.result.publicHex != null) {
-          images = decodeRlp(
-              Uint8List.fromList(toBuffer(flipGetResponse.result.publicHex)),
-              true);
-        } else {
-          if (flipGetResponse.result.hex != null) {
-            images = decodeRlp(
+            // let privateImages
+            // ;[privateImages, orders] = decode(privateHex)
+            privateImages = decodeRlp(
+                Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
+                true);
+          } else {
+            // TODO: implement this case
+            // ;[images, orders] = decode(hex)
+            var images3 = decodeRlp(
                 Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
           }
         }
-
-        // let privateImages
-        // ;[privateImages, orders] = decode(privateHex)
-        privateImages = decodeRlp(
-            Uint8List.fromList(toBuffer(flipGetResponse.result.privateHex)),
-            true);
-
-        // images = images.concat(privateImages)
-        imageUint8_1 = images.data[0][0];
-        imageUint8_2 = images.data[0][1];
-        imageUint8_3 = privateImages.data[0][0];
-        imageUint8_4 = privateImages.data[0][1];
-        listImages[0] = imageUint8_1;
-        listImages[1] = imageUint8_2;
-        listImages[2] = imageUint8_3;
-        listImages[3] = imageUint8_4;
-        orders = privateImages.data[1];
-      } else {
-        // TODO: implement this case
-        // ;[images, orders] = decode(hex)
-        var images3 = decodeRlp(
-            Uint8List.fromList(toBuffer(flipGetResponse.result.hex)), true);
       }
+
+      // images = images.concat(privateImages)
+      imageUint8_1 = images.data[0][0];
+      imageUint8_2 = images.data[0][1];
+      imageUint8_3 = privateImages.data[0][0];
+      imageUint8_4 = privateImages.data[0][1];
+      listImages[0] = imageUint8_1;
+      listImages[1] = imageUint8_2;
+      listImages[2] = imageUint8_3;
+      listImages[3] = imageUint8_4;
+      orders = privateImages.data[1];
 
       String order1 =
           orders[0][0].toString().replaceAll('[', '').replaceAll(']', '');
@@ -364,7 +424,7 @@ class ValidationService {
       logger.e(e.toString());
     }
 
-    print("flip loaded : " + validationSessionInfoFlips.hash);
+    //print("flip loaded : " + validationSessionInfoFlips.hash);
 
     _completer.complete(validationSessionInfoFlips);
     return _completer.future;

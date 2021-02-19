@@ -431,6 +431,14 @@ class _ValidationSessionCountdownTextState
                                     splashColor: Colors.green,
                                     color: Colors.green[300],
                                   ),
+                            _nodeType != DEMO_NODE
+                                ? Text(
+                                    "The validation session is being tested on this application. Only use it if you want to participate in the testing phase with the associated risks",
+                                    style:
+                                        AppStyles.textStyleHomeInfoWarningRed(
+                                            context),
+                                  )
+                                : SizedBox()
                           ],
                         ))
                       ])));

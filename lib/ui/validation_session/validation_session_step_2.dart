@@ -22,8 +22,9 @@ import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 
 class ValidationSessionStep2Page extends StatefulWidget {
   final bool simulationMode;
+  final String privateKey;
 
-  ValidationSessionStep2Page({Key key, this.simulationMode}) : super(key: key);
+  ValidationSessionStep2Page({Key key, this.simulationMode, this.privateKey}) : super(key: key);
 
   @override
   _ValidationSessionStep2PageState createState() =>
@@ -93,6 +94,7 @@ class _ValidationSessionStep2PageState
     ValidationSessionInfo _validationSessionInfo = await sl.get<ValidationService>()
         .getValidationSessionFlipsList(
             EpochPeriod.LongSession, null, widget.simulationMode);
+    _validationSessionInfo.privateKey = widget.privateKey;
     setState(() {
       validationSessionInfo = _validationSessionInfo;
     });
@@ -207,6 +209,7 @@ class _ValidationSessionStep2PageState
                               .listSessionValidationFlips.length,
                       itemBuilder: (context, index) {
                         return FlipDetail(
+                            privateKey: validationSessionInfo.privateKey,
                             address: StateContainer.of(context)
                                 .selectedAccount
                                 .address,
@@ -280,7 +283,8 @@ class _ValidationSessionStep2PageState
                                 '/validation_session_step_3',
                                 arguments: {
                                   'simulationMode': widget.simulationMode,
-                                  'validationSessionInfo': validationSessionInfo
+                                  'validationSessionInfo': validationSessionInfo,
+                                  'privateKey' : validationSessionInfo.privateKey
                                 });
                           });
                         }),
