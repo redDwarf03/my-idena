@@ -59,8 +59,6 @@ dependencies:
   flutter_countdown_timer: ^1.6.0
 
   multi_image_picker: ^4.7.14
-  
-  quartet: ^0.1.1
 
   sha3: ^0.1.2
 
