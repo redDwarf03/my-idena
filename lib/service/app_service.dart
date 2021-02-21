@@ -204,8 +204,6 @@ class AppService {
   Future<BcnTransactionsResponse> getAddressTxsResponse(
       String address, int count) async {
 
-    await sl.get<SmartContractService>().predictSmartContractAddress(address);
-
     Completer<BcnTransactionsResponse> _completer =
         new Completer<BcnTransactionsResponse>();
 
