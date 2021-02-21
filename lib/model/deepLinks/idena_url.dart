@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:hex/hex.dart';
 import 'package:my_idena/model/deepLinks/deepLinkParamSend.dart';
 import 'package:my_idena/model/deepLinks/deepLinkParamSignin.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/network/model/response/authenticate_response.dart';
 import 'package:my_idena/network/model/response/nonce_end_point_response.dart';
 import 'package:web3dart/crypto.dart' as crypto;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
+
 
 class IdenaUrl {
   DeepLinkParamSignin deepLinkParamSignin;
@@ -176,10 +174,5 @@ class IdenaUrl {
 
     // todo there must be a faster way to do this?
     return Uint8List(32)..setRange(32 - data.length, 32, data);
-  }
-
-  String toHexString(byteArray, bool withPrefix) {
-    return ((withPrefix ? '0x' : '') +
-        HEX.encode(ethereum_util.toBuffer(byteArray)));
   }
 }

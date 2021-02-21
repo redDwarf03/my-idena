@@ -5,6 +5,7 @@
 import 'dart:typed_data' show Uint8List;
 import 'package:convert/convert.dart' show hex;
 import 'package:hex/hex.dart' show HEX;
+import 'package:my_idena/util/helpers.dart';
 import 'package:web3dart/crypto.dart' as crypto show keccak256, hexToBytes, intToBytes, MsgSignature, sign;
 import 'package:ethereum_util/ethereum_util.dart' as ethereum_util show toBuffer, intToBuffer, padToEven;
 import 'package:my_idena/protos/models.pb.dart' show ProtoTransaction, ProtoTransaction_Data;
@@ -60,7 +61,7 @@ class Transaction {
       data.to = ethereum_util.toBuffer(this.to);
     }
     if (this.amount != null && this.amount != 0) {
-      data.amount = bigIntToBuffer(this.amount);
+      data.amount = AppHelpers.bigIntToBuffer(this.amount);
     }
     if (this.maxFee != null && this.maxFee != 0) {
       data.maxFee = ethereum_util.intToBuffer(this.maxFee);
@@ -73,11 +74,6 @@ class Transaction {
     }
 
     return data;
-  }
-
-  String toHexString(byteArray, bool withPrefix) {
-    return ((withPrefix ? '0x' : '') +
-        HEX.encode(ethereum_util.toBuffer(byteArray)));
   }
 
   Transaction sign(String privateKey) {
@@ -98,8 +94,8 @@ class Transaction {
     final header = msgSignature.v & 0xFF;
     var recId = header - 27;
     this.signature = Uint8List.fromList(([
-      ...padUint8ListTo32(crypto.intToBytes(msgSignature.r)),
-      ...padUint8ListTo32(crypto.intToBytes(msgSignature.s)),
+      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.r)),
+      ...AppHelpers.padUint8ListTo32(crypto.intToBytes(msgSignature.s)),
       recId
     ]));
 
@@ -118,7 +114,7 @@ class Transaction {
     this.nonce = protoTxData.nonce;
     this.epoch = protoTxData.epoch;
     this.type = protoTxData.type;
-    this.to = toHexString(protoTxData.to, true);
+    this.to = AppHelpers.toHexString(protoTxData.to, true);
 
     this.amount = Uint8List.fromList(protoTxData.amount);
     this.maxFee = Uint8List.fromList(protoTxData.maxFee);
@@ -129,22 +125,4 @@ class Transaction {
     return this;
   }
 
-  Uint8List padUint8ListTo32(Uint8List data) {
-    assert(data.length <= 32);
-    if (data.length == 32) return data;
-
-    // todo there must be a faster way to do this?
-    return Uint8List(32)..setRange(32 - data.length, 32, data);
-  }
-
-  /// Converts a [BigInt] into a hex [String]
-  String bigIntToHex(BigInt i) {
-    return "0x${i.toRadixString(16)}";
-  }
-
-  /// Converts an [BigInt] to a [Uint8List]
-  Uint8List bigIntToBuffer(BigInt i) {
-    return Uint8List.fromList(
-        hex.decode(ethereum_util.padToEven(bigIntToHex(i).substring(2))));
-  }
 }

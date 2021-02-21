@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
+import 'package:ethereum_util/ethereum_util.dart' as ethereum_util
+    show toBuffer, padToEven;
 
 class AppHelpers {
   static List<String> hexArray = '0123456789ABCDEF'.split('');
@@ -18,7 +21,7 @@ class AppHelpers {
   static String byteToHex(Uint8List bytes) {
     return HEX.encode(bytes).toUpperCase();
   }
-  
+
   static BigInt byteToBigInt(Uint8List bigIntBytes) {
     return _decodeBigInt(bigIntBytes);
   }
@@ -114,5 +117,30 @@ class AppHelpers {
       hex += HEX.encode(v);
     });
     return AppHelpers.hexToBytes(hex);
+  }
+
+  static String toHexString(byteArray, bool withPrefix) {
+    return ((withPrefix ? '0x' : '') +
+        HEX.encode(ethereum_util.toBuffer(byteArray)));
+  }
+
+  /// Converts a [BigInt] into a hex [String]
+  static String bigIntToHex(BigInt i) {
+    return "0x${i.toRadixString(16)}";
+  }
+
+  static Uint8List padUint8ListTo32(Uint8List data) {
+    assert(data.length <= 32);
+    if (data.length == 32) return data;
+
+    // todo there must be a faster way to do this?
+    return Uint8List(32)..setRange(32 - data.length, 32, data);
+  }
+
+
+  /// Converts an [BigInt] to a [Uint8List]
+  static Uint8List bigIntToBuffer(BigInt i) {
+    return Uint8List.fromList(
+        hex.decode(ethereum_util.padToEven(AppHelpers.bigIntToHex(i).substring(2))));
   }
 }

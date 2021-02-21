@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:convert/convert.dart';
 import 'package:dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
@@ -15,7 +14,6 @@ import 'package:my_idena/network/model/request/bcn_send_raw_tx_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
 import 'package:my_idena/network/model/request/bcn_transaction_request.dart';
 import 'package:my_idena/network/model/request/bcn_transactions_request.dart';
-import 'package:my_idena/network/model/request/bcn_tx_receipt_request.dart';
 import 'package:my_idena/network/model/request/dna_activate_invite_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOffline_request.dart';
 import 'package:my_idena/network/model/request/dna_becomeOnline_request.dart';
@@ -31,10 +29,10 @@ import 'package:my_idena/network/model/response/api_get_address_response.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
 import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
-import 'package:my_idena/network/model/response/bcn_tx_receipt_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_signin_response.dart';
+import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -47,45 +45,46 @@ import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/network/model/response/dna_sendTransaction_response.dart';
 import 'package:my_idena/model/transaction.dart' as model;
-import 'package:my_idena/network/model/response/simple_price_response.dart';
-import 'package:my_idena/network/model/response/simple_price_response_aed.dart';
-import 'package:my_idena/network/model/response/simple_price_response_ars.dart';
-import 'package:my_idena/network/model/response/simple_price_response_aud.dart';
-import 'package:my_idena/network/model/response/simple_price_response_brl.dart';
-import 'package:my_idena/network/model/response/simple_price_response_btc.dart';
-import 'package:my_idena/network/model/response/simple_price_response_cad.dart';
-import 'package:my_idena/network/model/response/simple_price_response_chf.dart';
-import 'package:my_idena/network/model/response/simple_price_response_clp.dart';
-import 'package:my_idena/network/model/response/simple_price_response_cny.dart';
-import 'package:my_idena/network/model/response/simple_price_response_czk.dart';
-import 'package:my_idena/network/model/response/simple_price_response_dkk.dart';
-import 'package:my_idena/network/model/response/simple_price_response_eur.dart';
-import 'package:my_idena/network/model/response/simple_price_response_gbp.dart';
-import 'package:my_idena/network/model/response/simple_price_response_hkd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_huf.dart';
-import 'package:my_idena/network/model/response/simple_price_response_idr.dart';
-import 'package:my_idena/network/model/response/simple_price_response_ils.dart';
-import 'package:my_idena/network/model/response/simple_price_response_inr.dart';
-import 'package:my_idena/network/model/response/simple_price_response_jpy.dart';
-import 'package:my_idena/network/model/response/simple_price_response_krw.dart';
-import 'package:my_idena/network/model/response/simple_price_response_kwd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_mxn.dart';
-import 'package:my_idena/network/model/response/simple_price_response_myr.dart';
-import 'package:my_idena/network/model/response/simple_price_response_nok.dart';
-import 'package:my_idena/network/model/response/simple_price_response_nzd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_php.dart';
-import 'package:my_idena/network/model/response/simple_price_response_pkr.dart';
-import 'package:my_idena/network/model/response/simple_price_response_pln.dart';
-import 'package:my_idena/network/model/response/simple_price_response_rub.dart';
-import 'package:my_idena/network/model/response/simple_price_response_sar.dart';
-import 'package:my_idena/network/model/response/simple_price_response_sek.dart';
-import 'package:my_idena/network/model/response/simple_price_response_sgd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_thb.dart';
-import 'package:my_idena/network/model/response/simple_price_response_try.dart';
-import 'package:my_idena/network/model/response/simple_price_response_twd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_usd.dart';
-import 'package:my_idena/network/model/response/simple_price_response_zar.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_aed.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_ars.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_aud.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_brl.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_btc.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_cad.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_chf.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_clp.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_cny.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_czk.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_dkk.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_eur.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_gbp.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_hkd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_huf.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_idr.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_ils.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_inr.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_jpy.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_krw.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_kwd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_mxn.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_myr.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_nok.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_nzd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_php.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_pkr.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_pln.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_rub.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_sar.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_sek.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_sgd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_thb.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_try.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_twd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_usd.dart';
+import 'package:my_idena/network/model/response/simplePrice/simple_price_response_zar.dart';
 import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/util/helpers.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
@@ -204,6 +203,9 @@ class AppService {
 
   Future<BcnTransactionsResponse> getAddressTxsResponse(
       String address, int count) async {
+
+    await sl.get<SmartContractService>().predictSmartContractAddress(address);
+
     Completer<BcnTransactionsResponse> _completer =
         new Completer<BcnTransactionsResponse>();
 
@@ -1741,7 +1743,7 @@ class AppService {
 
       if (await NodeUtil().getNodeType() == PUBLIC_NODE ||
           await NodeUtil().getNodeType() == SHARED_NODE) {
-        deepLinkParam.signature = IdenaUrl().toHexString(
+        deepLinkParam.signature = AppHelpers.toHexString(
             IdenaUrl().getNonceInternal(deepLinkParam.nonce, privateKey), true);
         _completer.complete(deepLinkParam);
         return _completer.future;
@@ -1786,74 +1788,6 @@ class AppService {
     }
     print("signature: " + deepLinkParam.signature);
     _completer.complete(deepLinkParam);
-    return _completer.future;
-  }
-
-  Future<BcnTxReceiptResponse> getTxReceipt(String txHash) async {
-    BcnTxReceiptRequest bcnTxReceiptRequest;
-    BcnTxReceiptResponse bcnTxReceiptResponse;
-
-    Map<String, dynamic> mapParams;
-
-    Completer<BcnTxReceiptResponse> _completer =
-        new Completer<BcnTxReceiptResponse>();
-
-    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
-    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
-
-    if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-      if (url.isAbsolute == false) {
-        _completer.complete(bcnTxReceiptResponse);
-        return _completer.future;
-      }
-
-      mapParams = {
-        'method': BcnTxReceiptRequest.METHOD_NAME,
-        'params': [txHash],
-        'id': 101,
-      };
-    } else {
-      if (url.isAbsolute == false || keyApp == "") {
-        _completer.complete(bcnTxReceiptResponse);
-        return _completer.future;
-      }
-
-      mapParams = {
-        'method': BcnTxReceiptRequest.METHOD_NAME,
-        'params': [txHash],
-        'id': 101,
-        'key': keyApp
-      };
-    }
-
-    try {
-      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
-        var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
-        if (response.status == 200) {
-          bcnTxReceiptResponse = bcnTxReceiptResponseFromJson(response.text);
-        }
-      } else {
-        bcnTxReceiptRequest = BcnTxReceiptRequest.fromJson(mapParams);
-        body = json.encode(bcnTxReceiptRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          bcnTxReceiptResponse =
-              bcnTxReceiptResponseFromJson(responseHttp.body);
-        }
-      }
-    } catch (e) {
-      logger.e(e.toString());
-    }
-
-    _completer.complete(bcnTxReceiptResponse);
-
     return _completer.future;
   }
 
