@@ -10,3 +10,4 @@ export 'account_modified_event.dart';
 export 'authenticated_event.dart';
 export 'transaction_send_event.dart';
 export 'conn_status_event.dart';
+export 'contract_deploy_event.dart';

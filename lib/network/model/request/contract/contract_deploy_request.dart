@@ -50,28 +50,29 @@ class Param {
     String from;
     String codeHash;
     int amount;
-    Args args;
+    List<Arg> args;
     int maxFee;
 
     factory Param.fromJson(Map<String, dynamic> json) => Param(
         from: json["from"],
         codeHash: json["codeHash"],
         amount: json["amount"],
-        args: Args.fromJson(json["args"]),
         maxFee: json["maxFee"],
+        args: List<Arg>.from(json["args"].map((x) => Arg.fromJson(x))),
+        
     );
 
     Map<String, dynamic> toJson() => {
         "from": from,
         "codeHash": codeHash,
         "amount": amount,
-        "args": args.toJson(),
+        "args": List<dynamic>.from(args.map((x) => x.toJson())),
         "maxFee": maxFee,
     };
 }
 
-class Args {
-    Args({
+class Arg {
+    Arg({
         this.index,
         this.format,
         this.value,
@@ -81,15 +82,15 @@ class Args {
     String format;
     String value;
 
-    factory Args.fromJson(Map<String, dynamic> json) => Args(
-        index: json[" index "],
-        format: json[" format "],
-        value: json[" value "],
+    factory Arg.fromJson(Map<String, dynamic> json) => Arg(
+        index: json["index"],
+        format: json["format"],
+        value: json["value"],
     );
 
     Map<String, dynamic> toJson() => {
-        " index ": index,
-        " format ": format,
-        " value ": value,
+        "index": index,
+        "format": format,
+        "value": value,
     };
 }

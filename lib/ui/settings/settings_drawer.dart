@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
@@ -8,6 +9,7 @@ import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/ui/SmartContracts/timeLock_widget.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
@@ -66,6 +68,8 @@ class _SettingsSheetState extends State<SettingsSheet>
   Animation<Offset> _offsetFloat;
   AnimationController _securityController;
   Animation<Offset> _securityOffsetFloat;
+  AnimationController _scController;
+  Animation<Offset> _scOffsetFloat;
   AnimationController _validationBasicsController;
   Animation<Offset> _validationBasicsOffsetFloat;
   AnimationController _aboutController;
@@ -85,6 +89,8 @@ class _SettingsSheetState extends State<SettingsSheet>
       LockTimeoutSetting(LockTimeoutOption.ONE);
 
   bool _securityOpen;
+
+  bool _scOpen;
 
   bool _inviteOpen;
 
@@ -135,6 +141,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _validationBasicsOpen = false;
     _aboutOpen = false;
     _securityOpen = false;
+    _scOpen = false;
     _inviteOpen = false;
     _profileInfosOpen = false;
     _loadingAccounts = false;
@@ -178,6 +185,10 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
+    _scController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
     _inviteController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 220),
@@ -200,6 +211,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_securityController);
+    _scOffsetFloat =
+        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+            .animate(_scController);
     _inviteOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_inviteController);
     _validationBasicsOffsetFloat =
@@ -225,6 +239,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   void dispose() {
     _controller.dispose();
     _securityController.dispose();
+    _scController.dispose();
     _inviteController.dispose();
     _validationBasicsController.dispose();
     _aboutController.dispose();
@@ -526,6 +541,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _securityController.reverse();
       return false;
+    } else if (_scOpen) {
+      setState(() {
+        _scOpen = false;
+      });
+      _scController.reverse();
+      return false;
     } else if (_inviteOpen) {
       setState(() {
         _inviteOpen = false;
@@ -575,6 +596,9 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _securityOffsetFloat,
                 child: buildSecurityMenu(context)),
+            SlideTransition(
+                position: _scOffsetFloat,
+                child: buildScMenu(context)),
             SlideTransition(
                 position: _inviteOffsetFloat, child: buildInviteMenu(context)),
             SlideTransition(
@@ -1090,6 +1114,19 @@ class _SettingsSheetState extends State<SettingsSheet>
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
                     ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).scHeader,
+                        FontAwesome5.file_contract, onPressed: () {
+                      setState(() {
+                        _scOpen = true;
+                      });
+                      _scController.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
                     Container(
                       margin: EdgeInsetsDirectional.only(
                           start: 30.0, top: 20.0, bottom: 10.0),
@@ -1527,6 +1564,120 @@ class _SettingsSheetState extends State<SettingsSheet>
                     Divider(
                         height: 2,
                         color: StateContainer.of(context).curTheme.text15),
+                  ].where(notNull).toList(),
+                ),
+                //List Top Gradient End
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    height: 20.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          StateContainer.of(context).curTheme.backgroundDark,
+                          StateContainer.of(context).curTheme.backgroundDark00
+                        ],
+                        begin: AlignmentDirectional(0.5, -1.0),
+                        end: AlignmentDirectional(0.5, 1.0),
+                      ),
+                    ),
+                  ),
+                ), //List Top Gradient End
+              ],
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+ Widget buildScMenu(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: StateContainer.of(context).curTheme.backgroundDark,
+        boxShadow: [
+          BoxShadow(
+              color: StateContainer.of(context).curTheme.overlay30,
+              offset: Offset(-5, 0),
+              blurRadius: 20),
+        ],
+      ),
+      child: SafeArea(
+        minimum: EdgeInsets.only(
+          top: 60,
+        ),
+        child: Column(
+          children: <Widget>[
+            // Back button
+            Container(
+              margin: EdgeInsets.only(bottom: 10.0, top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      //Back button
+                      Container(
+                        height: 40,
+                        width: 40,
+                        margin: EdgeInsets.only(right: 10, left: 10),
+                        child: FlatButton(
+                            highlightColor:
+                                StateContainer.of(context).curTheme.text15,
+                            splashColor:
+                                StateContainer.of(context).curTheme.text15,
+                            onPressed: () {
+                              setState(() {
+                                _scOpen = false;
+                              });
+                              _scController.reverse();
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(AppIcons.back,
+                                color: StateContainer.of(context).curTheme.text,
+                                size: 24)),
+                      ),
+                      //Security Header Text
+                      Text(
+                        AppLocalization.of(context).scHeader,
+                        style: AppStyles.textStyleSettingsHeader(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: EdgeInsets.only(top: 15.0),
+                  children: <Widget>[
+                    Container(
+                      margin:
+                          EdgeInsetsDirectional.only(start: 30.0, bottom: 10),
+                      child: Text(AppLocalization.of(context).manage,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLineWithInfos(
+                        context,
+                        AppLocalization.of(context).timeLockTitle,
+                        "TimeLock smart contract locks coins on the smart contract address until the specified block number appears. Once the block number is mined, the coins can be transferred to the specified address.",
+                        Entypo.hourglass, onPressed: () {
+                           Sheets.showAppHeightEightSheet(
+                          context: context, widget: TimeLockList(StateContainer.of(context).selectedAccount.address));
+                  }),
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End

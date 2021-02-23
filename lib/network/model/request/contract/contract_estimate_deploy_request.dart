@@ -17,29 +17,29 @@ class ContractEstimateDeployRequest {
     });
 
     String method;
-    List<Params> params;
+    List<Param> params;
     int id;
     String key;
 
     static const METHOD_NAME = "contract_estimateDeploy";
 
     factory ContractEstimateDeployRequest.fromJson(Map<String, dynamic> json) => ContractEstimateDeployRequest(
-        method: json[" method "],
-        params: List<Params>.from(json[" params "].map((x) => Params.fromJson(x))),
-        id: json[" id "],
-        key: json[" key "],
+        method: json["method"],
+        params: List<Param>.from(json["params"].map((x) => Param.fromJson(x))),
+        id: json["id"],
+        key: json["key"],
     );
 
     Map<String, dynamic> toJson() => {
-        " method ": method,
-        " params ": List<dynamic>.from(params.map((x) => x.toJson())),
-        " id ": id,
-        " key ": key,
+        "method": method,
+        "params": List<dynamic>.from(params.map((x) => x.toJson())),
+        "id": id,
+        "key": key,
     };
 }
 
-class Params {
-    Params({
+class Param {
+    Param({
         this.from,
         this.codeHash,
         this.amount,
@@ -51,27 +51,27 @@ class Params {
     String codeHash;
     int amount;
     int maxFee;
-    List<Args> args;
+    List<Arg> args;
 
-    factory Params.fromJson(Map<String, dynamic> json) => Params(
-        from: json[" from "],
-        codeHash: json[" codeHash "],
-        amount: json[" amount "],
-        maxFee: json[" maxFee "],
-        args: List<Args>.from(json[" args "].map((x) => Args.fromJson(x))),
+    factory Param.fromJson(Map<String, dynamic> json) => Param(
+        from: json["from"],
+        codeHash: json["codeHash"],
+        amount: json["amount"],
+        maxFee: json["maxFee"],
+        args: List<Arg>.from(json["args"].map((x) => Arg.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        " from ": from,
-        " codeHash ": codeHash,
-        " amount ": amount,
-        " maxFee ": maxFee,
-        " args ": List<dynamic>.from(args.map((x) => x.toJson())),
+        "from": from,
+        "codeHash": codeHash,
+        "amount": amount,
+        "maxFee": maxFee,
+        "args": List<dynamic>.from(args.map((x) => x.toJson())),
     };
 }
 
-class Args {
-    Args({
+class Arg {
+    Arg({
         this.index,
         this.format,
         this.value,
@@ -81,15 +81,15 @@ class Args {
     String format;
     String value;
 
-    factory Args.fromJson(Map<String, dynamic> json) => Args(
-        index: json[" index "],
-        format: json[" format "],
-        value: json[" value "],
+    factory Arg.fromJson(Map<String, dynamic> json) => Arg(
+        index: json["index"],
+        format: json["format"],
+        value: json["value"],
     );
 
     Map<String, dynamic> toJson() => {
-        " index ": index,
-        " format ": format,
-        " value ": value,
+        "index": index,
+        "format": format,
+        "value": value,
     };
 }

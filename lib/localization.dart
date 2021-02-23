@@ -507,7 +507,7 @@ class AppLocalization {
   }
 
   String get sendAmountConfirm {
-    return Intl.message("Send %1 IDNA",
+    return Intl.message("Send %1 iDNA",
         desc: 'send_pin_description', name: 'sendAmountConfirm');
   }
 
@@ -581,7 +581,7 @@ class AppLocalization {
   }
 
   String get minimumSend {
-    return Intl.message("Minimum send amount is %1 IDNA",
+    return Intl.message("Minimum send amount is %1 iDNA",
         desc: 'send_minimum_error', name: 'minimumSend');
   }
 
@@ -797,7 +797,7 @@ class AppLocalization {
 
   String get validationTipInfo {
     return Intl.message(
-        "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
+        "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 iDNA. Thank you.",
         desc: '',
         name: 'validationTipInfo');
   }
@@ -1201,6 +1201,89 @@ class AppLocalization {
 
   /// -- END SETTINGS ITEMS
 
+
+  /// -- SMART CONTRAT ITEMS
+  String get scHeader {
+    return Intl.message("Smart Contracts",
+        desc: '', name: 'scHeader');
+  } 
+
+  String get timeLockTitle {
+    return Intl.message("Time Lock",
+        desc: '', name: 'timeLockTitle');
+  } 
+
+  String get createTimeLock {
+    return Intl.message("Create Time Lock Smart Contract",
+        desc: '', name: 'createTimeLock');
+  } 
+
+  String get owner {
+    return Intl.message("Owner",
+        desc: '', name: 'owner');
+  } 
+
+  String get smartContractAddress {
+    return Intl.message("Smart Contract Address",
+        desc: '', name: 'smartContractAddress');
+  } 
+
+  String get enterDateTimeLock {
+    return Intl.message("Enter the unlock time",
+        desc: '', name: 'enterDateTimeLock');
+  } 
+
+  String get lockCoinConfirmatonButton {
+    return Intl.message("Confirm Lock coins",
+        desc: '', name: 'lockCoinConfirmatonButton');
+  } 
+
+  String get lockCoinEstimationButton {
+    return Intl.message("Estimate Lock coins",
+        desc: '', name: 'lockCoinEstimationButton');
+  } 
+
+  String get unlockTimeTitle {
+    return Intl.message("Unlock time",
+        desc: '', name: 'unlockTimeTitle');
+  } 
+
+  String get dateUnlockTimeMissing {
+    return Intl.message("Please Enter the time of unlock",
+        desc: '', name: 'dateUnlockTimeMissing');
+  }
+
+  String get gasCost {
+    return Intl.message("Gas cost",
+        desc: '', name: 'gasCost');
+  }
+
+  String get txFee {
+    return Intl.message("Tx fees",
+        desc: '', name: 'txFee');
+  }
+
+  String get contractDeployError {
+    return Intl.message("An error occurred. Try again later.",
+        desc: '', name: 'contractDeployError');
+  }
+
+  String get timeLockTo {
+    return Intl.message("Lock To",
+        desc: '', name: 'timeLockTo');
+  }
+
+  String get timeLockAmountConfirm {
+    return Intl.message("Lock %1 iDNA",
+        desc: '', name: 'timeLockAmountConfirm');
+  }
+
+  String get timeLockAmountConfirmPin {
+    return timeLockAmountConfirm;
+  }
+
+  /// -- SMART CONTRACT ITEMS END
+
   /// -- MINING
 
   String get activateMiningHeader {
@@ -1377,7 +1460,7 @@ class AppLocalization {
 
   String get newAccountIntro {
     return Intl.message(
-        "This is your new account. Once you receive IDNA, transactions will show up like this:",
+        "This is your new account. Once you receive iDNA, transactions will show up like this:",
         desc: 'Alternate account intro card',
         name: 'newAccountIntro');
   }

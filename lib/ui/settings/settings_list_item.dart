@@ -143,6 +143,70 @@ class AppSettings {
     );
   }
 
+  //
+  static Widget buildSettingsListItemSingleLineWithInfos(
+      BuildContext context, String heading, String info, IconData settingIcon,
+      {Function onPressed}) {
+    return FlatButton(
+      highlightColor: StateContainer.of(context).curTheme.text15,
+      splashColor: StateContainer.of(context).curTheme.text15,
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed();
+        } else {
+          return;
+        }
+      },
+      padding: EdgeInsets.all(0.0),
+      child: Container(
+        height: 100.0,
+        margin: EdgeInsetsDirectional.only(start: 30.0),
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsetsDirectional.only(end: 13.0),
+              child: Container(
+                child: Icon(
+                  settingIcon,
+                  color: StateContainer.of(context).curTheme.icon,
+                  size: 24,
+                ),
+                margin: EdgeInsetsDirectional.only(
+                  top: 3,
+                  start: 3,
+                  bottom: 3,
+                  end: 3,
+                ),
+              ),
+            ),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: UIUtil.drawerWidth(context) - 100,
+                    child: Text(
+                      heading,
+                      style: AppStyles.textStyleSettingItemHeader(context),
+                    ),
+                  ),
+                  Container(
+                    width: UIUtil.drawerWidth(context) - 100,
+                    child: AutoSizeText(
+                      info,
+                      maxLines: 5,
+                      stepGranularity: 0.1,
+                      minFontSize: 8,
+                      style: AppStyles.textStyleSettingItemSubheader(context),
+                    ),
+                  ),
+                ]),
+          ],
+        ),
+      ),
+    );
+  }
+
   static Widget buildSettingsListItemSwitch(BuildContext context,
       String heading, IconData settingIcon, bool _isSwitched,
       {Function onChanged}) {
