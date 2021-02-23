@@ -111,7 +111,9 @@ class _ValidationSessionStep3PageState
     validationSessionInfo = await sl
         .get<ValidationService>()
         .getValidationSessionFlipsList(EpochPeriod.LongSession,
-            widget.paramValidationSessionInfo, widget.simulationMode);
+            widget.paramValidationSessionInfo, widget.simulationMode, StateContainer.of(context)
+                                .selectedAccount
+                                .address);
     validationSessionInfo.privateKey = widget.privateKey;
     setState(() {});
   }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -49,7 +47,8 @@ class ValidationService {
   Future<ValidationSessionInfo> getValidationSessionFlipsList(
       String typeSession,
       ValidationSessionInfo validationSessionInfoInput,
-      bool simulationMode) async {
+      bool simulationMode,
+      String address) async {
     Completer<ValidationSessionInfo> _completer =
         new Completer<ValidationSessionInfo>();
 
@@ -96,7 +95,21 @@ class ValidationService {
         Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
         String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
 
-        mapParams = {'method': method, "params": [], 'id': 101, 'key': keyApp};
+        if (await NodeUtil().getNodeType() == SHARED_NODE) {
+          mapParams = {
+            'method': method,
+            "params": [address],
+            'id': 101,
+            'key': keyApp
+          };
+        } else {
+          mapParams = {
+            'method': method,
+            "params": [],
+            'id': 101,
+            'key': keyApp
+          };
+        }
 
         if (typeSession == EpochPeriod.ShortSession) {
           if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
@@ -194,8 +207,12 @@ class ValidationService {
         if (validationSessionInfoFlips.extra) {
           listSessionValidationFlipExtra.add(validationSessionInfoFlips);
         } else {
-          if (validationSessionInfoFlips.ready) {
+          if (await NodeUtil().getNodeType() == SHARED_NODE) {
             listSessionValidationFlip.add(validationSessionInfoFlips);
+          } else {
+            if (validationSessionInfoFlips.ready) {
+              listSessionValidationFlip.add(validationSessionInfoFlips);
+            }
           }
         }
       }
@@ -216,8 +233,7 @@ class ValidationService {
       ValidationSessionInfoFlips validationSessionInfoFlips,
       String address,
       bool simulationMode,
-      String privateKey
-      ) async {
+      String privateKey) async {
     Completer<ValidationSessionInfoFlips> _completer =
         new Completer<ValidationSessionInfoFlips>();
 
@@ -306,9 +322,8 @@ class ValidationService {
           var decryptedPublicPart = decryptMessage(
               flipGetKeyResponse.result.publicKey,
               flipGetResponse.result.publicHex);
-          var decryptedPrivateKey = decryptMessage(
-              privateKey,
-              flipGetKeyResponse.result.privateKey);
+          var decryptedPrivateKey =
+              decryptMessage(privateKey, flipGetKeyResponse.result.privateKey);
           var decryptedPrivatePart = decryptMessage(
               decryptedPrivateKey, flipGetResponse.result.privateHex);
 

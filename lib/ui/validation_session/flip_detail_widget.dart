@@ -37,8 +37,8 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
       _validationSessionInfoFlips = await sl.get<ValidationService>()
           .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode, widget.privateKey);
-      print("listImagesLeft length : " +
-          _validationSessionInfoFlips.listImagesLeft.length.toString());
+      //print("listImagesLeft length : " +
+      //    _validationSessionInfoFlips.listImagesLeft.length.toString());
       setState(() {});
     }
   }

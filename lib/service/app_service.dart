@@ -1784,7 +1784,7 @@ class AppService {
     } catch (e) {
       logger.e(e.toString());
     }
-    print("signature: " + deepLinkParam.signature);
+    //print("signature: " + deepLinkParam.signature);
     _completer.complete(deepLinkParam);
     return _completer.future;
   }

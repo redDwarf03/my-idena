@@ -88,7 +88,9 @@ class _ValidationSessionStep1PageState
     ValidationSessionInfo _validationSessionInfo = await sl
         .get<ValidationService>()
         .getValidationSessionFlipsList(
-            EpochPeriod.ShortSession, null, widget.simulationMode);
+            EpochPeriod.ShortSession, null, widget.simulationMode, StateContainer.of(context)
+                                .selectedAccount
+                                .address);
     String privateKey;
     if (await NodeUtil().getNodeType() == SHARED_NODE) {
       String seedOrigin = await sl.get<SharedPrefsUtil>().getSeedOrigin();
@@ -97,7 +99,7 @@ class _ValidationSessionStep1PageState
         if (seed != null) {
           int index = StateContainer.of(context).selectedAccount.index;
           privateKey = await AppUtil().seedToPrivateKey(seed, index);
-          print("privateKey : " + privateKey);
+          //print("privateKey : " + privateKey);
         }
       }
       _validationSessionInfo.privateKey = privateKey == null ? seed : privateKey;
@@ -271,7 +273,7 @@ class _ValidationSessionStep1PageState
               ),
 
               // Next Screen Button
-              _durationSession != 0
+              _durationSession > 0 
                   ? CountDown(
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {

@@ -542,6 +542,7 @@ class _ValidationSessionCountdownTextState
                         .toString(),
                     textAlign: TextAlign.center,
                     style: AppStyles.textStyleHomeInfoDetail(context)),
+                    controller != null ?
                 CountdownTimer(
                   controller: controller,
                   widgetBuilder: (_, CurrentRemainingTime time) {
@@ -583,7 +584,7 @@ class _ValidationSessionCountdownTextState
                       );
                     }
                   },
-                ),
+                ) : SizedBox(),
               ],
             ))
           ])));

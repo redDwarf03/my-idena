@@ -53,7 +53,7 @@ String decryptMessage(String key, String data) {
   final ctr = pc.CTRStreamCipher(pc.AESFastEngine())
     ..init(false, pc.ParametersWithIV(pc.KeyParameter(encryptionKey), iv));
   Uint8List decrypted = ctr.process(encryptedText.bytes);
-  print(HEX.encode(decrypted));
+  //print(HEX.encode(decrypted));
 
   return(HEX.encode(decrypted));
 }

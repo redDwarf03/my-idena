@@ -93,7 +93,9 @@ class _ValidationSessionStep2PageState
   Future<void> loadValidationSession() async {
     ValidationSessionInfo _validationSessionInfo = await sl.get<ValidationService>()
         .getValidationSessionFlipsList(
-            EpochPeriod.LongSession, null, widget.simulationMode);
+            EpochPeriod.LongSession, null, widget.simulationMode, StateContainer.of(context)
+                                .selectedAccount
+                                .address);
     _validationSessionInfo.privateKey = widget.privateKey;
     setState(() {
       validationSessionInfo = _validationSessionInfo;

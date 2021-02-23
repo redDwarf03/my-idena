@@ -386,7 +386,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
           int index = StateContainer.of(context).selectedAccount.index;
           privateKey =
               await AppUtil().seedToPrivateKey(seed, index);
-          print("privateKey : " + privateKey);
+          //print("privateKey : " + privateKey);
         }
       }
       //print("send tx");
