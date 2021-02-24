@@ -9,7 +9,7 @@ import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
-import 'package:my_idena/ui/SmartContracts/timeLock_widget.dart';
+import 'package:my_idena/ui/SmartContracts/timeLock_list.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
@@ -211,9 +211,8 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_securityController);
-    _scOffsetFloat =
-        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
-            .animate(_scController);
+    _scOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+        .animate(_scController);
     _inviteOffsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_inviteController);
     _validationBasicsOffsetFloat =
@@ -597,8 +596,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                 position: _securityOffsetFloat,
                 child: buildSecurityMenu(context)),
             SlideTransition(
-                position: _scOffsetFloat,
-                child: buildScMenu(context)),
+                position: _scOffsetFloat, child: buildScMenu(context)),
             SlideTransition(
                 position: _inviteOffsetFloat, child: buildInviteMenu(context)),
             SlideTransition(
@@ -964,7 +962,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                             child: Text(
                               seedOrigin == null || seedOrigin == ""
                                   ? ""
-                                  : AppLocalization.of(context).displaySeedOrigin +
+                                  : AppLocalization.of(context)
+                                          .displaySeedOrigin +
                                       seedOrigin,
                               style: TextStyle(
                                   color: StateContainer.of(context)
@@ -1592,7 +1591,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     );
   }
 
- Widget buildScMenu(BuildContext context) {
+  Widget buildScMenu(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: StateContainer.of(context).curTheme.backgroundDark,
@@ -1675,9 +1674,57 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).timeLockTitle,
                         "TimeLock smart contract locks coins on the smart contract address until the specified block number appears. Once the block number is mined, the coins can be transferred to the specified address.",
                         Entypo.hourglass, onPressed: () {
-                           Sheets.showAppHeightEightSheet(
-                          context: context, widget: TimeLockList(StateContainer.of(context).selectedAccount.address));
-                  }),
+                      Sheets.showAppHeightEightSheet(
+                          context: context,
+                          widget: TimeLockList(StateContainer.of(context)
+                              .selectedAccount
+                              .address));
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLineWithInfos(
+                        context,
+                        AppLocalization.of(context).multisigMofNTitle,
+                        "A multisignature wallet address with specified M and N locks coins. In order to send the coins from the multisig, M specific participants out of N have to provide their signatures.",
+                        FontAwesome5.signature, onPressed: () {
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).multisigMofNTitle,
+                        "Soon...",
+                      );
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLineWithInfos(
+                        context,
+                        AppLocalization.of(context).oracleLockTitle,
+                        "OracleLock is a non-refundable smart contract that locks coins until a decision is made by oracles. If the voting result matches the expected value, coins are transferred to address A, otherwise to address B.",
+                        Entypo.thumbs_up, onPressed: () {
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).oracleLockTitle,
+                        "Soon...",
+                      );
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLineWithInfos(
+                        context,
+                        AppLocalization.of(context).refundableOracleLockTitle,
+                        "RefundableOracleLock is a refundable smart contract address that can lock coins from multiple users until a decision is made by oracles.",
+                        Entypo.shareable, onPressed: () {
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).refundableOracleLockTitle,
+                        "Soon...",
+                      );
+                    }),
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End

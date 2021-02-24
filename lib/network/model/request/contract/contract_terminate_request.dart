@@ -49,7 +49,7 @@ class Param {
     String from;
     String contract;
     List<Arg> args;
-    int maxFee;
+    double maxFee;
 
     factory Param.fromJson(Map<String, dynamic> json) => Param(
         from: json["from"],

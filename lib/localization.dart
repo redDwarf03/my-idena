@@ -1213,9 +1213,29 @@ class AppLocalization {
         desc: '', name: 'timeLockTitle');
   } 
 
+  String get multisigMofNTitle {
+    return Intl.message("Multisig M-of-N",
+        desc: '', name: 'multisigMofNTitle');
+  } 
+
+  String get oracleLockTitle {
+    return Intl.message("Oracle Lock",
+        desc: '', name: 'oracleLockTitle');
+  } 
+
+  String get refundableOracleLockTitle {
+    return Intl.message("Refundable Oracle Lock",
+        desc: '', name: 'refundableOracleLockTitle');
+  } 
+  
   String get createTimeLock {
     return Intl.message("Create Time Lock Smart Contract",
         desc: '', name: 'createTimeLock');
+  } 
+
+  String get createMultiSig {
+    return Intl.message("Create MultiSig Contract",
+        desc: '', name: 'createMultiSig');
   } 
 
   String get owner {
@@ -1280,6 +1300,36 @@ class AppLocalization {
 
   String get timeLockAmountConfirmPin {
     return timeLockAmountConfirm;
+  }
+
+  String get scTransferButton {
+    return Intl.message("Transfer",
+        desc: '', name: 'timeLockTransferButton');
+  }
+
+  String get scTerminateButton {
+    return Intl.message("Terminate",
+        desc: '', name: 'scTerminateButton');
+  }
+
+  String get scTransferConfirmationTitle {
+    return Intl.message("Transfer confirmation",
+        desc: '', name: 'scTransferConfirmationTitle');
+  }
+
+  String get timeLockTransferConfirmationText {
+    return Intl.message("Are you sure you want to send the locked coins to the destination address ?",
+        desc: '', name: 'timeLockTransferConfirmationText');
+  }
+
+  String get scTerminateConfirmationTitle {
+    return Intl.message("Terminate confirmation",
+        desc: '', name: 'scTerminateConfirmationTitle');
+  }
+
+  String get timeLockTerminateConfirmationText {
+    return Intl.message("Are you sure you want to terminate the contract and send 50% of the stacked coins to the destination address ?",
+        desc: '', name: 'timeLockTransferConfirmationText');
   }
 
   /// -- SMART CONTRACT ITEMS END

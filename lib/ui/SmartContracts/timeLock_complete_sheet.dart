@@ -5,21 +5,16 @@ import 'package:my_idena/dimens.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/numberutil.dart';
 
 class TimeLockCompleteSheet extends StatefulWidget {
   final String amountRaw;
-  final String destination;
-  final String contactName;
   final String localAmount;
   final DateTime dateUnlock;
 
   TimeLockCompleteSheet(
       {this.amountRaw,
-      this.destination,
-      this.contactName,
       this.localAmount,
       this.dateUnlock})
       : super();
@@ -45,7 +40,6 @@ class _TimeLockCompleteSheetState extends State<TimeLockCompleteSheet> {
               .toStringAsFixed(8) +
           "~";
     }
-    destinationAltered = widget.destination;
   }
 
   @override
@@ -132,43 +126,6 @@ class _TimeLockCompleteSheetState extends State<TimeLockCompleteSheet> {
                       ),
                     ),
                   ),
-                  //
-                  Container(
-                    margin: EdgeInsets.only(top: 10.0, bottom: 10),
-                    child: Column(
-                      children: <Widget>[
-                        //
-                        Text(
-                          CaseChange.toUpperCase(
-                              AppLocalization.of(context).timeLockTo, context),
-                          style: TextStyle(
-                            fontSize: 28.0,
-                            fontWeight: FontWeight.w700,
-                            color: StateContainer.of(context).curTheme.success,
-                            fontFamily: 'Roboto',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // The container for the address
-                  Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 15.0),
-                      margin: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.105,
-                          right: MediaQuery.of(context).size.width * 0.105),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: StateContainer.of(context)
-                            .curTheme
-                            .backgroundDarkest,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: UIUtil.threeLineAddressText(
-                          context, destinationAltered,
-                          type: ThreeLineAddressTextType.SUCCESS,
-                          contactName: widget.contactName)),
                   Container(
                     margin: EdgeInsets.only(top: 10.0),
                     child: Column(

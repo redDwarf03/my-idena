@@ -49,9 +49,9 @@ class Param {
 
     String from;
     String codeHash;
-    int amount;
+    double amount;
     List<Arg> args;
-    int maxFee;
+    double maxFee;
 
     factory Param.fromJson(Map<String, dynamic> json) => Param(
         from: json["from"],

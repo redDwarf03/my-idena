@@ -18,7 +18,7 @@ class ApiContractTxsResponse {
     String continuationToken;
 
     factory ApiContractTxsResponse.fromJson(Map<String, dynamic> json) => ApiContractTxsResponse(
-        result: List<ApiContractTxsResponseResult>.from(json["result"].map((x) => ApiContractTxsResponseResult.fromJson(x))),
+        result: json["result"] == null ? null : List<ApiContractTxsResponseResult>.from(json["result"].map((x) => ApiContractTxsResponseResult.fromJson(x))),
         continuationToken: json["continuationToken"],
     );
 
@@ -54,7 +54,7 @@ class ApiContractTxsResponseResult {
     String maxFee;
     String fee;
     int size;
-    TxReceipt txReceipt;
+    ApiContractTxsResponseResultTxReceipt txReceipt;
     Data data;
 
     factory ApiContractTxsResponseResult.fromJson(Map<String, dynamic> json) => ApiContractTxsResponseResult(
@@ -68,7 +68,7 @@ class ApiContractTxsResponseResult {
         maxFee: json["maxFee"],
         fee: json["fee"],
         size: json["size"],
-        txReceipt: json["txReceipt"] == null ? null : TxReceipt.fromJson(json["txReceipt"]),
+        txReceipt: json["txReceipt"] == null ? null : ApiContractTxsResponseResultTxReceipt.fromJson(json["txReceipt"]),
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
     );
 
@@ -108,8 +108,8 @@ class Data {
     };
 }
 
-class TxReceipt {
-    TxReceipt({
+class ApiContractTxsResponseResultTxReceipt {
+    ApiContractTxsResponseResultTxReceipt({
         this.success,
         this.gasUsed,
         this.gasCost,
@@ -123,7 +123,7 @@ class TxReceipt {
     String method;
     String errorMsg;
 
-    factory TxReceipt.fromJson(Map<String, dynamic> json) => TxReceipt(
+    factory ApiContractTxsResponseResultTxReceipt.fromJson(Map<String, dynamic> json) => ApiContractTxsResponseResultTxReceipt(
         success: json["success"],
         gasUsed: json["gasUsed"],
         gasCost: json["gasCost"],

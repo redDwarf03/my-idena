@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final contractCallRequest = contractCallRequestFromJson(jsonString);
+//     final contractCallTimeLockRequest = contractCallTimeLockRequestFromJson(jsonString);
 
 import 'dart:convert';
 
-ContractCallRequest contractCallRequestFromJson(String str) => ContractCallRequest.fromJson(json.decode(str));
+ContractCallTimeLockRequest contractCallTimeLockRequestFromJson(String str) => ContractCallTimeLockRequest.fromJson(json.decode(str));
 
-String contractCallRequestToJson(ContractCallRequest data) => json.encode(data.toJson());
+String contractCallTimeLockRequestToJson(ContractCallTimeLockRequest data) => json.encode(data.toJson());
 
-class ContractCallRequest {
-    ContractCallRequest({
+class ContractCallTimeLockRequest {
+    ContractCallTimeLockRequest({
         this.method,
         this.params,
         this.id,
@@ -23,7 +23,7 @@ class ContractCallRequest {
 
     static const METHOD_NAME = "contract_call";
 
-    factory ContractCallRequest.fromJson(Map<String, dynamic> json) => ContractCallRequest(
+    factory ContractCallTimeLockRequest.fromJson(Map<String, dynamic> json) => ContractCallTimeLockRequest(
         method: json["method"],
         params: List<Param>.from(json["params"].map((x) => Param.fromJson(x))),
         id: json["id"],
@@ -43,10 +43,8 @@ class Param {
         this.from,
         this.contract,
         this.method,
-        this.amount,
-        this.args,
         this.maxFee,
-        this.broadcastBlock,
+        this.args,
     });
 
     String from;
@@ -61,20 +59,16 @@ class Param {
         from: json["from"],
         contract: json["contract"],
         method: json["method"],
-        amount: json["amount"],
-        args: List<Arg>.from(json["args"].map((x) => Arg.fromJson(x))),
         maxFee: json["maxFee"],
-        broadcastBlock: json["broadcastBlock"],
+        args: List<Arg>.from(json["args"].map((x) => Arg.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "from": from,
         "contract": contract,
         "method": method,
-        "amount": amount,
-        "args": List<dynamic>.from(args.map((x) => x.toJson())),
         "maxFee": maxFee,
-        "broadcastBlock": broadcastBlock,
+        "args": List<dynamic>.from(args.map((x) => x.toJson())),
     };
 }
 

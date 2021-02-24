@@ -49,7 +49,7 @@ class Param {
 
     String from;
     String codeHash;
-    int amount;
+    double amount;
     int maxFee;
     List<Arg> args;
 

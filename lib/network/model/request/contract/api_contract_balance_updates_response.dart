@@ -53,7 +53,7 @@ class ApiContractBalanceUpdatesResponseResult {
     String address;
     String contractAddress;
     String contractType;
-    TxReceipt txReceipt;
+    ApiContractBalanceUpdatesResponseResultTxReceipt txReceipt;
 
     factory ApiContractBalanceUpdatesResponseResult.fromJson(Map<String, dynamic> json) => ApiContractBalanceUpdatesResponseResult(
         hash: json["hash"],
@@ -68,7 +68,7 @@ class ApiContractBalanceUpdatesResponseResult {
         address: json["address"],
         contractAddress: json["contractAddress"],
         contractType: json["contractType"],
-        txReceipt: TxReceipt.fromJson(json["txReceipt"]),
+        txReceipt: json["txReceipt"] == null ? null : ApiContractBalanceUpdatesResponseResultTxReceipt.fromJson(json["txReceipt"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -88,8 +88,8 @@ class ApiContractBalanceUpdatesResponseResult {
     };
 }
 
-class TxReceipt {
-    TxReceipt({
+class ApiContractBalanceUpdatesResponseResultTxReceipt {
+    ApiContractBalanceUpdatesResponseResultTxReceipt({
         this.success,
         this.gasUsed,
         this.gasCost,
@@ -103,7 +103,7 @@ class TxReceipt {
     String method;
     String errorMsg;
 
-    factory TxReceipt.fromJson(Map<String, dynamic> json) => TxReceipt(
+    factory ApiContractBalanceUpdatesResponseResultTxReceipt.fromJson(Map<String, dynamic> json) => ApiContractBalanceUpdatesResponseResultTxReceipt(
         success: json["success"],
         gasUsed: json["gasUsed"],
         gasCost: json["gasCost"],

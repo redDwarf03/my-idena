@@ -18,36 +18,24 @@ import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/model/address.dart';
-import 'package:my_idena/model/db/contact.dart';
-import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/SmartContracts/timeLock_confirm_sheet.dart';
-import 'package:my_idena/ui/send/send_confirm_sheet.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena/ui/util/formatters.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/ui/widgets/timelock_count_down.dart';
 import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/user_data_util.dart';
 
 class TimeLockSheet extends StatefulWidget {
   final AvailableCurrency localCurrency;
-  final Contact contact;
-  final String address;
   final String quickSendAmount;
+  final String address;
 
-  TimeLockSheet(
-      {@required this.localCurrency,
-      this.contact,
-      this.address,
-      this.quickSendAmount})
-      : super();
+  TimeLockSheet({@required this.localCurrency, this.quickSendAmount, this.address}) : super();
 
   _TimeLockSheetState createState() => _TimeLockSheetState();
 }
@@ -57,31 +45,17 @@ enum AddressStyle { TEXT60, TEXT90, PRIMARY }
 class _TimeLockSheetState extends State<TimeLockSheet> {
   final Logger log = sl.get<Logger>();
 
-  FocusNode _timeLockAddressFocusNode;
-  TextEditingController _timeLockAddressController;
   FocusNode _timeLockDateFocusNode;
   TextEditingController _timeLockDateController;
   FocusNode _timeLockAmountFocusNode;
   TextEditingController _timeLockAmountController;
 
-  // States
-  AddressStyle _timeLockAddressStyle;
   String _amountHint = "";
-  String _addressHint = "";
   String _dateHint = "";
   String _amountValidationText = "";
   String _dateValidationText = "";
-  String _addressValidationText = "";
   String quickSendAmount;
-  List<Contact> _contacts;
   bool animationOpen;
-  // Used to replace address textfield with colorized TextSpan
-  bool _addressValidAndUnfocused = false;
-  // Set to true when a contact is being entered
-  bool _isContact = false;
-  // Buttons States (Used because we hide the buttons under certain conditions)
-  bool _pasteButtonVisible = true;
-  bool _showContactButton = true;
   // Local currency mode/fiat conversion
   bool _localCurrencyMode = false;
   String _lastLocalCurrencyAmount = "";
@@ -97,20 +71,21 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
   Future<ContractEstimateDeployResponse> estimateContract() async {
     return await sl.get<SmartContractService>().contractEstimateDeployTimeLock(
         StateContainer.of(context).wallet.address,
-        _timeLockDate.millisecondsSinceEpoch,
+        _timeLockDate.millisecondsSinceEpoch ~/ 1000,
         _localCurrencyMode
-            ? int.tryParse(
+            ? double.tryParse(
                 NumberUtil.getAmountAsRaw(_convertLocalCurrencyToCrypto()))
             : _rawAmount == null
-                ? int.tryParse(
+                ? double.tryParse(
                     NumberUtil.getAmountAsRaw(_timeLockAmountController.text))
-                : int.tryParse(_rawAmount));
+                : double.tryParse(_rawAmount));
   }
 
   void loadSCPredictAddress() async {
     scPredictAddress = await sl
         .get<SmartContractService>()
-        .getPredictSmartContractAddress(widget.address);
+        .getPredictSmartContractAddress(
+            widget.address);
     setState(() {});
   }
 
@@ -121,30 +96,11 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
     loadSCPredictAddress();
 
     _timeLockAmountFocusNode = FocusNode();
-    _timeLockAddressFocusNode = FocusNode();
     _timeLockDateFocusNode = FocusNode();
     _timeLockAmountController = TextEditingController();
-    _timeLockAddressController = TextEditingController();
     _timeLockDateController = TextEditingController();
-    _timeLockAddressStyle = AddressStyle.TEXT60;
-    _contacts = List();
     quickSendAmount = widget.quickSendAmount;
     this.animationOpen = false;
-    if (widget.contact != null) {
-      // Setup initial state for contact pre-filled
-      _timeLockAddressController.text = widget.contact.name;
-      _isContact = true;
-      _showContactButton = false;
-      _pasteButtonVisible = false;
-      _timeLockAddressStyle = AddressStyle.PRIMARY;
-    } else if (widget.address != null) {
-      // Setup initial state with prefilled address
-      _timeLockAddressController.text = widget.address;
-      _showContactButton = false;
-      _pasteButtonVisible = false;
-      _timeLockAddressStyle = AddressStyle.TEXT90;
-      _addressValidAndUnfocused = true;
-    }
 
     // On amount focus change
     _timeLockAmountFocusNode.addListener(() {
@@ -180,41 +136,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
         setState(() {
           _dateHint = "";
         });
-      }
-    });
-    // On address focus change
-    _timeLockAddressFocusNode.addListener(() {
-      if (_timeLockAddressFocusNode.hasFocus) {
-        setState(() {
-          _addressHint = null;
-          //_addressValidAndUnfocused = false;
-        });
-        _timeLockAddressController.selection = TextSelection.fromPosition(
-            TextPosition(offset: _timeLockAddressController.text.length));
-        if (_timeLockAddressController.text.startsWith("@")) {
-          sl
-              .get<DBHelper>()
-              .getContactsWithNameLike(_timeLockAddressController.text)
-              .then((contactList) {
-            setState(() {
-              _contacts = contactList;
-            });
-          });
-        }
-      } else {
-        setState(() {
-          _addressHint = "";
-          _contacts = [];
-          if (Address(_timeLockAddressController.text).isValid()) {
-            //_addressValidAndUnfocused = true;
-          }
-        });
-        if (_timeLockAddressController.text.trim() == "@") {
-          _timeLockAddressController.text = "";
-          setState(() {
-            _showContactButton = true;
-          });
-        }
       }
     });
 
@@ -358,7 +279,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                     GestureDetector(
                       onTap: () {
                         // Clear focus of our fields when tapped in this empty space
-                        _timeLockAddressFocusNode.unfocus();
                         _timeLockAmountFocusNode.unfocus();
                       },
                       child: Container(
@@ -367,7 +287,7 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                         constraints: BoxConstraints.expand(),
                       ),
                     ),
-                    // A column for Enter Amount, Enter Address, Error containers and the pop up list
+                    // A column for Enter Amount, Error containers and the pop up list
                     SingleChildScrollView(
                       child: Padding(
                         padding: EdgeInsets.only(top: 30, bottom: bottom + 80),
@@ -468,12 +388,7 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                                         );
                                       },
                                     ),
-
-                                    // ******* Enter Amount Container ******* //
                                     getEnterAmountContainer(),
-                                    // ******* Enter Amount Container End ******* //
-
-                                    // ******* Enter Amount Error Container ******* //
                                     Container(
                                       alignment: AlignmentDirectional(0, 0),
                                       margin: EdgeInsets.only(top: 3),
@@ -487,79 +402,7 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
-                                    // ******* Enter Amount Error Container End ******* //
-                                  ],
-                                ),
-
-                                // Column for Enter Address container + Enter Address Error container
-                                Column(
-                                  children: <Widget>[
-                                    Container(
-                                      alignment: Alignment.topCenter,
-                                      child: Stack(
-                                        alignment: Alignment.topCenter,
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.105,
-                                                right: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.105),
-                                            alignment: Alignment.bottomCenter,
-                                            constraints: BoxConstraints(
-                                                maxHeight: 174, minHeight: 0),
-                                            // ********************************************* //
-                                            // ********* The pop-up Contacts List ********* //
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25),
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .backgroundDarkest,
-                                                ),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                  ),
-                                                  margin: EdgeInsets.only(
-                                                      bottom: 50),
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 0, top: 0),
-                                                    itemCount: _contacts.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return _buildContactItem(
-                                                          _contacts[index]);
-                                                    },
-                                                  ), // ********* The pop-up Contacts List End ********* //
-                                                  // ************************************************** //
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-                                          // ******* Enter Address Container ******* //
-                                          getEnterAddressContainer(),
-                                          // ******* Enter Address Container End ******* //
-                                          // ******* Enter Date Container ******* //
-                                          getEnterDateContainer(),
-                                          // ******* Enter Date Container End ******* //
-                                        ],
-                                      ),
-                                    ),
+                                    getEnterDateContainer(),
                                     SizedBox(height: 20),
                                     Container(
                                       margin:
@@ -584,7 +427,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                                  
                                   ],
                                 ),
                               ],
@@ -635,21 +477,19 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
               ),
             ),
 
-            //A column with "Scan QR Code" and "Lock" buttons
+            //A column "Lock" buttons
             Container(
               child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      // Send Button
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
                           AppLocalization.of(context).lockCoinEstimationButton,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () async {
                         validRequest = _validateRequest();
-                        if (_timeLockAddressController.text.startsWith("@") &&
-                            validRequest) {
+                        if (validRequest) {
                           contractEstimateDeployResponse =
                               await estimateContract();
                           if (contractEstimateDeployResponse != null &&
@@ -664,49 +504,15 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                                 context);
                             return;
                           }
-
-                          // Need to make sure its a valid contact
-                          sl
-                              .get<DBHelper>()
-                              .getContactWithName(
-                                  _timeLockAddressController.text)
-                              .then((contact) {
-                            if (contact == null) {
-                              setState(() {
-                                _addressValidationText =
-                                    AppLocalization.of(context).contactInvalid;
-                              });
-                            } else {
-                              Sheets.showAppHeightNineSheet(
-                                  context: context,
-                                  widget: TimeLockConfirmSheet(
-                                      contractEstimateDeployResponse:
-                                          contractEstimateDeployResponse,
-                                      scPredictAddress: scPredictAddress,
-                                      owner: StateContainer.of(context)
-                                          .wallet
-                                          .address,
-                                      dateUnlock: _timeLockDate,
-                                      amountRaw: _localCurrencyMode
-                                          ? NumberUtil.getAmountAsRaw(
-                                              _convertLocalCurrencyToCrypto())
-                                          : _rawAmount == null
-                                              ? NumberUtil.getAmountAsRaw(
-                                                  _timeLockAmountController
-                                                      .text)
-                                              : _rawAmount,
-                                      destination: contact.address,
-                                      contactName: contact.name,
-                                      maxSend: _isMaxSend(),
-                                      localCurrency: _localCurrencyMode
-                                          ? _timeLockAmountController.text
-                                          : null));
-                            }
-                          });
-                        } else if (validRequest) {
                           Sheets.showAppHeightNineSheet(
                               context: context,
-                              widget: SendConfirmSheet(
+                              widget: TimeLockConfirmSheet(
+                                  contractEstimateDeployResponse:
+                                      contractEstimateDeployResponse,
+                                  scPredictAddress: scPredictAddress,
+                                  owner:
+                                      StateContainer.of(context).wallet.address,
+                                  dateUnlock: _timeLockDate,
                                   amountRaw: _localCurrencyMode
                                       ? NumberUtil.getAmountAsRaw(
                                           _convertLocalCurrencyToCrypto())
@@ -714,137 +520,12 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                                           ? NumberUtil.getAmountAsRaw(
                                               _timeLockAmountController.text)
                                           : _rawAmount,
-                                  destination: _timeLockAddressController.text,
                                   maxSend: _isMaxSend(),
                                   localCurrency: _localCurrencyMode
                                       ? _timeLockAmountController.text
                                       : null));
                         }
                       }),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      // Scan QR Code Button
-                      AppButton.buildAppButton(
-                          context,
-                          AppButtonType.PRIMARY_OUTLINE,
-                          AppLocalization.of(context).scanQrCode,
-                          Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () async {
-                        UIUtil.cancelLockEvent();
-                        String scanResult = await UserDataUtil.getQRData(
-                            DataType.ADDRESS, context);
-                        if (scanResult == null) {
-                          UIUtil.showSnackbar(
-                              AppLocalization.of(context).qrInvalidAddress,
-                              context);
-                        } else if (QRScanErrs.ERROR_LIST.contains(scanResult)) {
-                          return;
-                        } else {
-                          // Is a URI
-                          Address address = Address(scanResult);
-                          // See if this address belongs to a contact
-                          Contact contact = await sl
-                              .get<DBHelper>()
-                              .getContactWithAddress(address.address);
-                          if (contact == null) {
-                            // Not a contact
-                            if (mounted) {
-                              setState(() {
-                                _isContact = false;
-                                _addressValidationText = "";
-                                _timeLockAddressStyle = AddressStyle.TEXT90;
-                                _pasteButtonVisible = false;
-                                _showContactButton = false;
-                              });
-                              _timeLockAddressController.text = address.address;
-                              _timeLockAddressFocusNode.unfocus();
-                              setState(() {
-                                _addressValidAndUnfocused = true;
-                              });
-                            }
-                          } else {
-                            // Is a contact
-                            if (mounted) {
-                              setState(() {
-                                _isContact = true;
-                                _addressValidationText = "";
-                                _timeLockAddressStyle = AddressStyle.PRIMARY;
-                                _pasteButtonVisible = false;
-                                _showContactButton = false;
-                              });
-                              _timeLockAddressController.text = contact.name;
-                            }
-                          }
-                          // If amount is present, fill it and go to SendConfirm
-                          if (address.amount != null) {
-                            bool hasError = false;
-                            BigInt amountBigInt =
-                                BigInt.tryParse(address.amount);
-                            if (amountBigInt != null &&
-                                amountBigInt < BigInt.from(10).pow(24)) {
-                              hasError = true;
-                              UIUtil.showSnackbar(
-                                  AppLocalization.of(context)
-                                      .minimumSend
-                                      .replaceAll("%1", "0.000001"),
-                                  context);
-                            } else if (_localCurrencyMode && mounted) {
-                              toggleLocalCurrency();
-                              _timeLockAmountController.text =
-                                  NumberUtil.getRawAsUsableString(
-                                      address.amount);
-                            } else if (mounted) {
-                              setState(() {
-                                _rawAmount = address.amount;
-                                // If raw amount has more precision than we support show a special indicator
-                                if (NumberUtil.getRawAsUsableString(_rawAmount)
-                                        .replaceAll(",", "") ==
-                                    NumberUtil.getRawAsUsableDecimal(_rawAmount)
-                                        .toString()) {
-                                  _timeLockAmountController.text =
-                                      NumberUtil.getRawAsUsableString(
-                                              _rawAmount)
-                                          .replaceAll(",", "");
-                                } else {
-                                  _timeLockAmountController
-                                      .text = NumberUtil.truncateDecimal(
-                                              NumberUtil.getRawAsUsableDecimal(
-                                                  address.amount),
-                                              digits: 6)
-                                          .toStringAsFixed(6) +
-                                      "~";
-                                }
-                              });
-                              _timeLockAddressFocusNode.unfocus();
-                            }
-
-                            if (!hasError) {
-                              // Go to confirm sheet
-                              Sheets.showAppHeightNineSheet(
-                                  context: context,
-                                  widget: SendConfirmSheet(
-                                      amountRaw: _localCurrencyMode
-                                          ? NumberUtil.getAmountAsRaw(
-                                              _convertLocalCurrencyToCrypto())
-                                          : _rawAmount == null
-                                              ? NumberUtil.getAmountAsRaw(
-                                                  _timeLockAmountController
-                                                      .text)
-                                              : _rawAmount,
-                                      destination: contact != null
-                                          ? contact.address
-                                          : address.address,
-                                      contactName:
-                                          contact != null ? contact.name : null,
-                                      maxSend: _isMaxSend(),
-                                      localCurrency: _localCurrencyMode
-                                          ? _timeLockAmountController.text
-                                          : null));
-                            }
-                          }
-                        }
-                      })
                     ],
                   ),
                 ],
@@ -1006,45 +687,11 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
     }
   }
 
-  // Build contact items for the list
-  Widget _buildContactItem(Contact contact) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 42,
-          width: double.infinity - 5,
-          child: FlatButton(
-            onPressed: () {
-              _timeLockAddressController.text = contact.name;
-              _timeLockAddressFocusNode.unfocus();
-              setState(() {
-                _isContact = true;
-                _showContactButton = false;
-                _pasteButtonVisible = false;
-                _timeLockAddressStyle = AddressStyle.PRIMARY;
-              });
-            },
-            child: Text(contact.name,
-                textAlign: TextAlign.center,
-                style: AppStyles.textStyleAddressText90(context)),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 25),
-          height: 1,
-          color: StateContainer.of(context).curTheme.text03,
-        ),
-      ],
-    );
-  }
-
   /// Validate form data to see if valid
   /// @returns true if valid, false otherwise
   bool _validateRequest() {
     bool isValid = true;
     _timeLockAmountFocusNode.unfocus();
-    _timeLockAddressFocusNode.unfocus();
     _timeLockDateFocusNode.unfocus();
     // Validate amount
     if (_timeLockAmountController.text.trim().isEmpty) {
@@ -1075,28 +722,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
               AppLocalization.of(context).insufficientBalance;
         });
       }
-    }
-    // Validate address
-    bool isContact = _timeLockAddressController.text.startsWith("@");
-    if (_timeLockAddressController.text.trim().isEmpty) {
-      isValid = false;
-      setState(() {
-        _addressValidationText = AppLocalization.of(context).addressMising;
-        _pasteButtonVisible = true;
-      });
-    } else if (!isContact &&
-        !Address(_timeLockAddressController.text).isValid()) {
-      isValid = false;
-      setState(() {
-        _addressValidationText = AppLocalization.of(context).invalidAddress;
-        _pasteButtonVisible = true;
-      });
-    } else if (!isContact) {
-      setState(() {
-        _addressValidationText = "";
-        _pasteButtonVisible = false;
-      });
-      _timeLockAddressFocusNode.unfocus();
     }
     if (_timeLockDateController.text.trim().isEmpty || _timeLockDate == null) {
       isValid = false;
@@ -1168,8 +793,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                 .wallet
                 .getAccountBalanceMoinsFeesDisplay(estimationFees)
                 .replaceAll(r",", "");
-            _timeLockAddressController.selection = TextSelection.fromPosition(
-                TextPosition(offset: _timeLockAddressController.text.length));
           } else {
             String feeString = _convertFeesToLocalCurrency();
             feeString = feeString.replaceAll(
@@ -1193,8 +816,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                 .replaceAll(".", _localCurrencyFormat.symbols.DECIMAL_SEP);
             _timeLockAmountController.text =
                 _localCurrencyFormat.currencySymbol + localAmount;
-            _timeLockAddressController.selection = TextSelection.fromPosition(
-                TextPosition(offset: _timeLockAddressController.text.length));
           }
         },
       ),
@@ -1205,9 +826,6 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
       textAlign: TextAlign.center,
       onSubmitted: (text) {
         FocusScope.of(context).unfocus();
-        if (!Address(_timeLockAddressController.text).isValid()) {
-          FocusScope.of(context).requestFocus(_timeLockAddressFocusNode);
-        }
       },
     );
   } //************ Enter Amount Container Method End ************//
@@ -1221,7 +839,7 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
         AppTextField(
           focusNode: FocusNode(),
           controller: _timeLockDateController,
-          topMargin: 204,
+          topMargin: 30,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -1248,9 +866,9 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
                     maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                   _timeLockDateController.text =
                       '${date.year}/${date.month.toString().padLeft(2, "0")}/${date.day.toString().padLeft(2, "0")} - ${date.hour.toString().padLeft(2, "0")}:${date.minute.toString().padLeft(2, "0")}';
-                 
+
                   setState(() {
-                     _timeLockDate = date;
+                    _timeLockDate = date;
                   });
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
               }),
@@ -1286,197 +904,4 @@ class _TimeLockSheetState extends State<TimeLockSheet> {
     );
   } //************ Enter Date Container Method End ************//
   //*************************************************************//
-
-  //************ Enter Address Container Method ************//
-  //*******************************************************//
-  getEnterAddressContainer() {
-    return Column(children: [
-      AppTextField(
-          topMargin: 124,
-          padding: _addressValidAndUnfocused
-              ? EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0)
-              : EdgeInsets.zero,
-          textAlign: _isContact && false ? TextAlign.start : TextAlign.center,
-          focusNode: _timeLockAddressFocusNode,
-          controller: _timeLockAddressController,
-          cursorColor: StateContainer.of(context).curTheme.primary,
-          inputFormatters: [
-            _isContact
-                ? LengthLimitingTextInputFormatter(20)
-                : LengthLimitingTextInputFormatter(65),
-          ],
-          textInputAction: TextInputAction.done,
-          maxLines: null,
-          autocorrect: false,
-          hintText: _addressHint == null
-              ? ""
-              : AppLocalization.of(context).enterAddress,
-          prefixButton: TextFieldButton(
-            icon: AppIcons.at,
-            onPressed: () {
-              if (_showContactButton && _contacts.length == 0) {
-                // Show menu
-                FocusScope.of(context).requestFocus(_timeLockAddressFocusNode);
-                if (_timeLockAddressController.text.length == 0) {
-                  _timeLockAddressController.text = "@";
-                  _timeLockAddressController.selection =
-                      TextSelection.fromPosition(TextPosition(
-                          offset: _timeLockAddressController.text.length));
-                }
-                sl.get<DBHelper>().getContacts().then((contactList) {
-                  setState(() {
-                    _contacts = contactList;
-                  });
-                });
-              }
-            },
-          ),
-          fadePrefixOnCondition: true,
-          prefixShowFirstCondition: _showContactButton && _contacts.length == 0,
-          suffixButton: TextFieldButton(
-            icon: AppIcons.paste,
-            onPressed: () {
-              if (!_pasteButtonVisible) {
-                return;
-              }
-              Clipboard.getData("text/plain").then((ClipboardData data) {
-                if (data == null || data.text == null) {
-                  return;
-                }
-                Address address = Address(data.text);
-                if (address.isValid()) {
-                  sl
-                      .get<DBHelper>()
-                      .getContactWithAddress(address.address)
-                      .then((contact) {
-                    if (contact == null) {
-                      setState(() {
-                        _isContact = false;
-                        _addressValidationText = "";
-                        _timeLockAddressStyle = AddressStyle.TEXT90;
-                        _pasteButtonVisible = false;
-                        _showContactButton = false;
-                      });
-                      _timeLockAddressController.text = address.address;
-                      //_timeLockAddressFocusNode.unfocus();
-                      setState(() {
-                        //_addressValidAndUnfocused = true;
-                      });
-                    } else {
-                      // Is a contact
-                      setState(() {
-                        _isContact = true;
-                        _addressValidationText = "";
-                        _timeLockAddressStyle = AddressStyle.PRIMARY;
-                        _pasteButtonVisible = false;
-                        _showContactButton = false;
-                      });
-                      _timeLockAddressController.text = contact.name;
-                    }
-                  });
-                }
-              });
-            },
-          ),
-          fadeSuffixOnCondition: true,
-          suffixShowFirstCondition: _pasteButtonVisible,
-          style: _timeLockAddressStyle == AddressStyle.TEXT60
-              ? AppStyles.textStyleAddressText60(context)
-              : _timeLockAddressStyle == AddressStyle.TEXT90
-                  ? AppStyles.textStyleAddressText90(context)
-                  : AppStyles.textStyleAddressText90(context),
-          onChanged: (text) {
-            if (text.length > 0) {
-              setState(() {
-                _showContactButton = false;
-              });
-            } else {
-              setState(() {
-                _showContactButton = true;
-              });
-            }
-            bool isContact = text.startsWith("@");
-            // Switch to contact mode if starts with @
-            if (isContact) {
-              setState(() {
-                _isContact = true;
-              });
-              sl
-                  .get<DBHelper>()
-                  .getContactsWithNameLike(text)
-                  .then((matchedList) {
-                setState(() {
-                  _contacts = matchedList;
-                });
-              });
-            } else {
-              setState(() {
-                _isContact = false;
-                _contacts = [];
-              });
-            }
-            // Always reset the error message to be less annoying
-            setState(() {
-              _addressValidationText = "";
-            });
-            if (!isContact && Address(text).isValid()) {
-              //_timeLockAddressFocusNode.unfocus();
-              setState(() {
-                _timeLockAddressStyle = AddressStyle.TEXT90;
-                _addressValidationText = "";
-                _pasteButtonVisible = true;
-              });
-            } else if (!isContact) {
-              setState(() {
-                _timeLockAddressStyle = AddressStyle.TEXT60;
-                _pasteButtonVisible = true;
-              });
-            } else {
-              sl.get<DBHelper>().getContactWithName(text).then((contact) {
-                if (contact == null) {
-                  setState(() {
-                    _timeLockAddressStyle = AddressStyle.TEXT60;
-                  });
-                } else {
-                  setState(() {
-                    _pasteButtonVisible = false;
-                    _addressValidationText = "";
-                    _timeLockAddressStyle = AddressStyle.PRIMARY;
-                  });
-                }
-              });
-            }
-          },
-          overrideTextFieldWidget: _addressValidAndUnfocused
-              ? GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _addressValidAndUnfocused = false;
-                      _addressValidationText = "";
-                    });
-                    Future.delayed(Duration(milliseconds: 50), () {
-                      FocusScope.of(context)
-                          .requestFocus(_timeLockAddressFocusNode);
-                    });
-                  },
-                  child: UIUtil.threeLineAddressText(
-                      context, _timeLockAddressController.text))
-              : null),
-      // ******* Enter Address Error Container ******* //
-      Container(
-        alignment: AlignmentDirectional(0, 0),
-        margin: EdgeInsets.only(top: 3),
-        child: Text(_addressValidationText,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: StateContainer.of(context).curTheme.primary,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w600,
-            )),
-      ),
-      // ******* Enter Address Error Container End ******* //
-    ]);
-  } //************ Enter Address Container Method End ************//
-  //*************************************************************//
-
 }

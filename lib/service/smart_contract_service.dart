@@ -7,14 +7,20 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/network/model/request/bcn_tx_receipt_request.dart';
-import 'package:my_idena/network/model/request/contract/contract_call_request.dart';
+import 'package:my_idena/network/model/request/contract/contract_call_multisig_request.dart';
+import 'package:my_idena/network/model/request/contract/contract_call_time_lock_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_deploy_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_estimate_deploy_request.dart';
+import 'package:my_idena/network/model/request/contract/contract_get_stake_request.dart';
+import 'package:my_idena/network/model/request/contract/contract_read_data_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_terminate_request.dart';
 import 'package:my_idena/network/model/response/bcn_tx_receipt_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_deploy_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_read_data_owner_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_read_data_timestamp_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/service/app_service.dart';
@@ -134,7 +140,7 @@ class SmartContractService {
   }
 
   Future<ContractDeployResponse> contractDeployTimeLock(
-      String owner, int timestamp, int amount, int maxFee) async {
+      String owner, int timestamp, double amount, double maxFee) async {
     ContractDeployRequest contractDeployRequest;
     ContractDeployResponse contractDeployResponse;
 
@@ -223,8 +229,99 @@ class SmartContractService {
     return _completer.future;
   }
 
+  Future<ContractDeployResponse> contractDeployMultiSig(String owner,
+      int maxVotes, int minVotes, double amount, double maxFee) async {
+    ContractDeployRequest contractDeployRequest;
+    ContractDeployResponse contractDeployResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractDeployResponse> _completer =
+        new Completer<ContractDeployResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractDeployResponse);
+
+      EventTaxiImpl.singleton()
+          .fire(ContractDeployEvent(response: "Connection error"));
+
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractDeployRequest.METHOD_NAME,
+      'params': [
+        {
+          "from": owner,
+          "codeHash": "0x03",
+          "amount": amount,
+          "maxFee": maxFee,
+          "args": [
+            {"index": 0, "format": "byte", "value": maxVotes.toString()},
+            {"index": 1, "format": "byte", "value": minVotes.toString()}
+          ]
+        }
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractDeployResponse =
+              contractDeployResponseFromJson(response.text);
+
+          if (contractDeployResponse.error != null) {
+            EventTaxiImpl.singleton().fire(ContractDeployEvent(
+                response: contractDeployResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(ContractDeployEvent(response: "Success"));
+          }
+        }
+      } else {
+        contractDeployRequest = ContractDeployRequest.fromJson(mapParams);
+        body = json.encode(contractDeployRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractDeployResponse =
+              contractDeployResponseFromJson(responseHttp.body);
+
+          if (contractDeployResponse.error != null) {
+            EventTaxiImpl.singleton().fire(ContractDeployEvent(
+                response: contractDeployResponse.error.message));
+          } else {
+            EventTaxiImpl.singleton()
+                .fire(ContractDeployEvent(response: "Success"));
+          }
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+
+      EventTaxiImpl.singleton()
+          .fire(ContractDeployEvent(response: e.toString()));
+    }
+
+    _completer.complete(contractDeployResponse);
+
+    return _completer.future;
+  }
+
   Future<ContractEstimateDeployResponse> contractEstimateDeployTimeLock(
-      String owner, int timestamp, int amount) async {
+      String owner, int timestamp, double amount) async {
     ContractEstimateDeployRequest contractEstimateDeployRequest;
     ContractEstimateDeployResponse contractEstimateDeployResponse;
 
@@ -248,7 +345,6 @@ class SmartContractService {
           "from": owner,
           "codeHash": "0x01",
           "amount": amount,
-          "maxFee": 1,
           "args": [
             {"index": 0, "format": "uint64", "value": timestamp.toString()}
           ]
@@ -291,9 +387,13 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractCallResponse> contractCallTimeLock(String owner,
-      String contract, double maxFee, String destinationAddress) async {
-    ContractCallRequest contractCallRequest;
+  Future<ContractCallResponse> contractCallTransferTimeLock(
+      String owner,
+      String contract,
+      double maxFee,
+      String destinationAddress,
+      String amount) async {
+    ContractCallTimeLockRequest contractCallRequest;
     ContractCallResponse contractCallResponse;
 
     Map<String, dynamic> mapParams;
@@ -310,7 +410,7 @@ class SmartContractService {
     }
 
     mapParams = {
-      'method': ContractCallRequest.METHOD_NAME,
+      'method': ContractCallTimeLockRequest.METHOD_NAME,
       'params': [
         {
           "from": owner,
@@ -318,7 +418,8 @@ class SmartContractService {
           "method": "transfer",
           "maxFee": maxFee,
           "args": [
-            {"index": 0, "format": "hex", "value": destinationAddress}
+            {"index": 0, "format": "hex", "value": destinationAddress},
+            {"index": 1, "format": "dna", "value": amount}
           ]
         }
       ],
@@ -339,7 +440,149 @@ class SmartContractService {
           contractCallResponse = contractCallResponseFromJson(response.text);
         }
       } else {
-        contractCallRequest = ContractCallRequest.fromJson(mapParams);
+        contractCallRequest = ContractCallTimeLockRequest.fromJson(mapParams);
+        body = json.encode(contractCallRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractCallResponse =
+              contractCallResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(contractCallResponse);
+
+    return _completer.future;
+  }
+
+  Future<ContractCallResponse> contractCallSendMultiSig(
+      String owner,
+      String contract,
+      double maxFee,
+      String destinationAddress,
+      String amount) async {
+    ContractCallMultiSigRequest contractCallRequest;
+    ContractCallResponse contractCallResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractCallResponse> _completer =
+        new Completer<ContractCallResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractCallResponse);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractCallTimeLockRequest.METHOD_NAME,
+      'params': [
+        {
+          "from": owner,
+          "contract": contract,
+          "method": "send",
+          "maxFee": maxFee,
+          "args": [
+            {"index": 0, "format": "hex", "value": destinationAddress},
+            {"index": 1, "format": "dna", "value": amount}
+          ]
+        }
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractCallResponse = contractCallResponseFromJson(response.text);
+        }
+      } else {
+        contractCallRequest = ContractCallMultiSigRequest.fromJson(mapParams);
+        body = json.encode(contractCallRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractCallResponse =
+              contractCallResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(contractCallResponse);
+
+    return _completer.future;
+  }
+
+  Future<ContractCallResponse> contractCallPushMultiSig(
+      String owner,
+      String contract,
+      double maxFee,
+      String destinationAddress,
+      String amount) async {
+    ContractCallTimeLockRequest contractCallRequest;
+    ContractCallResponse contractCallResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractCallResponse> _completer =
+        new Completer<ContractCallResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractCallResponse);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractCallTimeLockRequest.METHOD_NAME,
+      'params': [
+        {
+          "from": owner,
+          "contract": contract,
+          "method": "push",
+          "maxFee": maxFee,
+          "args": [
+            {"index": 0, "format": "hex", "value": destinationAddress},
+            {"index": 1, "format": "dna", "value": amount}
+          ]
+        }
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractCallResponse = contractCallResponseFromJson(response.text);
+        }
+      } else {
+        contractCallRequest = ContractCallTimeLockRequest.fromJson(mapParams);
         body = json.encode(contractCallRequest.toJson());
         responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
@@ -423,6 +666,71 @@ class SmartContractService {
     return _completer.future;
   }
 
+  Future<ContractTerminateResponse> contractTerminateMultiSig(String owner,
+      String contract, double maxFee, String destinationAddress) async {
+    ContractTerminateRequest contractTerminateRequest;
+    ContractTerminateResponse contractTerminateResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractTerminateResponse> _completer =
+        new Completer<ContractTerminateResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractTerminateResponse);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractTerminateRequest.METHOD_NAME,
+      'params': [
+        {
+          "from": owner,
+          "contract": contract,
+          "maxFee": maxFee,
+          "args": [
+            {"index": 0, "format": "hex", "value": destinationAddress}
+          ]
+        }
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractTerminateResponse =
+              contractTerminateResponseFromJson(response.text);
+        }
+      } else {
+        contractTerminateRequest = ContractTerminateRequest.fromJson(mapParams);
+        body = json.encode(contractTerminateRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractTerminateResponse =
+              contractTerminateResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(contractTerminateResponse);
+
+    return _completer.future;
+  }
 
   Future<ApiContractResponse> getContract(String contractAddress) async {
     HttpClient httpClient = new HttpClient();
@@ -495,10 +803,13 @@ class SmartContractService {
   Future<ApiContractTxsResponse> getContractTxs(
       String address, int limit, String typeOfContract) async {
     HttpClient httpClient = new HttpClient();
-    ApiContractTxsResponse apiContractTxsResponse = new ApiContractTxsResponse();
+    ApiContractTxsResponse apiContractTxsResponse =
+        new ApiContractTxsResponse();
     apiContractTxsResponse.result = new List<ApiContractTxsResponseResult>();
     Completer<ApiContractTxsResponse> _completer =
         new Completer<ApiContractTxsResponse>();
+
+    Map contractCharged = new Map();
 
     try {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
@@ -507,19 +818,41 @@ class SmartContractService {
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
-        ApiContractTxsResponse apiContractTxsResponseTmp = apiContractTxsResponseFromJson(reply);
+        ApiContractTxsResponse apiContractTxsResponseTmp =
+            apiContractTxsResponseFromJson(reply);
         if (apiContractTxsResponseTmp != null &&
             apiContractTxsResponseTmp.result != null) {
           for (int i = 0; i < apiContractTxsResponseTmp.result.length; i++) {
-            if(apiContractTxsResponseTmp.result[i].type == "CallContract")
-            {
-              ApiContractResponse apiContractResponse = await getContract(apiContractTxsResponseTmp.result[i].to);
-                if(apiContractResponse != null && apiContractResponse.result != null && apiContractResponse.result.type == typeOfContract)
-                {
-                    apiContractTxsResponse.result.add(apiContractTxsResponseTmp.result[i]);
+            if (apiContractTxsResponseTmp.result[i].type == "CallContract" ||
+                apiContractTxsResponseTmp.result[i].type == "DeployContract") {
+              String contractAddress = apiContractTxsResponseTmp.result[i].to;
+              if (apiContractTxsResponseTmp.result[i].type ==
+                  "DeployContract") {
+                BcnTxReceiptResponse bcnTxReceiptResponse = await getTxReceipt(
+                    apiContractTxsResponseTmp.result[i].hash);
+                if (bcnTxReceiptResponse != null &&
+                    bcnTxReceiptResponse.result != null) {
+                  contractAddress = bcnTxReceiptResponse.result.contract;
+                  apiContractTxsResponseTmp.result[i].to = contractAddress;
                 }
+              }
+
+              if (contractAddress == null ||
+                  contractCharged.containsKey(contractAddress.toUpperCase()) ==
+                      false) {
+                ApiContractResponse apiContractResponse =
+                    await getContract(contractAddress);
+                if (apiContractResponse != null &&
+                    apiContractResponse.result != null &&
+                    apiContractResponse.result.type == typeOfContract) {
+                  apiContractTxsResponse.result
+                      .add(apiContractTxsResponseTmp.result[i]);
+                  contractCharged.putIfAbsent(contractAddress.toUpperCase(),
+                      () => contractAddress.toUpperCase());
+                }
+              }
             }
-          }  
+          }
         }
       }
     } catch (e) {
@@ -529,6 +862,187 @@ class SmartContractService {
     }
 
     _completer.complete(apiContractTxsResponse);
+
+    return _completer.future;
+  }
+
+  Future<int> getContractReadDataTimestamp(String contractAddress) async {
+    ContractReadDataRequest contractReadDataRequest;
+    ContractReadDataTimestampResponse contractReadDataResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<int> _completer = new Completer<int>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(0);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractReadDataRequest.METHOD_NAME,
+      'params': [contractAddress, "timestamp", "uint64"],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractReadDataResponse =
+              contractReadDataTimestampResponseFromJson(response.text);
+        }
+      } else {
+        contractReadDataRequest = ContractReadDataRequest.fromJson(mapParams);
+        body = json.encode(contractReadDataRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractReadDataResponse =
+              contractReadDataTimestampResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    if (contractReadDataResponse != null) {
+      _completer.complete(contractReadDataResponse.result);
+    } else {
+      _completer.complete(0);
+    }
+
+    return _completer.future;
+  }
+
+  Future<String> getContractReadDataOwner(String contractAddress) async {
+    ContractReadDataRequest contractReadDataRequest;
+    ContractReadDataOwnerResponse contractReadDataResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<String> _completer = new Completer<String>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete("");
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractReadDataRequest.METHOD_NAME,
+      'params': [
+        contractAddress,
+        "owner",
+        "hex",
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractReadDataResponse =
+              contractReadDataOwnerResponseFromJson(response.text);
+        }
+      } else {
+        contractReadDataRequest = ContractReadDataRequest.fromJson(mapParams);
+        body = json.encode(contractReadDataRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractReadDataResponse =
+              contractReadDataOwnerResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    if (contractReadDataResponse != null) {
+      _completer.complete(contractReadDataResponse.result);
+    } else {
+      _completer.complete("");
+    }
+
+    return _completer.future;
+  }
+
+  Future<ContractGetStakeResponse> getContractStake(
+      String contractAddress) async {
+    ContractGetStakeRequest contractGetStakeRequest;
+    ContractGetStakeResponse contractGetStakeResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractGetStakeResponse> _completer =
+        new Completer<ContractGetStakeResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractGetStakeResponse);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractGetStakeRequest.METHOD_NAME,
+      'params': [
+        contractAddress,
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        var response = await ssh.HttpClientImpl(
+                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+            .request(url.toString(),
+                method: 'POST',
+                data: jsonEncode(mapParams),
+                headers: requestHeaders);
+        if (response.status == 200) {
+          contractGetStakeResponse =
+              contractGetStakeResponseFromJson(response.text);
+        }
+      } else {
+        contractGetStakeRequest = ContractGetStakeRequest.fromJson(mapParams);
+        body = json.encode(contractGetStakeRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractGetStakeResponse =
+              contractGetStakeResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(contractGetStakeResponse);
 
     return _completer.future;
   }
