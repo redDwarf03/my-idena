@@ -9,6 +9,7 @@ import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/ui/SmartContracts/multiSig_list.dart';
 import 'package:my_idena/ui/SmartContracts/timeLock_list.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
@@ -1686,14 +1687,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     AppSettings.buildSettingsListItemSingleLineWithInfos(
                         context,
-                        AppLocalization.of(context).multisigMofNTitle,
+                        AppLocalization.of(context).multisigTitle,
                         "A multisignature wallet address with specified M and N locks coins. In order to send the coins from the multisig, M specific participants out of N have to provide their signatures.",
                         FontAwesome5.signature, onPressed: () {
-                      AppDialogs.showInfoDialog(
-                        context,
-                        AppLocalization.of(context).multisigMofNTitle,
-                        "Soon...",
-                      );
+                     Sheets.showAppHeightEightSheet(
+                          context: context,
+                          widget: MultiSigList(StateContainer.of(context)
+                              .selectedAccount
+                              .address));
+                      
                     }),
                     Divider(
                       height: 2,

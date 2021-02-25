@@ -1,12 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/model/smartContractMultiSig.dart';
 import 'package:my_idena/network/model/request/contract/api_contract_balance_updates_response.dart';
 import 'package:my_idena/network/model/request/contract/api_contract_txs_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
+import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
+import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/service/smart_contract_service.dart';
+import 'package:my_idena/ui/SmartContracts/multiSig_detail.dart';
 import 'package:my_idena/ui/SmartContracts/multiSig_sheet.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/service_locator.dart';
@@ -41,13 +45,13 @@ class _MultiSigListState extends State<MultiSigList> {
   void loadMultiSigContracts() async {
     ApiContractTxsResponse apiContractTxsResponse = await sl
         .get<SmartContractService>()
-        .getContractTxs(widget.address, 100, "MultiSig");
+        .getContractTxs(widget.address, 100, "Multisig");
     if (apiContractTxsResponse != null &&
         apiContractTxsResponse.result != null) {
       for (int i = 0; i < apiContractTxsResponse.result.length; i++) {
         SmartContractMultiSig smartContractMultiSig =
             new SmartContractMultiSig();
-        smartContractMultiSig.type = "MultiSig";
+        smartContractMultiSig.type = "Multisig";
         smartContractMultiSig.owner = apiContractTxsResponse.result[i].from;
         smartContractMultiSig.contractAddress =
             apiContractTxsResponse.result[i].to;
@@ -68,14 +72,45 @@ class _MultiSigListState extends State<MultiSigList> {
             .getContractStake(smartContractMultiSig.contractAddress);
         if (contractGetStakeResponse != null &&
             contractGetStakeResponse.result != null) {
-          smartContractMultiSig.balance =
+          smartContractMultiSig.stake =
               double.tryParse(contractGetStakeResponse.result.stake);
         }
 
-        smartContractMultiSig.maxVotes = 0;
-        smartContractMultiSig.minVotes = 0;
-        smartContractMultiSig.count = 0;
-        smartContractMultiSig.state = 0; 
+        DnaGetBalanceResponse dnaGetBalanceResponse = await sl
+            .get<AppService>()
+            .getBalanceGetResponse(
+                smartContractMultiSig.contractAddress, false);
+        if (dnaGetBalanceResponse != null &&
+            dnaGetBalanceResponse.result != null) {
+          smartContractMultiSig.balance =
+              double.tryParse(dnaGetBalanceResponse.result.balance);
+        } else {
+          smartContractMultiSig.balance = 0;
+        }
+
+        int maxVotes = await sl
+            .get<SmartContractService>()
+            .getContractReadDataByte(
+                smartContractMultiSig.contractAddress, "maxVotes");
+        smartContractMultiSig.maxVotes = maxVotes;
+
+        int minVotes = await sl
+            .get<SmartContractService>()
+            .getContractReadDataByte(
+                smartContractMultiSig.contractAddress, "minVotes");
+        smartContractMultiSig.minVotes = minVotes;
+
+        int count = await sl
+            .get<SmartContractService>()
+            .getContractReadDataByte(
+                smartContractMultiSig.contractAddress, "count");
+        smartContractMultiSig.count = count;
+
+        int state = await sl
+            .get<SmartContractService>()
+            .getContractReadDataByte(
+                smartContractMultiSig.contractAddress, "state");
+        smartContractMultiSig.state = state;
 
         smartContractMultiSigList.add(smartContractMultiSig);
       }
@@ -139,7 +174,7 @@ class _MultiSigListState extends State<MultiSigList> {
                             // Header
                             AutoSizeText(
                               CaseChange.toUpperCase(
-                                  AppLocalization.of(context).multisigMofNTitle,
+                                  AppLocalization.of(context).multisigTitle,
                                   context),
                               style: AppStyles.textStyleHeader(context),
                               textAlign: TextAlign.center,
@@ -275,9 +310,7 @@ class _MultiSigListState extends State<MultiSigList> {
                 height: 32.0,
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Icon(
-                      FontAwesome.stop_circle
-                        ,
+                  child: Icon(FontAwesome.stop_circle,
                       size: 26,
                       color: StateContainer.of(context).curTheme.success),
                 ),
@@ -285,7 +318,7 @@ class _MultiSigListState extends State<MultiSigList> {
               // info
               Expanded(
                 child: Container(
-                  height: 120,
+                  height: 180,
                   margin: EdgeInsetsDirectional.only(start: 2.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -320,7 +353,7 @@ class _MultiSigListState extends State<MultiSigList> {
                           text: '',
                           children: [
                             TextSpan(
-                              text: "Author : ",
+                              text: "Owner : ",
                               style: TextStyle(
                                 color: StateContainer.of(context)
                                     .curTheme
@@ -365,6 +398,142 @@ class _MultiSigListState extends State<MultiSigList> {
                                 fontFamily: 'Roboto',
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            TextSpan(
+                              text: "Stake : ",
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            TextSpan(
+                              text: smartContractMultiSig.stake.toString() +
+                                  " iDNA",
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w100,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            TextSpan(
+                              text: "Number of voters : ",
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            TextSpan(
+                              text: smartContractMultiSig.maxVotes.toString(),
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w100,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            TextSpan(
+                              text:
+                                  "Min nb of votes required to unlock the coins : ",
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            TextSpan(
+                              text: smartContractMultiSig.minVotes.toString(),
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w100,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            TextSpan(
+                              text: "Status : ",
+                              style: TextStyle(
+                                color: StateContainer.of(context)
+                                    .curTheme
+                                    .primary60,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            smartContractMultiSig.state == 1
+                                ? TextSpan(
+                                    text:
+                                        "The list of voters is not defined yet (actually " +
+                                            smartContractMultiSig.count
+                                                .toString() +
+                                            " voter(s))",
+                                    style: TextStyle(
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .primary60,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w100,
+                                      fontFamily: 'Roboto',
+                                    ),
+                                  )
+                                : TextSpan(
+                                    text: "The list of voters is complete",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w100,
+                                      fontFamily: 'Roboto',
+                                    ),
+                                  ),
                           ],
                         ),
                       ),

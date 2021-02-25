@@ -2,6 +2,7 @@ import 'package:my_idena/network/model/request/contract/api_contract_balance_upd
 
 class SmartContractMultiSig {
   double balance;
+  double stake;
   String type;
   int maxVotes;
   int minVotes;
@@ -13,8 +14,15 @@ class SmartContractMultiSig {
   List<ApiContractBalanceUpdatesResponseResult> balanceUpdates;
 
   ApiContractBalanceUpdatesResponseResult getLastBalanceUpdates() {
-    if (this.balanceUpdates != null) {
-      return this.balanceUpdates[0];
+  if (this.balanceUpdates != null) {
+      for(int i = 0; i< this.balanceUpdates.length; i++)
+      {
+          if(this.balanceUpdates[i].txReceipt != null)
+          {
+            return this.balanceUpdates[i];
+          }
+      }
+      return null;
     } else {
       return null;
     }

@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/localization.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:my_idena/dimens.dart';
 import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
-import 'package:my_idena/model/smartContractTimeLock.dart';
+import 'package:my_idena/model/smartContractMultiSig.dart';
 import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
@@ -31,23 +30,23 @@ const completeColor = Color(0xff5e6172);
 const inProgressColor = Color(0xff5ec792);
 const todoColor = Color(0xffd1d2d7);
 
-class TimeLockDetail extends StatefulWidget {
-  final SmartContractTimeLock smartContractTimeLock;
+class MultiSigDetail extends StatefulWidget {
+  final SmartContractMultiSig smartContractMultiSig;
   final Contact contact;
   final String address;
 
-  TimeLockDetail({
-    this.smartContractTimeLock,
+  MultiSigDetail({
+    this.smartContractMultiSig,
     this.contact,
     this.address,
   }) : super();
 
-  _TimeLockDetailStateState createState() => _TimeLockDetailStateState();
+  _MultiSigDetailStateState createState() => _MultiSigDetailStateState();
 }
 
 enum AddressStyle { TEXT60, TEXT90, PRIMARY }
 
-class _TimeLockDetailStateState extends State<TimeLockDetail> {
+class _MultiSigDetailStateState extends State<MultiSigDetail> {
   int _processIndex;
   var _processes;
 
@@ -82,7 +81,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
   void initState() {
     super.initState();
 
-    _processes = ['Deploy', 'Lock', 'Unlock', 'Transfer', 'Terminate'];
+    _processes = ['Deploy', 'Lock', 'Voters ok', 'Transfer', 'Terminate'];
 
     _blockAddressFocusNode = FocusNode();
     _blockAddressController = TextEditingController();
@@ -140,30 +139,27 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
       }
     });
 
-    if (widget.smartContractTimeLock.getLastBalanceUpdates().txReceipt.method ==
-        "deploy") {
-      if (widget.smartContractTimeLock.isLocked() == null) {
-        _processIndex = 3;
-      } else {
-        if (widget.smartContractTimeLock.isLocked()) {
-          _processIndex = 1;
-        } else {
-          _processIndex = 2;
-        }
-      }
-    } else if (widget.smartContractTimeLock
+    if (widget.smartContractMultiSig.state == 2) {
+      if (widget.smartContractMultiSig
             .getLastBalanceUpdates()
             .txReceipt
             .method ==
         "transfer") {
       _processIndex = 3;
-    } else if (widget.smartContractTimeLock
-            .getLastBalanceUpdates()
-            .txReceipt
-            .method ==
-        "terminate") {
-      _processIndex = 4;
+    } else
+      if (widget.smartContractMultiSig
+              .getLastBalanceUpdates()
+              .txReceipt
+              .method ==
+          "terminate") {
+        _processIndex = 4;
+      } else {
+        _processIndex = 2;
+      }
+    } else {
+      _processIndex = 1;
     }
+
   }
 
   @override
@@ -226,7 +222,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                 ? Icon(FontAwesome5.lock,
                                     size: 18, color: getColor(index))
                                 : index == 2
-                                    ? Icon(FontAwesome5.lock_open,
+                                    ? Icon(FontAwesome5.vote_yea,
                                         size: 18, color: getColor(index))
                                     : index == 3
                                         ? Icon(FontAwesome5.share_square,
@@ -352,7 +348,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
               ),
             ),
             Container(
-              height: 120,
+              height: 148,
               margin: EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -374,7 +370,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                           ),
                         ),
                         TextSpan(
-                            text: widget.smartContractTimeLock.contractAddress,
+                            text: widget.smartContractMultiSig.contractAddress,
                             style:
                                 AppStyles.textStyleTransactionAddress(context)),
                       ],
@@ -396,7 +392,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                           ),
                         ),
                         TextSpan(
-                            text: widget.smartContractTimeLock.owner,
+                            text: widget.smartContractMultiSig.owner,
                             style:
                                 AppStyles.textStyleTransactionAddress(context)),
                       ],
@@ -419,7 +415,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                         ),
                         TextSpan(
                           text:
-                              widget.smartContractTimeLock.balance.toString() +
+                              widget.smartContractMultiSig.balance.toString() +
                                   " iDNA",
                           style: TextStyle(
                             color:
@@ -448,7 +444,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                           ),
                         ),
                         TextSpan(
-                          text: widget.smartContractTimeLock.stake.toString() +
+                          text: widget.smartContractMultiSig.stake.toString() +
                               " iDNA",
                           style: TextStyle(
                             color:
@@ -461,35 +457,87 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                       ],
                     ),
                   ),
-                  widget.smartContractTimeLock.timestamp == null
-                      ? SizedBox()
-                      : RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: "Unlock time: ",
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary60,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                              TextSpan(
-                                text: DateFormat.yMEd(
-                                        Localizations.localeOf(context)
-                                            .languageCode)
-                                    .add_Hm()
-                                    .format(DateTime.fromMillisecondsSinceEpoch(
-                                            widget.smartContractTimeLock
-                                                    .timestamp *
-                                                1000)
-                                        .toLocal())
-                                    .toString(),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: '',
+                      children: [
+                        TextSpan(
+                          text: "Number of voters : ",
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              widget.smartContractMultiSig.maxVotes.toString(),
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: '',
+                      children: [
+                        TextSpan(
+                          text:
+                              "Min nb of votes required to unlock the coins : ",
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              widget.smartContractMultiSig.minVotes.toString(),
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: '',
+                      children: [
+                        TextSpan(
+                          text: "Status : ",
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                        widget.smartContractMultiSig.state == 1
+                            ? TextSpan(
+                                text:
+                                    "The list of voters is not defined yet (actually " +
+                                        widget.smartContractMultiSig.count
+                                            .toString() +
+                                        " voter(s))",
                                 style: TextStyle(
                                   color: StateContainer.of(context)
                                       .curTheme
@@ -498,11 +546,20 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                   fontWeight: FontWeight.w100,
                                   fontFamily: 'Roboto',
                                 ),
+                              )
+                            : TextSpan(
+                                text: "The list of voters is complete",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w100,
+                                  fontFamily: 'Roboto',
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                  widget.smartContractTimeLock.getLastBalanceUpdates() == null
+                      ],
+                    ),
+                  ),
+                  widget.smartContractMultiSig.getLastBalanceUpdates() == null
                       ? SizedBox()
                       : RichText(
                           textAlign: TextAlign.start,
@@ -520,12 +577,12 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                   fontFamily: 'Roboto',
                                 ),
                               ),
-                              widget.smartContractTimeLock
+                              widget.smartContractMultiSig
                                           .getLastBalanceUpdates()
                                           .txReceipt ==
                                       null
                                   ? TextSpan(
-                                      text: widget.smartContractTimeLock
+                                      text: widget.smartContractMultiSig
                                               .getLastBalanceUpdates()
                                               .type +
                                           " - Success",
@@ -536,12 +593,12 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                         fontFamily: 'Roboto',
                                       ),
                                     )
-                                  : widget.smartContractTimeLock
+                                  : widget.smartContractMultiSig
                                           .getLastBalanceUpdates()
                                           .txReceipt
                                           .success
                                       ? TextSpan(
-                                          text: widget.smartContractTimeLock
+                                          text: widget.smartContractMultiSig
                                                   .getLastBalanceUpdates()
                                                   .txReceipt
                                                   .method +
@@ -554,12 +611,12 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                           ),
                                         )
                                       : TextSpan(
-                                          text: widget.smartContractTimeLock
+                                          text: widget.smartContractMultiSig
                                                   .getLastBalanceUpdates()
                                                   .txReceipt
                                                   .method +
                                               " - " +
-                                              widget.smartContractTimeLock
+                                              widget.smartContractMultiSig
                                                   .getLastBalanceUpdates()
                                                   .txReceipt
                                                   .errorMsg,
@@ -682,20 +739,20 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                       AppLocalization.of(context)
                                           .scTransferConfirmationTitle,
                                       AppLocalization.of(context)
-                                          .timeLockTransferConfirmationText,
+                                          .scTransferConfirmationTitle,
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
-                                    await sl
+                                    /*await sl
                                         .get<SmartContractService>()
-                                        .contractCallTransferTimeLock(
-                                            widget.smartContractTimeLock.owner,
-                                            widget.smartContractTimeLock
+                                        .contractCallTransferMultiSig(
+                                            widget.smartContractMultiSig.owner,
+                                            widget.smartContractMultiSig
                                                 .contractAddress,
                                             0.25,
                                             contact.address,
-                                            widget.smartContractTimeLock.balance
-                                                .toString());
+                                            widget.smartContractMultiSig.balance
+                                                .toString());*/
                                     Navigator.of(context).popUntil(
                                         RouteUtils.withNameLike('/home'));
                                   });
@@ -706,26 +763,27 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                   context,
                                   AppButtonType.PRIMARY,
                                   AppLocalization.of(context).scTransferButton,
-                                  Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
+                                  Dimens.BUTTON_BOTTOM_SMALL_PLACE,
+                                  onPressed: () {
                                 AppDialogs.showConfirmDialog(
                                     context,
                                     AppLocalization.of(context)
                                         .scTransferConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .timeLockTransferConfirmationText,
+                                        .scTransferConfirmationTitle,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {
-                                  await sl
+                                  /*await sl
                                       .get<SmartContractService>()
-                                      .contractCallTransferTimeLock(
-                                          widget.smartContractTimeLock.owner,
-                                          widget.smartContractTimeLock
+                                      .contractCallTransferMultiSig(
+                                          widget.smartContractMultiSig.owner,
+                                          widget.smartContractMultiSig
                                               .contractAddress,
                                           0.25,
                                           _blockAddressController.text,
-                                          widget.smartContractTimeLock.balance
-                                              .toString());
+                                          widget.smartContractMultiSig.balance
+                                              .toString());*/
                                   Navigator.of(context).popUntil(
                                       RouteUtils.withNameLike('/home'));
                                 });
@@ -743,10 +801,89 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                 context: context,
                                 widget: SendSheet(
                                     address: widget
-                                        .smartContractTimeLock.contractAddress,
+                                        .smartContractMultiSig.contractAddress,
                                     localCurrency: StateContainer.of(context)
                                         .curCurrency));
                           }),
+                    _processIndex < 2 &&
+                            widget.smartContractMultiSig.owner ==
+                                StateContainer.of(context)
+                                    .selectedAccount
+                                    .address ?
+                        
+                        AppButton.buildAppButton(
+                            context,
+                            AppButtonType.PRIMARY,
+                            AppLocalization.of(context).scAddVoterButton,
+                            Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
+                            validRequest = _validateRequest();
+                            if (_blockAddressController.text.startsWith("@") &&
+                                validRequest) {
+                              // Need to make sure its a valid contact
+                              sl
+                                  .get<DBHelper>()
+                                  .getContactWithName(
+                                      _blockAddressController.text)
+                                  .then((contact) {
+                                if (contact == null) {
+                                  setState(() {
+                                    _addressValidationText =
+                                        AppLocalization.of(context)
+                                            .contactInvalid;
+                                  });
+                                } else {
+                                  AppDialogs.showConfirmDialog(
+                                      context,
+                                      AppLocalization.of(context)
+                                          .scAddVoterConfirmationTitle,
+                                      AppLocalization.of(context)
+                                          .scAddVoterConfirmationText,
+                                      CaseChange.toUpperCase(
+                                          AppLocalization.of(context).yesButton,
+                                          context), () async {
+                                    await sl
+                                        .get<SmartContractService>()
+                                        .contractCallAddMultiSig(
+                                            widget.smartContractMultiSig.owner,
+                                            widget.smartContractMultiSig
+                                                .contractAddress,
+                                            0.25,
+                                            contact.address);
+                                    Navigator.of(context).popUntil(
+                                        RouteUtils.withNameLike('/home'));
+                                  });
+                                }
+                              });
+                            } else if (validRequest) {
+                              AppButton.buildAppButton(
+                                  context,
+                                  AppButtonType.PRIMARY,
+                                  AppLocalization.of(context).scTerminateButton,
+                                  Dimens.BUTTON_BOTTOM_SMALL_PLACE,
+                                  onPressed: () {
+                                AppDialogs.showConfirmDialog(
+                                    context,
+                                    AppLocalization.of(context)
+                                        .scAddVoterConfirmationTitle,
+                                    AppLocalization.of(context)
+                                        .scAddVoterConfirmationText,
+                                    CaseChange.toUpperCase(
+                                        AppLocalization.of(context).yesButton,
+                                        context), () async {
+                                  await sl
+                                      .get<SmartContractService>()
+                                      .contractTerminateMultiSig(
+                                          widget.smartContractMultiSig.owner,
+                                          widget.smartContractMultiSig
+                                              .contractAddress,
+                                          0.25,
+                                          _blockAddressController.text);
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                });
+                              });
+                            }
+                          }) : SizedBox(),
                     _processIndex == 4
                         ? SizedBox()
                         : AppButton.buildAppButton(
@@ -775,15 +912,15 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                       AppLocalization.of(context)
                                           .scTerminateConfirmationTitle,
                                       AppLocalization.of(context)
-                                          .timeLockTerminateConfirmationText,
+                                          .scTerminateConfirmationTitle,
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
                                     await sl
                                         .get<SmartContractService>()
-                                        .contractTerminateTimeLock(
-                                            widget.smartContractTimeLock.owner,
-                                            widget.smartContractTimeLock
+                                        .contractTerminateMultiSig(
+                                            widget.smartContractMultiSig.owner,
+                                            widget.smartContractMultiSig
                                                 .contractAddress,
                                             0.25,
                                             contact.address);
@@ -797,21 +934,22 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                   context,
                                   AppButtonType.PRIMARY,
                                   AppLocalization.of(context).scTerminateButton,
-                                  Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
+                                  Dimens.BUTTON_BOTTOM_SMALL_PLACE,
+                                  onPressed: () {
                                 AppDialogs.showConfirmDialog(
                                     context,
                                     AppLocalization.of(context)
                                         .scTerminateConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .timeLockTerminateConfirmationText,
+                                        .scTerminateConfirmationTitle,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {
                                   await sl
                                       .get<SmartContractService>()
-                                      .contractTerminateTimeLock(
-                                          widget.smartContractTimeLock.owner,
-                                          widget.smartContractTimeLock
+                                      .contractTerminateMultiSig(
+                                          widget.smartContractMultiSig.owner,
+                                          widget.smartContractMultiSig
                                               .contractAddress,
                                           0.25,
                                           _blockAddressController.text);
@@ -820,7 +958,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                 });
                               });
                             }
-                          })
+                          }),
                   ],
                 ),
               ],

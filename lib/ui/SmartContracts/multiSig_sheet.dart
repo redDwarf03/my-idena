@@ -35,7 +35,9 @@ class MultiSigSheet extends StatefulWidget {
   final String quickSendAmount;
   final String address;
 
-  MultiSigSheet({@required this.localCurrency, this.quickSendAmount, this.address}) : super();
+  MultiSigSheet(
+      {@required this.localCurrency, this.quickSendAmount, this.address})
+      : super();
 
   _MultiSigSheetState createState() => _MultiSigSheetState();
 }
@@ -45,15 +47,19 @@ enum AddressStyle { TEXT60, TEXT90, PRIMARY }
 class _MultiSigSheetState extends State<MultiSigSheet> {
   final Logger log = sl.get<Logger>();
 
-  FocusNode _multiSigDateFocusNode;
-  TextEditingController _multiSigDateController;
+  FocusNode _multiSigMinVotesFocusNode;
+  TextEditingController _multiSigMinVotesController;
+  FocusNode _multiSigMaxVotesFocusNode;
+  TextEditingController _multiSigMaxVotesController;
   FocusNode _multiSigAmountFocusNode;
   TextEditingController _multiSigAmountController;
 
   String _amountHint = "";
-  String _dateHint = "";
+  String _minVotesHint = "";
+  String _maxVotesHint = "";
   String _amountValidationText = "";
-  String _dateValidationText = "";
+  String _minVotesValidationText = "";
+  String _maxVotesValidationText = "";
   String quickSendAmount;
   bool animationOpen;
   // Local currency mode/fiat conversion
@@ -64,14 +70,14 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
   bool isTokenToSendSwitched = false;
   String _rawAmount;
   bool validRequest = true;
-  DateTime _multiSigDate;
   String scPredictAddress = "";
   ContractEstimateDeployResponse contractEstimateDeployResponse;
 
   Future<ContractEstimateDeployResponse> estimateContract() async {
     return await sl.get<SmartContractService>().contractEstimateDeployMultiSig(
         StateContainer.of(context).wallet.address,
-        _multiSigDate.millisecondsSinceEpoch ~/ 1000,
+        int.tryParse(_multiSigMaxVotesController.text),
+        int.tryParse(_multiSigMinVotesController.text),
         _localCurrencyMode
             ? double.tryParse(
                 NumberUtil.getAmountAsRaw(_convertLocalCurrencyToCrypto()))
@@ -84,8 +90,7 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
   void loadSCPredictAddress() async {
     scPredictAddress = await sl
         .get<SmartContractService>()
-        .getPredictSmartContractAddress(
-            widget.address);
+        .getPredictSmartContractAddress(widget.address);
     setState(() {});
   }
 
@@ -96,9 +101,11 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
     loadSCPredictAddress();
 
     _multiSigAmountFocusNode = FocusNode();
-    _multiSigDateFocusNode = FocusNode();
+    _multiSigMinVotesFocusNode = FocusNode();
+    _multiSigMaxVotesFocusNode = FocusNode();
     _multiSigAmountController = TextEditingController();
-    _multiSigDateController = TextEditingController();
+    _multiSigMinVotesController = TextEditingController();
+    _multiSigMaxVotesController = TextEditingController();
     quickSendAmount = widget.quickSendAmount;
     this.animationOpen = false;
 
@@ -127,18 +134,28 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
         });
       }
     });
-    _multiSigDateFocusNode.addListener(() {
-      if (_multiSigDateFocusNode.hasFocus) {
+    _multiSigMinVotesFocusNode.addListener(() {
+      if (_multiSigMinVotesFocusNode.hasFocus) {
         setState(() {
-          _dateHint = null;
+          _minVotesHint = null;
         });
       } else {
         setState(() {
-          _dateHint = "";
+          _minVotesHint = "";
         });
       }
     });
-
+    _multiSigMaxVotesFocusNode.addListener(() {
+      if (_multiSigMaxVotesFocusNode.hasFocus) {
+        setState(() {
+          _minVotesHint = null;
+        });
+      } else {
+        setState(() {
+          _minVotesHint = "";
+        });
+      }
+    });
     // Set initial currency format
     _localCurrencyFormat = NumberFormat.currency(
         locale: widget.localCurrency.getLocale().toString(),
@@ -192,7 +209,7 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
                           // Header
                           AutoSizeText(
                             CaseChange.toUpperCase(
-                                AppLocalization.of(context).multiSigTitle,
+                                AppLocalization.of(context).multisigTitle,
                                 context),
                             style: AppStyles.textStyleHeader(context),
                             textAlign: TextAlign.center,
@@ -402,8 +419,38 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
-                                    getEnterDateContainer(),
                                     SizedBox(height: 20),
+                                    Container(
+                                        child: getEnterMaxVotesContainer()),
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_maxVotesValidationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Container(
+                                        child: getEnterMinVotesContainer()),
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_minVotesValidationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 30),
@@ -486,7 +533,7 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).lockCoinEstimationButton,
+                          AppLocalization.of(context).multiSigEstimationButton,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () async {
                         validRequest = _validateRequest();
                         if (validRequest) {
@@ -512,7 +559,10 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
                                   scPredictAddress: scPredictAddress,
                                   owner:
                                       StateContainer.of(context).wallet.address,
-                                  dateUnlock: _multiSigDate,
+                                  minVotes: int.tryParse(
+                                      _multiSigMinVotesController.text),
+                                  maxVotes: int.tryParse(
+                                      _multiSigMaxVotesController.text),
                                   amountRaw: _localCurrencyMode
                                       ? NumberUtil.getAmountAsRaw(
                                           _convertLocalCurrencyToCrypto())
@@ -692,7 +742,8 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
   bool _validateRequest() {
     bool isValid = true;
     _multiSigAmountFocusNode.unfocus();
-    _multiSigDateFocusNode.unfocus();
+    _multiSigMinVotesFocusNode.unfocus();
+    _multiSigMaxVotesFocusNode.unfocus();
     // Validate amount
     if (_multiSigAmountController.text.trim().isEmpty) {
       isValid = false;
@@ -723,11 +774,50 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
         });
       }
     }
-    if (_multiSigDateController.text.trim().isEmpty || _multiSigDate == null) {
+    int minVotes = int.tryParse(_multiSigMinVotesController.text);
+    if (_multiSigMinVotesController.text.trim().isEmpty) {
       isValid = false;
       setState(() {
-        _dateValidationText = AppLocalization.of(context).dateUnlockTimeMissing;
+        _minVotesValidationText = AppLocalization.of(context).minVotesMissing;
       });
+    } else {
+      if (minVotes == null) {
+        isValid = false;
+        setState(() {
+          _minVotesValidationText =
+              AppLocalization.of(context).minVotesNumericError;
+        });
+      }
+    }
+    int maxVotes = int.tryParse(_multiSigMaxVotesController.text);
+    if (_multiSigMaxVotesController.text.trim().isEmpty) {
+      isValid = false;
+      setState(() {
+        _maxVotesValidationText = AppLocalization.of(context).maxVotesMissing;
+      });
+    } else {
+      if (maxVotes == null) {
+        isValid = false;
+        setState(() {
+          _maxVotesValidationText =
+              AppLocalization.of(context).maxVotesNumericError;
+        });
+      } else {
+        if (maxVotes > 32) {
+          isValid = false;
+          setState(() {
+            _maxVotesValidationText =
+                AppLocalization.of(context).maxVotes32Error;
+          });
+        }
+        if (maxVotes != null && minVotes != null && maxVotes < minVotes) {
+          isValid = false;
+          setState(() {
+            _maxVotesValidationText =
+                AppLocalization.of(context).maxVSminVotesError;
+          });
+        }
+      }
     }
     return isValid;
   }
@@ -831,15 +921,26 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
   } //************ Enter Amount Container Method End ************//
   //*************************************************************//
 
-//************ Enter Date Container Method ************//
-  //*******************************************************//
-  getEnterDateContainer() {
+  getEnterMaxVotesContainer() {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterMaxVotesMultiSig,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
         AppTextField(
-          focusNode: FocusNode(),
-          controller: _multiSigDateController,
-          topMargin: 30,
+          focusNode: _multiSigMaxVotesFocusNode,
+          controller: _multiSigMaxVotesController,
           cursorColor: StateContainer.of(context).curTheme.primary,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -847,61 +948,78 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
             color: StateContainer.of(context).curTheme.primary,
             fontFamily: 'Roboto',
           ),
-          inputFormatters: [LengthLimitingTextInputFormatter(1)],
+          inputFormatters: [LengthLimitingTextInputFormatter(2)],
           onChanged: (text) {
             // Always reset the error message to be less annoying
             setState(() {
-              _dateValidationText = "";
+              _maxVotesValidationText = "";
             });
           },
-          suffixButton: TextFieldButton(
-              icon: AppIcons.timer,
-              onPressed: () {
-                DatePicker.showDateTimePicker(context,
-                    theme: DatePickerTheme(
-                      containerHeight: 210.0,
-                    ),
-                    showTitleActions: true,
-                    minTime: DateTime.now(),
-                    maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
-                  _multiSigDateController.text =
-                      '${date.year}/${date.month.toString().padLeft(2, "0")}/${date.day.toString().padLeft(2, "0")} - ${date.hour.toString().padLeft(2, "0")}:${date.minute.toString().padLeft(2, "0")}';
-
-                  setState(() {
-                    _multiSigDate = date;
-                  });
-                }, currentTime: DateTime.now(), locale: LocaleType.en);
-              }),
           textInputAction: TextInputAction.next,
           maxLines: null,
           autocorrect: false,
-          hintText: _dateHint == null
+          hintText: _maxVotesHint == null
               ? ""
-              : AppLocalization.of(context).enterDateMultiSig,
-          fadeSuffixOnCondition: true,
-          suffixShowFirstCondition: true,
+              : AppLocalization.of(context).enterMaxVotesMultiSig,
           keyboardType:
-              TextInputType.numberWithOptions(signed: true, decimal: true),
+              TextInputType.numberWithOptions(signed: true, decimal: false),
           textAlign: TextAlign.center,
           onSubmitted: (text) {
             FocusScope.of(context).unfocus();
           },
-        ),
-        // ******* Enter Date Error Container ******* //
-        Container(
-          alignment: AlignmentDirectional(0, 0),
-          margin: EdgeInsets.only(top: 3),
-          child: Text(_dateValidationText,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: StateContainer.of(context).curTheme.primary,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w600,
-              )),
-        ),
-        // ******* Enter Date Error Container End ******* //
+        )
       ],
     );
-  } //************ Enter Date Container Method End ************//
-  //*************************************************************//
+  }
+
+  getEnterMinVotesContainer() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              AppLocalization.of(context).enterMinVotesMultiSig,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w100,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text60,
+              ),
+            ),
+          ],
+        ),
+        AppTextField(
+          focusNode: _multiSigMinVotesFocusNode,
+          controller: _multiSigMinVotesController,
+          cursorColor: StateContainer.of(context).curTheme.primary,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: StateContainer.of(context).curTheme.primary,
+            fontFamily: 'Roboto',
+          ),
+          inputFormatters: [LengthLimitingTextInputFormatter(2)],
+          onChanged: (text) {
+            // Always reset the error message to be less annoying
+            setState(() {
+              _minVotesValidationText = "";
+            });
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: null,
+          autocorrect: false,
+          hintText: _minVotesHint == null
+              ? ""
+              : AppLocalization.of(context).enterMinVotesMultiSig,
+          keyboardType:
+              TextInputType.numberWithOptions(signed: true, decimal: false),
+          textAlign: TextAlign.center,
+          onSubmitted: (text) {
+            FocusScope.of(context).unfocus();
+          },
+        )
+      ],
+    );
+  }
 }

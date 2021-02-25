@@ -90,8 +90,8 @@ class _TimeLockListState extends State<TimeLockList> {
 
         int contractReadDataTimestamp = await sl
             .get<SmartContractService>()
-            .getContractReadDataTimestamp(
-                smartContractTimeLock.contractAddress);
+            .getContractReadDataUint64(
+                smartContractTimeLock.contractAddress, "timestamp");
         smartContractTimeLock.timestamp = contractReadDataTimestamp;
 
         smartContractTimeLockList.add(smartContractTimeLock);
@@ -340,7 +340,7 @@ class _TimeLockListState extends State<TimeLockList> {
                           text: '',
                           children: [
                             TextSpan(
-                              text: "Author : ",
+                              text: "Owner : ",
                               style: TextStyle(
                                 color: StateContainer.of(context)
                                     .curTheme

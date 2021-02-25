@@ -392,23 +392,25 @@ class AppLocalization {
   }
 
   String get newAccountInfoDerivationPath {
-    return Intl.message("Please note, the address that will be generated for your new account will use type 515 for derive path and not type 60 dedicated to Ether (cf: Registered coin types for BIP-0044).",
-        desc: 'intro_welcome_new_account', name: 'newAccountInfoDerivationPath');
+    return Intl.message(
+        "Please note, the address that will be generated for your new account will use type 515 for derive path and not type 60 dedicated to Ether (cf: Registered coin types for BIP-0044).",
+        desc: 'intro_welcome_new_account',
+        name: 'newAccountInfoDerivationPath');
   }
 
   String get enterSeedFrom {
-    return Intl.message("Please specify the origin of your seed (HD Wallet / Paper Wallet).",
-        desc: '', name: 'enterSeedFrom');
+    return Intl.message(
+        "Please specify the origin of your seed (HD Wallet / Paper Wallet).",
+        desc: '',
+        name: 'enterSeedFrom');
   }
 
   String get displaySeedOrigin {
-    return Intl.message("Origin : ",
-        desc: '', name: 'displaySeedOrigin');
+    return Intl.message("Origin : ", desc: '', name: 'displaySeedOrigin');
   }
 
   String get addressUnknown {
-    return Intl.message("Address unknown",
-        desc: '', name: 'addressUnknown');
+    return Intl.message("Address unknown", desc: '', name: 'addressUnknown');
   }
 
   String get ackBackedUp {
@@ -1201,86 +1203,140 @@ class AppLocalization {
 
   /// -- END SETTINGS ITEMS
 
-
   /// -- SMART CONTRAT ITEMS
   String get scHeader {
-    return Intl.message("Smart Contracts",
-        desc: '', name: 'scHeader');
-  } 
+    return Intl.message("Smart Contracts", desc: '', name: 'scHeader');
+  }
 
   String get timeLockTitle {
-    return Intl.message("Time Lock",
-        desc: '', name: 'timeLockTitle');
-  } 
+    return Intl.message("Time Lock", desc: '', name: 'timeLockTitle');
+  }
 
-  String get multisigMofNTitle {
-    return Intl.message("Multisig M-of-N",
-        desc: '', name: 'multisigMofNTitle');
-  } 
+  String get multisigTitle {
+    return Intl.message("Multisig M-of-N", desc: '', name: 'multisigTitle');
+  }
 
   String get oracleLockTitle {
-    return Intl.message("Oracle Lock",
-        desc: '', name: 'oracleLockTitle');
-  } 
+    return Intl.message("Oracle Lock", desc: '', name: 'oracleLockTitle');
+  }
 
   String get refundableOracleLockTitle {
     return Intl.message("Refundable Oracle Lock",
         desc: '', name: 'refundableOracleLockTitle');
-  } 
-  
+  }
+
   String get createTimeLock {
     return Intl.message("Create Time Lock Smart Contract",
         desc: '', name: 'createTimeLock');
-  } 
+  }
 
   String get createMultiSig {
     return Intl.message("Create MultiSig Contract",
         desc: '', name: 'createMultiSig');
-  } 
+  }
 
   String get owner {
-    return Intl.message("Owner",
-        desc: '', name: 'owner');
-  } 
+    return Intl.message("Owner", desc: '', name: 'owner');
+  }
 
   String get smartContractAddress {
     return Intl.message("Smart Contract Address",
         desc: '', name: 'smartContractAddress');
-  } 
+  }
 
   String get enterDateTimeLock {
     return Intl.message("Enter the unlock time",
         desc: '', name: 'enterDateTimeLock');
-  } 
+  }
+
+  String get enterMaxVotesMultiSig {
+    return Intl.message("Enter the number of voters",
+        desc: '', name: 'enterMaxVotesMultiSig');
+  }
+
+  String get enterMinVotesMultiSig {
+    return Intl.message("Enter the min number of votes required to unlock the coins",
+        desc: '', name: 'enterMinVotesMultiSig');
+  }
 
   String get lockCoinConfirmatonButton {
     return Intl.message("Confirm Lock coins",
         desc: '', name: 'lockCoinConfirmatonButton');
-  } 
+  }
 
   String get lockCoinEstimationButton {
     return Intl.message("Estimate Lock coins",
         desc: '', name: 'lockCoinEstimationButton');
-  } 
+  }
+
+  String get multiSigEstimationButton {
+    return Intl.message("Estimate Multi Signatures",
+        desc: '', name: 'multiSigEstimationButton');
+  }
 
   String get unlockTimeTitle {
-    return Intl.message("Unlock time",
-        desc: '', name: 'unlockTimeTitle');
-  } 
+    return Intl.message("Unlock time", desc: '', name: 'unlockTimeTitle');
+  }
 
   String get dateUnlockTimeMissing {
     return Intl.message("Please Enter the time of unlock",
         desc: '', name: 'dateUnlockTimeMissing');
   }
 
+  String get maxVotesTitle {
+    return Intl.message("Number of voters", desc: '', name: 'maxVotesTitle');
+  }
+
+  String get minVotesTitle {
+    return Intl.message("Min number of votes required to unlock the coins", desc: '', name: 'minVotesTitle');
+  }
+
+  String get maxVotesMissing {
+    return Intl.message("Please Enter the number of voters",
+        desc: '', name: 'maxVotesMissing');
+  }
+
+  String get minVotesMissing {
+    return Intl.message(
+        "Please Enter the min number of votes required to unlock the coins",
+        desc: '',
+        name: 'minVotesMissing');
+  }
+
+  String get maxVSminVotesError {
+    return Intl.message(
+        "The number of voters should be higher than the min number of votes required to unlock the coins",
+        desc: '',
+        name: 'maxVSminVotesError');
+  }
+
+  String get maxVotes32Error {
+    return Intl.message(
+        "The number of voters shouldn't be higher than 32",
+        desc: '',
+        name: 'maxVotes32Error');
+  }
+
+  String get minVotesNumericError {
+    return Intl.message(
+        "The min number of votes required to unlock the coins should be numeric",
+        desc: '',
+        name: 'minVotesNumericError');
+  }
+
+  String get maxVotesNumericError {
+    return Intl.message(
+        "The number of voters should be numeric",
+        desc: '',
+        name: 'maxVotesNumericError');
+  }
+
   String get gasCost {
-    return Intl.message("Gas cost",
-        desc: '', name: 'gasCost');
+    return Intl.message("Gas cost", desc: '', name: 'gasCost');
   }
 
   String get txFee {
-    return Intl.message("Tx fees",
-        desc: '', name: 'txFee');
+    return Intl.message("Tx fees", desc: '', name: 'txFee');
   }
 
   String get contractDeployError {
@@ -1289,8 +1345,7 @@ class AppLocalization {
   }
 
   String get timeLockTo {
-    return Intl.message("Lock To",
-        desc: '', name: 'timeLockTo');
+    return Intl.message("Lock To", desc: '', name: 'timeLockTo');
   }
 
   String get timeLockAmountConfirm {
@@ -1303,13 +1358,15 @@ class AppLocalization {
   }
 
   String get scTransferButton {
-    return Intl.message("Transfer",
-        desc: '', name: 'timeLockTransferButton');
+    return Intl.message("Transfer", desc: '', name: 'timeLockTransferButton');
+  }
+
+  String get scAddVoterButton {
+    return Intl.message("Add voter", desc: '', name: 'timescAddVoterButtonLockTransferButton');
   }
 
   String get scTerminateButton {
-    return Intl.message("Terminate",
-        desc: '', name: 'scTerminateButton');
+    return Intl.message("Terminate", desc: '', name: 'scTerminateButton');
   }
 
   String get scTransferConfirmationTitle {
@@ -1318,8 +1375,10 @@ class AppLocalization {
   }
 
   String get timeLockTransferConfirmationText {
-    return Intl.message("Are you sure you want to send the locked coins to the destination address ?",
-        desc: '', name: 'timeLockTransferConfirmationText');
+    return Intl.message(
+        "Are you sure you want to send the locked coins to the destination address ?",
+        desc: '',
+        name: 'timeLockTransferConfirmationText');
   }
 
   String get scTerminateConfirmationTitle {
@@ -1327,9 +1386,23 @@ class AppLocalization {
         desc: '', name: 'scTerminateConfirmationTitle');
   }
 
+  String get scAddVoterConfirmationTitle {
+    return Intl.message("Add voter confirmation",
+        desc: '', name: 'scAddVoterConfirmationTitle');
+  }
+
+  String get scAddVoterConfirmationText {
+    return Intl.message(
+        "Are you sure you want to add the voter's address that can vote for transfers to unlock the coins ?",
+        desc: '',
+        name: 'scAddVoterConfirmationText');
+  }
+
   String get timeLockTerminateConfirmationText {
-    return Intl.message("Are you sure you want to terminate the contract and send 50% of the stacked coins to the destination address ?",
-        desc: '', name: 'timeLockTransferConfirmationText');
+    return Intl.message(
+        "Are you sure you want to terminate the contract and send 50% of the stacked coins to the destination address ?",
+        desc: '',
+        name: 'timeLockTransferConfirmationText');
   }
 
   /// -- SMART CONTRACT ITEMS END
