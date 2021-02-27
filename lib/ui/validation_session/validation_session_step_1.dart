@@ -16,7 +16,9 @@ import 'package:my_idena/ui/validation_session/validation_thumbnails.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/count_down.dart';
 import 'package:my_idena/ui/widgets/demo_mode_clip_widget.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/util/enums/wallet_type.dart';
@@ -25,8 +27,10 @@ import 'package:my_idena/util/util_node.dart';
 
 class ValidationSessionStep1Page extends StatefulWidget {
   final bool simulationMode;
+  final String address;
 
-  ValidationSessionStep1Page({Key key, this.simulationMode}) : super(key: key);
+  ValidationSessionStep1Page({Key key, this.simulationMode, this.address})
+      : super(key: key);
 
   @override
   _ValidationSessionStep1PageState createState() =>
@@ -87,10 +91,8 @@ class _ValidationSessionStep1PageState
   Future<void> loadValidationSession() async {
     ValidationSessionInfo _validationSessionInfo = await sl
         .get<ValidationService>()
-        .getValidationSessionFlipsList(
-            EpochPeriod.ShortSession, null, widget.simulationMode, StateContainer.of(context)
-                                .selectedAccount
-                                .address);
+        .getValidationSessionFlipsList(EpochPeriod.ShortSession, null,
+            widget.simulationMode, widget.address);
     String privateKey;
     if (await NodeUtil().getNodeType() == SHARED_NODE) {
       String seedOrigin = await sl.get<SharedPrefsUtil>().getSeedOrigin();
@@ -102,10 +104,9 @@ class _ValidationSessionStep1PageState
           //print("privateKey : " + privateKey);
         }
       }
-      _validationSessionInfo.privateKey = privateKey == null ? seed : privateKey;
-    }
-    else
-    {
+      _validationSessionInfo.privateKey =
+          privateKey == null ? seed : privateKey;
+    } else {
       _validationSessionInfo.privateKey = null;
     }
 
@@ -273,7 +274,7 @@ class _ValidationSessionStep1PageState
               ),
 
               // Next Screen Button
-              _durationSession > 0 
+              _durationSession > 0
                   ? CountDown(
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
@@ -286,34 +287,59 @@ class _ValidationSessionStep1PageState
                             '/validation_session_step_2',
                             arguments: {
                               'simulationMode': widget.simulationMode,
-                              'privateKey': validationSessionInfo.privateKey
+                              'privateKey': validationSessionInfo.privateKey,
+                              'address': widget.address
                             });
                       })
                   : SizedBox(),
-              allSelect
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AppButton.buildAppButton(
-                            context,
-                            AppButtonType.PRIMARY,
-                            AppLocalization.of(context).submitAnswers,
-                            Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
-                          if (widget.simulationMode == false) {
-                            sl
-                                .get<ValidationService>()
-                                .submitShortAnswers(validationSessionInfo);
-                          }
-                          Navigator.of(context).pushNamed(
-                              '/validation_session_step_2',
-                              arguments: {
-                                'simulationMode': widget.simulationMode,
-                                'privateKey': validationSessionInfo.privateKey
-                              });
-                        }),
-                      ],
-                    )
-                  : SizedBox(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AppButton.buildAppButton(
+                      context,
+                      allSelect ? AppButtonType.PRIMARY : AppButtonType.PRIMARY_OUTLINE,
+                      AppLocalization.of(context).submitAnswers,
+                      Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
+                    if (allSelect == false) {
+                      AppDialogs.showConfirmDialog(
+                          context,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllSelectTitle,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllSelectDesc,
+                          CaseChange.toUpperCase(
+                              AppLocalization.of(context).yesButton, context),
+                          () async {
+                        if (widget.simulationMode == false) {
+                          sl
+                              .get<ValidationService>()
+                              .submitShortAnswers(validationSessionInfo);
+                        }
+                        Navigator.of(context).pushNamed(
+                            '/validation_session_step_2',
+                            arguments: {
+                              'simulationMode': widget.simulationMode,
+                              'privateKey': validationSessionInfo.privateKey,
+                              'address': widget.address
+                            });
+                      });
+                    } else {
+                      if (widget.simulationMode == false) {
+                        sl
+                            .get<ValidationService>()
+                            .submitShortAnswers(validationSessionInfo);
+                      }
+                      Navigator.of(context)
+                          .pushNamed('/validation_session_step_2', arguments: {
+                        'simulationMode': widget.simulationMode,
+                        'privateKey': validationSessionInfo.privateKey,
+                        'address': widget.address
+                      });
+                    }
+                  }),
+                ],
+              ),
             ],
           ),
         ),

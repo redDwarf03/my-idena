@@ -23,8 +23,11 @@ import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 class ValidationSessionStep2Page extends StatefulWidget {
   final bool simulationMode;
   final String privateKey;
+  final String address;
 
-  ValidationSessionStep2Page({Key key, this.simulationMode, this.privateKey}) : super(key: key);
+  ValidationSessionStep2Page(
+      {Key key, this.simulationMode, this.privateKey, this.address})
+      : super(key: key);
 
   @override
   _ValidationSessionStep2PageState createState() =>
@@ -91,11 +94,10 @@ class _ValidationSessionStep2PageState
   }
 
   Future<void> loadValidationSession() async {
-    ValidationSessionInfo _validationSessionInfo = await sl.get<ValidationService>()
-        .getValidationSessionFlipsList(
-            EpochPeriod.LongSession, null, widget.simulationMode, StateContainer.of(context)
-                                .selectedAccount
-                                .address);
+    ValidationSessionInfo _validationSessionInfo = await sl
+        .get<ValidationService>()
+        .getValidationSessionFlipsList(EpochPeriod.LongSession, null,
+            widget.simulationMode, widget.address);
     _validationSessionInfo.privateKey = widget.privateKey;
     setState(() {
       validationSessionInfo = _validationSessionInfo;
@@ -251,7 +253,8 @@ class _ValidationSessionStep2PageState
                       durationInSeconds: _durationSession,
                       isEndCountDown: (bool isEnd) {
                         if (widget.simulationMode == false) {
-                          sl.get<ValidationService>()
+                          sl
+                              .get<ValidationService>()
                               .submitLongAnswers(validationSessionInfo);
                         }
                         Navigator.of(context).pushNamed(
@@ -259,40 +262,76 @@ class _ValidationSessionStep2PageState
                         );
                       })
                   : SizedBox(),
-              allSelect
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AppButton.buildAppButton(
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AppButton.buildAppButton(
+                      context,
+                      allSelect
+                          ? AppButtonType.PRIMARY
+                          : AppButtonType.PRIMARY_OUTLINE,
+                      AppLocalization.of(context).startCheckingKeywords,
+                      Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
+                    if (allSelect == false) {
+                      AppDialogs.showConfirmDialog(
+                          context,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllSelectTitle,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllSelectDesc,
+                          CaseChange.toUpperCase(
+                              AppLocalization.of(context).yesButton, context),
+                          () async {
+                        AppDialogs.showConfirmDialog(
                             context,
-                            AppButtonType.PRIMARY,
-                            AppLocalization.of(context).startCheckingKeywords,
-                            Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
-                          AppDialogs.showConfirmDialog(
-                              context,
+                            AppLocalization.of(context)
+                                .validationAnswersNotYetSubmitted,
+                            AppLocalization.of(context)
+                                    .validationQualifyKeywords +
+                                " " +
+                                AppLocalization.of(context)
+                                    .validationFlipsIrrelevantKeywordsWarning,
+                            CaseChange.toUpperCase(
+                                AppLocalization.of(context)
+                                    .validationUnderstand,
+                                context), () {
+                          Navigator.of(context).pushNamed(
+                              '/validation_session_step_3',
+                              arguments: {
+                                'simulationMode': widget.simulationMode,
+                                'validationSessionInfo': validationSessionInfo,
+                                'privateKey': validationSessionInfo.privateKey,
+                                'address': widget.address
+                              });
+                        });
+                      });
+                    } else {
+                      AppDialogs.showConfirmDialog(
+                          context,
+                          AppLocalization.of(context)
+                              .validationAnswersNotYetSubmitted,
+                          AppLocalization.of(context)
+                                  .validationQualifyKeywords +
+                              " " +
                               AppLocalization.of(context)
-                                  .validationAnswersNotYetSubmitted,
-                              AppLocalization.of(context)
-                                      .validationQualifyKeywords +
-                                  " " +
-                                  AppLocalization.of(context)
-                                      .validationFlipsIrrelevantKeywordsWarning,
-                              CaseChange.toUpperCase(
-                                  AppLocalization.of(context)
-                                      .validationUnderstand,
-                                  context), () {
-                            Navigator.of(context).pushNamed(
-                                '/validation_session_step_3',
-                                arguments: {
-                                  'simulationMode': widget.simulationMode,
-                                  'validationSessionInfo': validationSessionInfo,
-                                  'privateKey' : validationSessionInfo.privateKey
-                                });
-                          });
-                        }),
-                      ],
-                    )
-                  : SizedBox(),
+                                  .validationFlipsIrrelevantKeywordsWarning,
+                          CaseChange.toUpperCase(
+                              AppLocalization.of(context).validationUnderstand,
+                              context), () {
+                        Navigator.of(context).pushNamed(
+                            '/validation_session_step_3',
+                            arguments: {
+                              'simulationMode': widget.simulationMode,
+                              'validationSessionInfo': validationSessionInfo,
+                              'privateKey': validationSessionInfo.privateKey,
+                              'address': widget.address
+                            });
+                      });
+                    }
+                  }),
+                ],
+              ),
             ],
           ),
         ),

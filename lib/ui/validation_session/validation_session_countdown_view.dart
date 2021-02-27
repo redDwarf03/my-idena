@@ -471,8 +471,10 @@ class _ValidationSessionCountdownTextState
   Future launchSession(bool force) async {
     if (currentPeriod == EpochPeriod.ShortSession || force) {
       bool simulationMode = false;
-      Navigator.of(context)
-          .pushNamed('/validation_session_step_1', arguments: simulationMode);
+      Navigator.of(context).pushNamed('/validation_session_step_1', arguments: {
+        'simulationMode': simulationMode,
+        'address': StateContainer.of(context).selectedAccount.address
+      });
     }
   }
 
@@ -542,49 +544,56 @@ class _ValidationSessionCountdownTextState
                         .toString(),
                     textAlign: TextAlign.center,
                     style: AppStyles.textStyleHomeInfoDetail(context)),
-                    controller != null ?
-                CountdownTimer(
-                  controller: controller,
-                  widgetBuilder: (_, CurrentRemainingTime time) {
-                    if (time == null) {
-                      return Text("");
-                    } else {
-                      return Row(
-                        children: [
-                          Text(
-                              time.days != null
-                                  ? "${time.days}" +
-                                      AppLocalization.of(context).timeDays
-                                  : "0" + AppLocalization.of(context).timeDays,
-                              style:
-                                  AppStyles.textStyleHomeInfoDetail(context)),
-                          Text(
-                              time.hours != null
-                                  ? " ${time.hours}" +
-                                      AppLocalization.of(context).timeHours
-                                  : " 0" +
-                                      AppLocalization.of(context).timeHours,
-                              style:
-                                  AppStyles.textStyleHomeInfoDetail(context)),
-                          Text(
-                              time.min != null
-                                  ? " ${time.min}" +
-                                      AppLocalization.of(context).timeMin
-                                  : " 0" + AppLocalization.of(context).timeMin,
-                              style:
-                                  AppStyles.textStyleHomeInfoDetail(context)),
-                          Text(
-                              time.sec != null
-                                  ? " ${time.sec}" +
-                                      AppLocalization.of(context).timeSec
-                                  : " 0" + AppLocalization.of(context).timeSec,
-                              style:
-                                  AppStyles.textStyleHomeInfoDetail(context)),
-                        ],
-                      );
-                    }
-                  },
-                ) : SizedBox(),
+                controller != null
+                    ? CountdownTimer(
+                        controller: controller,
+                        widgetBuilder: (_, CurrentRemainingTime time) {
+                          if (time == null) {
+                            return Text("");
+                          } else {
+                            return Row(
+                              children: [
+                                Text(
+                                    time.days != null
+                                        ? "${time.days}" +
+                                            AppLocalization.of(context).timeDays
+                                        : "0" +
+                                            AppLocalization.of(context)
+                                                .timeDays,
+                                    style: AppStyles.textStyleHomeInfoDetail(
+                                        context)),
+                                Text(
+                                    time.hours != null
+                                        ? " ${time.hours}" +
+                                            AppLocalization.of(context)
+                                                .timeHours
+                                        : " 0" +
+                                            AppLocalization.of(context)
+                                                .timeHours,
+                                    style: AppStyles.textStyleHomeInfoDetail(
+                                        context)),
+                                Text(
+                                    time.min != null
+                                        ? " ${time.min}" +
+                                            AppLocalization.of(context).timeMin
+                                        : " 0" +
+                                            AppLocalization.of(context).timeMin,
+                                    style: AppStyles.textStyleHomeInfoDetail(
+                                        context)),
+                                Text(
+                                    time.sec != null
+                                        ? " ${time.sec}" +
+                                            AppLocalization.of(context).timeSec
+                                        : " 0" +
+                                            AppLocalization.of(context).timeSec,
+                                    style: AppStyles.textStyleHomeInfoDetail(
+                                        context)),
+                              ],
+                            );
+                          }
+                        },
+                      )
+                    : SizedBox(),
               ],
             ))
           ])));

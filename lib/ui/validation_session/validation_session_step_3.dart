@@ -27,12 +27,14 @@ class ValidationSessionStep3Page extends StatefulWidget {
   final ValidationSessionInfo paramValidationSessionInfo;
   final bool simulationMode;
   final String privateKey;
+  final String address;
 
   ValidationSessionStep3Page(
       {Key key,
       this.paramValidationSessionInfo,
       this.simulationMode,
-      this.privateKey})
+      this.privateKey,
+      this.address})
       : super(key: key);
 
   @override
@@ -110,10 +112,11 @@ class _ValidationSessionStep3PageState
   Future<void> loadValidationSession() async {
     validationSessionInfo = await sl
         .get<ValidationService>()
-        .getValidationSessionFlipsList(EpochPeriod.LongSession,
-            widget.paramValidationSessionInfo, widget.simulationMode, StateContainer.of(context)
-                                .selectedAccount
-                                .address);
+        .getValidationSessionFlipsList(
+            EpochPeriod.LongSession,
+            widget.paramValidationSessionInfo,
+            widget.simulationMode,
+            widget.address);
     validationSessionInfo.privateKey = widget.privateKey;
     setState(() {});
   }
@@ -294,15 +297,39 @@ class _ValidationSessionStep3PageState
                       })
                   : SizedBox(),
               // Next Screen Button
-              allSelect && allQualify && irrelvantCtl
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        AppButton.buildAppButton(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AppButton.buildAppButton(
+                      context,
+                      allSelect && allQualify && irrelvantCtl
+                          ? AppButtonType.PRIMARY
+                          : AppButtonType.PRIMARY_OUTLINE,
+                      AppLocalization.of(context).submitAnswers,
+                      Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
+                    if (allSelect && allQualify && irrelvantCtl == false) {
+                      AppDialogs.showConfirmDialog(
+                          context,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllSelectTitle,
+                          AppLocalization.of(context)
+                              .validationAnswersNotAllQualifyDesc,
+                          CaseChange.toUpperCase(
+                              AppLocalization.of(context).yesButton, context),
+                          () async {
+                        AppDialogs.showConfirmDialog(
                             context,
-                            AppButtonType.PRIMARY,
-                            AppLocalization.of(context).submitAnswers,
-                            Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
+                            AppLocalization.of(context)
+                                .validationAnswersNotYetSubmitted,
+                            AppLocalization.of(context)
+                                    .validationQualifyKeywords +
+                                " " +
+                                AppLocalization.of(context)
+                                    .validationFlipsIrrelevantKeywordsWarning,
+                            CaseChange.toUpperCase(
+                                AppLocalization.of(context)
+                                    .validationUnderstand,
+                                context), () {
                           AppDialogs.showConfirmDialog(
                               context,
                               AppLocalization.of(context).validationHeader,
@@ -320,10 +347,28 @@ class _ValidationSessionStep3PageState
                               '/home',
                             );
                           });
-                        }),
-                      ],
-                    )
-                  : SizedBox(),
+                        });
+                      });
+                    } else {
+                      AppDialogs.showConfirmDialog(
+                          context,
+                          AppLocalization.of(context).validationHeader,
+                          AppLocalization.of(context).validationFlipsSubmitOk,
+                          CaseChange.toUpperCase(
+                              AppLocalization.of(context).goHome, context), () {
+                        if (widget.simulationMode == false) {
+                          sl
+                              .get<ValidationService>()
+                              .submitLongAnswers(validationSessionInfo);
+                        }
+                        Navigator.of(context).pushNamed(
+                          '/home',
+                        );
+                      });
+                    }
+                  }),
+                ],
+              )
             ],
           ),
         ),
