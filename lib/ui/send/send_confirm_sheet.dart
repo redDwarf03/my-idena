@@ -391,7 +391,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       }
       //print("send tx");
       sl.get<AppService>().sendTx(StateContainer.of(context).wallet.address,
-          widget.amountRaw, destinationAltered, privateKey == null ? seed : privateKey);
+          widget.amountRaw, destinationAltered, privateKey == null ? seed : privateKey, null);
     } catch (e) {
       // Send failed
       //print("send failed" + e.toString());

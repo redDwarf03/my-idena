@@ -184,7 +184,7 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
                           // Header
                           AutoSizeText(
                             CaseChange.toUpperCase(
-                                AppLocalization.of(context).timeLockTitle,
+                                AppLocalization.of(context).multisigTitle,
                                 context),
                             style: AppStyles.textStyleHeader(context),
                             textAlign: TextAlign.center,
@@ -710,7 +710,7 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
         PinOverlayType.ENTER_PIN,
         expectedPin: expectedPin,
         description: AppLocalization.of(context)
-            .timeLockAmountConfirmPin
+            .scAmountConfirmPin
             .replaceAll("%1", amount),
       );
     }));

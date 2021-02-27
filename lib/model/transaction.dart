@@ -7,7 +7,7 @@ import 'package:convert/convert.dart' show hex;
 import 'package:hex/hex.dart' show HEX;
 import 'package:my_idena/util/helpers.dart';
 import 'package:web3dart/crypto.dart' as crypto show keccak256, hexToBytes, intToBytes, MsgSignature, sign;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util show toBuffer, intToBuffer, padToEven;
+import 'package:ethereum_util/ethereum_util.dart' as ethereum_util show toBuffer, intToBuffer;
 import 'package:my_idena/protos/models.pb.dart' show ProtoTransaction, ProtoTransaction_Data;
 
 class Transaction {

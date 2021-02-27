@@ -1,17 +1,23 @@
 import 'dart:async';
 import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/model/smartContractMultiSig.dart';
 import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/model/wallet.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/network/model/dictWords.dart';
+import 'package:my_idena/network/model/request/contract/api_contract_balance_updates_response.dart';
+import 'package:my_idena/network/model/request/contract/api_contract_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
 import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_idena/util/helpers.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:my_idena/themes.dart';
 import 'package:my_idena/service_locator.dart';
@@ -287,7 +293,7 @@ class StateContainerState extends State<StateContainer> {
       encryptedSecret = null;
     });
   }
-  
+
   /// Handle address response
   void handleAddressResponse(DnaGetBalanceResponse response) {
     // Set currency locale here for the UI to access
@@ -328,7 +334,7 @@ class StateContainerState extends State<StateContainer> {
         dnaIdentityResponse = await sl
             .get<AppService>()
             .getDnaIdentity(wallet.address.toString());
-            selectedAccount.state =
+        selectedAccount.state =
             dnaIdentityResponse == null || dnaIdentityResponse.result == null
                 ? ""
                 : dnaIdentityResponse.result.state;
@@ -340,9 +346,103 @@ class StateContainerState extends State<StateContainer> {
             addressTxsResponse.result != null &&
             addressTxsResponse.result.transactions != null) {
           for (Transaction item in addressTxsResponse.result.transactions) {
-            setState(() {
-              wallet.history.insert(0, item);
-            });
+            String contractAddressMultiSigToSend;
+            SmartContractMultiSig smartContractMultiSig;
+            try {
+              String payloadFromHex = AppHelpers.fromHexString(item.payload);
+              if (payloadFromHex.contains("multisig:")) {
+                contractAddressMultiSigToSend = payloadFromHex.split(":")[1];
+
+                if (contractAddressMultiSigToSend != null) {
+                  ApiContractResponse apiContractResponse = await sl
+                      .get<SmartContractService>()
+                      .getContract(contractAddressMultiSigToSend);
+                  if (apiContractResponse != null &&
+                      apiContractResponse.result != null) {
+                    smartContractMultiSig = new SmartContractMultiSig();
+                    smartContractMultiSig.type = "Multisig";
+                    smartContractMultiSig.owner =
+                        apiContractResponse.result.author;
+                    smartContractMultiSig.contractAddress =
+                        apiContractResponse.result.address;
+
+                    ApiContractBalanceUpdatesResponse
+                        apiContractBalanceUpdatesResponse = await sl
+                            .get<SmartContractService>()
+                            .getContractBalanceUpdates(
+                                smartContractMultiSig.owner,
+                                apiContractResponse.result.address,
+                                100);
+                    if (apiContractBalanceUpdatesResponse != null &&
+                        apiContractBalanceUpdatesResponse.result != null) {
+                      smartContractMultiSig.balanceUpdates =
+                          apiContractBalanceUpdatesResponse.result;
+                    }
+
+                    smartContractMultiSig.nbVotesDone = 0;
+                    for (int j = 0;
+                        j < smartContractMultiSig.balanceUpdates.length;
+                        j++) {
+                      if (smartContractMultiSig.balanceUpdates[j].txReceipt !=
+                              null &&
+                          smartContractMultiSig
+                                  .balanceUpdates[j].txReceipt.method ==
+                              "send") {
+                        smartContractMultiSig.nbVotesDone++;
+                      }
+                    }
+
+                    ContractGetStakeResponse contractGetStakeResponse = await sl
+                        .get<SmartContractService>()
+                        .getContractStake(
+                            smartContractMultiSig.contractAddress);
+                    if (contractGetStakeResponse != null &&
+                        contractGetStakeResponse.result != null) {
+                      smartContractMultiSig.stake = double.tryParse(
+                          contractGetStakeResponse.result.stake);
+                    }
+
+                    DnaGetBalanceResponse dnaGetBalanceResponse = await sl
+                        .get<AppService>()
+                        .getBalanceGetResponse(
+                            smartContractMultiSig.contractAddress, false);
+                    if (dnaGetBalanceResponse != null &&
+                        dnaGetBalanceResponse.result != null) {
+                      smartContractMultiSig.balance =
+                          double.tryParse(dnaGetBalanceResponse.result.balance);
+                    } else {
+                      smartContractMultiSig.balance = 0;
+                    }
+
+                    int maxVotes = await sl
+                        .get<SmartContractService>()
+                        .getContractReadDataByte(
+                            smartContractMultiSig.contractAddress, "maxVotes");
+                    smartContractMultiSig.maxVotes = maxVotes;
+
+                    int minVotes = await sl
+                        .get<SmartContractService>()
+                        .getContractReadDataByte(
+                            smartContractMultiSig.contractAddress, "minVotes");
+                    smartContractMultiSig.minVotes = minVotes;
+
+                    int count = await sl
+                        .get<SmartContractService>()
+                        .getContractReadDataByte(
+                            smartContractMultiSig.contractAddress, "count");
+                    smartContractMultiSig.count = count;
+
+                    int state = await sl
+                        .get<SmartContractService>()
+                        .getContractReadDataByte(
+                            smartContractMultiSig.contractAddress, "state");
+                    smartContractMultiSig.state = state;
+                  }
+                }
+              }
+            } catch (e) {}
+            item.smartContractMultiSig = smartContractMultiSig;
+            wallet.history.insert(0, item);
           }
         }
 
@@ -384,7 +484,7 @@ class StateContainerState extends State<StateContainer> {
     );
   }
 
-    Future<String> getSeed() async {
+  Future<String> getSeed() async {
     String seed;
     if (encryptedSecret != null) {
       seed = HEX.encode(AppCrypt.decrypt(

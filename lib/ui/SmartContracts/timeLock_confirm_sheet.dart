@@ -638,7 +638,7 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
         PinOverlayType.ENTER_PIN,
         expectedPin: expectedPin,
         description: AppLocalization.of(context)
-            .timeLockAmountConfirmPin
+            .scAmountConfirmPin
             .replaceAll("%1", amount),
       );
     }));

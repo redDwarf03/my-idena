@@ -10,11 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:my_idena/model/deepLinks/idena_url.dart';
 import 'package:my_idena/service/app_service.dart';
 import 'package:my_idena/themes.dart';
+import 'package:my_idena/ui/SmartContracts/multiSig_detail.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
@@ -42,6 +44,7 @@ import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/widgets/reactive_refresh.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/sync_info_view.dart';
+import 'package:my_idena/util/helpers.dart';
 
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/hapticutil.dart';
@@ -665,8 +668,7 @@ class _AppHomePageState extends State<AppHomePage>
                   ),
                   //
                   //_nodeType != SHARED_NODE &&
-                          _nodeType != PUBLIC_NODE &&
-                          _nodeType != UNKOWN_NODE
+                  _nodeType != PUBLIC_NODE && _nodeType != UNKOWN_NODE
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
@@ -738,7 +740,10 @@ class _AppHomePageState extends State<AppHomePage>
       String typeLabel = BlockTypes()
           .getTransactionTypeLabel(item.type, item.payload, context);
       String text = typeLabel == "" ? item.type : typeLabel;
-
+      text = item.smartContractMultiSig != null && item.to == StateContainer.of(
+                                                                  context)
+                                                              .selectedAccount
+                                                              .address ? "Demand to vote" : text;
       return Slidable(
         delegate: SlidableScrollDelegate(),
         actionExtentRatio: 0.35,
@@ -846,6 +851,39 @@ class _AppHomePageState extends State<AppHomePage>
                                             AppStyles.textStyleTransactionUnit(
                                                 context),
                                       ),
+                                item.smartContractMultiSig != null && item.to == StateContainer.of(
+                                                                  context)
+                                                              .selectedAccount
+                                                              .address
+                                    ? new SizedBox(
+                                        height: 18.0,
+                                        width: 18.0,
+                                        child: IconButton(
+                                            highlightColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .text15,
+                                            splashColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .text15,
+                                            onPressed: () {
+                                              Sheets.showAppHeightNineSheet(
+                                                  context: context,
+                                                  widget: MultiSigDetail(
+                                                      smartContractMultiSig:
+                                                          item.smartContractMultiSig,
+                                                          address: StateContainer.of(
+                                                                  context)
+                                                              .selectedAccount
+                                                              .address));
+                                            },
+                                            padding: EdgeInsets.all(0.0),
+                                            icon: Icon(FontAwesome5.signature,
+                                                color: Colors.red[400],
+                                                size: 18)),
+                                      )
+                                    : SizedBox(),
                               ],
                             ),
                           ),
@@ -1868,6 +1906,11 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                   Text(AppLocalization.of(context).transactionDetailReward,
                       style: AppStyles.textStyleTransactionWelcome(context)),
                   Text(widget.item.tips.toString() + " IDNA",
+                      style: AppStyles.textStyleParagraphThinPrimary(context)),
+                  SizedBox(height: 10),
+                  Text(AppLocalization.of(context).transactionDetailPayload,
+                      style: AppStyles.textStyleTransactionWelcome(context)),
+                  SelectableText(AppHelpers.fromHexString(widget.item.payload),
                       style: AppStyles.textStyleParagraphThinPrimary(context)),
                   SizedBox(height: 20),
                   Text(

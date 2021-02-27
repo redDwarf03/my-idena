@@ -1063,7 +1063,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                       bool simulationMode = true;
                       Navigator.of(context).pushNamed(
                           '/validation_session_step_1',
-                          arguments: simulationMode);
+                          arguments: {
+                                'simulationMode': simulationMode,
+                                'address': StateContainer.of(context).selectedAccount.address
+                              });
                     }),
                     Divider(
                       height: 2,

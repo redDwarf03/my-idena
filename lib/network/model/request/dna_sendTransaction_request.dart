@@ -43,21 +43,33 @@ class Param {
         this.from,
         this.to,
         this.amount,
+        this.maxFee,
+        this.tips,
+        this.payload,
     });
 
     String from;
     String to;
     String amount;
+    String maxFee;
+    String tips;
+    String payload;
 
     factory Param.fromJson(Map<String, dynamic> json) => Param(
         from: json["from"],
         to: json["to"],
         amount: json["amount"],
+        maxFee: json["maxFee"],
+        tips: json["tips"],
+        payload: json["payload"],
     );
 
     Map<String, dynamic> toJson() => {
         "from": from,
         "to": to,
         "amount": amount,
+        "maxFee": maxFee,
+        "tips": tips,
+        "payload": payload,
     };
 }

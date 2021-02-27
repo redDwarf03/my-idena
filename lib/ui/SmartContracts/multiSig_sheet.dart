@@ -307,7 +307,7 @@ class _MultiSigSheetState extends State<MultiSigSheet> {
                     // A column for Enter Amount, Error containers and the pop up list
                     SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 30, bottom: bottom + 80),
+                        padding: EdgeInsets.only(top: 30, bottom: bottom + 80, left: 20, right: 30),
                         child: Column(
                           children: <Widget>[
                             Stack(

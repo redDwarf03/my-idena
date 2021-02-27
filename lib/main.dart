@@ -201,9 +201,11 @@ class _AppState extends State<App> {
                     AppHomePage(priceConversion: settings.arguments),
                 settings: settings,
               );
-             case '/signin':
+            case '/signin':
               return NoTransitionRoute(
-                builder: (_) => DeepLinkSigninScreen(deepLinkParam: settings.arguments,),
+                builder: (_) => DeepLinkSigninScreen(
+                  deepLinkParam: settings.arguments,
+                ),
                 settings: settings,
               );
             case '/intro_welcome':
@@ -253,17 +255,20 @@ class _AppState extends State<App> {
                 settings: settings,
               );
             case '/validation_session_step_1':
+              var map = Map<String, dynamic>.from(settings.arguments);
               return NoTransitionRoute(
                 builder: (_) => ValidationSessionStep1Page(
-                    simulationMode: settings.arguments),
+                  simulationMode: map['simulationMode'],
+                  address: map['address'],
+                ),
                 settings: settings,
               );
             case '/validation_session_step_2':
               var map = Map<String, dynamic>.from(settings.arguments);
               return NoTransitionRoute(
                 builder: (_) => ValidationSessionStep2Page(
-                    simulationMode: map['simulationMode'],
-                    privateKey: map['privateKey'],
+                  simulationMode: map['simulationMode'],
+                  privateKey: map['privateKey'],
                 ),
                 settings: settings,
               );
@@ -470,7 +475,10 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
 
   void setBrightnessMode() {
     setState(() {
-      StateContainer.of(context).curTheme = MediaQuery.of(context).platformBrightness == Brightness.dark ? IdenaDarkTheme() : IdenaTheme();
+      StateContainer.of(context).curTheme =
+          MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? IdenaDarkTheme()
+              : IdenaTheme();
     });
   }
 

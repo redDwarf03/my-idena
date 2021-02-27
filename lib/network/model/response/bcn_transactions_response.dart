@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/model/address.dart';
+import 'package:my_idena/model/smartContractMultiSig.dart';
 import 'package:my_idena/util/numberutil.dart';
 
 BcnTransactionsResponse bcnTransactionsResponseFromJson(String str) =>
@@ -75,6 +76,7 @@ class Transaction {
     this.blockHash,
     this.usedFee,
     this.timestamp,
+    this.smartContractMultiSig,
   });
 
   String hash;
@@ -90,6 +92,7 @@ class Transaction {
   String blockHash;
   String usedFee;
   int timestamp;
+  SmartContractMultiSig smartContractMultiSig;
 
   factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
         hash: json["hash"],

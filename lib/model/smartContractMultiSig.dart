@@ -8,6 +8,7 @@ class SmartContractMultiSig {
   int minVotes;
   int state;
   int count;
+  int nbVotesDone;
   String owner;
   String contractAddress;
 

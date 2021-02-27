@@ -483,6 +483,11 @@ class AppLocalization {
         desc: 'transaction_detail', name: 'transactionDetailReward');
   }
 
+  String get transactionDetailPayload {
+    return Intl.message('Payload',
+        desc: 'transaction_detail', name: 'transactionDetailPayload');
+  }
+
   String get transactionDetailCopyPaste {
     return Intl.message('Double click on text to copy to clipboard',
         desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
@@ -902,6 +907,21 @@ class AppLocalization {
         desc: '', name: 'validationAnswersNotYetSubmitted');
   }
 
+  String get validationAnswersNotAllSelectTitle {
+    return Intl.message("Warning",
+        desc: '', name: 'validationAnswersNotAllSelectTitle');
+  }
+
+  String get validationAnswersNotAllSelectDesc {
+    return Intl.message("You haven't select all flips. Are you sure to submit ?",
+        desc: '', name: 'validationAnswersNotAllSelectDesc');
+  }
+
+  String get validationAnswersNotAllQualifyDesc {
+    return Intl.message("You haven't check all flips quality. Are you sure to submit ?",
+        desc: '', name: 'validationAnswersNotAllQualifyDesc');
+  }
+
   String get validationQualifyKeywordsQuestion {
     return Intl.message("Are both keywords relevant to the flip ?",
         desc: '', name: 'validationQualifyKeywordsQuestion');
@@ -1255,7 +1275,7 @@ class AppLocalization {
   }
 
   String get enterMinVotesMultiSig {
-    return Intl.message("Enter the min number of votes required to unlock the coins",
+    return Intl.message("Enter the min number of votes",
         desc: '', name: 'enterMinVotesMultiSig');
   }
 
@@ -1348,21 +1368,29 @@ class AppLocalization {
     return Intl.message("Lock To", desc: '', name: 'timeLockTo');
   }
 
-  String get timeLockAmountConfirm {
+  String get scLockAmountConfirm {
     return Intl.message("Lock %1 iDNA",
-        desc: '', name: 'timeLockAmountConfirm');
+        desc: '', name: 'scLockAmountConfirm');
   }
 
-  String get timeLockAmountConfirmPin {
-    return timeLockAmountConfirm;
+  String get scAmountConfirmPin {
+    return scLockAmountConfirm;
   }
 
   String get scTransferButton {
-    return Intl.message("Transfer", desc: '', name: 'timeLockTransferButton');
+    return Intl.message("Transfer", desc: '', name: 'scTransferButton');
+  }
+
+  String get scPushButton {
+    return Intl.message("Push", desc: '', name: 'scPushButton');
   }
 
   String get scAddVoterButton {
     return Intl.message("Add voter", desc: '', name: 'timescAddVoterButtonLockTransferButton');
+  }
+
+  String get scVoteButton {
+    return Intl.message("Vote", desc: '', name: 'scVoteButton');
   }
 
   String get scTerminateButton {
@@ -1372,6 +1400,11 @@ class AppLocalization {
   String get scTransferConfirmationTitle {
     return Intl.message("Transfer confirmation",
         desc: '', name: 'scTransferConfirmationTitle');
+  }
+
+  String get scPushConfirmationTitle {
+    return Intl.message("Push confirmation",
+        desc: '', name: 'scPushConfirmationTitle');
   }
 
   String get timeLockTransferConfirmationText {
@@ -1386,6 +1419,25 @@ class AppLocalization {
         desc: '', name: 'scTerminateConfirmationTitle');
   }
 
+  String get scVoteConfirmationTitle {
+    return Intl.message("Vote confirmation",
+        desc: '', name: 'scVoteConfirmationTitle');
+  }
+
+  String get scVoteConfirmationText {
+    return Intl.message(
+        "Are you sure you want to vote for transfers to unlock the coins ?",
+        desc: '',
+        name: 'scVoteConfirmationText');
+  }
+
+  String get scPushConfirmationText {
+    return Intl.message(
+        "Are you sure you want transferring the specified amount of coin ?",
+        desc: '',
+        name: 'scPushConfirmationText');
+  }
+
   String get scAddVoterConfirmationTitle {
     return Intl.message("Add voter confirmation",
         desc: '', name: 'scAddVoterConfirmationTitle');
@@ -1398,11 +1450,11 @@ class AppLocalization {
         name: 'scAddVoterConfirmationText');
   }
 
-  String get timeLockTerminateConfirmationText {
+  String get scTerminateConfirmationText {
     return Intl.message(
         "Are you sure you want to terminate the contract and send 50% of the stacked coins to the destination address ?",
         desc: '',
-        name: 'timeLockTransferConfirmationText');
+        name: 'scTerminateConfirmationText');
   }
 
   /// -- SMART CONTRACT ITEMS END

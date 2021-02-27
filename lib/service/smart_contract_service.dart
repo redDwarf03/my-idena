@@ -15,6 +15,7 @@ import 'package:my_idena/network/model/request/contract/contract_estimate_deploy
 import 'package:my_idena/network/model/request/contract/contract_get_stake_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_read_data_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_terminate_request.dart';
+import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
 import 'package:my_idena/network/model/response/bcn_tx_receipt_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_deploy_response.dart';
@@ -389,7 +390,7 @@ class SmartContractService {
     return _completer.future;
   }
 
-Future<ContractEstimateDeployResponse> contractEstimateDeployMultiSig(
+  Future<ContractEstimateDeployResponse> contractEstimateDeployMultiSig(
       String owner, int maxVotes, int minVotes, double amount) async {
     ContractEstimateDeployRequest contractEstimateDeployRequest;
     ContractEstimateDeployResponse contractEstimateDeployResponse;
@@ -599,11 +600,41 @@ Future<ContractEstimateDeployResponse> contractEstimateDeployMultiSig(
     return _completer.future;
   }
 
-Future<ContractCallResponse> contractCallAddMultiSig(
+  Future<String> getMultiSigToSend(String address) async {
+    if (address == null) return null;
+
+    BcnTransactionsResponse bcnTransactionsResponse =
+        await sl.get<AppService>().getAddressTxsResponse(address, 100);
+    if (bcnTransactionsResponse != null &&
+        bcnTransactionsResponse.result != null &&
+        bcnTransactionsResponse.result.transactions != null) {
+      for (int i = 0;
+          i < bcnTransactionsResponse.result.transactions.length;
+          i++) {
+        if (bcnTransactionsResponse.result.transactions[i].payload != null &&
+            bcnTransactionsResponse.result.transactions[i].payload
+                .trim()
+                .isNotEmpty) {
+          try {
+            String payloadFromHex = AppHelpers.fromHexString(
+                bcnTransactionsResponse.result.transactions[i].payload);
+            if (payloadFromHex.contains("multisig:")) {
+              return payloadFromHex.split(":")[1];
+            }
+          } catch (e) {
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<ContractCallResponse> contractCallAddMultiSig(
       String owner,
       String contract,
       double maxFee,
-      String destinationAddress) async {
+      String destinationAddress,
+      String privateKey) async {
     ContractCallMultiSigRequest contractCallRequest;
     ContractCallResponse contractCallResponse;
 
@@ -648,6 +679,12 @@ Future<ContractCallResponse> contractCallAddMultiSig(
                 headers: requestHeaders);
         if (response.status == 200) {
           contractCallResponse = contractCallResponseFromJson(response.text);
+
+          if (contractCallResponse != null &&
+              contractCallResponse.result != null) {
+            sl.get<AppService>().sendTx(owner, "0", destinationAddress,
+                privateKey, "multisig:" + contract);
+          }
         }
       } else {
         contractCallRequest = ContractCallMultiSigRequest.fromJson(mapParams);
@@ -657,6 +694,12 @@ Future<ContractCallResponse> contractCallAddMultiSig(
         if (responseHttp.statusCode == 200) {
           contractCallResponse =
               contractCallResponseFromJson(responseHttp.body);
+
+          if (contractCallResponse != null &&
+              contractCallResponse.result != null) {
+            sl.get<AppService>().sendTx(owner, "0", destinationAddress,
+                privateKey, "multisig:" + contract);
+          }
         }
       }
     } catch (e) {
@@ -952,7 +995,7 @@ Future<ContractCallResponse> contractCallAddMultiSig(
 
     try {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "http://api.idena.io/api/Address/" + address + "/Txs?limit=10"));
+          "http://api.idena.io/api/Address/" + address + "/Txs?limit=" + limit.toString()));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -963,6 +1006,7 @@ Future<ContractCallResponse> contractCallAddMultiSig(
             apiContractTxsResponseTmp.result != null) {
           for (int i = 0; i < apiContractTxsResponseTmp.result.length; i++) {
             if (apiContractTxsResponseTmp.result[i].type == "CallContract" ||
+                apiContractTxsResponseTmp.result[i].type == "TerminateContract" ||
                 apiContractTxsResponseTmp.result[i].type == "DeployContract") {
               String contractAddress = apiContractTxsResponseTmp.result[i].to;
               if (apiContractTxsResponseTmp.result[i].type ==
@@ -1005,7 +1049,8 @@ Future<ContractCallResponse> contractCallAddMultiSig(
     return _completer.future;
   }
 
-  Future<int> getContractReadDataUint64(String contractAddress, String key) async {
+  Future<int> getContractReadDataUint64(
+      String contractAddress, String key) async {
     ContractReadDataRequest contractReadDataRequest;
     ContractReadDataUint64Response contractReadDataResponse;
 
@@ -1064,7 +1109,8 @@ Future<ContractCallResponse> contractCallAddMultiSig(
     return _completer.future;
   }
 
-  Future<String> getContractReadDataHex(String contractAddress, String key) async {
+  Future<String> getContractReadDataHex(
+      String contractAddress, String key) async {
     ContractReadDataRequest contractReadDataRequest;
     ContractReadDataHexResponse contractReadDataResponse;
 
@@ -1123,7 +1169,8 @@ Future<ContractCallResponse> contractCallAddMultiSig(
     return _completer.future;
   }
 
- Future<int> getContractReadDataByte(String contractAddress, String key) async {
+  Future<int> getContractReadDataByte(
+      String contractAddress, String key) async {
     ContractReadDataRequest contractReadDataRequest;
     ContractReadDataByteResponse contractReadDataResponse;
 

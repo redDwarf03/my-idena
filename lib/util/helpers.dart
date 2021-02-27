@@ -2,8 +2,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util
-    show toBuffer, padToEven;
+import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 
 class AppHelpers {
   static List<String> hexArray = '0123456789ABCDEF'.split('');
@@ -124,6 +123,14 @@ class AppHelpers {
         HEX.encode(ethereum_util.toBuffer(byteArray)));
   }
 
+  static String fromHexString(string) {
+    try {
+      return ethereum_util.toUtf8(string);
+    } catch (e) {
+      return string;
+    }
+  }
+
   /// Converts a [BigInt] into a hex [String]
   static String bigIntToHex(BigInt i) {
     return "0x${i.toRadixString(16)}";
@@ -137,10 +144,9 @@ class AppHelpers {
     return Uint8List(32)..setRange(32 - data.length, 32, data);
   }
 
-
   /// Converts an [BigInt] to a [Uint8List]
   static Uint8List bigIntToBuffer(BigInt i) {
-    return Uint8List.fromList(
-        hex.decode(ethereum_util.padToEven(AppHelpers.bigIntToHex(i).substring(2))));
+    return Uint8List.fromList(hex.decode(
+        ethereum_util.padToEven(AppHelpers.bigIntToHex(i).substring(2))));
   }
 }

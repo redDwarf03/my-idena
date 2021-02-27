@@ -11,6 +11,8 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/model/smartContractMultiSig.dart';
+import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
@@ -22,7 +24,10 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:timelines/timelines.dart';
 
 const kTileHeight = 50.0;
@@ -33,11 +38,13 @@ const todoColor = Color(0xffd1d2d7);
 class MultiSigDetail extends StatefulWidget {
   final SmartContractMultiSig smartContractMultiSig;
   final Contact contact;
+  final String addressDestination;
   final String address;
 
   MultiSigDetail({
     this.smartContractMultiSig,
     this.contact,
+    this.addressDestination,
     this.address,
   }) : super();
 
@@ -81,7 +88,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
   void initState() {
     super.initState();
 
-    _processes = ['Deploy', 'Lock', 'Voters ok', 'Transfer', 'Terminate'];
+    _processes = ['Deploy', 'Lock', 'Voters ok', 'Push', 'Terminate'];
 
     _blockAddressFocusNode = FocusNode();
     _blockAddressController = TextEditingController();
@@ -94,9 +101,9 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
       _showContactButton = false;
       _pasteButtonVisible = false;
       _blockAddressStyle = AddressStyle.PRIMARY;
-    } else if (widget.address != null) {
+    } else if (widget.addressDestination != null) {
       // Setup initial state with prefilled address
-      _blockAddressController.text = widget.address;
+      _blockAddressController.text = widget.addressDestination;
       _showContactButton = false;
       _pasteButtonVisible = false;
       _blockAddressStyle = AddressStyle.TEXT90;
@@ -139,27 +146,24 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
       }
     });
 
-    if (widget.smartContractMultiSig.state == 2) {
-      if (widget.smartContractMultiSig
-            .getLastBalanceUpdates()
-            .txReceipt
-            .method ==
-        "transfer") {
-      _processIndex = 3;
-    } else
+    if (widget.smartContractMultiSig.getLastBalanceUpdates().txReceipt.method ==
+        "terminate") {
+      _processIndex = 4;
+    } else {
       if (widget.smartContractMultiSig
               .getLastBalanceUpdates()
               .txReceipt
               .method ==
-          "terminate") {
-        _processIndex = 4;
+          "push") {
+        _processIndex = 3;
       } else {
-        _processIndex = 2;
+        if (widget.smartContractMultiSig.state == 2) {
+          _processIndex = 2;
+        } else {
+          _processIndex = 1;
+        }
       }
-    } else {
-      _processIndex = 1;
     }
-
   }
 
   @override
@@ -199,7 +203,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
               ],
             ),
             Container(
-              height: 100,
+              height: 104,
               child: Timeline.tileBuilder(
                 theme: TimelineThemeData(
                   direction: Axis.horizontal,
@@ -348,7 +352,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
               ),
             ),
             Container(
-              height: 148,
+              height: 190,
               margin: EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -475,6 +479,35 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                         TextSpan(
                           text:
                               widget.smartContractMultiSig.maxVotes.toString(),
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: '',
+                      children: [
+                        TextSpan(
+                          text: "Number of votes done : ",
+                          style: TextStyle(
+                            color:
+                                StateContainer.of(context).curTheme.primary60,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                        TextSpan(
+                          text: widget.smartContractMultiSig.nbVotesDone
+                              .toString(),
                           style: TextStyle(
                             color:
                                 StateContainer.of(context).curTheme.primary60,
@@ -711,12 +744,16 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    _processIndex >= 3 || _processIndex == 1
-                        ? SizedBox()
-                        : AppButton.buildAppButton(
+                    // PUSH BUTTON
+                    _processIndex < 4 &&
+                            widget.smartContractMultiSig.nbVotesDone != null &&
+                            widget.smartContractMultiSig.minVotes != null &&
+                            widget.smartContractMultiSig.nbVotesDone >=
+                                widget.smartContractMultiSig.minVotes
+                        ? AppButton.buildAppButton(
                             context,
                             AppButtonType.PRIMARY,
-                            AppLocalization.of(context).scTransferButton,
+                            AppLocalization.of(context).scPushButton,
                             Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
                             validRequest = _validateRequest();
                             if (_blockAddressController.text.startsWith("@") &&
@@ -737,24 +774,40 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                   AppDialogs.showConfirmDialog(
                                       context,
                                       AppLocalization.of(context)
-                                          .scTransferConfirmationTitle,
+                                          .scPushConfirmationTitle,
                                       AppLocalization.of(context)
-                                          .scTransferConfirmationTitle,
+                                          .scPushConfirmationText,
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
-                                    /*await sl
-                                        .get<SmartContractService>()
-                                        .contractCallTransferMultiSig(
-                                            widget.smartContractMultiSig.owner,
-                                            widget.smartContractMultiSig
-                                                .contractAddress,
-                                            0.25,
-                                            contact.address,
-                                            widget.smartContractMultiSig.balance
-                                                .toString());*/
-                                    Navigator.of(context).popUntil(
-                                        RouteUtils.withNameLike('/home'));
+                                    ContractCallResponse contractCallResponse =
+                                        await sl
+                                            .get<SmartContractService>()
+                                            .contractCallPushMultiSig(
+                                                widget.smartContractMultiSig
+                                                    .owner,
+                                                widget.smartContractMultiSig
+                                                    .contractAddress,
+                                                0.25,
+                                                contact.address,
+                                                widget.smartContractMultiSig
+                                                    .balance
+                                                    .toString());
+                                    if (contractCallResponse != null &&
+                                        contractCallResponse.error != null) {
+                                      UIUtil.showSnackbar(
+                                          AppLocalization.of(context)
+                                                  .sendError +
+                                              " (" +
+                                              contractCallResponse
+                                                  .error.message +
+                                              ")",
+                                          context);
+                                      return;
+                                    } else {
+                                      Navigator.of(context).popUntil(
+                                          RouteUtils.withNameLike('/home'));
+                                    }
                                   });
                                 }
                               });
@@ -762,34 +815,51 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                               AppButton.buildAppButton(
                                   context,
                                   AppButtonType.PRIMARY,
-                                  AppLocalization.of(context).scTransferButton,
+                                  AppLocalization.of(context).scPushButton,
                                   Dimens.BUTTON_BOTTOM_SMALL_PLACE,
                                   onPressed: () {
                                 AppDialogs.showConfirmDialog(
                                     context,
                                     AppLocalization.of(context)
-                                        .scTransferConfirmationTitle,
+                                        .scPushConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .scTransferConfirmationTitle,
+                                        .scPushConfirmationText,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {
-                                  /*await sl
-                                      .get<SmartContractService>()
-                                      .contractCallTransferMultiSig(
-                                          widget.smartContractMultiSig.owner,
-                                          widget.smartContractMultiSig
-                                              .contractAddress,
-                                          0.25,
-                                          _blockAddressController.text,
-                                          widget.smartContractMultiSig.balance
-                                              .toString());*/
-                                  Navigator.of(context).popUntil(
-                                      RouteUtils.withNameLike('/home'));
+                                  ContractCallResponse contractCallResponse =
+                                      await sl
+                                          .get<SmartContractService>()
+                                          .contractCallPushMultiSig(
+                                              widget
+                                                  .smartContractMultiSig.owner,
+                                              widget.smartContractMultiSig
+                                                  .contractAddress,
+                                              0.25,
+                                              _blockAddressController.text,
+                                              widget
+                                                  .smartContractMultiSig.balance
+                                                  .toString());
+                                  if (contractCallResponse != null &&
+                                      contractCallResponse.error != null) {
+                                    UIUtil.showSnackbar(
+                                        AppLocalization.of(context).sendError +
+                                            " (" +
+                                            contractCallResponse.error.message +
+                                            ")",
+                                        context);
+                                    return;
+                                  } else {
+                                    Navigator.of(context).popUntil(
+                                        RouteUtils.withNameLike('/home'));
+                                  }
                                 });
                               });
                             }
-                          }),
+                          })
+                        : SizedBox(),
+
+                    // SEND COIN
                     _processIndex >= 3
                         ? SizedBox()
                         : AppButton.buildAppButton(
@@ -805,13 +875,12 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                     localCurrency: StateContainer.of(context)
                                         .curCurrency));
                           }),
-                    _processIndex < 2 &&
-                            widget.smartContractMultiSig.owner ==
-                                StateContainer.of(context)
-                                    .selectedAccount
-                                    .address ?
-                        
-                        AppButton.buildAppButton(
+
+                    // ADD VOTER BUTTON
+                    _processIndex == 1 &&
+                            widget.smartContractMultiSig.owner.toUpperCase() ==
+                                widget.address.toUpperCase()
+                        ? AppButton.buildAppButton(
                             context,
                             AppButtonType.PRIMARY,
                             AppLocalization.of(context).scAddVoterButton,
@@ -841,6 +910,82 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
+                                    String privateKey;
+                                    String seedOrigin = await sl
+                                        .get<SharedPrefsUtil>()
+                                        .getSeedOrigin();
+                                    String seed =
+                                        await StateContainer.of(context)
+                                            .getSeed();
+                                    if (seedOrigin == HD_WALLET) {
+                                      if (seed != null) {
+                                        int index = StateContainer.of(context)
+                                            .selectedAccount
+                                            .index;
+                                        privateKey = await AppUtil()
+                                            .seedToPrivateKey(seed, index);
+                                        //print("privateKey : " + privateKey);
+                                      }
+                                    }
+                                    ContractCallResponse contractCallResponse =
+                                        await sl
+                                            .get<SmartContractService>()
+                                            .contractCallAddMultiSig(
+                                                widget.smartContractMultiSig
+                                                    .owner,
+                                                widget.smartContractMultiSig
+                                                    .contractAddress,
+                                                0.25,
+                                                contact.address,
+                                                privateKey == null
+                                                    ? seed
+                                                    : privateKey);
+
+                                    if (contractCallResponse != null &&
+                                        contractCallResponse.error != null) {
+                                      UIUtil.showSnackbar(
+                                          AppLocalization.of(context)
+                                                  .sendError +
+                                              " (" +
+                                              contractCallResponse
+                                                  .error.message +
+                                              ")",
+                                          context);
+                                      return;
+                                    } else {
+                                      Navigator.of(context).popUntil(
+                                          RouteUtils.withNameLike('/home'));
+                                    }
+                                  });
+                                }
+                              });
+                            } else if (validRequest) {
+                              AppDialogs.showConfirmDialog(
+                                  context,
+                                  AppLocalization.of(context)
+                                      .scAddVoterConfirmationTitle,
+                                  AppLocalization.of(context)
+                                      .scAddVoterConfirmationText,
+                                  CaseChange.toUpperCase(
+                                      AppLocalization.of(context).yesButton,
+                                      context), () async {
+                                String privateKey;
+                                String seedOrigin = await sl
+                                    .get<SharedPrefsUtil>()
+                                    .getSeedOrigin();
+                                String seed =
+                                    await StateContainer.of(context).getSeed();
+                                if (seedOrigin == HD_WALLET) {
+                                  if (seed != null) {
+                                    int index = StateContainer.of(context)
+                                        .selectedAccount
+                                        .index;
+                                    privateKey = await AppUtil()
+                                        .seedToPrivateKey(seed, index);
+                                    //print("privateKey : " + privateKey);
+                                  }
+                                }
+                                ContractCallResponse contractCallResponse =
                                     await sl
                                         .get<SmartContractService>()
                                         .contractCallAddMultiSig(
@@ -848,9 +993,90 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                             widget.smartContractMultiSig
                                                 .contractAddress,
                                             0.25,
-                                            contact.address);
-                                    Navigator.of(context).popUntil(
-                                        RouteUtils.withNameLike('/home'));
+                                            _blockAddressController.text,
+                                            privateKey == null
+                                                ? seed
+                                                : privateKey);
+
+                                if (contractCallResponse != null &&
+                                    contractCallResponse.error != null) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).sendError +
+                                          " (" +
+                                          contractCallResponse.error.message +
+                                          ")",
+                                      context);
+                                  return;
+                                } else {
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                }
+                              });
+                            }
+                          })
+                        : SizedBox(),
+
+                    // VOTE (SEND) BUTTON
+                    _processIndex > 3
+                        ? SizedBox()
+                        : AppButton.buildAppButton(
+                            context,
+                            AppButtonType.PRIMARY,
+                            AppLocalization.of(context).scVoteButton,
+                            Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
+                            validRequest = _validateRequest();
+                            if (_blockAddressController.text.startsWith("@") &&
+                                validRequest) {
+                              // Need to make sure its a valid contact
+                              sl
+                                  .get<DBHelper>()
+                                  .getContactWithName(
+                                      _blockAddressController.text)
+                                  .then((contact) {
+                                if (contact == null) {
+                                  setState(() {
+                                    _addressValidationText =
+                                        AppLocalization.of(context)
+                                            .contactInvalid;
+                                  });
+                                } else {
+                                  AppDialogs.showConfirmDialog(
+                                      context,
+                                      AppLocalization.of(context)
+                                          .scVoteConfirmationTitle,
+                                      AppLocalization.of(context)
+                                          .scVoteConfirmationText,
+                                      CaseChange.toUpperCase(
+                                          AppLocalization.of(context).yesButton,
+                                          context), () async {
+                                    ContractCallResponse contractCallResponse =
+                                        await sl
+                                            .get<SmartContractService>()
+                                            .contractCallSendMultiSig(
+                                                widget.smartContractMultiSig
+                                                    .owner,
+                                                widget.smartContractMultiSig
+                                                    .contractAddress,
+                                                0.25,
+                                                contact.address,
+                                                widget.smartContractMultiSig
+                                                    .balance
+                                                    .toString());
+                                    if (contractCallResponse != null &&
+                                        contractCallResponse.error != null) {
+                                      UIUtil.showSnackbar(
+                                          AppLocalization.of(context)
+                                                  .sendError +
+                                              " (" +
+                                              contractCallResponse
+                                                  .error.message +
+                                              ")",
+                                          context);
+                                      return;
+                                    } else {
+                                      Navigator.of(context).popUntil(
+                                          RouteUtils.withNameLike('/home'));
+                                    }
                                   });
                                 }
                               });
@@ -858,32 +1084,36 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                               AppButton.buildAppButton(
                                   context,
                                   AppButtonType.PRIMARY,
-                                  AppLocalization.of(context).scTerminateButton,
+                                  AppLocalization.of(context).scVoteButton,
                                   Dimens.BUTTON_BOTTOM_SMALL_PLACE,
                                   onPressed: () {
                                 AppDialogs.showConfirmDialog(
                                     context,
                                     AppLocalization.of(context)
-                                        .scAddVoterConfirmationTitle,
+                                        .scVoteConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .scAddVoterConfirmationText,
+                                        .scVoteConfirmationText,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {
                                   await sl
                                       .get<SmartContractService>()
-                                      .contractTerminateMultiSig(
+                                      .contractCallSendMultiSig(
                                           widget.smartContractMultiSig.owner,
                                           widget.smartContractMultiSig
                                               .contractAddress,
                                           0.25,
-                                          _blockAddressController.text);
+                                          _blockAddressController.text,
+                                          widget.smartContractMultiSig.balance
+                                              .toString());
                                   Navigator.of(context).popUntil(
                                       RouteUtils.withNameLike('/home'));
                                 });
                               });
                             }
-                          }) : SizedBox(),
+                          }),
+
+                    // TERMINATE BUTTON
                     _processIndex == 4
                         ? SizedBox()
                         : AppButton.buildAppButton(
@@ -912,7 +1142,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                       AppLocalization.of(context)
                                           .scTerminateConfirmationTitle,
                                       AppLocalization.of(context)
-                                          .scTerminateConfirmationTitle,
+                                          .scTerminateConfirmationText,
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
@@ -941,7 +1171,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                                     AppLocalization.of(context)
                                         .scTerminateConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .scTerminateConfirmationTitle,
+                                        .scTerminateConfirmationText,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {

@@ -203,7 +203,6 @@ class AppService {
 
   Future<BcnTransactionsResponse> getAddressTxsResponse(
       String address, int count) async {
-
     Completer<BcnTransactionsResponse> _completer =
         new Completer<BcnTransactionsResponse>();
 
@@ -796,7 +795,8 @@ class AppService {
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE || await NodeUtil().getNodeType() == PUBLIC_NODE) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE ||
+        await NodeUtil().getNodeType() == PUBLIC_NODE) {
       dnaGetEpochResponse = new DnaGetEpochResponse();
       dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
       dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;
@@ -872,7 +872,8 @@ class AppService {
     Completer<DnaCeremonyIntervalsResponse> _completer =
         new Completer<DnaCeremonyIntervalsResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE || await NodeUtil().getNodeType() == PUBLIC_NODE) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE ||
+        await NodeUtil().getNodeType() == PUBLIC_NODE) {
       dnaCeremonyIntervalsResponse = new DnaCeremonyIntervalsResponse();
       dnaCeremonyIntervalsResponse.result =
           new DnaCeremonyIntervalsResponseResult();
@@ -1160,14 +1161,14 @@ class AppService {
         new Completer<DnaSendTransactionResponse>();
 
     dnaSendTransactionResponse = await sendTx(
-        from, amount, "0xf429e36D68BE10428D730784391589572Ee0f72B", seed);
+        from, amount, "0xf429e36D68BE10428D730784391589572Ee0f72B", seed, null);
 
     _completer.complete(dnaSendTransactionResponse);
     return _completer.future;
   }
 
-  Future<DnaSendTransactionResponse> sendTx(
-      String from, String amount, String to, String privateKey) async {
+  Future<DnaSendTransactionResponse> sendTx(String from, String amount,
+      String to, String privateKey, String payload) async {
     DnaSendTransactionRequest dnaSendTransactionRequest;
     DnaSendTransactionResponse dnaSendTransactionResponse;
 
@@ -1190,13 +1191,25 @@ class AppService {
           return _completer.future;
         }
 
-        mapParams = {
-          'method': DnaSendTransactionRequest.METHOD_NAME,
-          "params": [
-            {"from": from, "to": to, 'amount': amount}
-          ],
-          'id': 101
-        };
+        if (payload != null && payload.trim().isEmpty == false) {
+          String payloadHex =
+              AppHelpers.toHexString(ethereum_util.toBuffer(payload), true);
+          mapParams = {
+            'method': DnaSendTransactionRequest.METHOD_NAME,
+            "params": [
+              {"from": from, "to": to, 'amount': amount, 'payload': payloadHex}
+            ],
+            'id': 101
+          };
+        } else {
+          mapParams = {
+            'method': DnaSendTransactionRequest.METHOD_NAME,
+            "params": [
+              {"from": from, "to": to, 'amount': amount}
+            ],
+            'id': 101
+          };
+        }
       } else {
         if (url.isAbsolute == false || keyApp == "") {
           _completer.complete(dnaSendTransactionResponse);
@@ -1207,14 +1220,27 @@ class AppService {
           return _completer.future;
         }
 
-        mapParams = {
-          'method': DnaSendTransactionRequest.METHOD_NAME,
-          "params": [
-            {"from": from, "to": to, 'amount': amount}
-          ],
-          'id': 101,
-          'key': keyApp
-        };
+        if (payload != null && payload.trim().isEmpty == false) {
+          String payloadHex =
+              AppHelpers.toHexString(ethereum_util.toBuffer(payload), true);
+          mapParams = {
+            'method': DnaSendTransactionRequest.METHOD_NAME,
+            "params": [
+              {"from": from, "to": to, 'amount': amount, 'payload': payloadHex}
+            ],
+            'id': 101,
+            'key': keyApp
+          };
+        } else {
+          mapParams = {
+            'method': DnaSendTransactionRequest.METHOD_NAME,
+            "params": [
+              {"from": from, "to": to, 'amount': amount}
+            ],
+            'id': 101,
+            'key': keyApp
+          };
+        }
       }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {

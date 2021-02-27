@@ -775,7 +775,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                       AppLocalization.of(context)
                                           .scTerminateConfirmationTitle,
                                       AppLocalization.of(context)
-                                          .timeLockTerminateConfirmationText,
+                                          .scTerminateConfirmationText,
                                       CaseChange.toUpperCase(
                                           AppLocalization.of(context).yesButton,
                                           context), () async {
@@ -803,7 +803,7 @@ class _TimeLockDetailStateState extends State<TimeLockDetail> {
                                     AppLocalization.of(context)
                                         .scTerminateConfirmationTitle,
                                     AppLocalization.of(context)
-                                        .timeLockTerminateConfirmationText,
+                                        .scTerminateConfirmationText,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yesButton,
                                         context), () async {
