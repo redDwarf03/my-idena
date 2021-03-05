@@ -7,10 +7,10 @@ import 'package:my_idena/network/model/request/contract/api_contract_balance_upd
 import 'package:my_idena/network/model/request/contract/api_contract_txs_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
 import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/service/app_service.dart';
-import 'package:my_idena/service/smart_contract_service.dart';
-import 'package:my_idena/ui/SmartContracts/multiSig_detail.dart';
-import 'package:my_idena/ui/SmartContracts/multiSig_sheet.dart';
+import 'package:my_idena/factory/app_service.dart';
+import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_detail.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_sheet.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/dimens.dart';
@@ -31,6 +31,7 @@ class MultiSigList extends StatefulWidget {
 class _MultiSigListState extends State<MultiSigList> {
   final Logger log = sl.get<Logger>();
   bool loaded; 
+  double smartContractStake = 0;
   List<SmartContractMultiSig> smartContractMultiSigList =
       new List<SmartContractMultiSig>();
 
@@ -294,9 +295,8 @@ class _MultiSigListState extends State<MultiSigList> {
                       Sheets.showAppHeightNineSheet(
                           context: context,
                           widget: MultiSigSheet(
-                              address: widget.address,
-                              localCurrency:
-                                  StateContainer.of(context).curCurrency));
+                              address: widget.address
+                             ));
                     }),
                   ],
                 ),

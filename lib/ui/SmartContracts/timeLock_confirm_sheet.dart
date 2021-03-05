@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
@@ -8,18 +7,17 @@ import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
-import 'package:my_idena/service/smart_contract_service.dart';
+import 'package:my_idena/factory/smart_contract_service.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/ui/SmartContracts/timeLock_complete_sheet.dart';
+import 'package:my_idena/ui/smartContracts/timeLock_complete_sheet.dart';
 import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/biometrics.dart';
 import 'package:my_idena/util/hapticutil.dart';
@@ -31,9 +29,6 @@ import 'package:my_idena/ui/widgets/security.dart';
 class TimeLockConfirmSheet extends StatefulWidget {
   final String owner;
   final String amountRaw;
-  final String localCurrency;
-  final bool maxSend;
-  final String comment;
   final DateTime dateUnlock;
   final String scPredictAddress;
   final ContractEstimateDeployResponse contractEstimateDeployResponse;
@@ -41,9 +36,6 @@ class TimeLockConfirmSheet extends StatefulWidget {
   TimeLockConfirmSheet(
       {this.owner,
       this.amountRaw,
-      this.localCurrency,
-      this.comment,
-      this.maxSend = false,
       this.dateUnlock,
       this.scPredictAddress,
       this.contractEstimateDeployResponse})
@@ -53,7 +45,6 @@ class TimeLockConfirmSheet extends StatefulWidget {
 }
 
 class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
-  String amount;
   String destinationAltered;
   bool animationOpen;
 
@@ -95,7 +86,6 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
             removeUntilHome: true,
             widget: TimeLockCompleteSheet(
               amountRaw: widget.amountRaw,
-              localAmount: widget.localCurrency,
               dateUnlock: widget.dateUnlock,
             ));
       }
@@ -117,17 +107,6 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
     _registerBus();
 
     this.animationOpen = false;
-    // Derive amount from raw amount
-    if (NumberUtil.getRawAsUsableString(widget.amountRaw).replaceAll(",", "") ==
-        NumberUtil.getRawAsUsableDecimal(widget.amountRaw).toString()) {
-      amount = NumberUtil.getRawAsUsableString(widget.amountRaw);
-    } else {
-      amount = NumberUtil.truncateDecimal(
-                  NumberUtil.getRawAsUsableDecimal(widget.amountRaw),
-                  digits: 6)
-              .toStringAsFixed(6) +
-          "~";
-    }
   }
 
   @override
@@ -231,7 +210,7 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
                                                   color:
                                                       StateContainer.of(context)
                                                           .curTheme
-                                                          .text60,
+                                                          .primary,
                                                   fontSize: 14.0,
                                                   fontWeight: FontWeight.w700,
                                                   fontFamily: 'Roboto',
@@ -269,7 +248,7 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
                                                   color:
                                                       StateContainer.of(context)
                                                           .curTheme
-                                                          .text60,
+                                                          .primary,
                                                   fontSize: 14.0,
                                                   fontWeight: FontWeight.w700,
                                                   fontFamily: 'Roboto',
@@ -288,7 +267,7 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
                                           address: widget.scPredictAddress,
                                           type: AddressTextType.PRIMARY60),
                                     ),
-                                    // Container for the amount text
+
                                     Container(
                                       margin: EdgeInsets.only(
                                           left: MediaQuery.of(context)
@@ -306,69 +285,54 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
                                         color: StateContainer.of(context)
                                             .curTheme
                                             .backgroundDarkest,
-                                        borderRadius: BorderRadius.circular(25),
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      // Amount text
-
                                       child: Column(
                                         children: [
-                                          double.tryParse(amount.replaceAll(
-                                                      ",", "")) >
-                                                  0
-                                              ? RichText(
-                                                  textAlign: TextAlign.center,
-                                                  text: TextSpan(
-                                                    text: '',
-                                                    children: [
-                                                      TextSpan(
-                                                        text: "$amount",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: " iDNA",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: widget.localCurrency !=
-                                                                null
-                                                            ? " (${widget.localCurrency})"
-                                                            : "",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                    ],
+                                          RichText(
+                                            textAlign: TextAlign.center,
+                                            text: TextSpan(
+                                              text: '',
+                                              children: [
+                                                TextSpan(
+                                                  text: "Stake: ",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Roboto',
                                                   ),
-                                                )
-                                              : SizedBox(),
+                                                ),
+                                                TextSpan(
+                                                  text: widget.amountRaw,
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Roboto',
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: " iDNA",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w100,
+                                                    fontFamily: 'Roboto',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                           widget.contractEstimateDeployResponse !=
                                                       null &&
                                                   widget.contractEstimateDeployResponse
@@ -572,7 +536,7 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
                                     context,
                                     AppLocalization.of(context)
                                         .sendAmountConfirm
-                                        .replaceAll("%1", amount));
+                                        .replaceAll("%1", widget.amountRaw));
                             if (authenticated) {
                               sl.get<HapticUtil>().fingerprintSucess();
                               EventTaxiImpl.singleton().fire(
@@ -634,13 +598,9 @@ class _TimeLockConfirmSheetState extends State<TimeLockConfirmSheet> {
     String expectedPin = await sl.get<Vault>().getPin();
     bool auth = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
-      return new PinScreen(
-        PinOverlayType.ENTER_PIN,
-        expectedPin: expectedPin,
-        description: AppLocalization.of(context)
-            .scAmountConfirmPin
-            .replaceAll("%1", amount),
-      );
+      return new PinScreen(PinOverlayType.ENTER_PIN,
+          expectedPin: expectedPin,
+          description: AppLocalization.of(context).scLockAmountConfirmPin);
     }));
     //print("authenticateWithPin - auth : " + auth.toString());
     if (auth != null && auth) {

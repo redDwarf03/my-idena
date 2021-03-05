@@ -9,12 +9,11 @@ import 'package:my_idena/util/numberutil.dart';
 
 class MultiSigCompleteSheet extends StatefulWidget {
   final String amountRaw;
-  final String localAmount;
   final int minVotes;
   final int maxVotes;
 
   MultiSigCompleteSheet(  
-      {this.amountRaw, this.minVotes, this.maxVotes, this.localAmount})
+      {this.amountRaw, this.minVotes, this.maxVotes})
       : super();
 
   _MultiSigCompleteSheetState createState() => _MultiSigCompleteSheetState();
@@ -104,18 +103,6 @@ class _MultiSigCompleteSheetState extends State<MultiSigCompleteSheet> {
                                   StateContainer.of(context).curTheme.success,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w100,
-                              fontFamily: 'Roboto',
-                            ),
-                          ),
-                          TextSpan(
-                            text: widget.localAmount != null
-                                ? " (${widget.localAmount})"
-                                : "",
-                            style: TextStyle(
-                              color:
-                                  StateContainer.of(context).curTheme.success,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w700,
                               fontFamily: 'Roboto',
                             ),
                           ),

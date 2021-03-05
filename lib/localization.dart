@@ -597,12 +597,21 @@ class AppLocalization {
         desc: 'send_insufficient_balance', name: 'insufficientBalance');
   }
 
+  String get yourBalance {
+    return Intl.message("Your balance",
+        desc: '', name: 'yourBalance');
+  }
+
   String get sendFrom {
     return Intl.message("Send From", desc: 'send_title', name: 'sendFrom');
   }
 
   String get fees {
     return Intl.message("Max Fees", desc: 'fees', name: 'fees');
+  }
+
+  String get smartContractAmountStake {
+    return Intl.message("Smart contract stake", desc: '', name: 'smartContractAmountStake');
   }
 
   /// -- END SEND ITEMS
@@ -1369,11 +1378,11 @@ class AppLocalization {
   }
 
   String get scLockAmountConfirm {
-    return Intl.message("Lock %1 iDNA",
+    return Intl.message("Lock",
         desc: '', name: 'scLockAmountConfirm');
   }
 
-  String get scAmountConfirmPin {
+  String get scLockAmountConfirmPin {
     return scLockAmountConfirm;
   }
 
@@ -1386,7 +1395,7 @@ class AppLocalization {
   }
 
   String get scAddVoterButton {
-    return Intl.message("Add voter", desc: '', name: 'timescAddVoterButtonLockTransferButton');
+    return Intl.message("Add voter", desc: '', name: 'scAddVoterButton');
   }
 
   String get scVoteButton {

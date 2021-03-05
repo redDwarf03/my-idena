@@ -7,11 +7,11 @@ import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
-import 'package:my_idena/service/smart_contract_service.dart';
+import 'package:my_idena/factory/smart_contract_service.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/ui/SmartContracts/multiSig_complete_sheet.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_complete_sheet.dart';
 import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
@@ -30,9 +30,6 @@ import 'package:my_idena/ui/widgets/security.dart';
 class MultiSigConfirmSheet extends StatefulWidget {
   final String owner;
   final String amountRaw;
-  final String localCurrency;
-  final bool maxSend;
-  final String comment;
   final String scPredictAddress;
   final int minVotes;
   final int maxVotes;
@@ -41,9 +38,6 @@ class MultiSigConfirmSheet extends StatefulWidget {
   MultiSigConfirmSheet(
       {this.owner,
       this.amountRaw,
-      this.localCurrency,
-      this.comment,
-      this.maxSend = false,
       this.scPredictAddress,
       this.minVotes,
       this.maxVotes,
@@ -98,7 +92,6 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
               minVotes: widget.minVotes,
               maxVotes: widget.maxVotes,
               amountRaw: widget.amountRaw,
-              localAmount: widget.localCurrency,
             ));
       }
     });
@@ -350,23 +343,7 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
                                                           fontFamily: 'Roboto',
                                                         ),
                                                       ),
-                                                      TextSpan(
-                                                        text: widget.localCurrency !=
-                                                                null
-                                                            ? " (${widget.localCurrency})"
-                                                            : "",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
+                                                      
                                                     ],
                                                   ),
                                                 )
@@ -710,8 +687,8 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
         PinOverlayType.ENTER_PIN,
         expectedPin: expectedPin,
         description: AppLocalization.of(context)
-            .scAmountConfirmPin
-            .replaceAll("%1", amount),
+            .scLockAmountConfirmPin,
+           
       );
     }));
     //print("authenticateWithPin - auth : " + auth.toString());
