@@ -5,7 +5,7 @@ import 'package:my_idena/network/model/response/coins_price_response.dart';
 import 'package:my_idena/network/model/response/coins_response.dart';
 
 
-class CoinsService {
+class ApiCoinsService {
   var logger = Logger();
 
   Future<CoinsResponse> getCoinsResponse() async {
@@ -21,8 +21,8 @@ class CoinsService {
         coinsResponse = coinsResponseFromJson(reply);
       }
     } catch (e, s) {
-      print("pb coin exception : " + e.toString());
-      print("pb coin stack : " + s.toString());
+      //print("pb coin exception : " + e.toString());
+      //print("pb coin stack : " + s.toString());
     } finally {
       httpClient.close();
     }

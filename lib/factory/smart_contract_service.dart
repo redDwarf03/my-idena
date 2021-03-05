@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dartssh/client.dart';
+import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
@@ -26,7 +27,7 @@ import 'package:my_idena/network/model/response/contract/contract_read_data_hex_
 import 'package:my_idena/network/model/response/contract/contract_read_data_uint64_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/helpers.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
@@ -621,8 +622,7 @@ class SmartContractService {
             if (payloadFromHex.contains("multisig:")) {
               return payloadFromHex.split(":")[1];
             }
-          } catch (e) {
-          }
+          } catch (e) {}
         }
       }
     }
@@ -995,7 +995,10 @@ class SmartContractService {
 
     try {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "http://api.idena.io/api/Address/" + address + "/Txs?limit=" + limit.toString()));
+          "http://api.idena.io/api/Address/" +
+              address +
+              "/Txs?limit=" +
+              limit.toString()));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -1006,7 +1009,8 @@ class SmartContractService {
             apiContractTxsResponseTmp.result != null) {
           for (int i = 0; i < apiContractTxsResponseTmp.result.length; i++) {
             if (apiContractTxsResponseTmp.result[i].type == "CallContract" ||
-                apiContractTxsResponseTmp.result[i].type == "TerminateContract" ||
+                apiContractTxsResponseTmp.result[i].type ==
+                    "TerminateContract" ||
                 apiContractTxsResponseTmp.result[i].type == "DeployContract") {
               String contractAddress = apiContractTxsResponseTmp.result[i].to;
               if (apiContractTxsResponseTmp.result[i].type ==
@@ -1286,5 +1290,12 @@ class SmartContractService {
     _completer.complete(contractGetStakeResponse);
 
     return _completer.future;
+  }
+
+  Future<double> getSmartContractStake() async {
+    int feePerGas = await sl.get<AppService>().getFeePerGas();
+    double smartContractStake = double.parse((Decimal.parse(feePerGas.toString()) / Decimal.parse("1000000000000000000") * Decimal.parse("3000000")).toString());
+    //print("smartContractStake: " + smartContractStake.toString());
+    return smartContractStake;
   }
 }
