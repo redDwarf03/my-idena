@@ -30,4 +30,4 @@ const int DM_IDENTITY_KEYWORD_2 = 15;
 const int DM_IDENTITY_KEYWORD_3 = 10;
 const int DM_IDENTITY_KEYWORD_4 = 4;
 
-
+const int DM_FEE_PER_GAS = 1651527663100;

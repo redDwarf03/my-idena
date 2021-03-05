@@ -34,9 +34,9 @@ class _CountDownState extends State<CountDown> {
     return CircularCountDownTimer(
       duration: widget.durationInSeconds,
       controller: _countDownController,
-      width: 50,
-      height: 50,
-      color: Colors.white,
+      width: 40,
+      height: 40,
+      ringColor: Colors.white,
       fillColor: Colors.red,
       backgroundColor: null,
       strokeWidth: 5.0,

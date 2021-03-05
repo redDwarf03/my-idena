@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:convert' as convert;
-import 'dart:collection' as collection;
 
 import 'package:my_idena/util/app_ffi/encrypt/secure_random.dart' as secure_random;
 import 'package:pointycastle/api.dart';

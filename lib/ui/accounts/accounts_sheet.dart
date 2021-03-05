@@ -8,7 +8,7 @@ import 'package:my_idena/localization.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/account.dart';

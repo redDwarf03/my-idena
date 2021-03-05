@@ -8,9 +8,9 @@ import 'package:fluttericon/octicons_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/service/app_service.dart';
-import 'package:my_idena/ui/SmartContracts/multiSig_list.dart';
-import 'package:my_idena/ui/SmartContracts/timeLock_list.dart';
+import 'package:my_idena/factory/app_service.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
+import 'package:my_idena/ui/smartContracts/timeLock_list.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
@@ -95,8 +95,6 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   bool _inviteOpen;
 
-  bool _loadingAccounts;
-
   bool _contactsOpen;
 
   bool _validationBasicsOpen;
@@ -145,7 +143,6 @@ class _SettingsSheetState extends State<SettingsSheet>
     _scOpen = false;
     _inviteOpen = false;
     _profileInfosOpen = false;
-    _loadingAccounts = false;
     _miningActive = false;
     _canMine = false;
 

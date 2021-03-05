@@ -3,7 +3,7 @@ import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/network/model/dictWords.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/service/validation_service.dart';
+import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;

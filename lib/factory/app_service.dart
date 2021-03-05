@@ -9,6 +9,7 @@ import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/bus/subscribe_event.dart';
 import 'package:my_idena/model/deepLinks/deepLinkParamSignin.dart';
 import 'package:my_idena/model/deepLinks/idena_url.dart';
+import 'package:my_idena/network/model/request/bcn_fee_per_gas_request.dart';
 import 'package:my_idena/network/model/request/bcn_mempool_request.dart';
 import 'package:my_idena/network/model/request/bcn_send_raw_tx_request.dart';
 import 'package:my_idena/network/model/request/bcn_syncing_request.dart';
@@ -26,13 +27,13 @@ import 'package:my_idena/network/model/request/dna_sendTransaction_request.dart'
 import 'package:my_idena/network/model/request/dna_send_invite_request.dart';
 import 'package:my_idena/network/model/request/dna_signin_request.dart';
 import 'package:my_idena/network/model/response/api_get_address_response.dart';
+import 'package:my_idena/network/model/response/bcn_fee_per_gas_response.dart';
 import 'package:my_idena/network/model/response/bcn_mempool_response.dart';
 import 'package:my_idena/network/model/response/bcn_send_raw_tx_response.dart';
 import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_signin_response.dart';
-import 'package:my_idena/service/smart_contract_service.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -1848,4 +1849,67 @@ class AppService {
 
     return _completer.future;
   }
+
+  Future<int> getFeePerGas() async {
+    int feePerGas = 0;
+    Completer<int> _completer = new Completer<int>();
+
+    Map<String, dynamic> mapParams;
+
+    try {
+      BcnFeePerGasRequest bcnFeePerGasRequest;
+      BcnFeePerGasResponse bcnFeePerGasResponse;
+      if (await NodeUtil().getNodeType() == DEMO_NODE) {
+        feePerGas = DM_FEE_PER_GAS;
+      } else {
+        Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+        String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+        if (url.isAbsolute == false || keyApp == "") {
+          _completer.complete(feePerGas);
+          return _completer.future;
+        }
+
+        mapParams = {
+          'method': BcnFeePerGasRequest.METHOD_NAME,
+          'params': [],
+          'id': 101,
+          'key': keyApp
+        };
+
+        if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          var response = await ssh.HttpClientImpl(
+                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              .request(url.toString(),
+                  method: 'POST',
+                  data: jsonEncode(mapParams),
+                  headers: requestHeaders);
+          if (response.status == 200) {
+            bcnFeePerGasResponse = bcnFeePerGasResponseFromJson(response.text);
+
+            feePerGas = bcnFeePerGasResponse.result;
+          }
+        } else {
+          bcnFeePerGasRequest = BcnFeePerGasRequest.fromJson(mapParams);
+          body = json.encode(bcnFeePerGasRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            bcnFeePerGasResponse =
+                bcnFeePerGasResponseFromJson(responseHttp.body);
+
+            feePerGas = bcnFeePerGasResponse.result;
+          }
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(feePerGas);
+
+    return _completer.future;
+  }
+
 }

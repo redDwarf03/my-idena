@@ -46,10 +46,10 @@ Uint8List toBuffer(v) {
 String padToEven(String value) {
   checkNotNull(value);
 
-  var a = "${value}";
+  var a = "$value";
 
   if (a.length % 2 == 1) {
-    a = "0${a}";
+    a = "0$a";
   }
 
   return a;
@@ -125,10 +125,10 @@ String fromAscii(String stringValue) {
     // eslint-disable-line
     var code = stringValue.codeUnitAt(i);
     var n = hex.encode([code]);
-    hexString += n.length < 2 ? "0${n}" : n;
+    hexString += n.length < 2 ? "0$n" : n;
   }
 
-  return "0x${hexString}";
+  return "0x$hexString";
 }
 
 /// Is the string a hex string.

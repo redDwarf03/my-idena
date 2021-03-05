@@ -10,7 +10,7 @@ import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
@@ -1146,7 +1146,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
             color: StateContainer.of(context).curTheme.primary,
             fontFamily: 'Roboto',
           ),
-          inputFormatters: [LengthLimitingTextInputFormatter(23)],
+          inputFormatters: [LengthLimitingTextInputFormatter(30)],
           onChanged: (text) {
             // Always reset the error message to be less annoying
             updateSharedPrefsUtil();

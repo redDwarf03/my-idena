@@ -12,7 +12,7 @@ import 'package:my_idena/localization.dart';
 import 'package:my_idena/network/model/response/dna_ceremonyIntervals_response.dart';
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';

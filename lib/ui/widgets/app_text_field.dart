@@ -109,7 +109,7 @@ class _AppTextFieldState extends State<AppTextField> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: StateContainer.of(context).curTheme.backgroundDarkest,
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: widget.overrideTextFieldWidget == null
             ? Stack(alignment: AlignmentDirectional.center, children: <Widget>[
@@ -117,10 +117,13 @@ class _AppTextFieldState extends State<AppTextField> {
                     // User defined fields
                     textAlign: widget.textAlign,
                     keyboardAppearance: widget.keyboardAppearance,
-                    autocorrect: widget.autocorrect == null ? false : widget.autocorrect,
+                    autocorrect:
+                        widget.autocorrect == null ? false : widget.autocorrect,
                     maxLines: widget.maxLines,
                     focusNode: widget.focusNode,
-                    enableSuggestions: widget.enableSuggestions == null ? true : widget.enableSuggestions,
+                    enableSuggestions: widget.enableSuggestions == null
+                        ? true
+                        : widget.enableSuggestions,
                     controller: widget.controller,
                     cursorColor: widget.cursorColor ??
                         StateContainer.of(context).curTheme.primary,
@@ -143,6 +146,18 @@ class _AppTextFieldState extends State<AppTextField> {
                     // Input decoration
                     decoration: InputDecoration(
                         border: InputBorder.none,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  StateContainer.of(context).curTheme.primary60,
+                              width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  StateContainer.of(context).curTheme.primary10,
+                              width: 1.0),
+                        ),
                         // Hint
                         hintText:
                             widget.hintText == null ? "" : widget.hintText,

@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/util/user_data_util.dart';
 
 /// A widget for displaying a mnemonic phrase
 class MnemonicDisplay extends StatefulWidget {

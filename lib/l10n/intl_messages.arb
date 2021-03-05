@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-11T23:52:41.163131",
+  "@@last_modified": "2021-03-01T21:20:17.499903",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -164,6 +164,12 @@
   },
   "chartVolume": "Volume",
   "@chartVolume": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "signinConfirmation": "Signin confirmation",
+  "@signinConfirmation": {
     "description": "",
     "type": "text",
     "placeholders": {}
@@ -426,6 +432,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "newAccount": "New Account",
+  "@newAccount": {
+    "description": "intro_welcome_new_account",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newAccountInfoDerivationPath": "Please note, the address that will be generated for your new account will use type 515 for derive path and not type 60 dedicated to Ether (cf: Registered coin types for BIP-0044).",
+  "@newAccountInfoDerivationPath": {
+    "description": "intro_welcome_new_account",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterSeedFrom": "Please specify the origin of your seed (HD Wallet / Paper Wallet).",
+  "@enterSeedFrom": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "displaySeedOrigin": "Origin : ",
+  "@displaySeedOrigin": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addressUnknown": "Address unknown",
+  "@addressUnknown": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "ackBackedUp": "Are you sure that you've backed up your secret phrase or seed?",
   "@ackBackedUp": {
     "description": "Ack backed up",
@@ -498,6 +534,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "transactionDetailPayload": "Payload",
+  "@transactionDetailPayload": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
   "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
   "@transactionDetailCopyPaste": {
     "description": "transaction_detail",
@@ -528,7 +570,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "sendAmountConfirm": "Send %1 IDNA",
+  "sendAmountConfirm": "Send %1 iDNA",
   "@sendAmountConfirm": {
     "description": "send_pin_description",
     "type": "text",
@@ -612,7 +654,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "minimumSend": "Minimum send amount is %1 IDNA",
+  "minimumSend": "Minimum send amount is %1 iDNA",
   "@minimumSend": {
     "description": "send_minimum_error",
     "type": "text",
@@ -633,6 +675,12 @@
   "fees": "Max Fees",
   "@fees": {
     "description": "fees",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContractAmountStake": "Smart contract stake",
+  "@smartContractAmountStake": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },
@@ -864,7 +912,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "validationTipInfo": "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 IDNA. Thank you.",
+  "validationTipInfo": "If you are satisfied with the validation session with the mobile application, you can send a tip of 1, 10 or 50 iDNA. Thank you.",
   "@validationTipInfo": {
     "description": "",
     "type": "text",
@@ -992,6 +1040,24 @@
   },
   "validationAnswersNotYetSubmitted": "Your answers are not yet submitted",
   "@validationAnswersNotYetSubmitted": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationAnswersNotAllSelectTitle": "Warning",
+  "@validationAnswersNotAllSelectTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationAnswersNotAllSelectDesc": "You haven't select all flips. Are you sure to submit ?",
+  "@validationAnswersNotAllSelectDesc": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "validationAnswersNotAllQualifyDesc": "You haven't check all flips quality. Are you sure to submit ?",
+  "@validationAnswersNotAllQualifyDesc": {
     "description": "",
     "type": "text",
     "placeholders": {}
@@ -1326,6 +1392,276 @@
     "type": "text",
     "placeholders": {}
   },
+  "scHeader": "Smart Contracts",
+  "@scHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeLockTitle": "Time Lock",
+  "@timeLockTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "multisigTitle": "Multisig M-of-N",
+  "@multisigTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "oracleLockTitle": "Oracle Lock",
+  "@oracleLockTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "refundableOracleLockTitle": "Refundable Oracle Lock",
+  "@refundableOracleLockTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createTimeLock": "Create Time Lock Smart Contract",
+  "@createTimeLock": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createMultiSig": "Create MultiSig Contract",
+  "@createMultiSig": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "owner": "Owner",
+  "@owner": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContractAddress": "Smart Contract Address",
+  "@smartContractAddress": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterDateTimeLock": "Enter the unlock time",
+  "@enterDateTimeLock": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterMaxVotesMultiSig": "Enter the number of voters",
+  "@enterMaxVotesMultiSig": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterMinVotesMultiSig": "Enter the min number of votes",
+  "@enterMinVotesMultiSig": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lockCoinConfirmatonButton": "Confirm Lock coins",
+  "@lockCoinConfirmatonButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lockCoinEstimationButton": "Estimate Lock coins",
+  "@lockCoinEstimationButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "multiSigEstimationButton": "Estimate Multi Signatures",
+  "@multiSigEstimationButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unlockTimeTitle": "Unlock time",
+  "@unlockTimeTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dateUnlockTimeMissing": "Please Enter the time of unlock",
+  "@dateUnlockTimeMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "maxVotesTitle": "Number of voters",
+  "@maxVotesTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "minVotesTitle": "Min number of votes required to unlock the coins",
+  "@minVotesTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "maxVotesMissing": "Please Enter the number of voters",
+  "@maxVotesMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "minVotesMissing": "Please Enter the min number of votes required to unlock the coins",
+  "@minVotesMissing": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "maxVSminVotesError": "The number of voters should be higher than the min number of votes required to unlock the coins",
+  "@maxVSminVotesError": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "maxVotes32Error": "The number of voters shouldn't be higher than 32",
+  "@maxVotes32Error": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "minVotesNumericError": "The min number of votes required to unlock the coins should be numeric",
+  "@minVotesNumericError": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "maxVotesNumericError": "The number of voters should be numeric",
+  "@maxVotesNumericError": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "gasCost": "Gas cost",
+  "@gasCost": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "txFee": "Tx fees",
+  "@txFee": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "contractDeployError": "An error occurred. Try again later.",
+  "@contractDeployError": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeLockTo": "Lock To",
+  "@timeLockTo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scLockAmountConfirm": "Lock %1 iDNA",
+  "@scLockAmountConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scTransferButton": "Transfer",
+  "@scTransferButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scPushButton": "Push",
+  "@scPushButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scAddVoterButton": "Add voter",
+  "@scAddVoterButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scVoteButton": "Vote",
+  "@scVoteButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scTerminateButton": "Terminate",
+  "@scTerminateButton": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scTransferConfirmationTitle": "Transfer confirmation",
+  "@scTransferConfirmationTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scPushConfirmationTitle": "Push confirmation",
+  "@scPushConfirmationTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "timeLockTransferConfirmationText": "Are you sure you want to send the locked coins to the destination address ?",
+  "@timeLockTransferConfirmationText": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scTerminateConfirmationTitle": "Terminate confirmation",
+  "@scTerminateConfirmationTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scVoteConfirmationTitle": "Vote confirmation",
+  "@scVoteConfirmationTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scVoteConfirmationText": "Are you sure you want to vote for transfers to unlock the coins ?",
+  "@scVoteConfirmationText": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scPushConfirmationText": "Are you sure you want transferring the specified amount of coin ?",
+  "@scPushConfirmationText": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scAddVoterConfirmationTitle": "Add voter confirmation",
+  "@scAddVoterConfirmationTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scAddVoterConfirmationText": "Are you sure you want to add the voter's address that can vote for transfers to unlock the coins ?",
+  "@scAddVoterConfirmationText": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "scTerminateConfirmationText": "Are you sure you want to terminate the contract and send 50% of the stacked coins to the destination address ?",
+  "@scTerminateConfirmationText": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "activateMiningHeader": "Activate mining status",
   "@activateMiningHeader": {
     "description": "mining_infos",
@@ -1500,7 +1836,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "newAccountIntro": "This is your new account. Once you receive IDNA, transactions will show up like this:",
+  "newAccountIntro": "This is your new account. Once you receive iDNA, transactions will show up like this:",
   "@newAccountIntro": {
     "description": "Alternate account intro card",
     "type": "text",

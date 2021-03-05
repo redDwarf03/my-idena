@@ -9,7 +9,7 @@ import 'package:my_idena/localization.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/formatters.dart';
@@ -37,6 +37,8 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
   // Mnemonic Phrase
   FocusNode _mnemonicFocusNode = FocusNode();
   TextEditingController _mnemonicController = TextEditingController();
+
+  final _advancedSwitchController = AdvancedSwitchController();
 
   bool _seedMode = false; // False if restoring phrase, true if restoring seed
 
@@ -555,11 +557,8 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                               borderRadius:
                                                   BorderRadius.circular(5),
                                               width: 76,
-                                              value: _isSwitched,
-                                              onChanged: (value) =>
-                                                  setState(() {
-                                                _isSwitched = value;
-                                              }),
+                                              controller: _advancedSwitchController,
+                                            
                                             ),
                                           ],
                                         )),

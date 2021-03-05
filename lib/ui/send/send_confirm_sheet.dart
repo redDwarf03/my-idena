@@ -7,7 +7,7 @@ import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/service_locator.dart';

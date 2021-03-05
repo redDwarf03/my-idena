@@ -39,7 +39,7 @@ class _TimeLockCountDownState extends State<TimeLockCountDown> {
             controller: _countDownController,
             width: 200,
             height: 200,
-            color: Colors.white,
+            ringColor: Colors.white,
             fillColor: StateContainer.of(context).curTheme.primary20,
             backgroundColor: null,
             strokeWidth: 5.0,

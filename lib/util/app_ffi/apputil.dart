@@ -6,7 +6,7 @@ import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/network/model/response/dna_getCoinbaseAddr_response.dart';
-import 'package:my_idena/service/app_service.dart';
+import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
 import 'package:my_idena/util/enums/wallet_type.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/service/validation_service.dart';
+import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 

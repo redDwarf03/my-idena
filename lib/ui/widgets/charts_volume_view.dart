@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:charts_common/common.dart' as charts_common;
+import 'package:my_idena/factory/api/api_coins_service.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/network/model/response/coins_price_response.dart';
-import 'package:my_idena/service/coins_service.dart';
 import 'package:my_idena/service_locator.dart';
 
 class ChartsVolumeView extends StatefulWidget {
@@ -135,7 +135,7 @@ class Config {
 
   static loadChartDataList(String iso4217Code, int nbDays) async {
     CoinsPriceResponse coinsPriceResponse =
-        await sl.get<CoinsService>().getCoinsChart(iso4217Code, nbDays);
+        await sl.get<ApiCoinsService>().getCoinsChart(iso4217Code, nbDays);
 
     for (int i = 0; i < coinsPriceResponse.totalVolumes.length; i++) {
       if (min > coinsPriceResponse.totalVolumes[i][1].toDouble()) {
