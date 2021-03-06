@@ -48,9 +48,6 @@ class _TimeLockListState extends State<TimeLockList> {
   int _processIndex;
   var _processes;
 
-  FocusNode _blockAddressFocusNode;
-  TextEditingController _blockAddressController;
-
   List<SmartContractTimeLock> smartContractTimeLockList =
       new List<SmartContractTimeLock>();
 
@@ -131,6 +128,7 @@ class _TimeLockListState extends State<TimeLockList> {
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -519,55 +517,38 @@ class _TimeLockListState extends State<TimeLockList> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  RichText(
-                                    textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      text: '',
-                                      children: [
-                                        TextSpan(
-                                          text: "Smart Contract : ",
-                                          style: TextStyle(
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily: 'Roboto',
-                                          ),
-                                        ),
-                                        TextSpan(
-                                            text: smartContractTimeLock
-                                                .contractAddress,
-                                            style: AppStyles
-                                                .textStyleTransactionAddress(
-                                                    context)),
-                                      ],
+                                  Text(
+                                    AppLocalization.of(context)
+                                        .smartContractLabel,
+                                    style: TextStyle(
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .primary,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Roboto',
                                     ),
                                   ),
-                                  RichText(
-                                    textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      text: '',
-                                      children: [
-                                        TextSpan(
-                                          text: "Owner : ",
-                                          style: TextStyle(
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily: 'Roboto',
-                                          ),
-                                        ),
-                                        TextSpan(
-                                            text: smartContractTimeLock.owner,
-                                            style: AppStyles
-                                                .textStyleTransactionAddress(
-                                                    context)),
-                                      ],
+                                  SelectableText(
+                                      smartContractTimeLock.contractAddress,
+                                      style:
+                                          AppStyles.textStyleTransactionAddress(
+                                              context)),
+                                  Text(
+                                    AppLocalization.of(context).ownerLabel,
+                                    style: TextStyle(
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .primary,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Roboto',
                                     ),
                                   ),
+                                  SelectableText(smartContractTimeLock.owner,
+                                      style:
+                                          AppStyles.textStyleTransactionAddress(
+                                              context)),
                                   SizedBox(height: 20),
                                   _processIndex == 4
                                       ? SizedBox()
@@ -583,7 +564,10 @@ class _TimeLockListState extends State<TimeLockList> {
                                                     text: '',
                                                     children: [
                                                       TextSpan(
-                                                        text: "Balance : ",
+                                                        text:
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .balanceLabel,
                                                         style: TextStyle(
                                                           color:
                                                               StateContainer.of(
@@ -623,7 +607,10 @@ class _TimeLockListState extends State<TimeLockList> {
                                                     text: '',
                                                     children: [
                                                       TextSpan(
-                                                        text: "Stake : ",
+                                                        text:
+                                                            AppLocalization.of(
+                                                                    context)
+                                                                .stakeLabel,
                                                         style: TextStyle(
                                                           color:
                                                               StateContainer.of(
@@ -707,7 +694,9 @@ class _TimeLockListState extends State<TimeLockList> {
                                             text: '',
                                             children: [
                                               TextSpan(
-                                                text: "Unlock time: ",
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .unlockTimeLabel,
                                                 style: TextStyle(
                                                   color:
                                                       StateContainer.of(context)
@@ -758,7 +747,9 @@ class _TimeLockListState extends State<TimeLockList> {
                                             text: '',
                                             children: [
                                               TextSpan(
-                                                text: "Last status : ",
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .unlockTimeLabel,
                                                 style: TextStyle(
                                                   color:
                                                       StateContainer.of(context)
@@ -777,7 +768,10 @@ class _TimeLockListState extends State<TimeLockList> {
                                                       text: smartContractTimeLock
                                                               .getLastBalanceUpdates()
                                                               .type +
-                                                          " - Success",
+                                                          " - " +
+                                                          AppLocalization.of(
+                                                                  context)
+                                                              .successInfo,
                                                       style: TextStyle(
                                                         color: Colors.green,
                                                         fontSize: 14.0,
@@ -795,7 +789,10 @@ class _TimeLockListState extends State<TimeLockList> {
                                                                   .getLastBalanceUpdates()
                                                                   .txReceipt
                                                                   .method +
-                                                              " - Success",
+                                                              " - " +
+                                                              AppLocalization.of(
+                                                                      context)
+                                                                  .successInfo,
                                                           style: TextStyle(
                                                             color: Colors.green,
                                                             fontSize: 14.0,
@@ -879,6 +876,10 @@ class _TimeLockListState extends State<TimeLockList> {
                                                             AppLocalization.of(
                                                                     context)
                                                                 .timeLockTitle,
+                                                        contractStake:
+                                                            smartContractTimeLock
+                                                                .stake
+                                                                .toString(),
                                                         contractAddress:
                                                             smartContractTimeLock
                                                                 .contractAddress,

@@ -202,12 +202,12 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
               ],
             ),
             Container(
-              height: 104,
+              height: 60,
               child: Timeline.tileBuilder(
                 theme: TimelineThemeData(
                   direction: Axis.horizontal,
                   connectorTheme: ConnectorThemeData(
-                    space: 30.0,
+                    space: 20.0,
                     thickness: 5.0,
                   ),
                 ),
@@ -220,27 +220,27 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: index == 0
                             ? Icon(FontAwesome5.file_contract,
-                                size: 18, color: getColor(index))
+                                size: 14, color: getColor(index))
                             : index == 1
                                 ? Icon(FontAwesome5.lock,
-                                    size: 18, color: getColor(index))
+                                    size: 14, color: getColor(index))
                                 : index == 2
                                     ? Icon(FontAwesome5.vote_yea,
-                                        size: 18, color: getColor(index))
+                                        size: 14, color: getColor(index))
                                     : index == 3
                                         ? Icon(FontAwesome5.share_square,
-                                            size: 18, color: getColor(index))
+                                            size: 14, color: getColor(index))
                                         : Icon(FontAwesome.stop_circle,
-                                            size: 20, color: getColor(index)));
+                                            size: 16, color: getColor(index)));
                   },
                   contentsBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
                         _processes[index],
                         style: TextStyle(
                           color: getColor(index),
-                          fontSize: 14.0,
+                          fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                           fontFamily: 'Roboto',
                         ),
@@ -253,15 +253,15 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                     if (index == _processIndex && index != 4) {
                       color = inProgressColor;
                       child = Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0.0),
                         child: index == 3
                             ? Icon(
                                 Icons.check,
                                 color: Colors.white,
-                                size: 15.0,
+                                size: 10.0,
                               )
                             : CircularProgressIndicator(
-                                strokeWidth: 2.0,
+                                strokeWidth: 1.0,
                                 valueColor:
                                     AlwaysStoppedAnimation(Colors.white),
                               ),
@@ -271,7 +271,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                       child = Icon(
                         Icons.check,
                         color: Colors.white,
-                        size: 15.0,
+                        size: 10.0,
                       );
                     } else {
                       color = todoColor;
@@ -281,7 +281,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                       return Stack(
                         children: [
                           CustomPaint(
-                            size: Size(30.0, 30.0),
+                            size: Size(20.0, 20.0),
                             painter: _BezierPainter(
                               color: color,
                               drawStart: index > 0,
@@ -289,7 +289,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                             ),
                           ),
                           DotIndicator(
-                            size: 30.0,
+                            size: 20.0,
                             color: color,
                             child: child,
                           ),
@@ -299,7 +299,7 @@ class _MultiSigDetailStateState extends State<MultiSigDetail> {
                       return Stack(
                         children: [
                           CustomPaint(
-                            size: Size(15.0, 15.0),
+                            size: Size(10.0, 10.0),
                             painter: _BezierPainter(
                               color: color,
                               drawEnd: index < _processes.length - 1,

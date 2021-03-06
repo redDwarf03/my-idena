@@ -9,6 +9,7 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/styles.dart';
@@ -20,31 +21,29 @@ import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/util/caseconverter.dart';
 
-class SmartContractTerminateSheet extends StatefulWidget {
+class SmartContractPushSheet extends StatefulWidget {
   final String title;
   final Contact contact;
   final String address;
   final String contractAddress;
   final String owner;
-  final String contractStake;
+  final String contractBalance;
 
-  SmartContractTerminateSheet(
+  SmartContractPushSheet(
       {this.title,
       this.contact,
       this.address,
       this.contractAddress,
-      this.contractStake,
+      this.contractBalance,
       this.owner})
       : super();
 
-  _SmartContractTerminateSheetState createState() =>
-      _SmartContractTerminateSheetState();
+  _SmartContractPushSheetState createState() => _SmartContractPushSheetState();
 }
 
 enum AddressStyle { TEXT60, TEXT90, PRIMARY }
 
-class _SmartContractTerminateSheetState
-    extends State<SmartContractTerminateSheet> {
+class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
   final Logger log = sl.get<Logger>();
 
   FocusNode _blockAddressFocusNode;
@@ -242,50 +241,6 @@ class _SmartContractTerminateSheetState
                           address: widget.contractAddress,
                           type: AddressTextType.PRIMARY60),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context)
-                                    .smartContractAmountStake,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: RichText(
-                        textAlign: TextAlign.start,
-                        text: TextSpan(
-                          text: '',
-                          children: [
-                            TextSpan(
-                              text: widget.contractStake + " iDNA",
-                              style: TextStyle(
-                                color:
-                                    StateContainer.of(context).curTheme.text60,
-                                fontSize: 14.0,
-                                fontFamily: 'Roboto',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
                 //Empty SizedBox
@@ -404,7 +359,7 @@ class _SmartContractTerminateSheetState
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).scTerminateButton,
+                          AppLocalization.of(context).scPushButton,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                         validRequest = _validateRequest();
                         if (_blockAddressController.text.startsWith("@") &&
@@ -423,21 +378,34 @@ class _SmartContractTerminateSheetState
                               AppDialogs.showConfirmDialog(
                                   context,
                                   AppLocalization.of(context)
-                                      .scTerminateConfirmationTitle,
+                                      .scPushConfirmationTitle,
                                   AppLocalization.of(context)
-                                      .scTerminateConfirmationText,
+                                      .scPushConfirmationText,
                                   CaseChange.toUpperCase(
                                       AppLocalization.of(context).yesButton,
                                       context), () async {
-                                await sl
-                                    .get<SmartContractService>()
-                                    .contractTerminateTimeLock(
-                                        widget.owner,
-                                        widget.contractAddress,
-                                        0.25,
-                                        contact.address);
-                                Navigator.of(context)
-                                    .popUntil(RouteUtils.withNameLike('/home'));
+                                ContractCallResponse contractCallResponse =
+                                    await sl
+                                        .get<SmartContractService>()
+                                        .contractCallPushMultiSig(
+                                            widget.owner,
+                                            widget.contractAddress,
+                                            0.25,
+                                            contact.address,
+                                            widget.contractBalance.toString());
+                                if (contractCallResponse != null &&
+                                    contractCallResponse.error != null) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).sendError +
+                                          " (" +
+                                          contractCallResponse.error.message +
+                                          ")",
+                                      context);
+                                  return;
+                                } else {
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                }
                               });
                             }
                           });
@@ -445,30 +413,43 @@ class _SmartContractTerminateSheetState
                           AppButton.buildAppButton(
                               context,
                               AppButtonType.PRIMARY,
-                              AppLocalization.of(context).scTerminateButton,
+                              AppLocalization.of(context).scPushButton,
                               Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
                             AppDialogs.showConfirmDialog(
                                 context,
                                 AppLocalization.of(context)
-                                    .scTerminateConfirmationTitle,
+                                    .scPushConfirmationTitle,
                                 AppLocalization.of(context)
-                                    .scTerminateConfirmationText,
+                                    .scPushConfirmationText,
                                 CaseChange.toUpperCase(
                                     AppLocalization.of(context).yesButton,
                                     context), () async {
-                              await sl
-                                  .get<SmartContractService>()
-                                  .contractTerminateTimeLock(
-                                      widget.owner,
-                                      widget.contractAddress,
-                                      0.25,
-                                      _blockAddressController.text);
-                              Navigator.of(context)
-                                  .popUntil(RouteUtils.withNameLike('/home'));
+                              ContractCallResponse contractCallResponse =
+                                  await sl
+                                      .get<SmartContractService>()
+                                      .contractCallPushMultiSig(
+                                          widget.owner,
+                                          widget.contractAddress,
+                                          0.25,
+                                          _blockAddressController.text,
+                                          widget.contractBalance.toString());
+                              if (contractCallResponse != null &&
+                                  contractCallResponse.error != null) {
+                                UIUtil.showSnackbar(
+                                    AppLocalization.of(context).sendError +
+                                        " (" +
+                                        contractCallResponse.error.message +
+                                        ")",
+                                    context);
+                                return;
+                              } else {
+                                Navigator.of(context)
+                                    .popUntil(RouteUtils.withNameLike('/home'));
+                              }
                             });
                           });
                         }
-                      })
+                      }),
                     ],
                   ),
                 ],

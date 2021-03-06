@@ -18,6 +18,7 @@ import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/themes.dart';
 import 'package:my_idena/ui/smartContracts/multiSig_detail.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
+import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:intl/intl.dart';
@@ -740,10 +741,10 @@ class _AppHomePageState extends State<AppHomePage>
       String typeLabel = BlockTypes()
           .getTransactionTypeLabel(item.type, item.payload, context);
       String text = typeLabel == "" ? item.type : typeLabel;
-      text = item.smartContractMultiSig != null && item.to == StateContainer.of(
-                                                                  context)
-                                                              .selectedAccount
-                                                              .address ? "Demand to vote" : text;
+      text = item.smartContractMultiSig != null &&
+              item.to == StateContainer.of(context).selectedAccount.address
+          ? "Demand to vote"
+          : text;
       return Slidable(
         delegate: SlidableScrollDelegate(),
         actionExtentRatio: 0.35,
@@ -851,10 +852,11 @@ class _AppHomePageState extends State<AppHomePage>
                                             AppStyles.textStyleTransactionUnit(
                                                 context),
                                       ),
-                                item.smartContractMultiSig != null && item.to == StateContainer.of(
-                                                                  context)
-                                                              .selectedAccount
-                                                              .address
+                                item.smartContractMultiSig != null &&
+                                        item.to ==
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .address
                                     ? new SizedBox(
                                         height: 18.0,
                                         width: 18.0,
@@ -868,15 +870,22 @@ class _AppHomePageState extends State<AppHomePage>
                                                     .curTheme
                                                     .text15,
                                             onPressed: () {
-                                              Sheets.showAppHeightNineSheet(
+                                                Sheets.showAppHeightEightSheet(
                                                   context: context,
-                                                  widget: MultiSigDetail(
-                                                      smartContractMultiSig:
-                                                          item.smartContractMultiSig,
-                                                          address: StateContainer.of(
-                                                                  context)
-                                                              .selectedAccount
-                                                              .address));
+                                                  widget: SmartContractVoteSheet(
+                                                      title: AppLocalization.of(
+                                                              context)
+                                                          .multisigTitle,
+                                                      contractAddress:
+                                                          item.smartContractMultiSig
+                                                              .contractAddress,
+                                                      contractBalance:
+                                                          item.smartContractMultiSig
+                                                              .balance
+                                                              .toString(),
+                                                      owner:
+                                                          item.smartContractMultiSig
+                                                              .owner));
                                             },
                                             padding: EdgeInsets.all(0.0),
                                             icon: Icon(FontAwesome5.signature,

@@ -598,8 +598,7 @@ class AppLocalization {
   }
 
   String get yourBalance {
-    return Intl.message("Your balance",
-        desc: '', name: 'yourBalance');
+    return Intl.message("Your balance", desc: '', name: 'yourBalance');
   }
 
   String get sendFrom {
@@ -611,7 +610,58 @@ class AppLocalization {
   }
 
   String get smartContractAmountStake {
-    return Intl.message("Smart contract stake", desc: '', name: 'smartContractAmountStake');
+    return Intl.message("Smart contract stake",
+        desc: '', name: 'smartContractAmountStake');
+  }
+
+  String get smartContractLabel {
+    return Intl.message("Smart Contract :",
+        desc: '', name: 'smartContractLabel');
+  }
+
+  String get ownerLabel {
+    return Intl.message("Owner : ", desc: '', name: 'ownerLabel');
+  }
+
+  String get balanceLabel {
+    return Intl.message("Balance : ", desc: '', name: 'balanceLabel');
+  }
+
+  String get stakeLabel {
+    return Intl.message("Stake : ", desc: '', name: 'stakeLabel');
+  }
+
+  String get unlockTimeLabel {
+    return Intl.message("Unlock time : ", desc: '', name: 'unlockTimeLabel');
+  }
+
+  String get lastStatusLabel {
+    return Intl.message("Last status : ", desc: '', name: 'lastStatusLabel');
+  }
+
+  String get successInfo {
+    return Intl.message("Success", desc: '', name: 'successInfo');
+  }
+
+  String get smartContratStepDeploy {
+    return Intl.message("Deploy", desc: '', name: 'smartContratStepDeploy');
+  }
+
+  String get smartContratStepLock {
+    return Intl.message("Lock", desc: '', name: 'smartContratStepLock');
+  }
+
+  String get smartContratStepUnlock {
+    return Intl.message("Unlock", desc: '', name: 'smartContratStepUnlock');
+  }
+
+  String get smartContratStepTransfer {
+    return Intl.message("Transfer", desc: '', name: 'smartContratStepTransfer');
+  }
+
+  String get smartContratStepTerminate {
+    return Intl.message("Terminate",
+        desc: '', name: 'smartContratStepTerminate');
   }
 
   /// -- END SEND ITEMS
@@ -922,13 +972,17 @@ class AppLocalization {
   }
 
   String get validationAnswersNotAllSelectDesc {
-    return Intl.message("You haven't select all flips. Are you sure to submit ?",
-        desc: '', name: 'validationAnswersNotAllSelectDesc');
+    return Intl.message(
+        "You haven't select all flips. Are you sure to submit ?",
+        desc: '',
+        name: 'validationAnswersNotAllSelectDesc');
   }
 
   String get validationAnswersNotAllQualifyDesc {
-    return Intl.message("You haven't check all flips quality. Are you sure to submit ?",
-        desc: '', name: 'validationAnswersNotAllQualifyDesc');
+    return Intl.message(
+        "You haven't check all flips quality. Are you sure to submit ?",
+        desc: '',
+        name: 'validationAnswersNotAllQualifyDesc');
   }
 
   String get validationQualifyKeywordsQuestion {
@@ -1317,7 +1371,8 @@ class AppLocalization {
   }
 
   String get minVotesTitle {
-    return Intl.message("Min number of votes required to unlock the coins", desc: '', name: 'minVotesTitle');
+    return Intl.message("Min number of votes required to unlock the coins",
+        desc: '', name: 'minVotesTitle');
   }
 
   String get maxVotesMissing {
@@ -1340,10 +1395,8 @@ class AppLocalization {
   }
 
   String get maxVotes32Error {
-    return Intl.message(
-        "The number of voters shouldn't be higher than 32",
-        desc: '',
-        name: 'maxVotes32Error');
+    return Intl.message("The number of voters shouldn't be higher than 32",
+        desc: '', name: 'maxVotes32Error');
   }
 
   String get minVotesNumericError {
@@ -1354,10 +1407,8 @@ class AppLocalization {
   }
 
   String get maxVotesNumericError {
-    return Intl.message(
-        "The number of voters should be numeric",
-        desc: '',
-        name: 'maxVotesNumericError');
+    return Intl.message("The number of voters should be numeric",
+        desc: '', name: 'maxVotesNumericError');
   }
 
   String get gasCost {
@@ -1378,8 +1429,7 @@ class AppLocalization {
   }
 
   String get scLockAmountConfirm {
-    return Intl.message("Lock",
-        desc: '', name: 'scLockAmountConfirm');
+    return Intl.message("Lock", desc: '', name: 'scLockAmountConfirm');
   }
 
   String get scLockAmountConfirmPin {

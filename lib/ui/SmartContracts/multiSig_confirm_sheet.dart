@@ -307,47 +307,50 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
 
                                       child: Column(
                                         children: [
-                                          double.tryParse(amount.replaceAll(
-                                                      ",", "")) >
-                                                  0
-                                              ? RichText(
-                                                  textAlign: TextAlign.center,
-                                                  text: TextSpan(
-                                                    text: '',
-                                                    children: [
-                                                      TextSpan(
-                                                        text: "$amount",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: " iDNA",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curTheme
-                                                                  .primary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      
-                                                    ],
+                                          RichText(
+                                            textAlign: TextAlign.center,
+                                            text: TextSpan(
+                                              text: '',
+                                              children: [
+                                                TextSpan(
+                                                  text: "Stake: ",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Roboto',
                                                   ),
-                                                )
-                                              : SizedBox(),
+                                                ),
+                                                TextSpan(
+                                                  text: widget.amountRaw,
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'Roboto',
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: " iDNA",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w100,
+                                                    fontFamily: 'Roboto',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                           widget.contractEstimateDeployResponse !=
                                                       null &&
                                                   widget.contractEstimateDeployResponse
@@ -686,9 +689,7 @@ class _MultiSigConfirmSheetState extends State<MultiSigConfirmSheet> {
       return new PinScreen(
         PinOverlayType.ENTER_PIN,
         expectedPin: expectedPin,
-        description: AppLocalization.of(context)
-            .scLockAmountConfirmPin,
-           
+        description: AppLocalization.of(context).scLockAmountConfirmPin,
       );
     }));
     //print("authenticateWithPin - auth : " + auth.toString());

@@ -9,6 +9,7 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/styles.dart';
@@ -18,33 +19,34 @@ import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/enums/wallet_type.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 
-class SmartContractTerminateSheet extends StatefulWidget {
+class SmartContractAddVoterSheet extends StatefulWidget {
   final String title;
   final Contact contact;
   final String address;
   final String contractAddress;
   final String owner;
-  final String contractStake;
 
-  SmartContractTerminateSheet(
+  SmartContractAddVoterSheet(
       {this.title,
       this.contact,
       this.address,
       this.contractAddress,
-      this.contractStake,
       this.owner})
       : super();
 
-  _SmartContractTerminateSheetState createState() =>
-      _SmartContractTerminateSheetState();
+  _SmartContractAddVoterSheetState createState() =>
+      _SmartContractAddVoterSheetState();
 }
 
 enum AddressStyle { TEXT60, TEXT90, PRIMARY }
 
-class _SmartContractTerminateSheetState
-    extends State<SmartContractTerminateSheet> {
+class _SmartContractAddVoterSheetState
+    extends State<SmartContractAddVoterSheet> {
   final Logger log = sl.get<Logger>();
 
   FocusNode _blockAddressFocusNode;
@@ -242,50 +244,6 @@ class _SmartContractTerminateSheetState
                           address: widget.contractAddress,
                           type: AddressTextType.PRIMARY60),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context)
-                                    .smartContractAmountStake,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: RichText(
-                        textAlign: TextAlign.start,
-                        text: TextSpan(
-                          text: '',
-                          children: [
-                            TextSpan(
-                              text: widget.contractStake + " iDNA",
-                              style: TextStyle(
-                                color:
-                                    StateContainer.of(context).curTheme.text60,
-                                fontSize: 14.0,
-                                fontFamily: 'Roboto',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
                 //Empty SizedBox
@@ -404,7 +362,7 @@ class _SmartContractTerminateSheetState
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).scTerminateButton,
+                          AppLocalization.of(context).scAddVoterButton,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                         validRequest = _validateRequest();
                         if (_blockAddressController.text.startsWith("@") &&
@@ -423,52 +381,106 @@ class _SmartContractTerminateSheetState
                               AppDialogs.showConfirmDialog(
                                   context,
                                   AppLocalization.of(context)
-                                      .scTerminateConfirmationTitle,
+                                      .scAddVoterConfirmationTitle,
                                   AppLocalization.of(context)
-                                      .scTerminateConfirmationText,
+                                      .scAddVoterConfirmationText,
                                   CaseChange.toUpperCase(
                                       AppLocalization.of(context).yesButton,
                                       context), () async {
-                                await sl
-                                    .get<SmartContractService>()
-                                    .contractTerminateTimeLock(
-                                        widget.owner,
-                                        widget.contractAddress,
-                                        0.25,
-                                        contact.address);
-                                Navigator.of(context)
-                                    .popUntil(RouteUtils.withNameLike('/home'));
+                                String privateKey;
+                                String seedOrigin = await sl
+                                    .get<SharedPrefsUtil>()
+                                    .getSeedOrigin();
+                                String seed =
+                                    await StateContainer.of(context).getSeed();
+                                if (seedOrigin == HD_WALLET) {
+                                  if (seed != null) {
+                                    int index = StateContainer.of(context)
+                                        .selectedAccount
+                                        .index;
+                                    privateKey = await AppUtil()
+                                        .seedToPrivateKey(seed, index);
+                                    //print("privateKey : " + privateKey);
+                                  }
+                                }
+                                ContractCallResponse contractCallResponse =
+                                    await sl
+                                        .get<SmartContractService>()
+                                        .contractCallAddMultiSig(
+                                            widget.owner,
+                                            widget.contractAddress,
+                                            0.25,
+                                            contact.address,
+                                            privateKey == null
+                                                ? seed
+                                                : privateKey);
+
+                                if (contractCallResponse != null &&
+                                    contractCallResponse.error != null) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).sendError +
+                                          " (" +
+                                          contractCallResponse.error.message +
+                                          ")",
+                                      context);
+                                  return;
+                                } else {
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                }
                               });
                             }
                           });
                         } else if (validRequest) {
-                          AppButton.buildAppButton(
+                          AppDialogs.showConfirmDialog(
                               context,
-                              AppButtonType.PRIMARY,
-                              AppLocalization.of(context).scTerminateButton,
-                              Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
-                            AppDialogs.showConfirmDialog(
-                                context,
-                                AppLocalization.of(context)
-                                    .scTerminateConfirmationTitle,
-                                AppLocalization.of(context)
-                                    .scTerminateConfirmationText,
-                                CaseChange.toUpperCase(
-                                    AppLocalization.of(context).yesButton,
-                                    context), () async {
-                              await sl
-                                  .get<SmartContractService>()
-                                  .contractTerminateTimeLock(
-                                      widget.owner,
-                                      widget.contractAddress,
-                                      0.25,
-                                      _blockAddressController.text);
+                              AppLocalization.of(context)
+                                  .scAddVoterConfirmationTitle,
+                              AppLocalization.of(context)
+                                  .scAddVoterConfirmationText,
+                              CaseChange.toUpperCase(
+                                  AppLocalization.of(context).yesButton,
+                                  context), () async {
+                            String privateKey;
+                            String seedOrigin =
+                                await sl.get<SharedPrefsUtil>().getSeedOrigin();
+                            String seed =
+                                await StateContainer.of(context).getSeed();
+                            if (seedOrigin == HD_WALLET) {
+                              if (seed != null) {
+                                int index = StateContainer.of(context)
+                                    .selectedAccount
+                                    .index;
+                                privateKey = await AppUtil()
+                                    .seedToPrivateKey(seed, index);
+                                //print("privateKey : " + privateKey);
+                              }
+                            }
+                            ContractCallResponse contractCallResponse = await sl
+                                .get<SmartContractService>()
+                                .contractCallAddMultiSig(
+                                    widget.owner,
+                                    widget.contractAddress,
+                                    0.25,
+                                    _blockAddressController.text,
+                                    privateKey == null ? seed : privateKey);
+
+                            if (contractCallResponse != null &&
+                                contractCallResponse.error != null) {
+                              UIUtil.showSnackbar(
+                                  AppLocalization.of(context).sendError +
+                                      " (" +
+                                      contractCallResponse.error.message +
+                                      ")",
+                                  context);
+                              return;
+                            } else {
                               Navigator.of(context)
                                   .popUntil(RouteUtils.withNameLike('/home'));
-                            });
+                            }
                           });
                         }
-                      })
+                      }),
                     ],
                   ),
                 ],
