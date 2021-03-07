@@ -99,8 +99,6 @@ class AppService {
   final Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
   };
-  String body;
-  http.Response responseHttp;
 
   SSHClient sshClient;
 
@@ -149,9 +147,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -162,8 +164,8 @@ class AppService {
           }
         } else {
           dnaGetBalanceRequest = DnaGetBalanceRequest.fromJson(mapParams);
-          body = json.encode(dnaGetBalanceRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaGetBalanceRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetBalanceResponse =
@@ -234,9 +236,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -247,8 +253,8 @@ class AppService {
           }
         } else {
           bcnTransactionsRequest = BcnTransactionsRequest.fromJson(mapParams);
-          body = json.encode(bcnTransactionsRequest.toJson());
-          responseHttp =
+          String body = json.encode(bcnTransactionsRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnTransactionsResponse =
@@ -557,14 +563,15 @@ class AppService {
     return simplePriceResponse;
   }
 
-  Future<bool> getWStatusGetResponse() async {
+  Future<String> getWStatusGetResponse() async {
+
     DnaIdentityRequest dnaIdentityRequest;
 
     Map<String, dynamic> mapParams;
-    Completer<bool> _completer = new Completer<bool>();
+    Completer<String> _completer = new Completer<String>();
 
     if (await NodeUtil().getNodeType() == DEMO_NODE) {
-      _completer.complete(true);
+      _completer.complete("true");
       return _completer.future;
     }
 
@@ -575,7 +582,7 @@ class AppService {
         keyApp == null ||
         url.isAbsolute == false ||
         keyApp == "") {
-      _completer.complete(false);
+      _completer.complete("Url and/or api key invalid");
       return _completer.future;
     }
 
@@ -588,35 +595,56 @@ class AppService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        } else {
+          _completer.complete(sshClientStatus.sshClientStatusMsg);
+          return _completer.future;
+        }
+
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+          clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
                 headers: requestHeaders);
         if (response.status == 200) {
-          if (dnaIdentityResponseFromJson(response.text).result == null) {
-            _completer.complete(false);
+          DnaIdentityResponse dnaIdentityResponse =
+              dnaIdentityResponseFromJson(response.text);
+          if (dnaIdentityResponse.result == null) {
+            if (dnaIdentityResponse.error == null) {
+              _completer.complete(response.text);
+            } else {
+              _completer.complete(dnaIdentityResponse.error.message);
+            }
           } else {
-            _completer.complete(true);
+            _completer.complete("true");
           }
         }
       } else {
         dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
-        body = json.encode(dnaIdentityRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
+        String body = json.encode(dnaIdentityRequest.toJson());
+        http.Response responseHttp = await http
+            .post(url, body: body, headers: requestHeaders)
+            .timeout(Duration(seconds: 2));
         if (responseHttp.statusCode == 200) {
-          if (dnaIdentityResponseFromJson(responseHttp.body).result == null) {
-            _completer.complete(false);
+          DnaIdentityResponse dnaIdentityResponse =
+              dnaIdentityResponseFromJson(responseHttp.body);
+          if (dnaIdentityResponse.result == null) {
+            if (dnaIdentityResponse.error == null) {
+              _completer.complete(responseHttp.body);
+            } else {
+              _completer.complete(dnaIdentityResponse.error.message);
+            }
           } else {
-            _completer.complete(true);
+            _completer.complete("true");
           }
         }
       }
     } catch (e) {
-      _completer.complete(false);
+      _completer.complete(e.toString());
     }
 
     return _completer.future;
@@ -650,9 +678,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -664,8 +696,8 @@ class AppService {
         } else {
           dnaGetCoinbaseAddrRequest =
               DnaGetCoinbaseAddrRequest.fromJson(mapParams);
-          body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaGetCoinbaseAddrRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetCoinbaseAddrResponse =
@@ -755,9 +787,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -767,8 +803,8 @@ class AppService {
           }
         } else {
           dnaIdentityRequest = DnaIdentityRequest.fromJson(mapParams);
-          body = json.encode(dnaIdentityRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaIdentityRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaIdentityResponse =
@@ -834,9 +870,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -846,8 +886,8 @@ class AppService {
           }
         } else {
           dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
-          body = json.encode(dnaGetEpochRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaGetEpochRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetEpochResponse =
@@ -920,9 +960,13 @@ class AppService {
 
       try {
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -944,8 +988,8 @@ class AppService {
         } else {
           dnaCeremonyIntervalsRequest =
               DnaCeremonyIntervalsRequest.fromJson(mapParams);
-          body = json.encode(dnaCeremonyIntervalsRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaCeremonyIntervalsRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaCeremonyIntervalsResponse =
@@ -1000,9 +1044,13 @@ class AppService {
         };
 
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -1017,8 +1065,8 @@ class AppService {
           }
         } else {
           dnaGetEpochRequest = DnaGetEpochRequest.fromJson(mapParams);
-          body = json.encode(dnaGetEpochRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaGetEpochRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaGetEpochResponse =
@@ -1069,9 +1117,13 @@ class AppService {
       };
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1082,8 +1134,8 @@ class AppService {
         }
       } else {
         dnaBecomeOnlineRequest = DnaBecomeOnlineRequest.fromJson(mapParams);
-        body = json.encode(dnaBecomeOnlineRequest.toJson());
-        responseHttp =
+        String body = json.encode(dnaBecomeOnlineRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaBecomeOnlineResponse =
@@ -1126,9 +1178,13 @@ class AppService {
       };
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1139,8 +1195,8 @@ class AppService {
         }
       } else {
         dnaBecomeOffLineRequest = DnaBecomeOfflineRequest.fromJson(mapParams);
-        body = json.encode(dnaBecomeOffLineRequest.toJson());
-        responseHttp =
+        String body = json.encode(dnaBecomeOffLineRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaBecomeOffLineResponse =
@@ -1245,9 +1301,13 @@ class AppService {
       }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1265,7 +1325,7 @@ class AppService {
           }
         } else {
           EventTaxiImpl.singleton()
-              .fire(TransactionSendEvent(response: responseHttp.body));
+              .fire(TransactionSendEvent(response: response.text));
         }
       } else {
         if (await NodeUtil().getNodeType() == SHARED_NODE ||
@@ -1304,8 +1364,8 @@ class AppService {
         } else {
           dnaSendTransactionRequest =
               DnaSendTransactionRequest.fromJson(mapParams);
-          body = json.encode(dnaSendTransactionRequest.toJson());
-          responseHttp =
+          String body = json.encode(dnaSendTransactionRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             dnaSendTransactionResponse =
@@ -1382,9 +1442,13 @@ class AppService {
         }
 
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -1394,8 +1458,8 @@ class AppService {
           }
         } else {
           bcnSyncingRequest = BcnSyncingRequest.fromJson(mapParams);
-          body = json.encode(bcnSyncingRequest.toJson());
-          responseHttp =
+          String body = json.encode(bcnSyncingRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnSyncingResponse = bcnSyncingResponseFromJson(responseHttp.body);
@@ -1440,9 +1504,13 @@ class AppService {
       };
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1452,8 +1520,8 @@ class AppService {
         }
       } else {
         bcnMempoolRequest = BcnMempoolRequest.fromJson(mapParams);
-        body = json.encode(bcnMempoolRequest.toJson());
-        responseHttp =
+        String body = json.encode(bcnMempoolRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnMempoolResponse = bcnMempoolResponseFromJson(responseHttp.body);
@@ -1507,9 +1575,13 @@ class AppService {
       }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1525,8 +1597,8 @@ class AppService {
         }
       } else {
         bcnTransactionRequest = BcnTransactionRequest.fromJson(mapParams);
-        body = json.encode(bcnTransactionRequest.toJson());
-        responseHttp =
+        String body = json.encode(bcnTransactionRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnTransactionResponse =
@@ -1587,9 +1659,13 @@ class AppService {
       }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1606,12 +1682,12 @@ class AppService {
           }
         } else {
           EventTaxiImpl.singleton()
-              .fire(TransactionSendEvent(response: responseHttp.body));
+              .fire(TransactionSendEvent(response: response.text));
         }
       } else {
         bcnSendRawTxRequest = BcnSendRawTxRequest.fromJson(mapParams);
-        body = json.encode(bcnSendRawTxRequest.toJson());
-        responseHttp =
+        String body = json.encode(bcnSendRawTxRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           bcnSendRawTxResponse =
@@ -1666,9 +1742,13 @@ class AppService {
       };
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1679,8 +1759,8 @@ class AppService {
         }
       } else {
         dnaActivateInviteRequest = DnaActivateInviteRequest.fromJson(mapParams);
-        body = json.encode(dnaActivateInviteRequest.toJson());
-        responseHttp =
+        String body = json.encode(dnaActivateInviteRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaActivateInviteResponse =
@@ -1724,9 +1804,13 @@ class AppService {
       };
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1736,8 +1820,8 @@ class AppService {
         }
       } else {
         dnaSendInviteRequest = DnaSendInviteRequest.fromJson(mapParams);
-        body = json.encode(dnaSendInviteRequest.toJson());
-        responseHttp =
+        String body = json.encode(dnaSendInviteRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaSendInviteResponse =
@@ -1787,9 +1871,13 @@ class AppService {
       }
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -1800,8 +1888,8 @@ class AppService {
         }
       } else {
         dnaSignInRequest = DnaSignInRequest.fromJson(mapParams);
-        body = json.encode(dnaSignInRequest.toJson());
-        responseHttp =
+        String body = json.encode(dnaSignInRequest.toJson());
+        http.Response responseHttp =
             await http.post(url, body: body, headers: requestHeaders);
         if (responseHttp.statusCode == 200) {
           dnaSignInResponse = dnaSignInResponseFromJson(responseHttp.body);
@@ -1878,9 +1966,13 @@ class AppService {
         };
 
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -1892,8 +1984,8 @@ class AppService {
           }
         } else {
           bcnFeePerGasRequest = BcnFeePerGasRequest.fromJson(mapParams);
-          body = json.encode(bcnFeePerGasRequest.toJson());
-          responseHttp =
+          String body = json.encode(bcnFeePerGasRequest.toJson());
+          http.Response responseHttp =
               await http.post(url, body: body, headers: requestHeaders);
           if (responseHttp.statusCode == 200) {
             bcnFeePerGasResponse =
@@ -1911,5 +2003,4 @@ class AppService {
 
     return _completer.future;
   }
-
 }

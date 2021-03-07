@@ -14,6 +14,7 @@ import 'package:my_idena/network/model/request/contract/contract_call_time_lock_
 import 'package:my_idena/network/model/request/contract/contract_deploy_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_estimate_deploy_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_get_stake_request.dart';
+import 'package:my_idena/network/model/request/contract/contract_iterate_map_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_read_data_request.dart';
 import 'package:my_idena/network/model/request/contract/contract_terminate_request.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -22,6 +23,7 @@ import 'package:my_idena/network/model/response/contract/contract_call_response.
 import 'package:my_idena/network/model/response/contract/contract_deploy_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_iterate_map_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_read_data_byte_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_read_data_hex_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_read_data_uint64_response.dart';
@@ -90,13 +92,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           bcnTxReceiptResponse = bcnTxReceiptResponseFromJson(response.text);
         }
@@ -184,13 +192,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractDeployResponse =
               contractDeployResponseFromJson(response.text);
@@ -275,13 +289,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractDeployResponse =
               contractDeployResponseFromJson(response.text);
@@ -360,13 +380,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractEstimateDeployResponse =
               contractEstimateDeployResponseFromJson(response.text);
@@ -428,13 +454,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractEstimateDeployResponse =
               contractEstimateDeployResponseFromJson(response.text);
@@ -501,13 +533,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractCallResponse = contractCallResponseFromJson(response.text);
         }
@@ -572,13 +610,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractCallResponse = contractCallResponseFromJson(response.text);
         }
@@ -670,13 +714,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractCallResponse = contractCallResponseFromJson(response.text);
 
@@ -753,13 +803,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractCallResponse = contractCallResponseFromJson(response.text);
         }
@@ -818,13 +874,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractTerminateResponse =
               contractTerminateResponseFromJson(response.text);
@@ -884,13 +946,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractTerminateResponse =
               contractTerminateResponseFromJson(response.text);
@@ -1079,13 +1147,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractReadDataResponse =
               contractReadDataUint64ResponseFromJson(response.text);
@@ -1139,13 +1213,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractReadDataResponse =
               contractReadDataHexResponseFromJson(response.text);
@@ -1199,13 +1279,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractReadDataResponse =
               contractReadDataByteResponseFromJson(response.text);
@@ -1262,13 +1348,19 @@ class SmartContractService {
 
     try {
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
-            .request(url.toString(),
-                method: 'POST',
-                data: jsonEncode(mapParams),
-                headers: requestHeaders);
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
         if (response.status == 200) {
           contractGetStakeResponse =
               contractGetStakeResponseFromJson(response.text);
@@ -1294,8 +1386,98 @@ class SmartContractService {
 
   Future<double> getSmartContractStake() async {
     int feePerGas = await sl.get<AppService>().getFeePerGas();
-    double smartContractStake = double.parse((Decimal.parse(feePerGas.toString()) / Decimal.parse("1000000000000000000") * Decimal.parse("3000000")).toString());
+    double smartContractStake = double.parse(
+        (Decimal.parse(feePerGas.toString()) /
+                Decimal.parse("1000000000000000000") *
+                Decimal.parse("3000000"))
+            .toString());
     //print("smartContractStake: " + smartContractStake.toString());
     return smartContractStake;
+  }
+
+  Future<ContractIterateMapResponse> getContractIterateMapAmount(String contractAddress, String continuationToken)
+  {
+    return getContractIterateMap(contractAddress, "amount", continuationToken, "hex", "hex", 32);
+  }
+
+  Future<ContractIterateMapResponse> getContractIterateMapAddr(String contractAddress, String continuationToken)
+  {
+    return getContractIterateMap(contractAddress, "addr", continuationToken, "hex", "hex", 32);
+  }
+
+  Future<ContractIterateMapResponse> getContractIterateMap(
+      String contractAddress,
+      String map,
+      String continuationToken,
+      String keyFormat,
+      String valueFormat,
+      int limit) async {
+    ContractIterateMapRequest contractIterateMapRequest;
+    ContractIterateMapResponse contractIterateMapResponse;
+
+    Map<String, dynamic> mapParams;
+
+    Completer<ContractIterateMapResponse> _completer =
+        new Completer<ContractIterateMapResponse>();
+
+    Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
+    String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
+
+    if (url.isAbsolute == false || keyApp == "") {
+      _completer.complete(contractIterateMapResponse);
+      return _completer.future;
+    }
+
+    mapParams = {
+      'method': ContractIterateMapRequest.METHOD_NAME,
+      'params': [
+        contractAddress,
+        map,
+        continuationToken,
+        keyFormat,
+        valueFormat,
+        limit
+      ],
+      'id': 101,
+      'key': keyApp
+    };
+
+    try {
+      if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
+        SSHClientStatus sshClientStatus;
+        sshClientStatus =
+            await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
+        var response = await ssh.HttpClientImpl(
+            clientFactory: () =>
+                ssh.SSHTunneledBaseClient(sshClientStatus.sshClient)).request(
+            url.toString(),
+            method: 'POST',
+            data: jsonEncode(mapParams),
+            headers: requestHeaders);
+        if (response.status == 200) {
+          contractIterateMapResponse =
+              contractIterateMapResponseFromJson(response.text);
+        }
+      } else {
+        contractIterateMapRequest =
+            ContractIterateMapRequest.fromJson(mapParams);
+        body = json.encode(contractIterateMapRequest.toJson());
+        responseHttp =
+            await http.post(url, body: body, headers: requestHeaders);
+        if (responseHttp.statusCode == 200) {
+          contractIterateMapResponse =
+              contractIterateMapResponseFromJson(responseHttp.body);
+        }
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+
+    _completer.complete(contractIterateMapResponse);
+
+    return _completer.future;
   }
 }

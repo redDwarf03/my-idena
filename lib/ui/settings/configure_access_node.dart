@@ -23,6 +23,7 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_node.dart';
+import 'package:my_idena/util/util_vps.dart';
 
 class ConfigureAccessNodePage extends StatefulWidget {
   @override
@@ -79,12 +80,10 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   bool _passwordPkVisible;
   bool _vpsPasswordVisible;
 
-  Timer _timerSync;
   bool status = false;
 
   @override
   void dispose() {
-    _timerSync.cancel();
     super.dispose();
   }
 
@@ -215,53 +214,56 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       }
     });
     _deleteConfAccessNode();
-
-    _timeSyncUpdate();
   }
 
   void _deleteConfAccessNode() async {
     await sl.get<SharedPrefsUtil>().deleteConfAccessNode();
   }
 
-  _timeSyncUpdate() {
-    _timerSync = Timer(const Duration(milliseconds: 500), () async {
-      _addressText = "";
-      if (_selectedNodeType == DEMO_NODE || _selectedNodeType == PUBLIC_NODE) {
-        status = true;
-      } else {
-        status = false;
-      }
+  _tryConnection() async {
+    _addressText = "";
+    if (_selectedNodeType == DEMO_NODE || _selectedNodeType == PUBLIC_NODE) {
+      status = true;
+    } else {
+      status = false;
+    }
 
-      if (_selectedNodeType != DEMO_NODE && _selectedNodeType != PUBLIC_NODE) {
-        if ((_selectedNodeType == NORMAL_VPS_NODE &&
-                _vpsTunnelController.text != "" &&
-                _keyAppController.text != "" &&
-                _vpsIpController.text != "" &&
-                _vpsUserController.text != "" &&
-                _vpsPasswordController.text != "") ||
-            (_selectedNodeType == SHARED_NODE &&
-                _operatorController.text != "" &&
-                _keyAppController.text != "" &&
-                _encryptedPkController.text != "" &&
-                _passwordPkController.text != "") ||
-            (_selectedNodeType == NORMAL_LOCAL_NODE &&
-                _apiUrlController.text != "" &&
-                _keyAppController.text != "")) {
-          status = await sl.get<AppService>().getWStatusGetResponse();
-          if (status) {
-            _addressText = await AppUtil().getAddress();
-          }
+    if (_selectedNodeType != DEMO_NODE && _selectedNodeType != PUBLIC_NODE) {
+      if ((_selectedNodeType == NORMAL_VPS_NODE &&
+              _vpsTunnelController.text != "" &&
+              _keyAppController.text != "" &&
+              _vpsIpController.text != "" &&
+              _vpsUserController.text != "" &&
+              _vpsPasswordController.text != "") ||
+          (_selectedNodeType == SHARED_NODE &&
+              _operatorController.text != "" &&
+              _keyAppController.text != "" &&
+              _encryptedPkController.text != "" &&
+              _passwordPkController.text != "") ||
+          (_selectedNodeType == NORMAL_LOCAL_NODE &&
+              _apiUrlController.text != "" &&
+              _keyAppController.text != "")) {
+        if (_selectedNodeType == NORMAL_VPS_NODE) {
+          sl.get<VpsUtil>().disconnectVps();
         }
-      } else {
-        if (_selectedNodeType == DEMO_NODE) {
+
+        String statusString =
+            await sl.get<AppService>().getWStatusGetResponse();
+        if (statusString != null && statusString == "true") {
+          status = true;
           _addressText = await AppUtil().getAddress();
+        } else {
+          UIUtil.showSnackbar(statusString, context);
         }
       }
-      //print("status : " + status.toString());
-      if (!mounted) return;
-      setState(() {});
-      _timeSyncUpdate();
-    });
+    } else {
+      if (_selectedNodeType == DEMO_NODE) {
+        _addressText = await AppUtil().getAddress();
+      }
+    }
+    //print("status : " + status.toString());
+    if (!mounted) return;
+    setState(() {});
   }
 
   @override
@@ -1360,6 +1362,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
       await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     }
+    await _tryConnection();
   }
 
   getEnterNodeTypeContainer() {

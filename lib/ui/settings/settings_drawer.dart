@@ -1058,12 +1058,12 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).tryValidationSession,
                         LineariconsFree.select, onPressed: () {
                       bool simulationMode = true;
-                      Navigator.of(context).pushNamed(
-                          '/validation_session_step_1',
-                          arguments: {
-                                'simulationMode': simulationMode,
-                                'address': StateContainer.of(context).selectedAccount.address
-                              });
+                      Navigator.of(context)
+                          .pushNamed('/validation_session_step_1', arguments: {
+                        'simulationMode': simulationMode,
+                        'address':
+                            StateContainer.of(context).selectedAccount.address
+                      });
                     }),
                     Divider(
                       height: 2,
@@ -1110,19 +1110,27 @@ class _SettingsSheetState extends State<SettingsSheet>
                       Navigator.of(context).pushNamed('/creation_flips_step_1',
                           arguments: _flipKeyWordPairs);
                     }),*/
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLine(
-                        context,
-                        AppLocalization.of(context).scHeader,
-                        FontAwesome5.file_contract, onPressed: () {
-                      setState(() {
-                        _scOpen = true;
-                      });
-                      _scController.forward();
-                    }),
+                    widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE &&
+                            widget.nodeType != PUBLIC_NODE
+                        ? Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          )
+                        : SizedBox(),
+                    widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE &&
+                            widget.nodeType != PUBLIC_NODE
+                        ? AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context).scHeader,
+                            FontAwesome5.file_contract, onPressed: () {
+                            setState(() {
+                              _scOpen = true;
+                            });
+                            _scController.forward();
+                          })
+                        : SizedBox(),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1640,7 +1648,6 @@ class _SettingsSheetState extends State<SettingsSheet>
                                 color: StateContainer.of(context).curTheme.text,
                                 size: 24)),
                       ),
-                      //Security Header Text
                       Text(
                         AppLocalization.of(context).scHeader,
                         style: AppStyles.textStyleSettingsHeader(context),
@@ -1675,11 +1682,16 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).timeLockTitle,
                         "TimeLock smart contract locks coins on the smart contract address until the specified block number appears. Once the block number is mined, the coins can be transferred to the specified address.",
                         Entypo.hourglass, onPressed: () {
-                      Sheets.showAppHeightEightSheet(
+                      /* Sheets.showAppHeightEightSheet(
                           context: context,
                           widget: TimeLockList(StateContainer.of(context)
                               .selectedAccount
-                              .address));
+                              .address));*/
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).oracleLockTitle,
+                        "Soon...",
+                      );
                     }),
                     Divider(
                       height: 2,
@@ -1690,12 +1702,16 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).multisigTitle,
                         "A multisignature wallet address with specified M and N locks coins. In order to send the coins from the multisig, M specific participants out of N have to provide their signatures.",
                         FontAwesome5.signature, onPressed: () {
-                     Sheets.showAppHeightEightSheet(
+                      /*Sheets.showAppHeightEightSheet(
                           context: context,
                           widget: MultiSigList(StateContainer.of(context)
                               .selectedAccount
-                              .address));
-                      
+                              .address));*/
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).oracleLockTitle,
+                        "Soon...",
+                      );
                     }),
                     Divider(
                       height: 2,

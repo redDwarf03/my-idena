@@ -178,69 +178,6 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context).owner,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Address Text
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: OneOrThreeLineAddressText(
-                          address: StateContainer.of(context).wallet.address,
-                          type: AddressTextType.PRIMARY60),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context)
-                                    .smartContractAddress,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: OneOrThreeLineAddressText(
-                          address: widget.contractAddress,
-                          type: AddressTextType.PRIMARY60),
-                    ),
                   ],
                 ),
                 //Empty SizedBox
@@ -279,6 +216,94 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                                   children: <Widget>[
                                     Container(
                                       margin: EdgeInsets.only(
+                                          top: 0.0, left: 30, right: 30),
+                                      child: Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .owner,
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Address Text
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: OneOrThreeLineAddressText(
+                                          address: StateContainer.of(context)
+                                              .wallet
+                                              .address,
+                                          type: AddressTextType.PRIMARY60),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          top: 0.0, left: 30, right: 30),
+                                      child: Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .smartContractAddress,
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: OneOrThreeLineAddressText(
+                                          address: widget.contractAddress,
+                                          type: AddressTextType.PRIMARY60),
+                                    ),
+                                    getEnterAddressContainer(),
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_addressValidationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
                                           left: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -287,7 +312,7 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                                                   .size
                                                   .width *
                                               0.105),
-                                      alignment: Alignment.bottomCenter,
+                                      alignment: Alignment.topCenter,
                                       constraints: BoxConstraints(
                                           maxHeight: 174, minHeight: 0),
                                       // ********************************************* //
@@ -323,21 +348,7 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                                         ),
                                       ),
                                     ),
-                                    getEnterAddressContainer(),
                                     SizedBox(height: 10),
-                                    Container(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      margin: EdgeInsets.only(top: 3),
-                                      child: Text(_addressValidationText,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                    ),
                                   ],
                                 ),
                               ],
@@ -410,31 +421,25 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                             }
                           });
                         } else if (validRequest) {
-                          AppButton.buildAppButton(
+                          AppDialogs.showConfirmDialog(
                               context,
-                              AppButtonType.PRIMARY,
-                              AppLocalization.of(context).scVoteButton,
-                              Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
-                            AppDialogs.showConfirmDialog(
-                                context,
-                                AppLocalization.of(context)
-                                    .scVoteConfirmationTitle,
-                                AppLocalization.of(context)
-                                    .scVoteConfirmationText,
-                                CaseChange.toUpperCase(
-                                    AppLocalization.of(context).yesButton,
-                                    context), () async {
-                              await sl
-                                  .get<SmartContractService>()
-                                  .contractCallSendMultiSig(
-                                      widget.owner,
-                                      widget.contractAddress,
-                                      0.25,
-                                      _blockAddressController.text,
-                                      widget.contractBalance.toString());
-                              Navigator.of(context)
-                                  .popUntil(RouteUtils.withNameLike('/home'));
-                            });
+                              AppLocalization.of(context)
+                                  .scVoteConfirmationTitle,
+                              AppLocalization.of(context)
+                                  .scVoteConfirmationText,
+                              CaseChange.toUpperCase(
+                                  AppLocalization.of(context).yesButton,
+                                  context), () async {
+                            await sl
+                                .get<SmartContractService>()
+                                .contractCallSendMultiSig(
+                                    widget.owner,
+                                    widget.contractAddress,
+                                    0.25,
+                                    _blockAddressController.text,
+                                    widget.contractBalance.toString());
+                            Navigator.of(context)
+                                .popUntil(RouteUtils.withNameLike('/home'));
                           });
                         }
                       }),

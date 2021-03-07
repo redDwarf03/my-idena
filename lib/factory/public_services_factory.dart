@@ -111,7 +111,7 @@ class AppService {
     throw "method not available";
   }
 
-  Future<bool> getWStatusGetResponse() async {
+  Future<String> getWStatusGetResponse() async {
     throw "method not available";
   }
 

@@ -16,7 +16,6 @@ import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:my_idena/model/deepLinks/idena_url.dart';
 import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/themes.dart';
-import 'package:my_idena/ui/smartContracts/multiSig_detail.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
@@ -384,31 +383,34 @@ class _AppHomePageState extends State<AppHomePage>
   // Used to build list items that haven't been removed.
   Widget _buildItem(
       BuildContext context, int index, Animation<double> animation) {
-    String displayName = smallScreen(context)
-        ? StateContainer.of(context)
-            .wallet
-            .history[index]
-            .getShorterString(context)
-        : StateContainer.of(context)
-            .wallet
-            .history[index]
-            .getShortString(context);
-    _contacts.forEach((contact) {
-      if (contact.address.toLowerCase() ==
-          StateContainer.of(context)
+    if (index >= StateContainer.of(context).wallet.history.length) {
+    } else {
+      String displayName = smallScreen(context)
+          ? StateContainer.of(context)
               .wallet
               .history[index]
-              .to
-              .toString()
-              .toLowerCase()) {
-        displayName = contact.name;
-      }
-    });
-    return _buildTransactionCard(
-        StateContainer.of(context).wallet.history[index],
-        animation,
-        displayName,
-        context);
+              .getShorterString(context)
+          : StateContainer.of(context)
+              .wallet
+              .history[index]
+              .getShortString(context);
+      _contacts.forEach((contact) {
+        if (contact.address.toLowerCase() ==
+            StateContainer.of(context)
+                .wallet
+                .history[index]
+                .to
+                .toString()
+                .toLowerCase()) {
+          displayName = contact.name;
+        }
+      });
+      return _buildTransactionCard(
+          StateContainer.of(context).wallet.history[index],
+          animation,
+          displayName,
+          context);
+    }
   }
 
   // Return widget for list
@@ -870,22 +872,22 @@ class _AppHomePageState extends State<AppHomePage>
                                                     .curTheme
                                                     .text15,
                                             onPressed: () {
-                                                Sheets.showAppHeightEightSheet(
+                                              Sheets.showAppHeightEightSheet(
                                                   context: context,
                                                   widget: SmartContractVoteSheet(
-                                                      title: AppLocalization.of(
-                                                              context)
+                                                      title: AppLocalization
+                                                              .of(context)
                                                           .multisigTitle,
-                                                      contractAddress:
-                                                          item.smartContractMultiSig
-                                                              .contractAddress,
-                                                      contractBalance:
-                                                          item.smartContractMultiSig
-                                                              .balance
-                                                              .toString(),
-                                                      owner:
-                                                          item.smartContractMultiSig
-                                                              .owner));
+                                                      contractAddress: item
+                                                          .smartContractMultiSig
+                                                          .contractAddress,
+                                                      contractBalance: item
+                                                          .smartContractMultiSig
+                                                          .balance
+                                                          .toString(),
+                                                      owner: item
+                                                          .smartContractMultiSig
+                                                          .owner));
                                             },
                                             padding: EdgeInsets.all(0.0),
                                             icon: Icon(FontAwesome5.signature,

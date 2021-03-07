@@ -10,12 +10,14 @@ import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/biometrics.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_vps.dart';
 
 GetIt sl = GetIt.instance;
 
 void setupServiceLocator() {
   sl.registerLazySingleton<AppService>(() => AppService());
   sl.registerLazySingleton<SmartContractService>(() => SmartContractService());
+  sl.registerLazySingleton<VpsUtil>(() => VpsUtil());
   sl.registerLazySingleton<ApiCoinsService>(() => ApiCoinsService());
   sl.registerLazySingleton<ValidationService>(() => ValidationService());
   sl.registerLazySingleton<DBHelper>(() => DBHelper());

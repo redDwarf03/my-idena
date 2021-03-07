@@ -25,7 +25,7 @@ abstract class IServicesFactory {
   Future<BcnTransactionsResponse> getAddressTxsResponse(
       String address, int count);
 
-  Future<bool> getWStatusGetResponse();
+  Future<String> getWStatusGetResponse();
 
   Future<DnaGetCoinbaseAddrResponse> getDnaGetCoinbaseAddr();
 
@@ -67,4 +67,5 @@ abstract class IServicesFactory {
       DeepLinkParamSignin deepLinkParam, String privateKey);
 
   Future<int> getFeePerGas();
+
 }

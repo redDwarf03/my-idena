@@ -336,459 +336,451 @@ class _TimeLockListState extends State<TimeLockList> {
       _processIndex = 4;
     }
     return FlatButton(
-      onPressed: () {},
-      padding: EdgeInsets.only(right: 15.0, left: 15.0),
-      child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          color: Colors.grey[200],
-          elevation: 10,
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 20),
-                Container(
-                  height: 60,
-                  child: Timeline.tileBuilder(
-                    theme: TimelineThemeData(
-                      direction: Axis.horizontal,
-                      connectorTheme: ConnectorThemeData(
-                        space: 20.0,
-                        thickness: 5.0,
-                      ),
-                    ),
-                    builder: TimelineTileBuilder.connected(
-                      connectionDirection: ConnectionDirection.before,
-                      itemExtentBuilder: (_, __) =>
-                          (MediaQuery.of(context).size.width - 40) /
-                          _processes.length,
-                      oppositeContentsBuilder: (context, index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: index == 0
-                                ? Icon(FontAwesome5.file_contract,
-                                    size: 14, color: getColor(index))
-                                : index == 1
-                                    ? Icon(FontAwesome5.lock,
+        onPressed: () {},
+        padding: EdgeInsets.only(right: 15.0, left: 15.0),
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            color: Colors.grey[200],
+            elevation: 10,
+            child: SingleChildScrollView(
+                child: Column(children: <Widget>[
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    Container(
+                      height: 60,
+                      child: Timeline.tileBuilder(
+                        theme: TimelineThemeData(
+                          direction: Axis.horizontal,
+                          connectorTheme: ConnectorThemeData(
+                            space: 20.0,
+                            thickness: 5.0,
+                          ),
+                        ),
+                        builder: TimelineTileBuilder.connected(
+                          connectionDirection: ConnectionDirection.before,
+                          itemExtentBuilder: (_, __) =>
+                              (MediaQuery.of(context).size.width - 40) /
+                              _processes.length,
+                          oppositeContentsBuilder: (context, index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: index == 0
+                                    ? Icon(FontAwesome5.file_contract,
                                         size: 14, color: getColor(index))
-                                    : index == 2
-                                        ? Icon(FontAwesome5.lock_open,
+                                    : index == 1
+                                        ? Icon(FontAwesome5.lock,
                                             size: 14, color: getColor(index))
-                                        : index == 3
-                                            ? Icon(FontAwesome5.share_square,
+                                        : index == 2
+                                            ? Icon(FontAwesome5.lock_open,
                                                 size: 14,
                                                 color: getColor(index))
-                                            : Icon(FontAwesome.stop_circle,
-                                                size: 16,
-                                                color: getColor(index)));
-                      },
-                      contentsBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            _processes[index],
-                            style: TextStyle(
-                              color: getColor(index),
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Roboto',
-                            ),
-                          ),
-                        );
-                      },
-                      indicatorBuilder: (_, index) {
-                        var color;
-                        var child;
-                        if (index == _processIndex && index != 4) {
-                          color = inProgressColor;
-                          child = Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: index == 3
-                                ? Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 10.0,
-                                  )
-                                : CircularProgressIndicator(
-                                    strokeWidth: 1.0,
-                                    valueColor:
-                                        AlwaysStoppedAnimation(Colors.white),
-                                  ),
-                          );
-                        } else if (index <= _processIndex) {
-                          color = completeColor;
-                          child = Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 10.0,
-                          );
-                        } else {
-                          color = todoColor;
-                        }
-
-                        if (index <= _processIndex) {
-                          return Stack(
-                            children: [
-                              CustomPaint(
-                                size: Size(20.0, 20.0),
-                                painter: _BezierPainter(
-                                  color: color,
-                                  drawStart: index > 0,
-                                  drawEnd: index < _processIndex,
+                                            : index == 3
+                                                ? Icon(
+                                                    FontAwesome5.share_square,
+                                                    size: 14,
+                                                    color: getColor(index))
+                                                : Icon(FontAwesome.stop_circle,
+                                                    size: 16,
+                                                    color: getColor(index)));
+                          },
+                          contentsBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                _processes[index],
+                                style: TextStyle(
+                                  color: getColor(index),
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Roboto',
                                 ),
                               ),
-                              DotIndicator(
-                                size: 20.0,
-                                color: color,
-                                child: child,
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Stack(
-                            children: [
-                              CustomPaint(
-                                size: Size(10.0, 10.0),
-                                painter: _BezierPainter(
-                                  color: color,
-                                  drawEnd: index < _processes.length - 1,
-                                ),
-                              ),
-                              OutlinedDotIndicator(
-                                borderWidth: 4.0,
-                                color: color,
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                      connectorBuilder: (_, index, type) {
-                        if (index > 0) {
-                          if (index == _processIndex) {
-                            final prevColor = getColor(index - 1);
-                            final color = getColor(index);
-                            var gradientColors;
-                            if (type == ConnectorType.start) {
-                              gradientColors = [
-                                Color.lerp(prevColor, color, 0.5),
-                                color
-                              ];
+                            );
+                          },
+                          indicatorBuilder: (_, index) {
+                            var color;
+                            var child;
+                            if (index == _processIndex && index != 4) {
+                              color = inProgressColor;
+                              child = Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: index == 3
+                                    ? Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 10.0,
+                                      )
+                                    : CircularProgressIndicator(
+                                        strokeWidth: 1.0,
+                                        valueColor: AlwaysStoppedAnimation(
+                                            Colors.white),
+                                      ),
+                              );
+                            } else if (index <= _processIndex) {
+                              color = completeColor;
+                              child = Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 10.0,
+                              );
                             } else {
-                              gradientColors = [
-                                prevColor,
-                                Color.lerp(prevColor, color, 0.5)
-                              ];
+                              color = todoColor;
                             }
-                            return DecoratedLineConnector(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: gradientColors,
-                                ),
-                              ),
-                            );
-                          } else {
-                            return SolidLineConnector(
-                              color: getColor(index),
-                            );
-                          }
-                        } else {
-                          return null;
-                        }
-                      },
-                      itemCount: _processes.length,
+
+                            if (index <= _processIndex) {
+                              return Stack(
+                                children: [
+                                  CustomPaint(
+                                    size: Size(20.0, 20.0),
+                                    painter: _BezierPainter(
+                                      color: color,
+                                      drawStart: index > 0,
+                                      drawEnd: index < _processIndex,
+                                    ),
+                                  ),
+                                  DotIndicator(
+                                    size: 20.0,
+                                    color: color,
+                                    child: child,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Stack(
+                                children: [
+                                  CustomPaint(
+                                    size: Size(10.0, 10.0),
+                                    painter: _BezierPainter(
+                                      color: color,
+                                      drawEnd: index < _processes.length - 1,
+                                    ),
+                                  ),
+                                  OutlinedDotIndicator(
+                                    borderWidth: 4.0,
+                                    color: color,
+                                  ),
+                                ],
+                              );
+                            }
+                          },
+                          connectorBuilder: (_, index, type) {
+                            if (index > 0) {
+                              if (index == _processIndex) {
+                                final prevColor = getColor(index - 1);
+                                final color = getColor(index);
+                                var gradientColors;
+                                if (type == ConnectorType.start) {
+                                  gradientColors = [
+                                    Color.lerp(prevColor, color, 0.5),
+                                    color
+                                  ];
+                                } else {
+                                  gradientColors = [
+                                    prevColor,
+                                    Color.lerp(prevColor, color, 0.5)
+                                  ];
+                                }
+                                return DecoratedLineConnector(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: gradientColors,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return SolidLineConnector(
+                                  color: getColor(index),
+                                );
+                              }
+                            } else {
+                              return null;
+                            }
+                          },
+                          itemCount: _processes.length,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                // Main Container
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    margin: new EdgeInsetsDirectional.only(
-                        start: 12.0, end: 0.0, bottom: 0),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          // info
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsetsDirectional.only(start: 2.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    AppLocalization.of(context)
-                                        .smartContractLabel,
-                                    style: TextStyle(
-                                      color: StateContainer.of(context)
-                                          .curTheme
-                                          .primary,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Roboto',
-                                    ),
-                                  ),
-                                  SelectableText(
-                                      smartContractTimeLock.contractAddress,
-                                      style:
-                                          AppStyles.textStyleTransactionAddress(
-                                              context)),
-                                  Text(
-                                    AppLocalization.of(context).ownerLabel,
-                                    style: TextStyle(
-                                      color: StateContainer.of(context)
-                                          .curTheme
-                                          .primary,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Roboto',
-                                    ),
-                                  ),
-                                  SelectableText(smartContractTimeLock.owner,
-                                      style:
-                                          AppStyles.textStyleTransactionAddress(
-                                              context)),
-                                  SizedBox(height: 20),
-                                  _processIndex == 4
-                                      ? SizedBox()
-                                      : Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                    // Main Container
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        margin: new EdgeInsetsDirectional.only(
+                            start: 12.0, end: 0.0, bottom: 0),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              // info
+                              Expanded(
+                                child: Container(
+                                  margin:
+                                      EdgeInsetsDirectional.only(start: 2.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        AppLocalization.of(context)
+                                            .smartContractLabel,
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'Roboto',
+                                        ),
+                                      ),
+                                      SelectableText(
+                                          smartContractTimeLock.contractAddress,
+                                          style: AppStyles
+                                              .textStyleTransactionAddress(
+                                                  context)),
+                                      Text(
+                                        AppLocalization.of(context).ownerLabel,
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'Roboto',
+                                        ),
+                                      ),
+                                      SelectableText(
+                                          smartContractTimeLock.owner,
+                                          style: AppStyles
+                                              .textStyleTransactionAddress(
+                                                  context)),
+                                      SizedBox(height: 20),
+                                      _processIndex == 4
+                                          ? SizedBox()
+                                          : Row(
                                               children: [
-                                                RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                    text: '',
-                                                    children: [
-                                                      TextSpan(
-                                                        text:
-                                                            AppLocalization.of(
-                                                                    context)
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RichText(
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      text: TextSpan(
+                                                        text: '',
+                                                        children: [
+                                                          TextSpan(
+                                                            text: AppLocalization
+                                                                    .of(context)
                                                                 .balanceLabel,
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
+                                                            style: TextStyle(
+                                                              color: StateContainer
+                                                                      .of(context)
                                                                   .curTheme
                                                                   .primary,
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            smartContractTimeLock
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                            ),
+                                                          ),
+                                                          TextSpan(
+                                                            text: smartContractTimeLock
                                                                     .balance
                                                                     .toString() +
                                                                 " iDNA",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
+                                                            style: TextStyle(
+                                                              color: StateContainer
+                                                                      .of(context)
                                                                   .curTheme
                                                                   .primary60,
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          fontFamily: 'Roboto',
-                                                        ),
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w100,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                    text: '',
-                                                    children: [
-                                                      TextSpan(
-                                                        text:
-                                                            AppLocalization.of(
-                                                                    context)
+                                                    ),
+                                                    RichText(
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      text: TextSpan(
+                                                        text: '',
+                                                        children: [
+                                                          TextSpan(
+                                                            text: AppLocalization
+                                                                    .of(context)
                                                                 .stakeLabel,
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
+                                                            style: TextStyle(
+                                                              color: StateContainer
+                                                                      .of(context)
                                                                   .curTheme
                                                                   .primary,
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily: 'Roboto',
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            smartContractTimeLock
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                            ),
+                                                          ),
+                                                          TextSpan(
+                                                            text: smartContractTimeLock
                                                                     .stake
                                                                     .toString() +
                                                                 " iDNA",
-                                                        style: TextStyle(
-                                                          color:
-                                                              StateContainer.of(
-                                                                      context)
+                                                            style: TextStyle(
+                                                              color: StateContainer
+                                                                      .of(context)
                                                                   .curTheme
                                                                   .primary60,
-                                                          fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.w100,
-                                                          fontFamily: 'Roboto',
-                                                        ),
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w100,
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 20,
-                                              height: 10,
-                                            ),
-                                            _processIndex >= 3
-                                                ? SizedBox()
-                                                : MaterialButton(
-                                                    onPressed: () {
-                                                      Sheets.showAppHeightNineSheet(
-                                                          context: context,
-                                                          widget: SendSheet(
-                                                              address:
-                                                                  smartContractTimeLock
-                                                                      .contractAddress,
-                                                              localCurrency:
-                                                                  StateContainer.of(
-                                                                          context)
-                                                                      .curCurrency));
-                                                    },
-                                                    color: StateContainer.of(
-                                                            context)
-                                                        .curTheme
-                                                        .primary,
-                                                    textColor: Colors.white,
-                                                    child: Icon(
-                                                      AppIcons.export_icon,
-                                                      size: 14,
                                                     ),
-                                                    shape:
-                                                        RoundedRectangleBorder(
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                  height: 10,
+                                                ),
+                                                _processIndex >= 3
+                                                    ? SizedBox()
+                                                    : MaterialButton(
+                                                        onPressed: () {
+                                                          Sheets.showAppHeightNineSheet(
+                                                              context: context,
+                                                              widget: SendSheet(
+                                                                  address:
+                                                                      smartContractTimeLock
+                                                                          .contractAddress,
+                                                                  localCurrency:
+                                                                      StateContainer.of(
+                                                                              context)
+                                                                          .curCurrency));
+                                                        },
+                                                        color:
+                                                            StateContainer.of(
+                                                                    context)
+                                                                .curTheme
+                                                                .primary,
+                                                        textColor: Colors.white,
+                                                        child: Icon(
+                                                          AppIcons.export_icon,
+                                                          size: 14,
+                                                        ),
+                                                        shape: RoundedRectangleBorder(
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
                                                                         22.0)),
-                                                  ),
-                                          ],
-                                        ),
-                                  _processIndex == 4
-                                      ? SizedBox()
-                                      : SizedBox(height: 20),
-                                  smartContractTimeLock.timestamp == null
-                                      ? SizedBox()
-                                      : RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
+                                                      ),
+                                              ],
+                                            ),
+                                      _processIndex == 4
+                                          ? SizedBox()
+                                          : SizedBox(height: 20),
+                                      smartContractTimeLock.timestamp == null
+                                          ? SizedBox()
+                                          : RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  TextSpan(
+                                                    text: AppLocalization.of(
+                                                            context)
                                                         .unlockTimeLabel,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
                                                           .curTheme
                                                           .primary,
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: DateFormat.yMEd(
-                                                        Localizations.localeOf(
-                                                                context)
-                                                            .languageCode)
-                                                    .add_Hm()
-                                                    .format(DateTime.fromMillisecondsSinceEpoch(
-                                                            smartContractTimeLock
-                                                                    .timestamp *
-                                                                1000)
-                                                        .toLocal())
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'Roboto',
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: DateFormat.yMEd(
+                                                            Localizations
+                                                                    .localeOf(
+                                                                        context)
+                                                                .languageCode)
+                                                        .add_Hm()
+                                                        .format(DateTime.fromMillisecondsSinceEpoch(
+                                                                smartContractTimeLock
+                                                                        .timestamp *
+                                                                    1000)
+                                                            .toLocal())
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
                                                           .curTheme
                                                           .primary60,
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.w100,
-                                                  fontFamily: 'Roboto',
-                                                ),
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.w100,
+                                                      fontFamily: 'Roboto',
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                  smartContractTimeLock.timestamp == null
-                                      ? SizedBox()
-                                      : SizedBox(
-                                          height: 20,
-                                        ),
-                                  smartContractTimeLock
-                                              .getLastBalanceUpdates() ==
-                                          null
-                                      ? SizedBox()
-                                      : RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
+                                            ),
+                                      smartContractTimeLock.timestamp == null
+                                          ? SizedBox()
+                                          : SizedBox(
+                                              height: 20,
+                                            ),
+                                      smartContractTimeLock
+                                                  .getLastBalanceUpdates() ==
+                                              null
+                                          ? SizedBox()
+                                          : RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  TextSpan(
+                                                    text: AppLocalization.of(
+                                                            context)
                                                         .unlockTimeLabel,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
                                                           .curTheme
                                                           .primary,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                              smartContractTimeLock
-                                                          .getLastBalanceUpdates()
-                                                          .txReceipt ==
-                                                      null
-                                                  ? TextSpan(
-                                                      text: smartContractTimeLock
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'Roboto',
+                                                    ),
+                                                  ),
+                                                  smartContractTimeLock
                                                               .getLastBalanceUpdates()
-                                                              .type +
-                                                          " - " +
-                                                          AppLocalization.of(
-                                                                  context)
-                                                              .successInfo,
-                                                      style: TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w100,
-                                                        fontFamily: 'Roboto',
-                                                      ),
-                                                    )
-                                                  : smartContractTimeLock
-                                                          .getLastBalanceUpdates()
-                                                          .txReceipt
-                                                          .success
+                                                              .txReceipt ==
+                                                          null
                                                       ? TextSpan(
                                                           text: smartContractTimeLock
                                                                   .getLastBalanceUpdates()
-                                                                  .txReceipt
-                                                                  .method +
+                                                                  .type +
                                                               " - " +
                                                               AppLocalization.of(
                                                                       context)
@@ -802,111 +794,139 @@ class _TimeLockListState extends State<TimeLockList> {
                                                                 'Roboto',
                                                           ),
                                                         )
-                                                      : TextSpan(
-                                                          text: smartContractTimeLock
-                                                                  .getLastBalanceUpdates()
-                                                                  .txReceipt
-                                                                  .method +
-                                                              " - " +
-                                                              smartContractTimeLock
-                                                                  .getLastBalanceUpdates()
-                                                                  .txReceipt
-                                                                  .errorMsg,
-                                                          style: TextStyle(
-                                                            color: Colors.red,
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight.w100,
-                                                            fontFamily:
-                                                                'Roboto',
-                                                          ),
-                                                        ),
-                                            ],
-                                          ),
-                                        ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      _processIndex >= 3 || _processIndex == 1
-                                          ? SizedBox()
-                                          : MaterialButton(
-                                              onPressed: () {
-                                                Sheets.showAppHeightEightSheet(
-                                                    context: context,
-                                                    widget: SmartContractTransferSheet(
-                                                        title:
-                                                            AppLocalization.of(
+                                                      : smartContractTimeLock
+                                                              .getLastBalanceUpdates()
+                                                              .txReceipt
+                                                              .success
+                                                          ? TextSpan(
+                                                              text: smartContractTimeLock
+                                                                      .getLastBalanceUpdates()
+                                                                      .txReceipt
+                                                                      .method +
+                                                                  " - " +
+                                                                  AppLocalization.of(
+                                                                          context)
+                                                                      .successInfo,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                                fontSize: 14.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w100,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                              ),
+                                                            )
+                                                          : TextSpan(
+                                                              text: smartContractTimeLock
+                                                                      .getLastBalanceUpdates()
+                                                                      .txReceipt
+                                                                      .method +
+                                                                  " - " +
+                                                                  smartContractTimeLock
+                                                                      .getLastBalanceUpdates()
+                                                                      .txReceipt
+                                                                      .errorMsg,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 14.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w100,
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                              ),
+                                                            ),
+                                                ],
+                                              ),
+                                            ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          _processIndex >= 3 ||
+                                                  _processIndex == 1
+                                              ? SizedBox()
+                                              : MaterialButton(
+                                                  onPressed: () {
+                                                    Sheets.showAppHeightEightSheet(
+                                                        context: context,
+                                                        widget: SmartContractTransferSheet(
+                                                            title: AppLocalization.of(
                                                                     context)
                                                                 .timeLockTitle,
-                                                        contractBalance:
-                                                            smartContractTimeLock
-                                                                .balance
-                                                                .toString(),
-                                                        contractAddress:
-                                                            smartContractTimeLock
-                                                                .contractAddress,
-                                                        owner:
-                                                            smartContractTimeLock
-                                                                .owner));
-                                              },
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary,
-                                              textColor: Colors.white,
-                                              child: Icon(
-                                                FontAwesome5.share_square,
-                                                size: 16,
-                                              ),
-                                              padding: EdgeInsets.all(14),
-                                              shape: CircleBorder(),
-                                            ),
-                                      _processIndex == 4
-                                          ? SizedBox()
-                                          : MaterialButton(
-                                              onPressed: () {
-                                                Sheets.showAppHeightEightSheet(
-                                                    context: context,
-                                                    widget: SmartContractTerminateSheet(
-                                                        title:
-                                                            AppLocalization.of(
-                                                                    context)
+                                                            contractBalance:
+                                                                smartContractTimeLock
+                                                                    .balance
+                                                                    .toString(),
+                                                            contractAddress:
+                                                                smartContractTimeLock
+                                                                    .contractAddress,
+                                                            owner:
+                                                                smartContractTimeLock
+                                                                    .owner));
+                                                  },
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  textColor: Colors.white,
+                                                  child: Icon(
+                                                    FontAwesome5.share_square,
+                                                    size: 16,
+                                                  ),
+                                                  padding: EdgeInsets.all(14),
+                                                  shape: CircleBorder(),
+                                                ),
+                                          _processIndex == 4
+                                              ? SizedBox()
+                                              : MaterialButton(
+                                                  onPressed: () {
+                                                    Sheets.showAppHeightEightSheet(
+                                                        context: context,
+                                                        widget: SmartContractTerminateSheet(
+                                                            title: AppLocalization
+                                                                    .of(context)
                                                                 .timeLockTitle,
-                                                        contractStake:
-                                                            smartContractTimeLock
-                                                                .stake
-                                                                .toString(),
-                                                        contractAddress:
-                                                            smartContractTimeLock
-                                                                .contractAddress,
-                                                        owner:
-                                                            smartContractTimeLock
-                                                                .owner));
-                                              },
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary,
-                                              textColor: Colors.white,
-                                              child: Icon(
-                                                FontAwesome.stop_circle,
-                                                size: 22,
-                                              ),
-                                              padding: EdgeInsets.all(12),
-                                              shape: CircleBorder(),
-                                            ),
+                                                            contractStake:
+                                                                smartContractTimeLock
+                                                                    .stake
+                                                                    .toString(),
+                                                            contractAddress:
+                                                                smartContractTimeLock
+                                                                    .contractAddress,
+                                                            owner:
+                                                                smartContractTimeLock
+                                                                    .owner));
+                                                  },
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  textColor: Colors.white,
+                                                  child: Icon(
+                                                    FontAwesome.stop_circle,
+                                                    size: 22,
+                                                  ),
+                                                  padding: EdgeInsets.all(12),
+                                                  shape: CircleBorder(),
+                                                ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ])),
-              ])),
-    );
+                            ])),
+                  ]),
+            ]))));
   }
 }
 

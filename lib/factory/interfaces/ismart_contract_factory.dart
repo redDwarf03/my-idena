@@ -6,6 +6,7 @@ import 'package:my_idena/network/model/response/contract/contract_call_response.
 import 'package:my_idena/network/model/response/contract/contract_deploy_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
+import 'package:my_idena/network/model/response/contract/contract_iterate_map_response.dart';
 import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 
 abstract class ISmartContractFactory {
@@ -66,4 +67,11 @@ abstract class ISmartContractFactory {
   Future<ContractGetStakeResponse> getContractStake(String contractAddress);
 
   Future<double> getSmartContractStake();
+
+  Future<ContractIterateMapResponse> getContractIterateMap();
+
+  Future<ContractIterateMapResponse> getContractIterateMapAmount(String contractAddress, String continuationToken);
+
+  Future<ContractIterateMapResponse> getContractIterateMapAddr(String contractAddress, String continuationToken);
+ 
 }

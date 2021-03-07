@@ -113,9 +113,14 @@ class ValidationService {
 
         if (typeSession == EpochPeriod.ShortSession) {
           if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            SSHClientStatus sshClientStatus;
+            sshClientStatus =
+                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            if (sshClientStatus.sshClientStatus) {
+              sshClient = sshClientStatus.sshClient;
+            }
             var response = await ssh.HttpClientImpl(
-                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                    clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
                 .request(url.toString(),
                     method: 'POST',
                     data: jsonEncode(mapParams),
@@ -139,9 +144,14 @@ class ValidationService {
         }
         if (typeSession == EpochPeriod.LongSession) {
           if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            SSHClientStatus sshClientStatus;
+            sshClientStatus =
+                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            if (sshClientStatus.sshClientStatus) {
+              sshClient = sshClientStatus.sshClient;
+            }
             var response = await ssh.HttpClientImpl(
-                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                    clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
                 .request(url.toString(),
                     method: 'POST',
                     data: jsonEncode(mapParams),
@@ -342,9 +352,14 @@ class ValidationService {
             'key': keyApp
           };
           if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-            sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+            SSHClientStatus sshClientStatus;
+            sshClientStatus =
+                await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+            if (sshClientStatus.sshClientStatus) {
+              sshClient = sshClientStatus.sshClient;
+            }
             var response = await ssh.HttpClientImpl(
-                    clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                    clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
                 .request(url.toString(),
                     method: 'POST',
                     data: jsonEncode(mapParams),
@@ -479,9 +494,13 @@ class ValidationService {
         };
 
         if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-          sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+          SSHClientStatus sshClientStatus;
+          sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+          if (sshClientStatus.sshClientStatus) {
+            sshClient = sshClientStatus.sshClient;
+          }
           var response = await ssh.HttpClientImpl(
-                  clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                  clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
               .request(url.toString(),
                   method: 'POST',
                   data: jsonEncode(mapParams),
@@ -572,9 +591,13 @@ class ValidationService {
       flipSubmitShortAnswersRequest.key = keyApp;
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),
@@ -624,11 +647,11 @@ class ValidationService {
       for (int i = 0;
           i < validationSessionInfo.listSessionValidationFlips.length;
           i++) {
-        wrongWordsBool = false;
+        wrongWordsBool = true;
         if (validationSessionInfo.listSessionValidationFlips[i] != null &&
             validationSessionInfo.listSessionValidationFlips[i].relevanceType ==
-                RelevantType.IRRELEVANT) {
-          wrongWordsBool = true;
+                RelevantType.RELEVANT) {
+          wrongWordsBool = false;
         }
         LongAnswer answer = new LongAnswer(
             answer:
@@ -651,9 +674,13 @@ class ValidationService {
       flipSubmitLongAnswersRequest.key = keyApp;
 
       if (await NodeUtil().getNodeType() == NORMAL_VPS_NODE) {
-        sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+        SSHClientStatus sshClientStatus;
+        sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+        if (sshClientStatus.sshClientStatus) {
+          sshClient = sshClientStatus.sshClient;
+        }
         var response = await ssh.HttpClientImpl(
-                clientFactory: () => ssh.SSHTunneledBaseClient(client))
+                clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
             .request(url.toString(),
                 method: 'POST',
                 data: jsonEncode(mapParams),

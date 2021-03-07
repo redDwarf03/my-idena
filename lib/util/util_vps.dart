@@ -9,25 +9,35 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:args/args.dart';
 import 'package:dartssh/identity.dart';
 import 'package:dartssh/pem.dart';
-import 'package:dartssh/server.dart';
 import 'package:dartssh/ssh.dart';
 import 'package:dartssh/transport.dart';
 import 'package:dartssh/http.dart';
 
-SSHServer server;
-Identity identity;
-SSHClient client;
-Channel forwardChannel;
+class SSHClientStatus {
+  SSHClient sshClient;
+  bool sshClientStatus;
+  String sshClientStatusMsg;
+}
 
 class VpsUtil {
+  SSHClientStatus sshClientStatus;
+  Identity identity;
+  Channel forwardChannel;
 
-  Future<SSHClient> connectVps(String tunnel, String keyApp) async {
-
-    if(client != null)
-    {
-      return client;
+  void disconnectVps() {
+    if (sshClientStatus != null && sshClientStatus.sshClient != null &&
+        sshClientStatus.sshClient.socket != null) {
+      sshClientStatus.sshClient.disconnect("Configuration in progress");
     }
-    
+  }
+
+  Future<SSHClientStatus> connectVps(String tunnel, String keyApp) async {
+    if (sshClientStatus != null && sshClientStatus.sshClient != null &&
+        sshClientStatus.sshClient.socket != null) {
+      return this.sshClientStatus;
+    }
+
+    this.sshClientStatus = new SSHClientStatus();
     String user = await sl.get<SharedPrefsUtil>().getVpsUser();
     String ip = await sl.get<SharedPrefsUtil>().getVpsIp();
     String password = await sl.get<SharedPrefsUtil>().getVpsPassword();
@@ -35,7 +45,7 @@ class VpsUtil {
     String tunnelWithoutHttp =
         tunnel.replaceAll("http://", "").replaceAll("https://", "");
 
-    getSSHClient(<String>[
+    String statusString = getSSHClient(<String>[
       '-l',
       user,
       ip,
@@ -46,11 +56,13 @@ class VpsUtil {
       //,'--debug'
     ], (_, String v) => sshResponse += v, null, keyApp);
 
-    /*status = await getWStatusGetResponse(
-        HttpClientImpl(clientFactory: () => SSHTunneledBaseClient(client)),
-        tunnel,
-        keyApp);*/
-    return client;
+    if (statusString == "true") {
+      this.sshClientStatus.sshClientStatus = true;
+    } else {
+      this.sshClientStatus.sshClientStatus = false;
+      this.sshClientStatus.sshClientStatusMsg = statusString;
+    }
+    return this.sshClientStatus;
   }
 
   Future<bool> getWStatusGetResponse(
@@ -77,11 +89,9 @@ class VpsUtil {
     return true;
   }
 
-  bool getSSHClient(List<String> arguments, ResponseCallback response,
+  String getSSHClient(List<String> arguments, ResponseCallback response,
       VoidCallback done, String keyApp,
       {int termWidth = 80, int termHeight = 25}) {
-    bool status = false;
-
     final argParser = ArgParser()
       ..addOption('login', abbr: 'l')
       ..addOption('identity', abbr: 'i')
@@ -98,13 +108,12 @@ class VpsUtil {
     final ArgResults args = argParser.parse(arguments);
 
     identity = null;
-    client = null;
     forwardChannel = null;
 
     if (args.rest.length != 1) {
       print('usage: ssh -l login url [args]');
       print(argParser.usage);
-      return null;
+      return "usage: ssh -l login url [args]";
     }
 
     String host = args.rest.first,
@@ -114,24 +123,23 @@ class VpsUtil {
 
     if (login == null || login.isEmpty) {
       print('no login specified');
-      return null;
+      return "no login specified";
     }
 
-    if (host != null && host.split(":").length == 1)
-    {
+    if (host != null && host.split(":").length == 1) {
       host = host + ":22";
     }
 
     if (tunnel != null && tunnel.split(':').length != 2) {
       print('tunnel target should be specified host:port');
-      return null;
+      return "tunnel target should be specified host:port";
     }
 
     applyCipherSuiteOverrides(
         args['kex'], args['key'], args['cipher'], args['mac']);
 
     try {
-      client = SSHClient(
+      this.sshClientStatus.sshClient = SSHClient(
         hostport: parseUri(host),
         login: login,
         print: print,
@@ -157,9 +165,9 @@ class VpsUtil {
       );
     } catch (error, stacktrace) {
       print('ssh: exception: $error: $stacktrace');
-      return null;
+      return error;
     }
 
-    return status;
+    return "true";
   }
 }

@@ -57,10 +57,10 @@ class DemoServicesFactory implements IServicesFactory {
     return _completer.future;
   }
 
-  Future<bool> getWStatusGetResponse() async {
-    Completer<bool> _completer = new Completer<bool>();
+  Future<String> getWStatusGetResponse() async {
+    Completer<String> _completer = new Completer<String>();
 
-    _completer.complete(true);
+    _completer.complete("true");
     return _completer.future;
   }
 

@@ -179,69 +179,6 @@ class _SmartContractTransferSheetState
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context).owner,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Address Text
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: OneOrThreeLineAddressText(
-                          address: StateContainer.of(context).wallet.address,
-                          type: AddressTextType.PRIMARY60),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
-                      child: Container(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: AppLocalization.of(context)
-                                    .smartContractAddress,
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: OneOrThreeLineAddressText(
-                          address: widget.contractAddress,
-                          type: AddressTextType.PRIMARY60),
-                    ),
                   ],
                 ),
                 //Empty SizedBox
@@ -280,6 +217,94 @@ class _SmartContractTransferSheetState
                                   children: <Widget>[
                                     Container(
                                       margin: EdgeInsets.only(
+                                          top: 0.0, left: 30, right: 30),
+                                      child: Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .owner,
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Address Text
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: OneOrThreeLineAddressText(
+                                          address: StateContainer.of(context)
+                                              .wallet
+                                              .address,
+                                          type: AddressTextType.PRIMARY60),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          top: 0.0, left: 30, right: 30),
+                                      child: Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .smartContractAddress,
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: OneOrThreeLineAddressText(
+                                          address: widget.contractAddress,
+                                          type: AddressTextType.PRIMARY60),
+                                    ),
+                                    getEnterAddressContainer(),
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_addressValidationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
                                           left: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -288,7 +313,7 @@ class _SmartContractTransferSheetState
                                                   .size
                                                   .width *
                                               0.105),
-                                      alignment: Alignment.bottomCenter,
+                                      alignment: Alignment.topCenter,
                                       constraints: BoxConstraints(
                                           maxHeight: 174, minHeight: 0),
                                       // ********************************************* //
@@ -324,21 +349,8 @@ class _SmartContractTransferSheetState
                                         ),
                                       ),
                                     ),
-                                    getEnterAddressContainer(),
+
                                     SizedBox(height: 10),
-                                    Container(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      margin: EdgeInsets.only(top: 3),
-                                      child: Text(_addressValidationText,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                    ),
                                   ],
                                 ),
                               ],
@@ -399,31 +411,25 @@ class _SmartContractTransferSheetState
                             }
                           });
                         } else if (validRequest) {
-                          AppButton.buildAppButton(
+                          AppDialogs.showConfirmDialog(
                               context,
-                              AppButtonType.PRIMARY,
-                              AppLocalization.of(context).scTransferButton,
-                              Dimens.BUTTON_BOTTOM_SMALL_PLACE, onPressed: () {
-                            AppDialogs.showConfirmDialog(
-                                context,
-                                AppLocalization.of(context)
-                                    .scTransferConfirmationTitle,
-                                AppLocalization.of(context)
-                                    .timeLockTransferConfirmationText,
-                                CaseChange.toUpperCase(
-                                    AppLocalization.of(context).yesButton,
-                                    context), () async {
-                              await sl
-                                  .get<SmartContractService>()
-                                  .contractCallTransferTimeLock(
-                                      widget.owner,
-                                      widget.contractAddress,
-                                      0.25,
-                                      _blockAddressController.text,
-                                      widget.contractBalance);
-                              Navigator.of(context)
-                                  .popUntil(RouteUtils.withNameLike('/home'));
-                            });
+                              AppLocalization.of(context)
+                                  .scTransferConfirmationTitle,
+                              AppLocalization.of(context)
+                                  .timeLockTransferConfirmationText,
+                              CaseChange.toUpperCase(
+                                  AppLocalization.of(context).yesButton,
+                                  context), () async {
+                            await sl
+                                .get<SmartContractService>()
+                                .contractCallTransferTimeLock(
+                                    widget.owner,
+                                    widget.contractAddress,
+                                    0.25,
+                                    _blockAddressController.text,
+                                    widget.contractBalance);
+                            Navigator.of(context)
+                                .popUntil(RouteUtils.withNameLike('/home'));
                           });
                         }
                       }),

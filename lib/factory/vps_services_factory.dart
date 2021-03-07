@@ -82,9 +82,13 @@ class AppService {
     };
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -148,9 +152,13 @@ class AppService {
     };
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -207,10 +215,9 @@ class AppService {
     return _completer.future;
   }
 
-  Future<bool> getWStatusGetResponse() async {
-
+  Future<String> getWStatusGetResponse() async {
     Map<String, dynamic> mapParams;
-    Completer<bool> _completer = new Completer<bool>();
+    Completer<String> _completer = new Completer<String>();
 
     Uri url = await sl.get<SharedPrefsUtil>().getApiUrl();
     String keyApp = await sl.get<SharedPrefsUtil>().getKeyApp();
@@ -219,7 +226,7 @@ class AppService {
         keyApp == null ||
         url.isAbsolute == false ||
         keyApp == "") {
-      _completer.complete(false);
+      _completer.complete("Url and/or api key null");
       return _completer.future;
     }
 
@@ -231,22 +238,32 @@ class AppService {
     };
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
               headers: requestHeaders);
       if (response.status == 200) {
-        if (dnaIdentityResponseFromJson(response.text).result == null) {
-          _completer.complete(false);
+        DnaIdentityResponse dnaIdentityResponse =
+            dnaIdentityResponseFromJson(response.text);
+        if (dnaIdentityResponse.result == null) {
+          if (dnaIdentityResponse.error == null) {
+            _completer.complete(response.text);
+          } else {
+            _completer.complete(dnaIdentityResponse.error.message);
+          }
         } else {
-          _completer.complete(true);
+          _completer.complete("true");
         }
       }
     } catch (e) {
-      _completer.complete(false);
+      _completer.complete("Error getWStatusGetReponse : " + e.toString());
     }
 
     return _completer.future;
@@ -275,9 +292,13 @@ class AppService {
     };
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -341,9 +362,13 @@ class AppService {
     }
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -387,9 +412,13 @@ class AppService {
     };
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -435,9 +464,13 @@ class AppService {
     }
 
     try {
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -489,9 +522,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -539,9 +576,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -584,9 +625,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -660,9 +705,13 @@ class AppService {
         };
       }
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -717,9 +766,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -763,9 +816,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -806,9 +863,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -854,9 +915,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -910,9 +975,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -956,9 +1025,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -999,9 +1072,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),
@@ -1042,9 +1119,13 @@ class AppService {
         'key': keyApp
       };
 
-      sshClient = await VpsUtil().connectVps(url.toString(), keyApp);
+      SSHClientStatus sshClientStatus;
+      sshClientStatus = await sl.get<VpsUtil>().connectVps(url.toString(), keyApp);
+      if (sshClientStatus.sshClientStatus) {
+        sshClient = sshClientStatus.sshClient;
+      }
       var response = await ssh.HttpClientImpl(
-              clientFactory: () => ssh.SSHTunneledBaseClient(client))
+              clientFactory: () => ssh.SSHTunneledBaseClient(sshClientStatus.sshClient))
           .request(url.toString(),
               method: 'POST',
               data: jsonEncode(mapParams),

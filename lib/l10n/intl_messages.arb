@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-01T21:20:17.499903",
+  "@@last_modified": "2021-03-07T22:33:53.619407",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -246,7 +246,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterApiUrl": "Enter your API url",
+  "enterApiUrl": "Enter your node address",
   "@enterApiUrl": {
     "description": "",
     "type": "text",
@@ -264,19 +264,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterKeyApp": "Enter your key app",
+  "enterKeyApp": "Enter your api key",
   "@enterKeyApp": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterOperator": "Enter your operator",
+  "enterOperator": "Enter your shared node URL",
   "@enterOperator": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterEncryptedPk": "Enter your private key backup",
+  "enterEncryptedPk": "Enter your encrypted private key",
   "@enterEncryptedPk": {
     "description": "",
     "type": "text",
@@ -300,67 +300,67 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsUser": "Enter a user",
+  "enterVpsUser": "Enter a VPS user",
   "@enterVpsUser": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsIp": "Enter the VPS Address",
+  "enterVpsIp": "Enter the VPS IP Address",
   "@enterVpsIp": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsTunnel": "Enter the Tunnel Address",
+  "enterVpsTunnel": "Enter the node address",
   "@enterVpsTunnel": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsPassword": "Enter the password",
+  "enterVpsPassword": "Enter the VPS user password",
   "@enterVpsPassword": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsTunnelExample": "ex: 'http://localhost:9009' with http or https",
+  "enterVpsTunnelExample": "e.g.: 'http://localhost:9009' with http or https",
   "@enterVpsTunnelExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsIpExample": "ex: '11.22.33.44:22'",
+  "enterVpsIpExample": "e.g.: '11.22.33.44:22'",
   "@enterVpsIpExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsUserExample": "ex: 'root'",
+  "enterVpsUserExample": "e.g.: 'root'",
   "@enterVpsUserExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterOperatorExample": "ex: 'https://node.idena.io'",
+  "enterOperatorExample": "e.g.: 'https://node.idena.io'",
   "@enterOperatorExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "apiUrlMissing": "Please Enter your API url",
+  "apiUrlMissing": "Please Enter your node address",
   "@apiUrlMissing": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "operatorMissing": "Please Enter your operator",
+  "operatorMissing": "Please Enter your shared node URL",
   "@operatorMissing": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "encryptedPkMissing": "Please Enter your private key backup",
+  "encryptedPkMissing": "Please Enter your encrypted private key",
   "@encryptedPkMissing": {
     "description": "",
     "type": "text",
@@ -372,13 +372,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "wrongApiUrl": "The Api Url is not an url valid",
+  "wrongApiUrl": "The node address is not an url valid",
   "@wrongApiUrl": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "keyAppMissing": "Please Enter your key app",
+  "keyAppMissing": "Please Enter your api key",
   "@keyAppMissing": {
     "description": "",
     "type": "text",
@@ -390,7 +390,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "backupSeedConfirm": "Are you sure that you backed up your wallet seed?",
+  "backupSeedConfirm": "Are you sure that you have backed up your wallet seed?",
   "@backupSeedConfirm": {
     "description": "intro_new_wallet_backup",
     "type": "text",
@@ -474,7 +474,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "welcomeText": "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
+  "welcomeText": "Welcome to my Idena. To begin, you need configure the access to your Idena node.",
   "@welcomeText": {
     "description": "intro_welcome_title",
     "type": "text",
@@ -666,6 +666,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "yourBalance": "Your balance",
+  "@yourBalance": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
   "sendFrom": "Send From",
   "@sendFrom": {
     "description": "send_title",
@@ -680,6 +686,120 @@
   },
   "smartContractAmountStake": "Smart contract stake",
   "@smartContractAmountStake": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContractLabel": "Smart Contract :",
+  "@smartContractLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ownerLabel": "Owner : ",
+  "@ownerLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "balanceLabel": "Balance : ",
+  "@balanceLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "stakeLabel": "Stake : ",
+  "@stakeLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unlockTimeLabel": "Unlock time : ",
+  "@unlockTimeLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "lastStatusLabel": "Last status : ",
+  "@lastStatusLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nbOfVotersLabel": "Number of voters : ",
+  "@nbOfVotersLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nbOfVotesDoneLabel": "Number of votes done : ",
+  "@nbOfVotesDoneLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "minNbOfVotesRequiredLabel": "Min nb of votes required to unlock the coins : ",
+  "@minNbOfVotesRequiredLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "statusLabel": "Status : ",
+  "@statusLabel": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "listOfVotersNotDefined": "The list of voters is not defined yet (actually %1 voter(s))",
+  "@listOfVotersNotDefined": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "listOfVotersCompleted": "The list of voters is complete",
+  "@listOfVotersCompleted": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "listOfVoters": "Voters",
+  "@listOfVoters": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "successInfo": "Success",
+  "@successInfo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContratStepDeploy": "Deploy",
+  "@smartContratStepDeploy": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContratStepLock": "Lock",
+  "@smartContratStepLock": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContratStepUnlock": "Unlock",
+  "@smartContratStepUnlock": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContratStepTransfer": "Transfer",
+  "@smartContratStepTransfer": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "smartContratStepTerminate": "Terminate",
+  "@smartContratStepTerminate": {
     "description": "",
     "type": "text",
     "placeholders": {}
@@ -1566,7 +1686,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "scLockAmountConfirm": "Lock %1 iDNA",
+  "scLockAmountConfirm": "Lock",
   "@scLockAmountConfirm": {
     "description": "",
     "type": "text",
