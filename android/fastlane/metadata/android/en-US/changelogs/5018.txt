@@ -1,0 +1,3 @@
+- Update field labels to match official Desktop App and Web App
+- Fix bugs with validation session (shared node)
+- Configure Access Node page : Add messages to help users to understand potential configuration errors
