@@ -246,7 +246,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterApiUrl": "Enter your API url",
+  "enterApiUrl": "Node address",
   "@enterApiUrl": {
     "description": "",
     "type": "text",
@@ -264,25 +264,25 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterKeyApp": "Enter your key app",
+  "enterKeyApp": "Shared node api key",
   "@enterKeyApp": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterOperator": "Enter your operator",
+  "enterOperator": "Shared node URL",
   "@enterOperator": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterEncryptedPk": "Enter your private key backup",
+  "enterEncryptedPk": "Encrypted private key",
   "@enterEncryptedPk": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterPasswordPk": "Enter your password",
+  "enterPasswordPk": "Password",
   "@enterPasswordPk": {
     "description": "",
     "type": "text",
@@ -300,67 +300,67 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsUser": "Enter a user",
+  "enterVpsUser": "VPS user",
   "@enterVpsUser": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsIp": "Enter the VPS Address",
+  "enterVpsIp": "VPS IP address",
   "@enterVpsIp": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsTunnel": "Enter the Tunnel Address",
+  "enterVpsTunnel": "Node address",
   "@enterVpsTunnel": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsPassword": "Enter the password",
+  "enterVpsPassword": "VPS user password",
   "@enterVpsPassword": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsTunnelExample": "ex: 'http://localhost:9009' with http or https",
+  "enterVpsTunnelExample": "e.g.: 'http://localhost:9009' with http or https",
   "@enterVpsTunnelExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsIpExample": "ex: '11.22.33.44:22'",
+  "enterVpsIpExample": "e.g.: '11.22.33.44:22'",
   "@enterVpsIpExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterVpsUserExample": "ex: 'root'",
+  "enterVpsUserExample": "e.g.: 'root'",
   "@enterVpsUserExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "enterOperatorExample": "ex: 'https://node.idena.io'",
+  "enterOperatorExample": "e.g.: 'https://node.idena.io'",
   "@enterOperatorExample": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "apiUrlMissing": "Please Enter your API url",
+  "apiUrlMissing": "Please Enter your node address",
   "@apiUrlMissing": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "operatorMissing": "Please Enter your operator",
+  "operatorMissing": "Please Enter Shared node URL",
   "@operatorMissing": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "encryptedPkMissing": "Please Enter your private key backup",
+  "encryptedPkMissing": "Please Enter your Encrypted private key",
   "@encryptedPkMissing": {
     "description": "",
     "type": "text",
@@ -372,13 +372,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "wrongApiUrl": "The Api Url is not an url valid",
+  "wrongApiUrl": "Node address is not valid",
   "@wrongApiUrl": {
     "description": "",
     "type": "text",
     "placeholders": {}
   },
-  "keyAppMissing": "Please Enter your key app",
+  "keyAppMissing": "Please enter your api key",
   "@keyAppMissing": {
     "description": "",
     "type": "text",
@@ -390,7 +390,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "backupSeedConfirm": "Are you sure that you backed up your wallet seed?",
+  "backupSeedConfirm": "Are you sure that you have backed up your wallet seed?",
   "@backupSeedConfirm": {
     "description": "intro_new_wallet_backup",
     "type": "text",
@@ -474,7 +474,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "welcomeText": "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
+  "welcomeText": "Welcome to my Idena. To begin, you need to configure the access to Idena node.",
   "@welcomeText": {
     "description": "intro_welcome_title",
     "type": "text",
