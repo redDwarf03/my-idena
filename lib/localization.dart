@@ -235,7 +235,7 @@ class AppLocalization {
   }
 
   String get enterApiUrl {
-    return Intl.message("Enter your API url", desc: '', name: 'enterApiUrl');
+    return Intl.message("Enter your node address", desc: '', name: 'enterApiUrl');
   }
 
   String get enterDemoMode {
@@ -249,15 +249,15 @@ class AppLocalization {
   }
 
   String get enterKeyApp {
-    return Intl.message("Enter your key app", desc: '', name: 'enterKeyApp');
+    return Intl.message("Enter your api key", desc: '', name: 'enterKeyApp');
   }
 
   String get enterOperator {
-    return Intl.message("Enter your operator", desc: '', name: 'enterOperator');
+    return Intl.message("Enter your shared node URL", desc: '', name: 'enterOperator');
   }
 
   String get enterEncryptedPk {
-    return Intl.message("Enter your private key backup",
+    return Intl.message("Enter your encrypted private key",
         desc: '', name: 'enterEncryptedPk');
   }
 
@@ -276,54 +276,54 @@ class AppLocalization {
   }
 
   String get enterVpsUser {
-    return Intl.message("Enter a user", desc: '', name: 'enterVpsUser');
+    return Intl.message("Enter a VPS user", desc: '', name: 'enterVpsUser');
   }
 
   String get enterVpsIp {
-    return Intl.message("Enter the VPS Address", desc: '', name: 'enterVpsIp');
+    return Intl.message("Enter the VPS IP Address", desc: '', name: 'enterVpsIp');
   }
 
   String get enterVpsTunnel {
-    return Intl.message("Enter the Tunnel Address",
+    return Intl.message("Enter the node address",
         desc: '', name: 'enterVpsTunnel');
   }
 
   String get enterVpsPassword {
-    return Intl.message("Enter the password",
+    return Intl.message("Enter the VPS user password",
         desc: '', name: 'enterVpsPassword');
   }
 
   String get enterVpsTunnelExample {
-    return Intl.message("ex: 'http://localhost:9009' with http or https",
+    return Intl.message("e.g.: 'http://localhost:9009' with http or https",
         desc: '', name: 'enterVpsTunnelExample');
   }
 
   String get enterVpsIpExample {
-    return Intl.message("ex: '11.22.33.44:22'",
+    return Intl.message("e.g.: '11.22.33.44:22'",
         desc: '', name: 'enterVpsIpExample');
   }
 
   String get enterVpsUserExample {
-    return Intl.message("ex: 'root'", desc: '', name: 'enterVpsUserExample');
+    return Intl.message("e.g.: 'root'", desc: '', name: 'enterVpsUserExample');
   }
 
   String get enterOperatorExample {
-    return Intl.message("ex: 'https://node.idena.io'",
+    return Intl.message("e.g.: 'https://node.idena.io'",
         desc: '', name: 'enterOperatorExample');
   }
 
   String get apiUrlMissing {
-    return Intl.message("Please Enter your API url",
+    return Intl.message("Please Enter your node address",
         desc: '', name: 'apiUrlMissing');
   }
 
   String get operatorMissing {
-    return Intl.message("Please Enter your operator",
+    return Intl.message("Please Enter your shared node URL",
         desc: '', name: 'operatorMissing');
   }
 
   String get encryptedPkMissing {
-    return Intl.message("Please Enter your private key backup",
+    return Intl.message("Please Enter your encrypted private key",
         desc: '', name: 'encryptedPkMissing');
   }
 
@@ -333,12 +333,12 @@ class AppLocalization {
   }
 
   String get wrongApiUrl {
-    return Intl.message("The Api Url is not an url valid",
+    return Intl.message("The node address is not an url valid",
         desc: '', name: 'wrongApiUrl');
   }
 
   String get keyAppMissing {
-    return Intl.message("Please Enter your key app",
+    return Intl.message("Please Enter your api key",
         desc: '', name: 'keyAppMissing');
   }
 
@@ -351,7 +351,7 @@ class AppLocalization {
   }
 
   String get backupSeedConfirm {
-    return Intl.message('Are you sure that you backed up your wallet seed?',
+    return Intl.message('Are you sure that you have backed up your wallet seed?',
         desc: 'intro_new_wallet_backup', name: 'backupSeedConfirm');
   }
 
@@ -429,7 +429,7 @@ class AppLocalization {
 
   String get welcomeText {
     return Intl.message(
-        "Welcome to my Idena. To begin, you may configure the access to your node or share node.",
+        "Welcome to my Idena. To begin, you need configure the access to your Idena node.",
         desc: 'intro_welcome_title',
         name: 'welcomeText');
   }
@@ -637,6 +637,42 @@ class AppLocalization {
 
   String get lastStatusLabel {
     return Intl.message("Last status : ", desc: '', name: 'lastStatusLabel');
+  }
+
+  String get nbOfVotersLabel {
+    return Intl.message("Number of voters : ",
+        desc: '', name: 'nbOfVotersLabel');
+  }
+
+  String get nbOfVotesDoneLabel {
+    return Intl.message("Number of votes done : ",
+        desc: '', name: 'nbOfVotesDoneLabel');
+  }
+
+  String get minNbOfVotesRequiredLabel {
+    return Intl.message("Min nb of votes required to unlock the coins : ",
+        desc: '', name: 'minNbOfVotesRequiredLabel');
+  }
+
+  String get statusLabel {
+    return Intl.message("Status : ", desc: '', name: 'statusLabel');
+  }
+
+  String get listOfVotersNotDefined {
+    return Intl.message(
+        "The list of voters is not defined yet (actually %1 voter(s))",
+        desc: '',
+        name: 'listOfVotersNotDefined');
+  }
+
+  String get listOfVotersCompleted {
+    return Intl.message("The list of voters is complete",
+        desc: '', name: 'listOfVotersCompleted');
+  }
+
+  String get listOfVoters {
+    return Intl.message("Voters",
+        desc: '', name: 'listOfVoters');
   }
 
   String get successInfo {
