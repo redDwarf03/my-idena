@@ -1,7 +1,8 @@
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 
 const String DM_IDENTITY_ADDRESS = "0cxbd304e235b073637018c0430a4242d6f233bcf3";
 const int DM_IDENTITY_AGE = 5;
-const String DM_IDENTITY_STATE = "Human";
+const String DM_IDENTITY_STATE = IdentityStatus.Human;
 const int DM_IDENTITY_REQUIRED_FLIPS = 3;
 const int DM_IDENTITY_MADE_FLIPS = 3;
 const String DM_IDENTITY_PENALTY = "";
