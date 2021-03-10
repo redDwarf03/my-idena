@@ -15,40 +15,40 @@ abstract class ISmartContractFactory {
   Future<String> getPredictSmartContractAddress(String address);
 
   Future<ContractDeployResponse> contractDeployTimeLock(
-      String owner, int timestamp, double amount, double maxFee);
+      String nodeAddress, int timestamp, double amount, double maxFee);
 
   Future<ContractDeployResponse> contractDeployMultiSig(
-      String owner, int maxVotes, int minVotes, double amount, double maxFee);
+      String nodeAddress, int maxVotes, int minVotes, double amount, double maxFee);
 
   Future<ContractEstimateDeployResponse> contractEstimateDeployTimeLock(
-      String owner, int timestamp, double amount);
+      String nodeAddress, int timestamp, double amount);
 
   Future<ContractEstimateDeployResponse> contractEstimateDeployMultiSig(
-      String owner, int maxVotes, int minVotes, double amount);
+      String nodeAddress, int maxVotes, int minVotes, double amount);
 
-  Future<ContractCallResponse> contractCallTransferTimeLock(String owner,
+  Future<ContractCallResponse> contractCallTransferTimeLock(String nodeAddress,
       String contract, double maxFee, String destinationAddress, String amount);
 
-  Future<ContractCallResponse> contractCallSendMultiSig(String owner,
+  Future<ContractCallResponse> contractCallSendMultiSig(String nodeAddress,
       String contract, double maxFee, String destinationAddress, String amount);
 
   Future<String> getMultiSigToSend(String address);
 
   Future<ContractCallResponse> contractCallAddMultiSig(
-      String owner,
+      String nodeAddress,
       String contract,
       double maxFee,
       String destinationAddress,
       String privateKey);
 
-  Future<ContractCallResponse> contractCallPushMultiSig(String owner,
+  Future<ContractCallResponse> contractCallPushMultiSig(String nodeAddress,
       String contract, double maxFee, String destinationAddress, String amount);
 
   Future<ContractTerminateResponse> contractTerminateTimeLock(
-      String owner, String contract, double maxFee, String destinationAddress);
+      String nodeAddress, String contract, double maxFee, String destinationAddress);
 
   Future<ContractTerminateResponse> contractTerminateMultiSig(
-      String owner, String contract, double maxFee, String destinationAddress);
+      String nodeAddress, String contract, double maxFee, String destinationAddress);
 
   Future<ApiContractResponse> getContract(String contractAddress);
 

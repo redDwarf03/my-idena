@@ -9,12 +9,14 @@ import 'package:my_idena/styles.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 
 class ProfileInfos extends StatefulWidget {
   final AnimationController profileInfosController;
   bool profileInfosOpen;
-  String address;
-  ProfileInfos(this.profileInfosController, this.profileInfosOpen, this.address);
+  final String address;
+  ProfileInfos(
+      this.profileInfosController, this.profileInfosOpen, this.address);
 
   _ProfileInfosState createState() => _ProfileInfosState();
 }
@@ -28,7 +30,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
   void initState() {
     super.initState();
 
-      loadProfileInfos();
+    loadProfileInfos();
   }
 
   Future<void> loadProfileInfos() async {
@@ -100,11 +102,56 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                         size: 24)),
                               ),
                               // Header Text
-                              Text(
-                                AppLocalization.of(context).profileInfosHeader,
-                                style:
-                                    AppStyles.textStyleSettingsHeader(context),
-                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    AppLocalization.of(context)
+                                        .profileInfosHeader,
+                                    style: AppStyles.textStyleSettingsHeader(
+                                        context),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  dnaIdentityResponse.result.state ==
+                                          IdentityStatus.Human
+                                      ? Image.asset('assets/images/human_blank.png',
+                                          width: 40)
+                                      : dnaIdentityResponse.result.state ==
+                                              IdentityStatus.Verified
+                                          ? Image.asset(
+                                              'assets/images/human_blank.png',
+                                              width: 40)
+                                          : dnaIdentityResponse.result.state ==
+                                                  IdentityStatus.Newbie
+                                              ? Image.asset(
+                                                  'assets/images/newbie_blank.png',
+                                                  width: 40)
+                                              : dnaIdentityResponse.result.state ==
+                                                      IdentityStatus.Candidate
+                                                  ? Image.asset(
+                                                      'assets/images/candidate_blank.png',
+                                                      width: 40)
+                                                  : dnaIdentityResponse.result.state ==
+                                                          IdentityStatus
+                                                              .Suspended
+                                                      ? Image.asset(
+                                                          'assets/images/suspended_blank.png',
+                                                          width: 40)
+                                                      : dnaIdentityResponse.result.state ==
+                                                              IdentityStatus
+                                                                  .Zombie
+                                                          ? Image.asset(
+                                                              'assets/images/zombie_blank.png',
+                                                              width: 40)
+                                                          : dnaIdentityResponse.result.state ==
+                                                                  IdentityStatus.Invite
+                                                              ? Image.asset('assets/images/human_blank.png', width: 40)
+                                                              : dnaIdentityResponse.result.state == IdentityStatus.Terminating
+                                                                  ? Image.asset('assets/images/terminated_blank.png', width: 40)
+                                                                  : SizedBox()
+                                ],
+                              )
                             ],
                           ),
                           Container(

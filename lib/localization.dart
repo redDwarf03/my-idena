@@ -644,6 +644,16 @@ class AppLocalization {
         desc: '', name: 'nbOfVotersLabel');
   }
 
+  String get approvedUnlockContract {
+    return Intl.message("Approved to unlock %1 iDNA",
+        desc: '', name: 'approvedUnlockContract');
+  }
+
+  String get notVoteYet {
+    return Intl.message("No vote yet",
+        desc: '', name: 'notVoteYet');
+  }
+
   String get nbOfVotesDoneLabel {
     return Intl.message("Number of votes done : ",
         desc: '', name: 'nbOfVotesDoneLabel');
@@ -1356,6 +1366,10 @@ class AppLocalization {
 
   String get owner {
     return Intl.message("Owner", desc: '', name: 'owner');
+  }
+
+  String get winnerVote {
+    return Intl.message("The address with the most votes", desc: '', name: 'winnerVote');
   }
 
   String get smartContractAddress {

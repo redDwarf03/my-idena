@@ -869,9 +869,8 @@ class _TimeLockListState extends State<TimeLockList> {
                                                             contractAddress:
                                                                 smartContractTimeLock
                                                                     .contractAddress,
-                                                            owner:
-                                                                smartContractTimeLock
-                                                                    .owner));
+                                                            nodeAddress:
+                                                                widget.address));
                                                   },
                                                   color:
                                                       StateContainer.of(context)
@@ -902,9 +901,9 @@ class _TimeLockListState extends State<TimeLockList> {
                                                             contractAddress:
                                                                 smartContractTimeLock
                                                                     .contractAddress,
-                                                            owner:
-                                                                smartContractTimeLock
-                                                                    .owner));
+                                                            nodeAddress:
+                                                                widget.address
+                                                                    ));
                                                   },
                                                   color:
                                                       StateContainer.of(context)

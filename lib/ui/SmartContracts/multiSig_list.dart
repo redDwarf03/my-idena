@@ -21,7 +21,6 @@ import 'package:my_idena/ui/smartContracts/smart_contract_add_voter_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_push_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_terminate_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
-import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/dimens.dart';
@@ -83,7 +82,7 @@ class _MultiSigListState extends State<MultiSigList> {
 
         ApiContractBalanceUpdatesResponse apiContractBalanceUpdatesResponse =
             await sl.get<SmartContractService>().getContractBalanceUpdates(
-                smartContractMultiSig.owner,
+                null,
                 apiContractTxsResponse.result[i].to,
                 100);
         if (apiContractBalanceUpdatesResponse != null &&
@@ -108,7 +107,8 @@ class _MultiSigListState extends State<MultiSigList> {
               j++) {
             if (smartContractMultiSig.balanceUpdates[j].txReceipt != null &&
                 smartContractMultiSig.balanceUpdates[j].txReceipt.method ==
-                    "send") {
+                    "send" &&
+                    smartContractMultiSig.balanceUpdates[j].txReceipt.success == true) {
               smartContractMultiSig.nbVotesDone++;
             }
           }
@@ -1006,9 +1006,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                             contractAddress:
                                                                 smartContractMultiSig
                                                                     .contractAddress,
-                                                            owner:
-                                                                smartContractMultiSig
-                                                                    .owner));
+                                                            nodeAddress:
+                                                                widget.address));
                                                   },
                                                 ),
                                               )
@@ -1044,9 +1043,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                                 smartContractMultiSig
                                                                     .balance
                                                                     .toString(),
-                                                            owner:
-                                                                smartContractMultiSig
-                                                                    .owner));
+                                                            nodeAddress:
+                                                                widget.address));
                                                   },
                                                 ),
                                               ),
@@ -1076,7 +1074,7 @@ class _MultiSigListState extends State<MultiSigList> {
                                                     size: 16,
                                                   ),
                                                   color: Colors.white,
-                                                  onPressed: () {
+                                                  onPressed: () async {
                                                     Sheets.showAppHeightEightSheet(
                                                         context: context,
                                                         widget: SmartContractPushSheet(
@@ -1090,9 +1088,11 @@ class _MultiSigListState extends State<MultiSigList> {
                                                                 smartContractMultiSig
                                                                     .balance
                                                                     .toString(),
-                                                            owner:
+                                                            address: await getWinner(
                                                                 smartContractMultiSig
-                                                                    .owner));
+                                                                    .contractAddress),
+                                                            nodeAddress:
+                                                                 widget.address));
                                                   },
                                                 ),
                                               )
@@ -1128,9 +1128,9 @@ class _MultiSigListState extends State<MultiSigList> {
                                                             contractAddress:
                                                                 smartContractMultiSig
                                                                     .contractAddress,
-                                                            owner:
-                                                                smartContractMultiSig
-                                                                    .owner));
+                                                            nodeAddress:
+                                                                widget.address
+                                                                    ));
                                                   },
                                                 ),
                                               ),
@@ -1170,6 +1170,27 @@ class _MultiSigListState extends State<MultiSigList> {
                 ]),
           ]))),
     );
+  }
+
+  Future<String> getWinner(String contractAddress) async {
+    var map = Map();
+    ContractIterateMapResponse contractIterateMapResponse = await sl
+        .get<SmartContractService>()
+        .getContractIterateMapAddr(contractAddress, null);
+    if (contractIterateMapResponse != null &&
+        contractIterateMapResponse.result != null &&
+        contractIterateMapResponse.result.items != null) {
+      contractIterateMapResponse.result.items.forEach((element) {
+        if (!map.containsKey(element.value)) {
+          map[element.value] = 1;
+        } else {
+          map[element.value] += 1;
+        }
+      });
+      return map.keys.elementAt(0);
+    } else {
+      return null;
+    }
   }
 }
 

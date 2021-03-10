@@ -9,6 +9,7 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/styles.dart';
@@ -25,7 +26,7 @@ class SmartContractTerminateSheet extends StatefulWidget {
   final Contact contact;
   final String address;
   final String contractAddress;
-  final String owner;
+  final String nodeAddress;
   final String contractStake;
 
   SmartContractTerminateSheet(
@@ -34,7 +35,7 @@ class SmartContractTerminateSheet extends StatefulWidget {
       this.address,
       this.contractAddress,
       this.contractStake,
-      this.owner})
+      this.nodeAddress})
       : super();
 
   _SmartContractTerminateSheetState createState() =>
@@ -215,44 +216,6 @@ class _SmartContractTerminateSheetState
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: 0.0, left: 30, right: 30),
-                                      child: Container(
-                                        child: RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
-                                                        .owner,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Address Text
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: OneOrThreeLineAddressText(
-                                          address: StateContainer.of(context)
-                                              .wallet
-                                              .address,
-                                          type: AddressTextType.PRIMARY60),
-                                    ),
                                     Container(
                                       margin: EdgeInsets.only(
                                           top: 0.0, left: 30, right: 30),
@@ -449,15 +412,28 @@ class _SmartContractTerminateSheetState
                                   CaseChange.toUpperCase(
                                       AppLocalization.of(context).yesButton,
                                       context), () async {
-                                await sl
-                                    .get<SmartContractService>()
-                                    .contractTerminateTimeLock(
-                                        widget.owner,
-                                        widget.contractAddress,
-                                        0.25,
-                                        contact.address);
-                                Navigator.of(context)
-                                    .popUntil(RouteUtils.withNameLike('/home'));
+                                ContractTerminateResponse
+                                    contractTerminateResponse = await sl
+                                        .get<SmartContractService>()
+                                        .contractTerminateTimeLock(
+                                            widget.nodeAddress,
+                                            widget.contractAddress,
+                                            0.25,
+                                            contact.address);
+                                if (contractTerminateResponse != null &&
+                                    contractTerminateResponse.error != null) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).sendError +
+                                          " (" +
+                                          contractTerminateResponse
+                                              .error.message +
+                                          ")",
+                                      context);
+                                  return;
+                                } else {
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                }
                               });
                             }
                           });
@@ -471,15 +447,27 @@ class _SmartContractTerminateSheetState
                               CaseChange.toUpperCase(
                                   AppLocalization.of(context).yesButton,
                                   context), () async {
-                            await sl
-                                .get<SmartContractService>()
-                                .contractTerminateTimeLock(
-                                    widget.owner,
-                                    widget.contractAddress,
-                                    0.25,
-                                    _blockAddressController.text);
-                            Navigator.of(context)
-                                .popUntil(RouteUtils.withNameLike('/home'));
+                            ContractTerminateResponse
+                                contractTerminateResponse = await sl
+                                    .get<SmartContractService>()
+                                    .contractTerminateTimeLock(
+                                        widget.nodeAddress,
+                                        widget.contractAddress,
+                                        0.25,
+                                        _blockAddressController.text);
+                            if (contractTerminateResponse != null &&
+                                contractTerminateResponse.error != null) {
+                              UIUtil.showSnackbar(
+                                  AppLocalization.of(context).sendError +
+                                      " (" +
+                                      contractTerminateResponse.error.message +
+                                      ")",
+                                  context);
+                              return;
+                            } else {
+                              Navigator.of(context)
+                                  .popUntil(RouteUtils.withNameLike('/home'));
+                            }
                           });
                         }
                       })

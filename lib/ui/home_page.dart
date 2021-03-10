@@ -885,9 +885,11 @@ class _AppHomePageState extends State<AppHomePage>
                                                           .smartContractMultiSig
                                                           .balance
                                                           .toString(),
-                                                      owner: item
-                                                          .smartContractMultiSig
-                                                          .owner));
+                                                      nodeAddress:
+                                                          StateContainer.of(
+                                                                  context)
+                                                              .selectedAccount
+                                                              .address));
                                             },
                                             padding: EdgeInsets.all(0.0),
                                             icon: Icon(FontAwesome5.signature,

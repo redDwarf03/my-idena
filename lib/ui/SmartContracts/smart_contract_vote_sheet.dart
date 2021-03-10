@@ -26,7 +26,7 @@ class SmartContractVoteSheet extends StatefulWidget {
   final Contact contact;
   final String address;
   final String contractAddress;
-  final String owner;
+  final String nodeAddress;
   final String contractBalance;
 
   SmartContractVoteSheet(
@@ -35,7 +35,7 @@ class SmartContractVoteSheet extends StatefulWidget {
       this.address,
       this.contractAddress,
       this.contractBalance,
-      this.owner})
+      this.nodeAddress})
       : super();
 
   _SmartContractVoteSheetState createState() => _SmartContractVoteSheetState();
@@ -226,44 +226,6 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                                               TextSpan(
                                                 text:
                                                     AppLocalization.of(context)
-                                                        .owner,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Address Text
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: OneOrThreeLineAddressText(
-                                          address: StateContainer.of(context)
-                                              .wallet
-                                              .address,
-                                          type: AddressTextType.PRIMARY60),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: 0.0, left: 30, right: 30),
-                                      child: Container(
-                                        child: RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
                                                         .smartContractAddress,
                                                 style: TextStyle(
                                                   color:
@@ -399,7 +361,7 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                                     await sl
                                         .get<SmartContractService>()
                                         .contractCallSendMultiSig(
-                                            widget.owner,
+                                            widget.nodeAddress,
                                             widget.contractAddress,
                                             0.25,
                                             contact.address,
@@ -430,16 +392,27 @@ class _SmartContractVoteSheetState extends State<SmartContractVoteSheet> {
                               CaseChange.toUpperCase(
                                   AppLocalization.of(context).yesButton,
                                   context), () async {
-                            await sl
+                            ContractCallResponse contractCallResponse = await sl
                                 .get<SmartContractService>()
                                 .contractCallSendMultiSig(
-                                    widget.owner,
+                                    widget.nodeAddress,
                                     widget.contractAddress,
                                     0.25,
                                     _blockAddressController.text,
                                     widget.contractBalance.toString());
-                            Navigator.of(context)
-                                .popUntil(RouteUtils.withNameLike('/home'));
+                            if (contractCallResponse != null &&
+                                contractCallResponse.error != null) {
+                              UIUtil.showSnackbar(
+                                  AppLocalization.of(context).sendError +
+                                      " (" +
+                                      contractCallResponse.error.message +
+                                      ")",
+                                  context);
+                              return;
+                            } else {
+                              Navigator.of(context)
+                                  .popUntil(RouteUtils.withNameLike('/home'));
+                            }
                           });
                         }
                       }),

@@ -29,14 +29,14 @@ class SmartContractAddVoterSheet extends StatefulWidget {
   final Contact contact;
   final String address;
   final String contractAddress;
-  final String owner;
+  final String nodeAddress;
 
   SmartContractAddVoterSheet(
       {this.title,
       this.contact,
       this.address,
       this.contractAddress,
-      this.owner})
+      this.nodeAddress})
       : super();
 
   _SmartContractAddVoterSheetState createState() =>
@@ -229,44 +229,6 @@ class _SmartContractAddVoterSheetState
                                               TextSpan(
                                                 text:
                                                     AppLocalization.of(context)
-                                                        .owner,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Address Text
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: OneOrThreeLineAddressText(
-                                          address: StateContainer.of(context)
-                                              .wallet
-                                              .address,
-                                          type: AddressTextType.PRIMARY60),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: 0.0, left: 30, right: 30),
-                                      child: Container(
-                                        child: RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
                                                         .smartContractAddress,
                                                 style: TextStyle(
                                                   color:
@@ -418,7 +380,7 @@ class _SmartContractAddVoterSheetState
                                     await sl
                                         .get<SmartContractService>()
                                         .contractCallAddMultiSig(
-                                            widget.owner,
+                                            widget.nodeAddress,
                                             widget.contractAddress,
                                             0.25,
                                             contact.address,
@@ -470,7 +432,7 @@ class _SmartContractAddVoterSheetState
                             ContractCallResponse contractCallResponse = await sl
                                 .get<SmartContractService>()
                                 .contractCallAddMultiSig(
-                                    widget.owner,
+                                    widget.nodeAddress,
                                     widget.contractAddress,
                                     0.25,
                                     _blockAddressController.text,

@@ -26,7 +26,7 @@ class SmartContractPushSheet extends StatefulWidget {
   final Contact contact;
   final String address;
   final String contractAddress;
-  final String owner;
+  final String nodeAddress;
   final String contractBalance;
 
   SmartContractPushSheet(
@@ -35,7 +35,7 @@ class SmartContractPushSheet extends StatefulWidget {
       this.address,
       this.contractAddress,
       this.contractBalance,
-      this.owner})
+      this.nodeAddress})
       : super();
 
   _SmartContractPushSheetState createState() => _SmartContractPushSheetState();
@@ -226,44 +226,6 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                               TextSpan(
                                                 text:
                                                     AppLocalization.of(context)
-                                                        .owner,
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'Roboto',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Address Text
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: OneOrThreeLineAddressText(
-                                          address: StateContainer.of(context)
-                                              .wallet
-                                              .address,
-                                          type: AddressTextType.PRIMARY60),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: 0.0, left: 30, right: 30),
-                                      child: Container(
-                                        child: RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    AppLocalization.of(context)
                                                         .smartContractAddress,
                                                 style: TextStyle(
                                                   color:
@@ -288,7 +250,45 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                           address: widget.contractAddress,
                                           type: AddressTextType.PRIMARY60),
                                     ),
-                                    getEnterAddressContainer(),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          top: 0.0, left: 30, right: 30),
+                                      child: Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    AppLocalization.of(context)
+                                                        .winnerVote,
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    widget.address == null 
+                                    ? getEnterAddressContainer() 
+                                    : Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: OneOrThreeLineAddressText(
+                                          address: widget.address,
+                                          type: AddressTextType.PRIMARY60),
+                                    ),
+                                     widget.address == null 
+                                    ? 
                                     Container(
                                       alignment: AlignmentDirectional(0, 0),
                                       margin: EdgeInsets.only(top: 3),
@@ -301,7 +301,10 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                             fontFamily: 'Roboto',
                                             fontWeight: FontWeight.w600,
                                           )),
-                                    ),
+                                    ) : SizedBox(),
+                                    widget.address == null 
+                                    ? getEnterAddressContainer() 
+                                    : 
                                     Container(
                                       margin: EdgeInsets.only(
                                           left: MediaQuery.of(context)
@@ -400,7 +403,7 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                     await sl
                                         .get<SmartContractService>()
                                         .contractCallPushMultiSig(
-                                            widget.owner,
+                                            widget.nodeAddress,
                                             widget.contractAddress,
                                             0.25,
                                             contact.address,
@@ -434,7 +437,7 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                             ContractCallResponse contractCallResponse = await sl
                                 .get<SmartContractService>()
                                 .contractCallPushMultiSig(
-                                    widget.owner,
+                                    widget.nodeAddress,
                                     widget.contractAddress,
                                     0.25,
                                     _blockAddressController.text,

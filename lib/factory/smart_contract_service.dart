@@ -152,7 +152,7 @@ class SmartContractService {
   }
 
   Future<ContractDeployResponse> contractDeployTimeLock(
-      String owner, int timestamp, double amount, double maxFee) async {
+      String nodeAddress, int timestamp, double amount, double maxFee) async {
     ContractDeployRequest contractDeployRequest;
     ContractDeployResponse contractDeployResponse;
 
@@ -177,7 +177,7 @@ class SmartContractService {
       'method': ContractDeployRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "codeHash": "0x01",
           "amount": amount,
           "maxFee": maxFee,
@@ -247,7 +247,7 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractDeployResponse> contractDeployMultiSig(String owner,
+  Future<ContractDeployResponse> contractDeployMultiSig(String nodeAddress,
       int maxVotes, int minVotes, double amount, double maxFee) async {
     ContractDeployRequest contractDeployRequest;
     ContractDeployResponse contractDeployResponse;
@@ -273,7 +273,7 @@ class SmartContractService {
       'method': ContractDeployRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "codeHash": "0x05",
           "amount": amount,
           "maxFee": maxFee,
@@ -345,7 +345,7 @@ class SmartContractService {
   }
 
   Future<ContractEstimateDeployResponse> contractEstimateDeployTimeLock(
-      String owner, int timestamp, double amount) async {
+      String nodeAddress, int timestamp, double amount) async {
     ContractEstimateDeployRequest contractEstimateDeployRequest;
     ContractEstimateDeployResponse contractEstimateDeployResponse;
 
@@ -366,7 +366,7 @@ class SmartContractService {
       'method': ContractEstimateDeployRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "codeHash": "0x01",
           "amount": amount,
           "args": [
@@ -418,7 +418,7 @@ class SmartContractService {
   }
 
   Future<ContractEstimateDeployResponse> contractEstimateDeployMultiSig(
-      String owner, int maxVotes, int minVotes, double amount) async {
+      String nodeAddress, int maxVotes, int minVotes, double amount) async {
     ContractEstimateDeployRequest contractEstimateDeployRequest;
     ContractEstimateDeployResponse contractEstimateDeployResponse;
 
@@ -439,7 +439,7 @@ class SmartContractService {
       'method': ContractEstimateDeployRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "codeHash": "0x05",
           "amount": amount,
           "args": [
@@ -492,7 +492,7 @@ class SmartContractService {
   }
 
   Future<ContractCallResponse> contractCallTransferTimeLock(
-      String owner,
+      String nodeAddress,
       String contract,
       double maxFee,
       String destinationAddress,
@@ -517,7 +517,7 @@ class SmartContractService {
       'method': ContractCallRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "method": "transfer",
           "maxFee": maxFee,
@@ -569,7 +569,7 @@ class SmartContractService {
   }
 
   Future<ContractCallResponse> contractCallSendMultiSig(
-      String owner,
+      String nodeAddress,
       String contract,
       double maxFee,
       String destinationAddress,
@@ -594,7 +594,7 @@ class SmartContractService {
       'method': ContractCallRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "method": "send",
           "maxFee": maxFee,
@@ -674,7 +674,7 @@ class SmartContractService {
   }
 
   Future<ContractCallResponse> contractCallAddMultiSig(
-      String owner,
+      String nodeAddress,
       String contract,
       double maxFee,
       String destinationAddress,
@@ -699,7 +699,7 @@ class SmartContractService {
       'method': ContractCallRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "method": "add",
           "maxFee": maxFee,
@@ -732,7 +732,7 @@ class SmartContractService {
 
           if (contractCallResponse != null &&
               contractCallResponse.result != null) {
-            sl.get<AppService>().sendTx(owner, "0", destinationAddress,
+            sl.get<AppService>().sendTx(nodeAddress, "0", destinationAddress,
                 privateKey, "multisig:" + contract);
           }
         }
@@ -747,7 +747,7 @@ class SmartContractService {
 
           if (contractCallResponse != null &&
               contractCallResponse.result != null) {
-            sl.get<AppService>().sendTx(owner, "0", destinationAddress,
+            sl.get<AppService>().sendTx(nodeAddress, "0", destinationAddress,
                 privateKey, "multisig:" + contract);
           }
         }
@@ -762,7 +762,7 @@ class SmartContractService {
   }
 
   Future<ContractCallResponse> contractCallPushMultiSig(
-      String owner,
+      String nodeAddress,
       String contract,
       double maxFee,
       String destinationAddress,
@@ -787,7 +787,7 @@ class SmartContractService {
       'method': ContractCallRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "method": "push",
           "maxFee": maxFee,
@@ -838,7 +838,7 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractTerminateResponse> contractTerminateTimeLock(String owner,
+  Future<ContractTerminateResponse> contractTerminateTimeLock(String nodeAddress,
       String contract, double maxFee, String destinationAddress) async {
     ContractTerminateRequest contractTerminateRequest;
     ContractTerminateResponse contractTerminateResponse;
@@ -860,7 +860,7 @@ class SmartContractService {
       'method': ContractTerminateRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "maxFee": maxFee,
           "args": [
@@ -910,7 +910,7 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractTerminateResponse> contractTerminateMultiSig(String owner,
+  Future<ContractTerminateResponse> contractTerminateMultiSig(String nodeAddress,
       String contract, double maxFee, String destinationAddress) async {
     ContractTerminateRequest contractTerminateRequest;
     ContractTerminateResponse contractTerminateResponse;
@@ -932,7 +932,7 @@ class SmartContractService {
       'method': ContractTerminateRequest.METHOD_NAME,
       'params': [
         {
-          "from": owner,
+          "from": nodeAddress,
           "contract": contract,
           "maxFee": maxFee,
           "args": [

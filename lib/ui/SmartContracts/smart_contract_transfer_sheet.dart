@@ -9,6 +9,7 @@ import 'package:my_idena/model/address.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/network/model/response/contract/contract_call_response.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/styles.dart';
@@ -25,7 +26,7 @@ class SmartContractTransferSheet extends StatefulWidget {
   final Contact contact;
   final String address;
   final String contractAddress;
-  final String owner;
+  final String nodeAddress;
   final String contractBalance;
 
   SmartContractTransferSheet(
@@ -34,7 +35,7 @@ class SmartContractTransferSheet extends StatefulWidget {
       this.address,
       this.contractAddress,
       this.contractBalance,
-      this.owner})
+      this.nodeAddress})
       : super();
 
   _SmartContractTransferSheetState createState() =>
@@ -397,16 +398,28 @@ class _SmartContractTransferSheetState
                                   CaseChange.toUpperCase(
                                       AppLocalization.of(context).yesButton,
                                       context), () async {
-                                await sl
-                                    .get<SmartContractService>()
-                                    .contractCallTransferTimeLock(
-                                        widget.owner,
-                                        widget.contractAddress,
-                                        0.25,
-                                        contact.address,
-                                        widget.contractBalance);
-                                Navigator.of(context)
-                                    .popUntil(RouteUtils.withNameLike('/home'));
+                                ContractCallResponse contractCallResponse =
+                                    await sl
+                                        .get<SmartContractService>()
+                                        .contractCallTransferTimeLock(
+                                            widget.nodeAddress,
+                                            widget.contractAddress,
+                                            0.25,
+                                            contact.address,
+                                            widget.contractBalance);
+                                if (contractCallResponse != null &&
+                                    contractCallResponse.error != null) {
+                                  UIUtil.showSnackbar(
+                                      AppLocalization.of(context).sendError +
+                                          " (" +
+                                          contractCallResponse.error.message +
+                                          ")",
+                                      context);
+                                  return;
+                                } else {
+                                  Navigator.of(context).popUntil(
+                                      RouteUtils.withNameLike('/home'));
+                                }
                               });
                             }
                           });
@@ -420,16 +433,27 @@ class _SmartContractTransferSheetState
                               CaseChange.toUpperCase(
                                   AppLocalization.of(context).yesButton,
                                   context), () async {
-                            await sl
+                            ContractCallResponse contractCallResponse = await sl
                                 .get<SmartContractService>()
                                 .contractCallTransferTimeLock(
-                                    widget.owner,
+                                    widget.nodeAddress,
                                     widget.contractAddress,
                                     0.25,
                                     _blockAddressController.text,
                                     widget.contractBalance);
-                            Navigator.of(context)
-                                .popUntil(RouteUtils.withNameLike('/home'));
+                            if (contractCallResponse != null &&
+                                contractCallResponse.error != null) {
+                              UIUtil.showSnackbar(
+                                  AppLocalization.of(context).sendError +
+                                      " (" +
+                                      contractCallResponse.error.message +
+                                      ")",
+                                  context);
+                              return;
+                            } else {
+                              Navigator.of(context)
+                                  .popUntil(RouteUtils.withNameLike('/home'));
+                            }
                           });
                         }
                       }),

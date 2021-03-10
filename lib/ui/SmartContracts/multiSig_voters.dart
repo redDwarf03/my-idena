@@ -1,6 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/factory/smart_contract_service.dart';
 import 'package:my_idena/localization.dart';
@@ -8,6 +11,7 @@ import 'package:my_idena/network/model/response/contract/contract_iterate_map_re
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/crypto/utils_crypto.dart';
 
 class MultiSigVoters extends StatefulWidget {
   final String contractAddress;
@@ -26,11 +30,14 @@ class _MultiSigVotersState extends State<MultiSigVoters> {
   List<ContractIterateMapResponseItem>
       _contractIterateMapResponseItemsForDisplay =
       new List<ContractIterateMapResponseItem>();
+  List<ContractIterateMapResponseItem> contractIterateMapResponseAmountList =
+      new List<ContractIterateMapResponseItem>();
 
   @override
   void initState() {
     //
     loaded = false;
+
     loadVotersList().then((value) {
       setState(() {
         _contractIterateMapResponseItems.addAll(value);
@@ -42,10 +49,46 @@ class _MultiSigVotersState extends State<MultiSigVoters> {
     super.initState();
   }
 
+  String getAmount(String address) {
+    double amount = 0;
+    try {
+      for (int i = 0; i < contractIterateMapResponseAmountList.length; i++) {
+        if (address == contractIterateMapResponseAmountList[i].key) {
+          if (remove0x(contractIterateMapResponseAmountList[i].value) != "") {
+            amount = double.parse((Decimal.parse(int.parse(
+                            remove0x(
+                                contractIterateMapResponseAmountList[i].value),
+                            radix: 16)
+                        .toString()) /
+                    Decimal.parse("1000000000000000000"))
+                .toString());
+            break;
+          }
+        }
+      }
+    } catch (e) {}
+
+    return amount.toString();
+  }
+
   Future<List<ContractIterateMapResponseItem>> loadVotersList() async {
+    contractIterateMapResponseAmountList = await loadDonationsList();
+
     ContractIterateMapResponse contractIterateMapResponse = await sl
         .get<SmartContractService>()
         .getContractIterateMapAddr(widget.contractAddress, null);
+    if (contractIterateMapResponse != null &&
+        contractIterateMapResponse.result != null) {
+      return contractIterateMapResponse.result.items;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<ContractIterateMapResponseItem>> loadDonationsList() async {
+    ContractIterateMapResponse contractIterateMapResponse = await sl
+        .get<SmartContractService>()
+        .getContractIterateMapAmount(widget.contractAddress, null);
     if (contractIterateMapResponse != null &&
         contractIterateMapResponse.result != null) {
       return contractIterateMapResponse.result.items;
@@ -171,15 +214,56 @@ class _MultiSigVotersState extends State<MultiSigVoters> {
                           context,
                         ),
                       ),
+                      getAmount(contractIterateMapResponseItem.key) != "0.0" ?
                       Row(children: [
-                        Icon(Icons.subdirectory_arrow_right, color: StateContainer.of(context).curTheme.primary),
+                        Icon(FontAwesome5.vote_yea,
+                            size: 14,
+                            color: StateContainer.of(context).curTheme.primary),
+                        SizedBox(width: 10),
                         Text(
                           contractIterateMapResponseItem.value,
                           style: AppStyles.textStyleTransactionAddress(
                             context,
                           ),
                         ),
+                      ]) : Row(children: [
+                        Icon(AppIcons.info,
+                            color: StateContainer.of(context).curTheme.primary,
+                            size: 14),
+                        SizedBox(width: 10),
+                        Text(
+                          AppLocalization.of(context)
+                              .notVoteYet
+                              ,
+                          style: TextStyle(
+                            color: StateContainer.of(context).curTheme.primary,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
                       ]),
+                      getAmount(contractIterateMapResponseItem.key) != "0.0" ?
+                      Row(children: [
+                        Icon(AppIcons.export_icon,
+                            color: StateContainer.of(context).curTheme.primary,
+                            size: 14),
+                        SizedBox(width: 10),
+                        Text(
+                          AppLocalization.of(context)
+                              .approvedUnlockContract
+                              .replaceAll(
+                                  "%1",
+                                  getAmount(
+                                      contractIterateMapResponseItem.key)),
+                          style: TextStyle(
+                            color: StateContainer.of(context).curTheme.primary,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ]) : SizedBox(),
                     ],
                   ),
                 ),
