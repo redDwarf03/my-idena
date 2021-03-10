@@ -7,6 +7,7 @@ import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
+import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
@@ -109,6 +110,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   bool _canMine;
   List _flipKeyWordPairs;
   String seedOrigin;
+  String _state = IdentityStatus.Undefined;
 
   void loadCtx() async {
     DnaIdentityResponse _dnaIdentityResponse = await sl
@@ -118,15 +120,18 @@ class _SettingsSheetState extends State<SettingsSheet>
     bool _m = false;
     List _fk = new List();
     bool cm = false;
+    String _st = "";
     if (_dnaIdentityResponse != null && _dnaIdentityResponse.result != null) {
       _m = _dnaIdentityResponse.result.online;
       _fk = _dnaIdentityResponse.result.flipKeyWordPairs;
+      _st = _dnaIdentityResponse.result.state;
       cm = UtilIdentity().canMine(_dnaIdentityResponse.result.state);
     }
     String _so = await sl.get<SharedPrefsUtil>().getSeedOrigin();
 
     setState(() {
       _miningActive = _m;
+      _state = _st;
       _canMine = cm;
       _flipKeyWordPairs = _fk;
       seedOrigin = _so;
@@ -658,7 +663,16 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       width: 0),
                                 ),
                                 alignment: AlignmentDirectional(-1, 0),
-                                child: CircleAvatar(
+                                child: 
+                                  _state == IdentityStatus.Human ? Image.asset('assets/images/human_blank.png', width: 70)
+                                : _state == IdentityStatus.Verified ? Image.asset('assets/images/human_blank.png', width: 70)
+                                : _state == IdentityStatus.Newbie ? Image.asset('assets/images/newbie_blank.png', width: 70)
+                                : _state == IdentityStatus.Candidate ? Image.asset('assets/images/candidate_blank.png', width: 70)
+                                : _state == IdentityStatus.Suspended ? Image.asset('assets/images/suspended_blank.png', width: 70)
+                                : _state == IdentityStatus.Zombie ? Image.asset('assets/images/zombie_blank.png', width: 70)
+                                : _state == IdentityStatus.Invite ? Image.asset('assets/images/human_blank.png', width: 70)
+                                : _state == IdentityStatus.Terminating ? Image.asset('assets/images/terminated_blank.png', width: 70)
+                                : CircleAvatar(
                                   backgroundColor: StateContainer.of(context)
                                       .curTheme
                                       .text05,
@@ -1682,16 +1696,12 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).timeLockTitle,
                         "TimeLock smart contract locks coins on the smart contract address until the specified block number appears. Once the block number is mined, the coins can be transferred to the specified address.",
                         Entypo.hourglass, onPressed: () {
-                      /* Sheets.showAppHeightEightSheet(
+                       Sheets.showAppHeightEightSheet(
                           context: context,
                           widget: TimeLockList(StateContainer.of(context)
                               .selectedAccount
-                              .address));*/
-                      AppDialogs.showInfoDialog(
-                        context,
-                        AppLocalization.of(context).oracleLockTitle,
-                        "Soon...",
-                      );
+                              .address));
+                   
                     }),
                     Divider(
                       height: 2,
@@ -1702,16 +1712,12 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).multisigTitle,
                         "A multisignature wallet address with specified M and N locks coins. In order to send the coins from the multisig, M specific participants out of N have to provide their signatures.",
                         FontAwesome5.signature, onPressed: () {
-                      /*Sheets.showAppHeightEightSheet(
+                      Sheets.showAppHeightEightSheet(
                           context: context,
                           widget: MultiSigList(StateContainer.of(context)
                               .selectedAccount
-                              .address));*/
-                      AppDialogs.showInfoDialog(
-                        context,
-                        AppLocalization.of(context).oracleLockTitle,
-                        "Soon...",
-                      );
+                              .address));
+                   
                     }),
                     Divider(
                       height: 2,
