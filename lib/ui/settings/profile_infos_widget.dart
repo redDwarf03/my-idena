@@ -120,7 +120,7 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                       : dnaIdentityResponse.result.state ==
                                               IdentityStatus.Verified
                                           ? Image.asset(
-                                              'assets/images/human_blank.png',
+                                              'assets/images/verified_blank.png',
                                               width: 40)
                                           : dnaIdentityResponse.result.state ==
                                                   IdentityStatus.Newbie

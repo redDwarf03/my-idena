@@ -665,7 +665,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                 alignment: AlignmentDirectional(-1, 0),
                                 child: 
                                   _state == IdentityStatus.Human ? Image.asset('assets/images/human_blank.png', width: 70)
-                                : _state == IdentityStatus.Verified ? Image.asset('assets/images/human_blank.png', width: 70)
+                                : _state == IdentityStatus.Verified ? Image.asset('assets/images/verified_blank.png', width: 70)
                                 : _state == IdentityStatus.Newbie ? Image.asset('assets/images/newbie_blank.png', width: 70)
                                 : _state == IdentityStatus.Candidate ? Image.asset('assets/images/candidate_blank.png', width: 70)
                                 : _state == IdentityStatus.Suspended ? Image.asset('assets/images/suspended_blank.png', width: 70)
