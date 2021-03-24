@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 2.0.18+5018
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -28,104 +28,124 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.2
 
-  provider: ^4.3.3
+  provider: ^5.0.0
 
-  json_rpc_2: ^2.2.2
+  json_rpc_2: 
+    git:
+      url: https://github.com/redDwarf03/json_rpc_2.git
+      ref: master
 
-  mime: ^0.9.7
+  mime: ^1.0.0
 
-  quiver: ^2.1.5
+  quiver: ^3.0.0
 
-  characters: ^1.0.0
+  characters: ^1.1.0
   
-  url_launcher: ^5.7.10
+  url_launcher: ^6.0.2
   
-  fleva_icons: ^1.0.2
+  fleva_icons: 
+    git:
+      url: https://github.com/redDwarf03/fleva_icons.git
+      ref: master
   
-  connectivity: ^2.0.2
+  connectivity: ^3.0.3
 
-  rxdart: ^0.25.0
+  tweetnacl:
+    git:
+      url: https://github.com/redDwarf03/tweetnacl-dart.git
+      ref: master
+
+  rxdart: ^0.26.0
     
-  image: ^2.1.19
+  image: ^3.0.2
 
-  charts_flutter: ^0.9.0
+  charts_flutter: ^0.10.0
   
-  charts_common: ^0.9.0
+  charts_common: ^0.10.0
 
-  carousel_slider: ^3.0.0
+  carousel_slider: ^4.0.0-nullsafety.0
 
-  flutter_countdown_timer: ^3.0.1
+  flutter_countdown_timer: ^4.0.2
 
-  multi_image_picker: ^4.7.15
+  multi_image_picker: ^4.8.00
 
-  flutter_datetime_picker: ^1.5.0
+  flutter_datetime_picker:
+    git:
+      url: https://github.com/figengungor/flutter_datetime_picker.git
+      ref: null_safety_feature
+
+  timelines: 
+    git:
+      url: https://github.com/redDwarf03/timelines.git
+      ref: main
   
-  timelines: ^0.0.2+1
-  
-  sha3: ^0.1.2
+  sha3: ^0.2.0
 
-  cryptography: ^1.4.1
-
-  web3dart: ^1.2.3 
+  web3dart:
+    git:
+      url: https://github.com/redDwarf03/web3dart.git
+      ref: master
 
   # Securley store data in a keystore
-  flutter_secure_storage: ^3.3.5
+  flutter_secure_storage: ^4.1.0
 
   # Shared prefs
-  shared_preferences: ^0.5.12+4
+  shared_preferences: ^2.0.5
 
   # Flare for animations
-  flare_flutter: ^2.0.6
+  flare_flutter: ^3.0.0-nullsafety.1
   
   # Websockets
-  web_socket_channel: ^1.2.0
+  web_socket_channel: ^2.0.0
 
   # Platform-specific build info
-  package_info: ^0.4.3+4
+  package_info: ^2.0.0
 
   # Device-specific info
-  device_info: ^1.0.0 
+  device_info: ^2.0.0 
 
   # JSON Serialization
-  json_annotation: ^3.1.1
+  json_annotation: ^4.0.1
 
   # Localization
-  intl: ^0.16.1
+  intl: ^0.17.0
 
   # BigDecimal alternative
-  decimal: ^0.3.5
+  decimal: ^1.0.0
 
   # Logger
-  logger: ^0.9.4
+  logger: ^1.0.0
 
   # Native webview plugin
   flutter_webview_plugin: ^0.3.11
 
   # SQLite
-  sqflite: ^1.3.2+3
+  sqflite: ^2.0.0+3
 
   # Android/iOS path provider
-  path_provider: ^1.6.27
+  path_provider: ^2.0.1
   
   # TouchID/FaceID
-  local_auth: ^0.6.3+4
+  local_auth: ^1.1.0
 
   # Eventbus
-  event_taxi: ^0.1.5
+  event_taxi: ^1.0.0
 
   # SVG
-  flutter_svg: ^0.19.1
+  flutter_svg: ^0.21.0-nullsafety.0
   
-  badges: ^1.1.6
+  badges: ^2.0.0-nullsafety.1
   
-  ffi: ^0.1.3
+  ffi: ^1.0.0
 
-  flutter_launcher_icons: ^0.8.1
+  flutter_launcher_icons: ^0.9.0
 
   # QR Codes
-  qr_flutter: ^3.2.0 # Generator
+  qr_flutter: ^4.0.0 
+
+  # Generator
   barcode_scan:
     git:
       url: https://github.com/redDwarf03/flutter_barcode_reader.git
@@ -134,89 +154,89 @@ dependencies:
   # Deep link support
   uni_links:
     git:
-      url: https://github.com/CathalT/uni_links.git
+      url: https://github.com/redDwarf03/uni_links.git
       ref: nfc_android
 
   # HTTP client
-  http: ^0.12.2
+  http: ^0.13.1
 
   # Easy hexadecimal encoding and decoding
-  hex: ^0.1.2
+  hex: ^0.2.0
   
-  pointycastle: ^1.0.2
+  pointycastle: ^3.0.0-nullsafety.2
   
   # Vibrate
   vibrate:
     git:
-      url: https://github.com/bbedward/flutter_vibrate.git
+      url: https://github.com/redDwarf03/flutter_vibrate.git
       ref: master
 
   # Toast
-  oktoast: ^2.3.2
+  oktoast: ^3.0.0
 
   # Slidable list actions
-  flutter_slidable: ^0.5.7
+  flutter_slidable: ^0.6.0-nullsafety.0
 
   # Lock helper
-  synchronized: ^2.2.0+2
+  synchronized: ^3.0.0
 
   # Service provider
-  get_it: ^5.0.6
+  get_it: ^6.0.0
   
-  convert: ^2.1.1
+  convert: ^3.0.0
 
   # Root/Jailbreak detection
   root_checker:
     git:
-      url: https://github.com/bbedward/root_checker.git
+      url: https://github.com/redDwarf03/root_checker.git
       ref: master
 
   # Validation utilities
-  validators: ^2.0.0+1
+  validators2: ^3.0.0
 
   # Auto resize text widget
-  auto_size_text: ^2.1.0
+  auto_size_text: ^3.0.0-nullsafety.0
 
-  # Avoid keyboard from overlapping text fields
-  keyboard_avoider: ^0.1.2
-
-  tweetnacl:
+  keyboard_avoider: 
     git:
-      url: https://github.com/GreenAppers/tweetnacl-dart
+      url: https://github.com/redDwarf03/keyboard_avoider.git
+      ref: master
 
-  hash: ^1.0.3
-  
-  circular_countdown_timer: ^0.1.0
-
-  fluttericon: ^1.0.7
-
-  protobuf: ^1.1.3
-  
-  ethereum_util: ^1.3.0
-
-  asn1lib: ^0.8.1
-
-  dartssh: 
-    git:
-      url: https://github.com/redDwarf03/dartssh.git
+  hash:  
+    git: 
+      url: https://github.com/redDwarf03/hash.git
       ref: master
   
+  circular_countdown_timer: ^0.2.0
+
+  fluttericon: ^2.0.0
+
+  protobuf: ^2.0.0
+
+  asn1lib: ^0.9.0-nullsafety.0
+
   # Implementation of Bitcoin BIP39: Mnemonic code for generating deterministic keys
-  bip39: ^1.0.3
+  bip32: 
+    git: 
+      url: https://github.com/redDwarf03/bip32-dart.git
+      ref: master
 
-  bip32: ^1.0.7
+  bip39: 
+    git:
+      url: https://github.com/redDwarf03/bip39.git
+      ref: master
 
-  flutter_advanced_switch: ^1.0.0+1
+  flutter_advanced_switch: ^2.0.0
 
-  scrolling_page_indicator: ^0.1.3
+  scrolling_page_indicator:
+    git: 
+     url: https://github.com/redDwarf03/FlutterScrollingPageIndicator.git
+     ref: master
   
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  build_runner: ^1.7.0
-  json_serializable: ^3.2.5
-  intl_translation: ^0.17.9
-  
+  build_runner: ^1.12.2
+  json_serializable: ^4.0.3
+
 flutter_icons:
   image_path: "assets/images/icon.png" 
   android: true
