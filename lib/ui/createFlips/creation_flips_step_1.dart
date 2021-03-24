@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/appstate_container.dart';
@@ -43,7 +44,7 @@ class _CreationFlipsStep1PageState extends State<CreationFlipsStep1Page> {
   Widget build(BuildContext context) {
     List<Word> listWords = StateContainer.of(context).dictWords.words;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
       body: LayoutBuilder(

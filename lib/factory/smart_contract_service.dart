@@ -1,8 +1,9 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:dartssh/client.dart';
+import 'package:my_idena/pubdev/dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
@@ -30,14 +31,15 @@ import 'package:my_idena/network/model/response/contract/contract_read_data_uint
 import 'package:my_idena/network/model/response/contract/contract_terminate_response.dart';
 import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/factory/app_service.dart';
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
+import 'package:my_idena/pubdev/ethereum_util/utils.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/helpers.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
-import 'package:dartssh/http.dart' as ssh;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
+import 'package:my_idena/pubdev/dartssh/http.dart' as ssh;
 import 'package:web3dart/crypto.dart' as crypto show keccak256;
 import 'package:my_idena/network/model/request/contract/api_contract_balance_updates_response.dart';
 import 'package:my_idena/network/model/request/contract/api_contract_response.dart';
@@ -128,15 +130,15 @@ class SmartContractService {
   }
 
   Future<String> getPredictSmartContractAddress(String address) async {
-    var addr = ethereum_util.toBuffer(address);
+    var addr = toBuffer(address);
     var epoch;
     DnaGetEpochResponse dnaGetEpochResponse =
         await sl.get<AppService>().getDnaGetEpoch();
     if (dnaGetEpochResponse != null && dnaGetEpochResponse.result != null) {
-      epoch = ethereum_util.intToBuffer(dnaGetEpochResponse.result.epoch);
+      epoch = intToBuffer(dnaGetEpochResponse.result.epoch);
     }
-    var nonce = ethereum_util
-        .intToBuffer(await sl.get<AppService>().getLastNonce(address) + 1);
+    var nonce = 
+        intToBuffer(await sl.get<AppService>().getLastNonce(address) + 1);
     var res = Uint8List.fromList([
       ...addr,
       ...epoch,
@@ -990,7 +992,7 @@ class SmartContractService {
 
     try {
       HttpClientRequest request = await httpClient.getUrl(
-          Uri.parse("http://api.idena.io/api/Contract/" + contractAddress));
+          Uri.parse("https://api.idena.io/api/Contract/" + contractAddress));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -1017,14 +1019,14 @@ class SmartContractService {
 
     String uri;
     if (address != null) {
-      uri = "http://api.idena.io/api/Address/" +
+      uri = "https://api.idena.io/api/Address/" +
           address +
           "/Contract/" +
           contractAddress +
           "/BalanceUpdates?limit=" +
           limit.toString();
     } else {
-      uri = "http://api.idena.io/api/Contract/" +
+      uri = "https://api.idena.io/api/Contract/" +
           contractAddress +
           "/BalanceUpdates?limit=" +
           limit.toString();
@@ -1063,7 +1065,7 @@ class SmartContractService {
 
     try {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "http://api.idena.io/api/Address/" +
+          "https://api.idena.io/api/Address/" +
               address +
               "/Txs?limit=" +
               limit.toString()));

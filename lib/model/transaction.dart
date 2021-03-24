@@ -1,3 +1,4 @@
+// @dart=2.9
 // To parse this JSON data, do
 //
 //     final transaction = transactionFromJson(jsonString);
@@ -5,9 +6,10 @@
 import 'dart:typed_data' show Uint8List;
 import 'package:convert/convert.dart' show hex;
 import 'package:hex/hex.dart' show HEX;
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
+import 'package:my_idena/pubdev/ethereum_util/utils.dart';
 import 'package:my_idena/util/helpers.dart';
 import 'package:web3dart/crypto.dart' as crypto show keccak256, hexToBytes, intToBytes, MsgSignature, sign;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util show toBuffer, intToBuffer;
 import 'package:my_idena/protos/models.pb.dart' show ProtoTransaction, ProtoTransaction_Data;
 
 class Transaction {
@@ -41,7 +43,7 @@ class Transaction {
     ProtoTransaction transaction = new ProtoTransaction();
     transaction.data = this._createProtoTxData();
     if (this.signature != null) {
-      transaction.signature = ethereum_util.toBuffer(this.signature);
+      transaction.signature = toBuffer(this.signature);
     }
     return transaction.writeToBuffer();
   }
@@ -58,19 +60,19 @@ class Transaction {
       data.type = this.type;
     }
     if (this.to != null) {
-      data.to = ethereum_util.toBuffer(this.to);
+      data.to = toBuffer(this.to);
     }
     if (this.amount != null && this.amount != 0) {
       data.amount = AppHelpers.bigIntToBuffer(this.amount);
     }
     if (this.maxFee != null && this.maxFee != 0) {
-      data.maxFee = ethereum_util.intToBuffer(this.maxFee);
+      data.maxFee = intToBuffer(this.maxFee);
     }
     if (this.tips != null && this.tips != 0) {
-      data.tips = ethereum_util.intToBuffer(this.tips);
+      data.tips = intToBuffer(this.tips);
     }
     if (this.payload != null) {
-      data.payload = ethereum_util.toBuffer(this.payload);
+      data.payload = toBuffer(this.payload);
     }
 
     return data;
@@ -105,7 +107,7 @@ class Transaction {
   }
 
   fromHex(var hex) {
-    return this.fromBytes(ethereum_util.toBuffer(hex));
+    return this.fromBytes(toBuffer(hex));
   }
 
   Transaction fromBytes(bytes) {

@@ -1,3 +1,4 @@
+// @dart=2.9
 // To parse this JSON data, do
 //
 //     final simplePriceCnyResponse = simplePriceCnyResponseFromJson(jsonString);

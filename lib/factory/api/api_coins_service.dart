@@ -9,7 +9,7 @@ class ApiCoinsService {
   var logger = Logger();
 
   Future<CoinsResponse> getCoinsResponse() async {
-    CoinsResponse coinsResponse;
+    CoinsResponse? coinsResponse;
     HttpClient httpClient = new HttpClient();
     try {
       HttpClientRequest request = await httpClient
@@ -26,11 +26,11 @@ class ApiCoinsService {
     } finally {
       httpClient.close();
     }
-    return coinsResponse;
+    return coinsResponse!;
   }
 
   Future<CoinsPriceResponse> getCoinsChart(String currency, int nbDays) async {
-    CoinsPriceResponse coinsPriceResponse;
+    CoinsPriceResponse? coinsPriceResponse;
     HttpClient httpClient = new HttpClient();
     try {
       HttpClientRequest request = await httpClient.getUrl(Uri.parse(
@@ -50,6 +50,6 @@ class ApiCoinsService {
     } finally {
       httpClient.close();
     }
-    return coinsPriceResponse;
+    return coinsPriceResponse!;
   }
 }

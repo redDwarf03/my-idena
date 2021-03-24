@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena/model/available_currency.dart';

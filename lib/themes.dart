@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';

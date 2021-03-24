@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:my_idena/network/model/dna_all.dart';
 import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:my_idena/network/model/response/dna_identity_response.dart';

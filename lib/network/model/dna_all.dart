@@ -1,4 +1,3 @@
-
 import 'request/bcn_transactions_request.dart';
 import 'response/bcn_transactions_response.dart';
 import 'request/dna_ceremonyIntervals_request.dart';
@@ -28,16 +27,16 @@ class DnaAll {
         this.bcnTransactionsResponse,
     });
 
-  DnaGetCoinbaseAddrRequest dnaGetCoinbaseAddrRequest;
-  DnaGetCoinbaseAddrResponse dnaGetCoinbaseAddrResponse;
-  DnaIdentityRequest dnaIdentityRequest;
-  DnaIdentityResponse dnaIdentityResponse;
-  DnaGetBalanceRequest dnaGetBalanceRequest;
-  DnaGetBalanceResponse dnaGetBalanceResponse;
-  DnaGetEpochRequest dnaGetEpochRequest;
-  DnaGetEpochResponse dnaGetEpochResponse;
-  DnaCeremonyIntervalsRequest dnaCeremonyIntervalsRequest;
-  DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse;
-  BcnTransactionsRequest bcnTransactionsRequest;
-  BcnTransactionsResponse bcnTransactionsResponse;
+  DnaGetCoinbaseAddrRequest? dnaGetCoinbaseAddrRequest;
+  DnaGetCoinbaseAddrResponse? dnaGetCoinbaseAddrResponse;
+  DnaIdentityRequest? dnaIdentityRequest;
+  DnaIdentityResponse? dnaIdentityResponse;
+  DnaGetBalanceRequest? dnaGetBalanceRequest;
+  DnaGetBalanceResponse? dnaGetBalanceResponse;
+  DnaGetEpochRequest? dnaGetEpochRequest;
+  DnaGetEpochResponse? dnaGetEpochResponse;
+  DnaCeremonyIntervalsRequest? dnaCeremonyIntervalsRequest;
+  DnaCeremonyIntervalsResponse? dnaCeremonyIntervalsResponse;
+  BcnTransactionsRequest? bcnTransactionsRequest;
+  BcnTransactionsResponse? bcnTransactionsResponse;
 }

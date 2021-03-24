@@ -60,24 +60,24 @@ class CurrencyFormatter extends TextInputFormatter {
 }
 
 class LocalCurrencyFormatter extends TextInputFormatter {
-  NumberFormat currencyFormat;
-  bool active;
+  NumberFormat? currencyFormat;
+  bool? active;
 
   LocalCurrencyFormatter({this.currencyFormat, this.active});
 
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.trim() == currencyFormat.currencySymbol.trim() || newValue.text.isEmpty) {
+    if (newValue.text.trim() == currencyFormat!.currencySymbol.trim() || newValue.text.isEmpty) {
       // Return empty string
       return newValue.copyWith(
         text: "",
         selection: new TextSelection.collapsed(offset: 0));
     }
     // Ensure our input is in the right formatting here
-    if (active) {
+    if (active!) {
       // Make local currency = symbol + amount with correct decimal separator
       String curText = newValue.text;
       String shouldBeText = NumberUtil.sanitizeNumber(curText.replaceAll(",", "."));
-      shouldBeText = currencyFormat.currencySymbol + shouldBeText.replaceAll(".", currencyFormat.symbols.DECIMAL_SEP);
+      shouldBeText = currencyFormat!.currencySymbol + shouldBeText.replaceAll(".", currencyFormat!.symbols.DECIMAL_SEP);
       if (shouldBeText != curText) {
         return newValue.copyWith(
           text: shouldBeText,
@@ -153,7 +153,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text?.toUpperCase(),
+      text: newValue.text.toUpperCase(),
       selection: newValue.selection,
     );
   }
@@ -164,7 +164,7 @@ class LowerCaseTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text?.toLowerCase(),
+      text: newValue.text.toLowerCase(),
       selection: newValue.selection,
     );
   }

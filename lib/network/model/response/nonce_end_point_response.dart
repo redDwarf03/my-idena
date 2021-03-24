@@ -12,8 +12,8 @@ class NonceEndpointResponse {
     this.data,
   });
 
-  bool success;
-  Data data;
+  bool? success;
+  Data? data;
 
   factory NonceEndpointResponse.fromJson(Map<String, dynamic> json) =>
       NonceEndpointResponse(
@@ -23,7 +23,7 @@ class NonceEndpointResponse {
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 }
 
@@ -32,7 +32,7 @@ class Data {
     this.nonce,
   });
 
-  String nonce;
+  String? nonce;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         nonce: json["nonce"],

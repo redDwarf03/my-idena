@@ -14,22 +14,22 @@ class ValidationSessionInfoFlips {
       this.answerType,
       this.relevanceType});
 
-  String hash;
-  bool ready;
-  bool extra;
-  bool available;
-  List<Word> listWords;
-  List<Uint8List> listImagesLeft;
-  List<Uint8List> listImagesRight;
-  int answerType;
-  int relevanceType;
+  String? hash;
+  bool? ready;
+  bool? extra;
+  bool? available;
+  List<Word>? listWords;
+  List<Uint8List>? listImagesLeft;
+  List<Uint8List>? listImagesRight;
+  int? answerType;
+  int? relevanceType;
 }
 
 class ValidationSessionInfo {
   ValidationSessionInfo({this.typeSession, this.listSessionValidationFlips, this.privateKey});
 
-  String typeSession;
-  String privateKey;
-  List<ValidationSessionInfoFlips> listSessionValidationFlips;
-  List<ValidationSessionInfoFlips> listSessionValidationFlipsExtra;
+  String? typeSession;
+  String? privateKey;
+  List<ValidationSessionInfoFlips>? listSessionValidationFlips;
+  List<ValidationSessionInfoFlips>? listSessionValidationFlipsExtra;
 }

@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'package:badges/badges.dart';
 import 'package:fleva_icons/fleva_icons.dart';

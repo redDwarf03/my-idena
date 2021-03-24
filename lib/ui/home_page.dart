@@ -1,9 +1,10 @@
+// @dart=2.9
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:flare_flutter/flare.dart';
-import 'package:flare_dart/math/mat2d.dart';
+import 'package:flare_flutter/base/animation/actor_animation.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
@@ -553,7 +554,6 @@ class _AppHomePageState extends State<AppHomePage>
 
     return Scaffold(
       drawerEdgeDragWidth: 200,
-      resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: StateContainer.of(context).curTheme.background,

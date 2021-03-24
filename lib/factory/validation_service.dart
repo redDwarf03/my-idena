@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -31,8 +32,8 @@ import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
-import 'package:dartssh/http.dart' as ssh;
-import 'package:dartssh/client.dart';
+import 'package:my_idena/pubdev/dartssh/http.dart' as ssh;
+import 'package:my_idena/pubdev/dartssh/client.dart';
 
 class ValidationService {
   var logger = Logger();

@@ -13,14 +13,14 @@ class Flips {
         this.flips,
     });
 
-    List<Flip> flips;
+    List<Flip>? flips;
 
     factory Flips.fromJson(Map<String, dynamic> json) => Flips(
         flips: List<Flip>.from(json["flips"].map((x) => Flip.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "flips": List<dynamic>.from(flips.map((x) => x.toJson())),
+        "flips": List<dynamic>.from(flips!.map((x) => x.toJson())),
     };
 }
 
@@ -42,20 +42,20 @@ class Flip {
         this.mined,
     });
 
-    String id;
-    List<String> pics;
-    List<String> compressedPics;
-    List<int> editorIndexes;
-    String nonSensePic;
-    int nonSenseOrder;
-    List<int> order;
-    Hint hint;
-    String type;
-    int createdAt;
-    int modifiedAt;
-    String txHash;
-    String hash;
-    bool mined;
+    String? id;
+    List<String>? pics;
+    List<String>? compressedPics;
+    List<int>? editorIndexes;
+    String? nonSensePic;
+    int? nonSenseOrder;
+    List<int>? order;
+    Hint? hint;
+    String? type;
+    int? createdAt;
+    int? modifiedAt;
+    String? txHash;
+    String? hash;
+    bool? mined;
 
     factory Flip.fromJson(Map<String, dynamic> json) => Flip(
         id: json["id"],
@@ -76,13 +76,13 @@ class Flip {
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "pics": List<dynamic>.from(pics.map((x) => x)),
-        "compressedPics": List<dynamic>.from(compressedPics.map((x) => x)),
-        "editorIndexes": List<dynamic>.from(editorIndexes.map((x) => x)),
+        "pics": List<dynamic>.from(pics!.map((x) => x)),
+        "compressedPics": List<dynamic>.from(compressedPics!.map((x) => x)),
+        "editorIndexes": List<dynamic>.from(editorIndexes!.map((x) => x)),
         "nonSensePic": nonSensePic,
         "nonSenseOrder": nonSenseOrder,
-        "order": List<dynamic>.from(order.map((x) => x)),
-        "hint": hint.toJson(),
+        "order": List<dynamic>.from(order!.map((x) => x)),
+        "hint": hint!.toJson(),
         "type": type,
         "createdAt": createdAt,
         "modifiedAt": modifiedAt,
@@ -98,8 +98,8 @@ class Hint {
         this.words,
     });
 
-    int id;
-    List<Word> words;
+    int? id;
+    List<Word>? words;
 
     factory Hint.fromJson(Map<String, dynamic> json) => Hint(
         id: json["id"],
@@ -108,7 +108,7 @@ class Hint {
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "words": List<dynamic>.from(words.map((x) => x.toJson())),
+        "words": List<dynamic>.from(words!.map((x) => x.toJson())),
     };
 }
 
@@ -118,8 +118,8 @@ class Word {
         this.desc,
     });
 
-    String name;
-    String desc;
+    String? name;
+    String? desc;
 
     factory Word.fromJson(Map<String, dynamic> json) => Word(
         name: json["name"],

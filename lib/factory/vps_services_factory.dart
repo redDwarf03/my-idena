@@ -1,6 +1,6 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
-import 'package:dartssh/client.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena/bus/events.dart';
@@ -30,6 +30,9 @@ import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_signin_response.dart';
+import 'package:my_idena/pubdev/dartssh/client.dart';
+import 'package:my_idena/pubdev/dartssh/http.dart' as ssh;
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -47,8 +50,7 @@ import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
-import 'package:dartssh/http.dart' as ssh;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
+
 
 class AppService {
   var logger = Logger();
@@ -685,7 +687,7 @@ class AppService {
 
       if (payload != null && payload.trim().isEmpty == false) {
         String payloadHex =
-            AppHelpers.toHexString(ethereum_util.toBuffer(payload), true);
+            AppHelpers.toHexString(toBuffer(payload), true);
         mapParams = {
           'method': DnaSendTransactionRequest.METHOD_NAME,
           "params": [

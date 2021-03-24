@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -270,7 +271,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
       body: LayoutBuilder(

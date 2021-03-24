@@ -15,14 +15,14 @@ class DictWords {
         this.words,
     });
 
-    List<Word> words;
+    List<Word>? words;
 
     factory DictWords.fromJson(Map<String, dynamic> json) => DictWords(
         words: List<Word>.from(json["words"].map((x) => Word.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "words": List<dynamic>.from(words.map((x) => x.toJson())),
+        "words": List<dynamic>.from(words!.map((x) => x.toJson())),
     };
 
      Future<DictWords> getDictWords() async {
@@ -39,8 +39,8 @@ class Word {
         this.desc,
     });
 
-    String name;
-    String desc;
+    String? name;
+    String? desc;
 
     factory Word.fromJson(Map<String, dynamic> json) => Word(
         name: json["name"],

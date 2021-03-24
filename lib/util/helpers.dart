@@ -1,8 +1,10 @@
+// @dart=2.9
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
+import 'package:my_idena/pubdev/ethereum_util/utils.dart';
 
 class AppHelpers {
   static List<String> hexArray = '0123456789ABCDEF'.split('');
@@ -120,12 +122,12 @@ class AppHelpers {
 
   static String toHexString(byteArray, bool withPrefix) {
     return ((withPrefix ? '0x' : '') +
-        HEX.encode(ethereum_util.toBuffer(byteArray)));
+        HEX.encode(toBuffer(byteArray)));
   }
 
   static String fromHexString(string) {
     try {
-      return ethereum_util.toUtf8(string);
+      return toUtf8(string);
     } catch (e) {
       return string;
     }
@@ -147,6 +149,6 @@ class AppHelpers {
   /// Converts an [BigInt] to a [Uint8List]
   static Uint8List bigIntToBuffer(BigInt i) {
     return Uint8List.fromList(hex.decode(
-        ethereum_util.padToEven(AppHelpers.bigIntToHex(i).substring(2))));
+        padToEven(AppHelpers.bigIntToHex(i).substring(2))));
   }
 }

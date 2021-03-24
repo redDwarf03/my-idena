@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 

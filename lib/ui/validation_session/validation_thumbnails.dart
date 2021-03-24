@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;

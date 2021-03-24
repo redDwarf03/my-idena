@@ -1,7 +1,8 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:dartssh/client.dart';
+import 'package:my_idena/pubdev/dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
@@ -34,6 +35,7 @@ import 'package:my_idena/network/model/response/bcn_transaction_response.dart';
 import 'package:my_idena/network/model/response/dna_activate_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
 import 'package:my_idena/network/model/response/dna_signin_response.dart';
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
 import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
 import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
@@ -91,8 +93,7 @@ import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_idena/util/util_node.dart';
 import 'package:my_idena/util/util_vps.dart';
-import 'package:dartssh/http.dart' as ssh;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
+import 'package:my_idena/pubdev/dartssh/http.dart' as ssh;
 
 class AppService {
   var logger = Logger();
@@ -262,7 +263,7 @@ class AppService {
           }
         }
 
-        List<Transaction> listTxsMempool = new List();
+        List<Transaction> listTxsMempool = new List<Transaction>();
         BcnMempoolResponse bcnMempoolResponse = await getMemPool(address);
         if (bcnMempoolResponse != null && bcnMempoolResponse.result != null) {
           List<String> hashList = bcnMempoolResponse.result;
@@ -1250,7 +1251,7 @@ class AppService {
 
         if (payload != null && payload.trim().isEmpty == false) {
           String payloadHex =
-              AppHelpers.toHexString(ethereum_util.toBuffer(payload), true);
+              AppHelpers.toHexString(toBuffer(payload), true);
           mapParams = {
             'method': DnaSendTransactionRequest.METHOD_NAME,
             "params": [
@@ -1279,7 +1280,7 @@ class AppService {
 
         if (payload != null && payload.trim().isEmpty == false) {
           String payloadHex =
-              AppHelpers.toHexString(ethereum_util.toBuffer(payload), true);
+              AppHelpers.toHexString(toBuffer(payload), true);
           mapParams = {
             'method': DnaSendTransactionRequest.METHOD_NAME,
             "params": [
@@ -1349,7 +1350,7 @@ class AppService {
               nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
           //print("transaction.toHex() before sign : " + transaction.toHex());
           transaction.sign(privateKey);
-          var rawTxSigned = ethereum_util.addHexPrefix(transaction.toHex());
+          var rawTxSigned = addHexPrefix(transaction.toHex());
           //print("rawTxSigned : " + rawTxSigned);
           // Sign Raw Tx
           BcnSendRawTxResponse bcnSendRawTxResponse =
@@ -1912,7 +1913,7 @@ class AppService {
 
     try {
       HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("http://api.idena.io/api/Address/" + address));
+          .getUrl(Uri.parse("https://api.idena.io/api/Address/" + address));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {

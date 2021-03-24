@@ -1,17 +1,18 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dartssh/client.dart';
+import 'package:my_idena/pubdev/dartssh/client.dart';
 import 'package:my_idena/network/model/request/dna_identity_request.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:args/args.dart';
-import 'package:dartssh/identity.dart';
-import 'package:dartssh/pem.dart';
-import 'package:dartssh/ssh.dart';
-import 'package:dartssh/transport.dart';
-import 'package:dartssh/http.dart';
+import 'package:my_idena/pubdev/dartssh/identity.dart';
+import 'package:my_idena/pubdev/dartssh/pem.dart';
+import 'package:my_idena/pubdev/dartssh/ssh.dart';
+import 'package:my_idena/pubdev/dartssh/transport.dart';
+import 'package:my_idena/pubdev/dartssh/http.dart';
 
 class SSHClientStatus {
   SSHClient sshClient;

@@ -4,7 +4,7 @@ class FlipExamples {
   FlipExamples();
 
   Map<String, dynamic> getMapExample(String typeSession) {
-    Map<String, dynamic> mapExemple;
+    Map<String, dynamic>? mapExemple;
     if (typeSession == EpochPeriod.ShortSession) {
       mapExemple = {
         "jsonrpc": "2.0",
@@ -207,6 +207,6 @@ class FlipExamples {
         };
       }
     }
-    return mapExemple;
+    return mapExemple!;
   }
 }

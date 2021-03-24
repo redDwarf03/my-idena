@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
 import 'package:my_idena/model/db/appdb.dart';

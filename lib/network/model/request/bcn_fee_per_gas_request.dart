@@ -16,10 +16,10 @@ class BcnFeePerGasRequest {
         this.key,
     });
 
-    String method;
-    List<dynamic> params;
-    int id;
-    String key;
+    String? method;
+    List<dynamic>? params;
+    int? id;
+    String? key;
 
     static const METHOD_NAME = "bcn_feePerGas";
 
@@ -32,7 +32,7 @@ class BcnFeePerGasRequest {
 
     Map<String, dynamic> toJson() => {
         "method": method,
-        "params": List<dynamic>.from(params.map((x) => x)),
+        "params": List<dynamic>.from(params!.map((x) => x)),
         "id": id,
         "key": key,
     };

@@ -1,8 +1,9 @@
+// @dart=2.9
 import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 import 'package:hex/hex.dart';
+import 'package:my_idena/pubdev/ethereum_util/hash.dart' as hash;
 import 'package:my_idena/util/app_ffi/encrypt/encrypted.dart';
 import 'package:my_idena/util/crypto/utils_crypto.dart';
 import 'package:pointycastle/pointycastle.dart';
@@ -64,7 +65,7 @@ Uint8List _kdf(secret, outputLength) {
   List result = new List<int>();
   while (written < outputLength) {
     var ctrs = Uint8List.fromList([ctr >> 24, ctr >> 16, ctr >> 8, ctr]);
-    Uint8List hashResult = ethereum_util.sha256(ctrs + _bigIntToBytes(secret));
+    Uint8List hashResult = hash.sha256(ctrs + _bigIntToBytes(secret));
     result.addAll(hashResult);
     written += 32;
     ctr += 1;

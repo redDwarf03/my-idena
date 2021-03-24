@@ -1,3 +1,4 @@
+// @dart=2.9
 // Copyright 2015 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -313,7 +314,8 @@ class AppAlertDialog extends StatelessWidget {
     }
 
     if (actions != null) {
-      children.add(ButtonTheme.bar(
+      children.add(new ButtonBarTheme(
+        data: ButtonBarThemeData(alignment: MainAxisAlignment.center),
         child: ButtonBar(
           children: actions,
         ),
@@ -670,7 +672,7 @@ Future<T> showAppDialog<T>({
     context: context,
     pageBuilder: (BuildContext buildContext, Animation<double> animation,
         Animation<double> secondaryAnimation) {
-      final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
+      final ThemeData theme = Theme.of(context);
       final Widget pageChild = child ?? Builder(builder: builder);
       return SafeArea(
         child: Builder(builder: (BuildContext context) {

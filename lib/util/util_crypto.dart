@@ -1,8 +1,12 @@
+// @dart=2.9
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cryptography/cryptography.dart';
+
 import 'package:hex/hex.dart';
+import 'package:my_idena/pubdev/cryptography/algorithms/aes_gcm.dart';
+import 'package:my_idena/pubdev/cryptography/nonce.dart';
+import 'package:my_idena/pubdev/cryptography/secret_key.dart';
 import 'package:sha3/sha3.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -62,4 +66,5 @@ class UtilCrypto {
       return "";
     }
   }
+
 }

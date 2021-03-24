@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -12,7 +13,7 @@ import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/util/app_ffi/keys/seeds.dart';
 
 import 'package:quiver/strings.dart';
-import 'package:validators/validators.dart';
+import 'package:validators2/validators.dart';
 
 enum DataType { RAW, URL, ADDRESS, SEED }
 

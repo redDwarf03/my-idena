@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:my_idena/model/deepLinks/deepLinkParamSend.dart';
@@ -97,7 +98,7 @@ class IdenaUrl {
   Future<DeepLinkParamSignin> getNonce(
       DeepLinkParamSignin deepLinkParam) async {
     final http.Response response = await http.post(
-      deepLinkParam.nonceEndpoint,
+      Uri.parse(deepLinkParam.nonceEndpoint),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -128,7 +129,7 @@ class IdenaUrl {
   Future<DeepLinkParamSignin> authenticate(
       DeepLinkParamSignin deepLinkParam) async {
     final http.Response response = await http.post(
-      deepLinkParam.authenticationEndpoint,
+      Uri.parse(deepLinkParam.authenticationEndpoint),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

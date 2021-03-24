@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/material.dart';

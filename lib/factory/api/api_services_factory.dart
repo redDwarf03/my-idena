@@ -307,7 +307,7 @@ class ApiServicesFactory {
 
     try {
       HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("http://api.idena.io/api/Address/" + address));
+          .getUrl(Uri.parse("https://api.idena.io/api/Address/" + address));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {

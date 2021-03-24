@@ -5,8 +5,8 @@ class SimplePriceResponse {
         this.localCurrencyPrice,
     });
     
-String currency;
-double btcPrice;
-double localCurrencyPrice;
+String? currency;
+double? btcPrice;
+double? localCurrencyPrice;
 
 }

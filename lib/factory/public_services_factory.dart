@@ -1,6 +1,6 @@
+// @dart=2.9
 import 'dart:async';
 import 'dart:convert';
-import 'package:dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
@@ -29,12 +29,13 @@ import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
 import 'package:my_idena/network/model/response/dna_identity_response.dart';
 import 'package:my_idena/network/model/response/dna_sendTransaction_response.dart';
 import 'package:my_idena/model/transaction.dart' as model;
+import 'package:my_idena/pubdev/dartssh/client.dart';
+import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/helpers.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_demo_mode.dart';
 import 'package:http/http.dart' as http;
-import 'package:ethereum_util/ethereum_util.dart' as ethereum_util;
 
 class AppService {
   var logger = Logger();
@@ -256,7 +257,7 @@ class AppService {
           nonce + 1, epoch, 0, to, amountNumber, maxFee, null, null);
       //print("transaction.toHex() before sign : " + transaction.toHex());
       transaction.sign(privateKey);
-      var rawTxSigned = ethereum_util.addHexPrefix(transaction.toHex());
+      var rawTxSigned = addHexPrefix(transaction.toHex());
       //print("rawTxSigned : " + rawTxSigned);
       // Sign Raw Tx
       BcnSendRawTxResponse bcnSendRawTxResponse = await sendRawTx(rawTxSigned);

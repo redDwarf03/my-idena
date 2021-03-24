@@ -9,14 +9,14 @@ class AuthenticateResponse {
         this.data,
     });
 
-    Data data;
+    Data? data;
 
     factory AuthenticateResponse.fromJson(Map<String, dynamic> json) => AuthenticateResponse(
         data: Data.fromJson(json["data"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data!.toJson(),
     };
 }
 
@@ -25,7 +25,7 @@ class Data {
         this.authenticated,
     });
 
-    bool authenticated;
+    bool? authenticated;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
         authenticated: json["authenticated"],

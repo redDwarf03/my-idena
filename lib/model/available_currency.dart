@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:my_idena/model/setting_item.dart';
