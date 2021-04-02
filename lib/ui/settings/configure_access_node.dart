@@ -250,6 +250,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
 
         String statusString =
             await sl.get<AppService>().getWStatusGetResponse();
+        // print("statusString: " + statusString);
         if (statusString != null && statusString == "true") {
           status = true;
           _addressText = await AppUtil().getAddress();
@@ -262,6 +263,7 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
         _addressText = await AppUtil().getAddress();
       }
     }
+    await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     //print("status : " + status.toString());
     if (!mounted) return;
     setState(() {});
@@ -1317,7 +1319,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == SHARED_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(SHARED_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_operatorController.text);
@@ -1329,7 +1330,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsIp("");
       await sl.get<SharedPrefsUtil>().setVpsUser("");
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
-      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == NORMAL_VPS_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_VPS_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_vpsTunnelController.text);
@@ -1341,7 +1341,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
           .setVpsPassword(_vpsPasswordController.text);
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     } else if (_selectedNodeType == PUBLIC_NODE) {
       await sl.get<SharedPrefsUtil>().setNodeType(PUBLIC_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(PN_URL);
@@ -1351,7 +1350,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-      await sl.get<SharedPrefsUtil>().setAddress("");
     } else {
       await sl.get<SharedPrefsUtil>().setNodeType(NORMAL_LOCAL_NODE);
       await sl.get<SharedPrefsUtil>().setApiUrl(_apiUrlController.text);
@@ -1361,7 +1359,6 @@ class _ConfigureAccessNodePageState extends State<ConfigureAccessNodePage> {
       await sl.get<SharedPrefsUtil>().setVpsPassword("");
       await sl.get<SharedPrefsUtil>().setEncryptedPk("");
       await sl.get<SharedPrefsUtil>().setPasswordPk("");
-      await sl.get<SharedPrefsUtil>().setAddress(_addressText);
     }
     await _tryConnection();
   }

@@ -47,8 +47,18 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
   bool _showSeedError = false;
   bool _mnemonicIsValid = false;
   String _mnemonicError;
-  bool _isSwitched = false;
   String seedOrigin = "";
+
+  @override
+   void initState() {
+    super.initState();
+   }
+
+  @override
+   void dispose() {
+    super.dispose();
+    _advancedSwitchController.dispose();
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +87,10 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 start: smallScreen(context) ? 15 : 20),
                             height: 50,
                             width: 50,
-                            child: FlatButton(
-                                highlightColor:
-                                    StateContainer.of(context).curTheme.text15,
-                                splashColor:
-                                    StateContainer.of(context).curTheme.text15,
+                            child: TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0)),
-                                padding: EdgeInsets.all(0.0),
                                 child: Icon(AppIcons.back,
                                     color: StateContainer.of(context)
                                         .curTheme
@@ -100,19 +103,12 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 end: smallScreen(context) ? 15 : 20),
                             height: 50,
                             width: 50,
-                            child: FlatButton(
-                                highlightColor:
-                                    StateContainer.of(context).curTheme.text15,
-                                splashColor:
-                                    StateContainer.of(context).curTheme.text15,
+                            child: TextButton(
                                 onPressed: () {
                                   setState(() {
                                     _seedMode = !_seedMode;
                                   });
                                 },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50.0)),
-                                padding: EdgeInsets.all(0.0),
                                 child: Icon(
                                     _seedMode ? Icons.vpn_key : AppIcons.seed,
                                     color: StateContainer.of(context)
@@ -575,18 +571,15 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                       margin: EdgeInsetsDirectional.only(end: 30),
                       height: 50,
                       width: 50,
-                      child: FlatButton(
-                          highlightColor:
-                              StateContainer.of(context).curTheme.primary15,
-                          splashColor:
-                              StateContainer.of(context).curTheme.primary30,
+                      child: TextButton(
+                         
                           onPressed: () async {
                             if (_seedMode) {
                               _seedInputFocusNode.unfocus();
                               // If seed valid, log them in
                               if (AppSeeds.isValidSeed(
                                   _seedInputController.text)) {
-                                _isSwitched
+                                _advancedSwitchController.value
                                     ? seedOrigin = HD_WALLET
                                     : seedOrigin = PAPER_WALLET;
 
@@ -643,7 +636,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 String seed = AppMnemomics.mnemonicListToSeed(
                                     _mnemonicController.text.split(' '));
 
-                                _isSwitched
+                                _advancedSwitchController.value
                                     ? seedOrigin = HD_WALLET
                                     : seedOrigin = PAPER_WALLET;
 
@@ -713,9 +706,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                               }
                             }
                           },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0)),
-                          padding: EdgeInsets.all(0.0),
+                      
                           child: Icon(AppIcons.forward,
                               color:
                                   StateContainer.of(context).curTheme.primary,

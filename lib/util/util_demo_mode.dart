@@ -15,7 +15,7 @@ const String DM_PORTOFOLIO_STAKE = "0.000";
 
 const String DM_EPOCH_CURRENT_PERIOD = "None";
 const int DM_EPOCH_EPOCH = 45;
-DateTime DM_EPOCH_NEXT_VALIDATION = new DateTime(2021, 05, 31);
+DateTime DM_EPOCH_NEXT_VALIDATION = new DateTime(2021, 10, 31);
 const String DM_KEY_APP = "demo_api_key";
 
 const int DM_CEREMONY_INTERVALS_FLIP_LOTTERY_DURATION = 300;

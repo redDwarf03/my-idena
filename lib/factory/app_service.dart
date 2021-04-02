@@ -833,8 +833,7 @@ class AppService {
     Completer<DnaGetEpochResponse> _completer =
         new Completer<DnaGetEpochResponse>();
 
-    if (await NodeUtil().getNodeType() == DEMO_NODE ||
-        await NodeUtil().getNodeType() == PUBLIC_NODE) {
+    if (await NodeUtil().getNodeType() == DEMO_NODE) {
       dnaGetEpochResponse = new DnaGetEpochResponse();
       dnaGetEpochResponse.result = new DnaGetEpochResponseResult();
       dnaGetEpochResponse.result.currentPeriod = DM_EPOCH_CURRENT_PERIOD;

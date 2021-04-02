@@ -32,11 +32,6 @@ dependencies:
 
   provider: ^5.0.0
 
-  json_rpc_2: 
-    git:
-      url: https://github.com/redDwarf03/json_rpc_2.git
-      ref: master
-
   mime: ^1.0.0
 
   quiver: ^3.0.0
@@ -163,7 +158,7 @@ dependencies:
   # Easy hexadecimal encoding and decoding
   hex: ^0.2.0
   
-  pointycastle: ^3.0.0-nullsafety.2
+  pointycastle: ^3.0.1
   
   # Vibrate
   vibrate:
@@ -221,12 +216,9 @@ dependencies:
       url: https://github.com/redDwarf03/bip32-dart.git
       ref: master
 
-  bip39: 
-    git:
-      url: https://github.com/redDwarf03/bip39.git
-      ref: master
+  bip39: ^1.0.6
 
-  flutter_advanced_switch: ^2.0.0
+  flutter_advanced_switch: ^2.0.2
 
   scrolling_page_indicator:
     git: 

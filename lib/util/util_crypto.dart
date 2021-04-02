@@ -8,18 +8,33 @@ import 'package:my_idena/pubdev/cryptography/algorithms/aes_gcm.dart';
 import 'package:my_idena/pubdev/cryptography/nonce.dart';
 import 'package:my_idena/pubdev/cryptography/secret_key.dart';
 import 'package:sha3/sha3.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 class UtilCrypto {
   Future<String> encryptedPrivateKeyToAddress(
       String encPrivateKey, String password) async {
+        //print("encPrivateKey: " + encPrivateKey);
+        //print("password: " + password);
     try {
       EthPrivateKey ethPrivateKey = EthPrivateKey.fromHex(
           await encryptedPrivateKeyToSeed(encPrivateKey, password));
-      final address = await ethPrivateKey.extractAddress();
+      //print("ethPrivateKey: " + ethPrivateKey.privateKey.toString());
+      if(ethPrivateKey.privateKey.length != 32)
+      {
+        return "";
+      }
+      //final address = await ethPrivateKey.extractAddress();
+      var k = SHA3(256, KECCAK_PADDING, 256);
+       k.update(privateKeyBytesToPublic(ethPrivateKey.privateKey));
+      var hash = k.digest();
+      int _shaBytes = 256 ~/ 8;
+      hash = Uint8List.view(Uint8List.fromList(hash).buffer, _shaBytes - 20);
+
+      EthereumAddress address = EthereumAddress(hash);
 
       //print("address.hex : " + address.hex);
-      return address.hex;
+      return address.hexEip55;
     } catch (e) {
       print(e);
       return "";

@@ -9,6 +9,7 @@ import 'package:hex/hex.dart' show HEX;
 import 'package:my_idena/pubdev/ethereum_util/bytes.dart';
 import 'package:my_idena/pubdev/ethereum_util/utils.dart';
 import 'package:my_idena/util/helpers.dart';
+import 'package:sha3/sha3.dart';
 import 'package:web3dart/crypto.dart' as crypto show keccak256, hexToBytes, intToBytes, MsgSignature, sign;
 import 'package:my_idena/protos/models.pb.dart' show ProtoTransaction, ProtoTransaction_Data;
 
@@ -81,12 +82,16 @@ class Transaction {
   Transaction sign(String privateKey) {
     //print("this._createProtoTxData().writeToBuffer() : " +
     //    this._createProtoTxData().toString());
-
+ 
     //print(hex.encode(this._createProtoTxData().writeToBuffer()));
 
-    Uint8List messageHash =
-        crypto.keccak256(this._createProtoTxData().writeToBuffer());
+    //Uint8List messageHash =
+    //    crypto.keccak256(this._createProtoTxData().writeToBuffer());
 
+    var k = SHA3(256, KECCAK_PADDING, 256);
+    k.update(this._createProtoTxData().writeToBuffer());
+    Uint8List messageHash = Uint8List.fromList(k.digest());
+    
     //print("messageHash: " + messageHash.toString());
     //print("messageHash: " + hex.encode(messageHash));
     crypto.MsgSignature msgSignature =
