@@ -1720,36 +1720,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                               .address));
                    
                     }),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLineWithInfos(
-                        context,
-                        AppLocalization.of(context).oracleLockTitle,
-                        "OracleLock is a non-refundable smart contract that locks coins until a decision is made by oracles. If the voting result matches the expected value, coins are transferred to address A, otherwise to address B.",
-                        Entypo.thumbs_up, onPressed: () {
-                      AppDialogs.showInfoDialog(
-                        context,
-                        AppLocalization.of(context).oracleLockTitle,
-                        "Soon...",
-                      );
-                    }),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLineWithInfos(
-                        context,
-                        AppLocalization.of(context).refundableOracleLockTitle,
-                        "RefundableOracleLock is a refundable smart contract address that can lock coins from multiple users until a decision is made by oracles.",
-                        Entypo.shareable, onPressed: () {
-                      AppDialogs.showInfoDialog(
-                        context,
-                        AppLocalization.of(context).refundableOracleLockTitle,
-                        "Soon...",
-                      );
-                    }),
+                   
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End

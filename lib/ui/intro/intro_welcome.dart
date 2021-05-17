@@ -6,6 +6,7 @@ import 'package:my_idena/dimens.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/model/transaction.dart';
 
 class IntroWelcomePage extends StatefulWidget {
   @override

@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: models.proto
 //
-// @dart = 2.7
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 import 'dart:core' as $core;
@@ -25,14 +25,14 @@ class ProtoTransaction_Data extends $pb.GeneratedMessage {
 
   ProtoTransaction_Data._() : super();
   factory ProtoTransaction_Data({
-    $core.int nonce,
-    $core.int epoch,
-    $core.int type,
-    $core.List<$core.int> to,
-    $core.List<$core.int> amount,
-    $core.List<$core.int> maxFee,
-    $core.List<$core.int> tips,
-    $core.List<$core.int> payload,
+    $core.int? nonce,
+    $core.int? epoch,
+    $core.int? type,
+    $core.List<$core.int>? to,
+    $core.List<$core.int>? amount,
+    $core.List<$core.int>? maxFee,
+    $core.List<$core.int>? tips,
+    $core.List<$core.int>? payload,
   }) {
     final _result = create();
     if (nonce != null) {
@@ -72,7 +72,7 @@ class ProtoTransaction_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTransaction_Data copyWith(void Function(ProtoTransaction_Data) updates) => super.copyWith((message) => updates(message as ProtoTransaction_Data)); // ignore: deprecated_member_use
+  ProtoTransaction_Data copyWith(void Function(ProtoTransaction_Data) updates) => super.copyWith((message) => updates(message as ProtoTransaction_Data)) as ProtoTransaction_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTransaction_Data create() => ProtoTransaction_Data._();
@@ -80,7 +80,7 @@ class ProtoTransaction_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTransaction_Data> createRepeated() => $pb.PbList<ProtoTransaction_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoTransaction_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTransaction_Data>(create);
-  static ProtoTransaction_Data _defaultInstance;
+  static ProtoTransaction_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get nonce => $_getIZ(0);
@@ -165,9 +165,9 @@ class ProtoTransaction extends $pb.GeneratedMessage {
 
   ProtoTransaction._() : super();
   factory ProtoTransaction({
-    ProtoTransaction_Data data,
-    $core.List<$core.int> signature,
-    $core.bool useRlp,
+    ProtoTransaction_Data? data,
+    $core.List<$core.int>? signature,
+    $core.bool? useRlp,
   }) {
     final _result = create();
     if (data != null) {
@@ -192,7 +192,7 @@ class ProtoTransaction extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTransaction copyWith(void Function(ProtoTransaction) updates) => super.copyWith((message) => updates(message as ProtoTransaction)); // ignore: deprecated_member_use
+  ProtoTransaction copyWith(void Function(ProtoTransaction) updates) => super.copyWith((message) => updates(message as ProtoTransaction)) as ProtoTransaction; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTransaction create() => ProtoTransaction._();
@@ -200,7 +200,7 @@ class ProtoTransaction extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTransaction> createRepeated() => $pb.PbList<ProtoTransaction>();
   @$core.pragma('dart2js:noInline')
   static ProtoTransaction getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTransaction>(create);
-  static ProtoTransaction _defaultInstance;
+  static ProtoTransaction? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoTransaction_Data get data => $_getN(0);
@@ -255,22 +255,22 @@ class ProtoBlockHeader_Proposed extends $pb.GeneratedMessage {
 
   ProtoBlockHeader_Proposed._() : super();
   factory ProtoBlockHeader_Proposed({
-    $core.List<$core.int> parentHash,
-    $fixnum.Int64 height,
-    $fixnum.Int64 timestamp,
-    $core.List<$core.int> txHash,
-    $core.List<$core.int> proposerPubKey,
-    $core.List<$core.int> root,
-    $core.List<$core.int> identityRoot,
-    $core.int flags,
-    $core.List<$core.int> ipfsHash,
-    $core.List<$core.int> offlineAddr,
-    $core.List<$core.int> txBloom,
-    $core.List<$core.int> blockSeed,
-    $core.List<$core.int> feePerGas,
-    $core.int upgrade,
-    $core.List<$core.int> seedProof,
-    $core.List<$core.int> receiptsCid,
+    $core.List<$core.int>? parentHash,
+    $fixnum.Int64? height,
+    $fixnum.Int64? timestamp,
+    $core.List<$core.int>? txHash,
+    $core.List<$core.int>? proposerPubKey,
+    $core.List<$core.int>? root,
+    $core.List<$core.int>? identityRoot,
+    $core.int? flags,
+    $core.List<$core.int>? ipfsHash,
+    $core.List<$core.int>? offlineAddr,
+    $core.List<$core.int>? txBloom,
+    $core.List<$core.int>? blockSeed,
+    $core.List<$core.int>? feePerGas,
+    $core.int? upgrade,
+    $core.List<$core.int>? seedProof,
+    $core.List<$core.int>? receiptsCid,
   }) {
     final _result = create();
     if (parentHash != null) {
@@ -334,7 +334,7 @@ class ProtoBlockHeader_Proposed extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockHeader_Proposed copyWith(void Function(ProtoBlockHeader_Proposed) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader_Proposed)); // ignore: deprecated_member_use
+  ProtoBlockHeader_Proposed copyWith(void Function(ProtoBlockHeader_Proposed) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader_Proposed)) as ProtoBlockHeader_Proposed; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader_Proposed create() => ProtoBlockHeader_Proposed._();
@@ -342,7 +342,7 @@ class ProtoBlockHeader_Proposed extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockHeader_Proposed> createRepeated() => $pb.PbList<ProtoBlockHeader_Proposed>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader_Proposed getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockHeader_Proposed>(create);
-  static ProtoBlockHeader_Proposed _defaultInstance;
+  static ProtoBlockHeader_Proposed? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get parentHash => $_getN(0);
@@ -503,13 +503,13 @@ class ProtoBlockHeader_Empty extends $pb.GeneratedMessage {
 
   ProtoBlockHeader_Empty._() : super();
   factory ProtoBlockHeader_Empty({
-    $core.List<$core.int> parentHash,
-    $fixnum.Int64 height,
-    $core.List<$core.int> root,
-    $core.List<$core.int> identityRoot,
-    $fixnum.Int64 timestamp,
-    $core.List<$core.int> blockSeed,
-    $core.int flags,
+    $core.List<$core.int>? parentHash,
+    $fixnum.Int64? height,
+    $core.List<$core.int>? root,
+    $core.List<$core.int>? identityRoot,
+    $fixnum.Int64? timestamp,
+    $core.List<$core.int>? blockSeed,
+    $core.int? flags,
   }) {
     final _result = create();
     if (parentHash != null) {
@@ -546,7 +546,7 @@ class ProtoBlockHeader_Empty extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockHeader_Empty copyWith(void Function(ProtoBlockHeader_Empty) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader_Empty)); // ignore: deprecated_member_use
+  ProtoBlockHeader_Empty copyWith(void Function(ProtoBlockHeader_Empty) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader_Empty)) as ProtoBlockHeader_Empty; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader_Empty create() => ProtoBlockHeader_Empty._();
@@ -554,7 +554,7 @@ class ProtoBlockHeader_Empty extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockHeader_Empty> createRepeated() => $pb.PbList<ProtoBlockHeader_Empty>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader_Empty getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockHeader_Empty>(create);
-  static ProtoBlockHeader_Empty _defaultInstance;
+  static ProtoBlockHeader_Empty? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get parentHash => $_getN(0);
@@ -629,8 +629,8 @@ class ProtoBlockHeader extends $pb.GeneratedMessage {
 
   ProtoBlockHeader._() : super();
   factory ProtoBlockHeader({
-    ProtoBlockHeader_Proposed proposedHeader,
-    ProtoBlockHeader_Empty emptyHeader,
+    ProtoBlockHeader_Proposed? proposedHeader,
+    ProtoBlockHeader_Empty? emptyHeader,
   }) {
     final _result = create();
     if (proposedHeader != null) {
@@ -652,7 +652,7 @@ class ProtoBlockHeader extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockHeader copyWith(void Function(ProtoBlockHeader) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader)); // ignore: deprecated_member_use
+  ProtoBlockHeader copyWith(void Function(ProtoBlockHeader) updates) => super.copyWith((message) => updates(message as ProtoBlockHeader)) as ProtoBlockHeader; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader create() => ProtoBlockHeader._();
@@ -660,7 +660,7 @@ class ProtoBlockHeader extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockHeader> createRepeated() => $pb.PbList<ProtoBlockHeader>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockHeader getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockHeader>(create);
-  static ProtoBlockHeader _defaultInstance;
+  static ProtoBlockHeader? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoBlockHeader_Proposed get proposedHeader => $_getN(0);
@@ -693,7 +693,7 @@ class ProtoBlockBody extends $pb.GeneratedMessage {
 
   ProtoBlockBody._() : super();
   factory ProtoBlockBody({
-    $core.Iterable<ProtoTransaction> transactions,
+    $core.Iterable<ProtoTransaction>? transactions,
   }) {
     final _result = create();
     if (transactions != null) {
@@ -712,7 +712,7 @@ class ProtoBlockBody extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockBody copyWith(void Function(ProtoBlockBody) updates) => super.copyWith((message) => updates(message as ProtoBlockBody)); // ignore: deprecated_member_use
+  ProtoBlockBody copyWith(void Function(ProtoBlockBody) updates) => super.copyWith((message) => updates(message as ProtoBlockBody)) as ProtoBlockBody; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockBody create() => ProtoBlockBody._();
@@ -720,7 +720,7 @@ class ProtoBlockBody extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockBody> createRepeated() => $pb.PbList<ProtoBlockBody>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockBody getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockBody>(create);
-  static ProtoBlockBody _defaultInstance;
+  static ProtoBlockBody? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoTransaction> get transactions => $_getList(0);
@@ -735,8 +735,8 @@ class ProtoBlock extends $pb.GeneratedMessage {
 
   ProtoBlock._() : super();
   factory ProtoBlock({
-    ProtoBlockHeader header,
-    ProtoBlockBody body,
+    ProtoBlockHeader? header,
+    ProtoBlockBody? body,
   }) {
     final _result = create();
     if (header != null) {
@@ -758,7 +758,7 @@ class ProtoBlock extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlock copyWith(void Function(ProtoBlock) updates) => super.copyWith((message) => updates(message as ProtoBlock)); // ignore: deprecated_member_use
+  ProtoBlock copyWith(void Function(ProtoBlock) updates) => super.copyWith((message) => updates(message as ProtoBlock)) as ProtoBlock; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlock create() => ProtoBlock._();
@@ -766,7 +766,7 @@ class ProtoBlock extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlock> createRepeated() => $pb.PbList<ProtoBlock>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlock getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlock>(create);
-  static ProtoBlock _defaultInstance;
+  static ProtoBlock? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoBlockHeader get header => $_getN(0);
@@ -801,9 +801,9 @@ class ProtoBlockProposal_Data extends $pb.GeneratedMessage {
 
   ProtoBlockProposal_Data._() : super();
   factory ProtoBlockProposal_Data({
-    ProtoBlockHeader header,
-    ProtoBlockBody body,
-    $core.List<$core.int> proof,
+    ProtoBlockHeader? header,
+    ProtoBlockBody? body,
+    $core.List<$core.int>? proof,
   }) {
     final _result = create();
     if (header != null) {
@@ -828,7 +828,7 @@ class ProtoBlockProposal_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockProposal_Data copyWith(void Function(ProtoBlockProposal_Data) updates) => super.copyWith((message) => updates(message as ProtoBlockProposal_Data)); // ignore: deprecated_member_use
+  ProtoBlockProposal_Data copyWith(void Function(ProtoBlockProposal_Data) updates) => super.copyWith((message) => updates(message as ProtoBlockProposal_Data)) as ProtoBlockProposal_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockProposal_Data create() => ProtoBlockProposal_Data._();
@@ -836,7 +836,7 @@ class ProtoBlockProposal_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockProposal_Data> createRepeated() => $pb.PbList<ProtoBlockProposal_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockProposal_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockProposal_Data>(create);
-  static ProtoBlockProposal_Data _defaultInstance;
+  static ProtoBlockProposal_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoBlockHeader get header => $_getN(0);
@@ -879,8 +879,8 @@ class ProtoBlockProposal extends $pb.GeneratedMessage {
 
   ProtoBlockProposal._() : super();
   factory ProtoBlockProposal({
-    ProtoBlockProposal_Data data,
-    $core.List<$core.int> signature,
+    ProtoBlockProposal_Data? data,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (data != null) {
@@ -902,7 +902,7 @@ class ProtoBlockProposal extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockProposal copyWith(void Function(ProtoBlockProposal) updates) => super.copyWith((message) => updates(message as ProtoBlockProposal)); // ignore: deprecated_member_use
+  ProtoBlockProposal copyWith(void Function(ProtoBlockProposal) updates) => super.copyWith((message) => updates(message as ProtoBlockProposal)) as ProtoBlockProposal; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockProposal create() => ProtoBlockProposal._();
@@ -910,7 +910,7 @@ class ProtoBlockProposal extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockProposal> createRepeated() => $pb.PbList<ProtoBlockProposal>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockProposal getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockProposal>(create);
-  static ProtoBlockProposal _defaultInstance;
+  static ProtoBlockProposal? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoBlockProposal_Data get data => $_getN(0);
@@ -943,9 +943,9 @@ class ProtoIpfsFlip extends $pb.GeneratedMessage {
 
   ProtoIpfsFlip._() : super();
   factory ProtoIpfsFlip({
-    $core.List<$core.int> pubKey,
-    $core.List<$core.int> publicPart,
-    $core.List<$core.int> privatePart,
+    $core.List<$core.int>? pubKey,
+    $core.List<$core.int>? publicPart,
+    $core.List<$core.int>? privatePart,
   }) {
     final _result = create();
     if (pubKey != null) {
@@ -970,7 +970,7 @@ class ProtoIpfsFlip extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoIpfsFlip copyWith(void Function(ProtoIpfsFlip) updates) => super.copyWith((message) => updates(message as ProtoIpfsFlip)); // ignore: deprecated_member_use
+  ProtoIpfsFlip copyWith(void Function(ProtoIpfsFlip) updates) => super.copyWith((message) => updates(message as ProtoIpfsFlip)) as ProtoIpfsFlip; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoIpfsFlip create() => ProtoIpfsFlip._();
@@ -978,7 +978,7 @@ class ProtoIpfsFlip extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoIpfsFlip> createRepeated() => $pb.PbList<ProtoIpfsFlip>();
   @$core.pragma('dart2js:noInline')
   static ProtoIpfsFlip getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoIpfsFlip>(create);
-  static ProtoIpfsFlip _defaultInstance;
+  static ProtoIpfsFlip? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get pubKey => $_getN(0);
@@ -1018,9 +1018,9 @@ class ProtoBlockCert_Signature extends $pb.GeneratedMessage {
 
   ProtoBlockCert_Signature._() : super();
   factory ProtoBlockCert_Signature({
-    $core.bool turnOffline,
-    $core.int upgrade,
-    $core.List<$core.int> signature,
+    $core.bool? turnOffline,
+    $core.int? upgrade,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (turnOffline != null) {
@@ -1045,7 +1045,7 @@ class ProtoBlockCert_Signature extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockCert_Signature copyWith(void Function(ProtoBlockCert_Signature) updates) => super.copyWith((message) => updates(message as ProtoBlockCert_Signature)); // ignore: deprecated_member_use
+  ProtoBlockCert_Signature copyWith(void Function(ProtoBlockCert_Signature) updates) => super.copyWith((message) => updates(message as ProtoBlockCert_Signature)) as ProtoBlockCert_Signature; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockCert_Signature create() => ProtoBlockCert_Signature._();
@@ -1053,7 +1053,7 @@ class ProtoBlockCert_Signature extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockCert_Signature> createRepeated() => $pb.PbList<ProtoBlockCert_Signature>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockCert_Signature getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockCert_Signature>(create);
-  static ProtoBlockCert_Signature _defaultInstance;
+  static ProtoBlockCert_Signature? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get turnOffline => $_getBF(0);
@@ -1094,10 +1094,10 @@ class ProtoBlockCert extends $pb.GeneratedMessage {
 
   ProtoBlockCert._() : super();
   factory ProtoBlockCert({
-    $fixnum.Int64 round,
-    $core.int step,
-    $core.List<$core.int> votedHash,
-    $core.Iterable<ProtoBlockCert_Signature> signatures,
+    $fixnum.Int64? round,
+    $core.int? step,
+    $core.List<$core.int>? votedHash,
+    $core.Iterable<ProtoBlockCert_Signature>? signatures,
   }) {
     final _result = create();
     if (round != null) {
@@ -1125,7 +1125,7 @@ class ProtoBlockCert extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBlockCert copyWith(void Function(ProtoBlockCert) updates) => super.copyWith((message) => updates(message as ProtoBlockCert)); // ignore: deprecated_member_use
+  ProtoBlockCert copyWith(void Function(ProtoBlockCert) updates) => super.copyWith((message) => updates(message as ProtoBlockCert)) as ProtoBlockCert; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBlockCert create() => ProtoBlockCert._();
@@ -1133,7 +1133,7 @@ class ProtoBlockCert extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBlockCert> createRepeated() => $pb.PbList<ProtoBlockCert>();
   @$core.pragma('dart2js:noInline')
   static ProtoBlockCert getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBlockCert>(create);
-  static ProtoBlockCert _defaultInstance;
+  static ProtoBlockCert? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get round => $_getI64(0);
@@ -1174,7 +1174,7 @@ class ProtoWeakCertificates extends $pb.GeneratedMessage {
 
   ProtoWeakCertificates._() : super();
   factory ProtoWeakCertificates({
-    $core.Iterable<$core.List<$core.int>> hashes,
+    $core.Iterable<$core.List<$core.int>>? hashes,
   }) {
     final _result = create();
     if (hashes != null) {
@@ -1193,7 +1193,7 @@ class ProtoWeakCertificates extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoWeakCertificates copyWith(void Function(ProtoWeakCertificates) updates) => super.copyWith((message) => updates(message as ProtoWeakCertificates)); // ignore: deprecated_member_use
+  ProtoWeakCertificates copyWith(void Function(ProtoWeakCertificates) updates) => super.copyWith((message) => updates(message as ProtoWeakCertificates)) as ProtoWeakCertificates; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoWeakCertificates create() => ProtoWeakCertificates._();
@@ -1201,7 +1201,7 @@ class ProtoWeakCertificates extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoWeakCertificates> createRepeated() => $pb.PbList<ProtoWeakCertificates>();
   @$core.pragma('dart2js:noInline')
   static ProtoWeakCertificates getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoWeakCertificates>(create);
-  static ProtoWeakCertificates _defaultInstance;
+  static ProtoWeakCertificates? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.List<$core.int>> get hashes => $_getList(0);
@@ -1216,8 +1216,8 @@ class ProtoTransactionIndex extends $pb.GeneratedMessage {
 
   ProtoTransactionIndex._() : super();
   factory ProtoTransactionIndex({
-    $core.List<$core.int> blockHash,
-    $core.int idx,
+    $core.List<$core.int>? blockHash,
+    $core.int? idx,
   }) {
     final _result = create();
     if (blockHash != null) {
@@ -1239,7 +1239,7 @@ class ProtoTransactionIndex extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTransactionIndex copyWith(void Function(ProtoTransactionIndex) updates) => super.copyWith((message) => updates(message as ProtoTransactionIndex)); // ignore: deprecated_member_use
+  ProtoTransactionIndex copyWith(void Function(ProtoTransactionIndex) updates) => super.copyWith((message) => updates(message as ProtoTransactionIndex)) as ProtoTransactionIndex; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTransactionIndex create() => ProtoTransactionIndex._();
@@ -1247,7 +1247,7 @@ class ProtoTransactionIndex extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTransactionIndex> createRepeated() => $pb.PbList<ProtoTransactionIndex>();
   @$core.pragma('dart2js:noInline')
   static ProtoTransactionIndex getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTransactionIndex>(create);
-  static ProtoTransactionIndex _defaultInstance;
+  static ProtoTransactionIndex? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get blockHash => $_getN(0);
@@ -1276,7 +1276,7 @@ class ProtoFlipPrivateKeys extends $pb.GeneratedMessage {
 
   ProtoFlipPrivateKeys._() : super();
   factory ProtoFlipPrivateKeys({
-    $core.Iterable<$core.List<$core.int>> keys,
+    $core.Iterable<$core.List<$core.int>>? keys,
   }) {
     final _result = create();
     if (keys != null) {
@@ -1295,7 +1295,7 @@ class ProtoFlipPrivateKeys extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoFlipPrivateKeys copyWith(void Function(ProtoFlipPrivateKeys) updates) => super.copyWith((message) => updates(message as ProtoFlipPrivateKeys)); // ignore: deprecated_member_use
+  ProtoFlipPrivateKeys copyWith(void Function(ProtoFlipPrivateKeys) updates) => super.copyWith((message) => updates(message as ProtoFlipPrivateKeys)) as ProtoFlipPrivateKeys; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoFlipPrivateKeys create() => ProtoFlipPrivateKeys._();
@@ -1303,7 +1303,7 @@ class ProtoFlipPrivateKeys extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoFlipPrivateKeys> createRepeated() => $pb.PbList<ProtoFlipPrivateKeys>();
   @$core.pragma('dart2js:noInline')
   static ProtoFlipPrivateKeys getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoFlipPrivateKeys>(create);
-  static ProtoFlipPrivateKeys _defaultInstance;
+  static ProtoFlipPrivateKeys? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.List<$core.int>> get keys => $_getList(0);
@@ -1318,8 +1318,8 @@ class ProtoProfile extends $pb.GeneratedMessage {
 
   ProtoProfile._() : super();
   factory ProtoProfile({
-    $core.List<$core.int> nickname,
-    $core.List<$core.int> info,
+    $core.List<$core.int>? nickname,
+    $core.List<$core.int>? info,
   }) {
     final _result = create();
     if (nickname != null) {
@@ -1341,7 +1341,7 @@ class ProtoProfile extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoProfile copyWith(void Function(ProtoProfile) updates) => super.copyWith((message) => updates(message as ProtoProfile)); // ignore: deprecated_member_use
+  ProtoProfile copyWith(void Function(ProtoProfile) updates) => super.copyWith((message) => updates(message as ProtoProfile)) as ProtoProfile; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoProfile create() => ProtoProfile._();
@@ -1349,7 +1349,7 @@ class ProtoProfile extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoProfile> createRepeated() => $pb.PbList<ProtoProfile>();
   @$core.pragma('dart2js:noInline')
   static ProtoProfile getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoProfile>(create);
-  static ProtoProfile _defaultInstance;
+  static ProtoProfile? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get nickname => $_getN(0);
@@ -1384,13 +1384,13 @@ class ProtoHandshake extends $pb.GeneratedMessage {
 
   ProtoHandshake._() : super();
   factory ProtoHandshake({
-    $core.int networkId,
-    $fixnum.Int64 height,
-    $core.List<$core.int> genesis,
-    $fixnum.Int64 timestamp,
-    $core.String appVersion,
-    $core.int peers,
-    $core.List<$core.int> oldGenesis,
+    $core.int? networkId,
+    $fixnum.Int64? height,
+    $core.List<$core.int>? genesis,
+    $fixnum.Int64? timestamp,
+    $core.String? appVersion,
+    $core.int? peers,
+    $core.List<$core.int>? oldGenesis,
   }) {
     final _result = create();
     if (networkId != null) {
@@ -1427,7 +1427,7 @@ class ProtoHandshake extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoHandshake copyWith(void Function(ProtoHandshake) updates) => super.copyWith((message) => updates(message as ProtoHandshake)); // ignore: deprecated_member_use
+  ProtoHandshake copyWith(void Function(ProtoHandshake) updates) => super.copyWith((message) => updates(message as ProtoHandshake)) as ProtoHandshake; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoHandshake create() => ProtoHandshake._();
@@ -1435,7 +1435,7 @@ class ProtoHandshake extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoHandshake> createRepeated() => $pb.PbList<ProtoHandshake>();
   @$core.pragma('dart2js:noInline')
   static ProtoHandshake getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoHandshake>(create);
-  static ProtoHandshake _defaultInstance;
+  static ProtoHandshake? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get networkId => $_getIZ(0);
@@ -1510,8 +1510,8 @@ class ProtoMsg extends $pb.GeneratedMessage {
 
   ProtoMsg._() : super();
   factory ProtoMsg({
-    $fixnum.Int64 code,
-    $core.List<$core.int> payload,
+    $fixnum.Int64? code,
+    $core.List<$core.int>? payload,
   }) {
     final _result = create();
     if (code != null) {
@@ -1533,7 +1533,7 @@ class ProtoMsg extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoMsg copyWith(void Function(ProtoMsg) updates) => super.copyWith((message) => updates(message as ProtoMsg)); // ignore: deprecated_member_use
+  ProtoMsg copyWith(void Function(ProtoMsg) updates) => super.copyWith((message) => updates(message as ProtoMsg)) as ProtoMsg; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoMsg create() => ProtoMsg._();
@@ -1541,7 +1541,7 @@ class ProtoMsg extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoMsg> createRepeated() => $pb.PbList<ProtoMsg>();
   @$core.pragma('dart2js:noInline')
   static ProtoMsg getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoMsg>(create);
-  static ProtoMsg _defaultInstance;
+  static ProtoMsg? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get code => $_getI64(0);
@@ -1572,9 +1572,9 @@ class ProtoIdentityStateDiff_IdentityStateDiffValue extends $pb.GeneratedMessage
 
   ProtoIdentityStateDiff_IdentityStateDiffValue._() : super();
   factory ProtoIdentityStateDiff_IdentityStateDiffValue({
-    $core.List<$core.int> address,
-    $core.bool deleted,
-    $core.List<$core.int> value,
+    $core.List<$core.int>? address,
+    $core.bool? deleted,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (address != null) {
@@ -1599,7 +1599,7 @@ class ProtoIdentityStateDiff_IdentityStateDiffValue extends $pb.GeneratedMessage
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoIdentityStateDiff_IdentityStateDiffValue copyWith(void Function(ProtoIdentityStateDiff_IdentityStateDiffValue) updates) => super.copyWith((message) => updates(message as ProtoIdentityStateDiff_IdentityStateDiffValue)); // ignore: deprecated_member_use
+  ProtoIdentityStateDiff_IdentityStateDiffValue copyWith(void Function(ProtoIdentityStateDiff_IdentityStateDiffValue) updates) => super.copyWith((message) => updates(message as ProtoIdentityStateDiff_IdentityStateDiffValue)) as ProtoIdentityStateDiff_IdentityStateDiffValue; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoIdentityStateDiff_IdentityStateDiffValue create() => ProtoIdentityStateDiff_IdentityStateDiffValue._();
@@ -1607,7 +1607,7 @@ class ProtoIdentityStateDiff_IdentityStateDiffValue extends $pb.GeneratedMessage
   static $pb.PbList<ProtoIdentityStateDiff_IdentityStateDiffValue> createRepeated() => $pb.PbList<ProtoIdentityStateDiff_IdentityStateDiffValue>();
   @$core.pragma('dart2js:noInline')
   static ProtoIdentityStateDiff_IdentityStateDiffValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoIdentityStateDiff_IdentityStateDiffValue>(create);
-  static ProtoIdentityStateDiff_IdentityStateDiffValue _defaultInstance;
+  static ProtoIdentityStateDiff_IdentityStateDiffValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -1645,7 +1645,7 @@ class ProtoIdentityStateDiff extends $pb.GeneratedMessage {
 
   ProtoIdentityStateDiff._() : super();
   factory ProtoIdentityStateDiff({
-    $core.Iterable<ProtoIdentityStateDiff_IdentityStateDiffValue> values,
+    $core.Iterable<ProtoIdentityStateDiff_IdentityStateDiffValue>? values,
   }) {
     final _result = create();
     if (values != null) {
@@ -1664,7 +1664,7 @@ class ProtoIdentityStateDiff extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoIdentityStateDiff copyWith(void Function(ProtoIdentityStateDiff) updates) => super.copyWith((message) => updates(message as ProtoIdentityStateDiff)); // ignore: deprecated_member_use
+  ProtoIdentityStateDiff copyWith(void Function(ProtoIdentityStateDiff) updates) => super.copyWith((message) => updates(message as ProtoIdentityStateDiff)) as ProtoIdentityStateDiff; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoIdentityStateDiff create() => ProtoIdentityStateDiff._();
@@ -1672,7 +1672,7 @@ class ProtoIdentityStateDiff extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoIdentityStateDiff> createRepeated() => $pb.PbList<ProtoIdentityStateDiff>();
   @$core.pragma('dart2js:noInline')
   static ProtoIdentityStateDiff getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoIdentityStateDiff>(create);
-  static ProtoIdentityStateDiff _defaultInstance;
+  static ProtoIdentityStateDiff? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoIdentityStateDiff_IdentityStateDiffValue> get values => $_getList(0);
@@ -1687,8 +1687,8 @@ class ProtoSnapshotBlock_KeyValue extends $pb.GeneratedMessage {
 
   ProtoSnapshotBlock_KeyValue._() : super();
   factory ProtoSnapshotBlock_KeyValue({
-    $core.List<$core.int> key,
-    $core.List<$core.int> value,
+    $core.List<$core.int>? key,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (key != null) {
@@ -1710,7 +1710,7 @@ class ProtoSnapshotBlock_KeyValue extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoSnapshotBlock_KeyValue copyWith(void Function(ProtoSnapshotBlock_KeyValue) updates) => super.copyWith((message) => updates(message as ProtoSnapshotBlock_KeyValue)); // ignore: deprecated_member_use
+  ProtoSnapshotBlock_KeyValue copyWith(void Function(ProtoSnapshotBlock_KeyValue) updates) => super.copyWith((message) => updates(message as ProtoSnapshotBlock_KeyValue)) as ProtoSnapshotBlock_KeyValue; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotBlock_KeyValue create() => ProtoSnapshotBlock_KeyValue._();
@@ -1718,7 +1718,7 @@ class ProtoSnapshotBlock_KeyValue extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoSnapshotBlock_KeyValue> createRepeated() => $pb.PbList<ProtoSnapshotBlock_KeyValue>();
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotBlock_KeyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoSnapshotBlock_KeyValue>(create);
-  static ProtoSnapshotBlock_KeyValue _defaultInstance;
+  static ProtoSnapshotBlock_KeyValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get key => $_getN(0);
@@ -1747,7 +1747,7 @@ class ProtoSnapshotBlock extends $pb.GeneratedMessage {
 
   ProtoSnapshotBlock._() : super();
   factory ProtoSnapshotBlock({
-    $core.Iterable<ProtoSnapshotBlock_KeyValue> data,
+    $core.Iterable<ProtoSnapshotBlock_KeyValue>? data,
   }) {
     final _result = create();
     if (data != null) {
@@ -1766,7 +1766,7 @@ class ProtoSnapshotBlock extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoSnapshotBlock copyWith(void Function(ProtoSnapshotBlock) updates) => super.copyWith((message) => updates(message as ProtoSnapshotBlock)); // ignore: deprecated_member_use
+  ProtoSnapshotBlock copyWith(void Function(ProtoSnapshotBlock) updates) => super.copyWith((message) => updates(message as ProtoSnapshotBlock)) as ProtoSnapshotBlock; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotBlock create() => ProtoSnapshotBlock._();
@@ -1774,7 +1774,7 @@ class ProtoSnapshotBlock extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoSnapshotBlock> createRepeated() => $pb.PbList<ProtoSnapshotBlock>();
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotBlock getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoSnapshotBlock>(create);
-  static ProtoSnapshotBlock _defaultInstance;
+  static ProtoSnapshotBlock? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoSnapshotBlock_KeyValue> get data => $_getList(0);
@@ -1790,9 +1790,9 @@ class ProtoGossipBlockRange_Block extends $pb.GeneratedMessage {
 
   ProtoGossipBlockRange_Block._() : super();
   factory ProtoGossipBlockRange_Block({
-    ProtoBlockHeader header,
-    ProtoBlockCert cert,
-    ProtoIdentityStateDiff diff,
+    ProtoBlockHeader? header,
+    ProtoBlockCert? cert,
+    ProtoIdentityStateDiff? diff,
   }) {
     final _result = create();
     if (header != null) {
@@ -1817,7 +1817,7 @@ class ProtoGossipBlockRange_Block extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoGossipBlockRange_Block copyWith(void Function(ProtoGossipBlockRange_Block) updates) => super.copyWith((message) => updates(message as ProtoGossipBlockRange_Block)); // ignore: deprecated_member_use
+  ProtoGossipBlockRange_Block copyWith(void Function(ProtoGossipBlockRange_Block) updates) => super.copyWith((message) => updates(message as ProtoGossipBlockRange_Block)) as ProtoGossipBlockRange_Block; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoGossipBlockRange_Block create() => ProtoGossipBlockRange_Block._();
@@ -1825,7 +1825,7 @@ class ProtoGossipBlockRange_Block extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoGossipBlockRange_Block> createRepeated() => $pb.PbList<ProtoGossipBlockRange_Block>();
   @$core.pragma('dart2js:noInline')
   static ProtoGossipBlockRange_Block getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoGossipBlockRange_Block>(create);
-  static ProtoGossipBlockRange_Block _defaultInstance;
+  static ProtoGossipBlockRange_Block? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoBlockHeader get header => $_getN(0);
@@ -1870,8 +1870,8 @@ class ProtoGossipBlockRange extends $pb.GeneratedMessage {
 
   ProtoGossipBlockRange._() : super();
   factory ProtoGossipBlockRange({
-    $core.int batchId,
-    $core.Iterable<ProtoGossipBlockRange_Block> blocks,
+    $core.int? batchId,
+    $core.Iterable<ProtoGossipBlockRange_Block>? blocks,
   }) {
     final _result = create();
     if (batchId != null) {
@@ -1893,7 +1893,7 @@ class ProtoGossipBlockRange extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoGossipBlockRange copyWith(void Function(ProtoGossipBlockRange) updates) => super.copyWith((message) => updates(message as ProtoGossipBlockRange)); // ignore: deprecated_member_use
+  ProtoGossipBlockRange copyWith(void Function(ProtoGossipBlockRange) updates) => super.copyWith((message) => updates(message as ProtoGossipBlockRange)) as ProtoGossipBlockRange; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoGossipBlockRange create() => ProtoGossipBlockRange._();
@@ -1901,7 +1901,7 @@ class ProtoGossipBlockRange extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoGossipBlockRange> createRepeated() => $pb.PbList<ProtoGossipBlockRange>();
   @$core.pragma('dart2js:noInline')
   static ProtoGossipBlockRange getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoGossipBlockRange>(create);
-  static ProtoGossipBlockRange _defaultInstance;
+  static ProtoGossipBlockRange? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get batchId => $_getIZ(0);
@@ -1925,8 +1925,8 @@ class ProtoProposeProof_Data extends $pb.GeneratedMessage {
 
   ProtoProposeProof_Data._() : super();
   factory ProtoProposeProof_Data({
-    $core.List<$core.int> proof,
-    $fixnum.Int64 round,
+    $core.List<$core.int>? proof,
+    $fixnum.Int64? round,
   }) {
     final _result = create();
     if (proof != null) {
@@ -1948,7 +1948,7 @@ class ProtoProposeProof_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoProposeProof_Data copyWith(void Function(ProtoProposeProof_Data) updates) => super.copyWith((message) => updates(message as ProtoProposeProof_Data)); // ignore: deprecated_member_use
+  ProtoProposeProof_Data copyWith(void Function(ProtoProposeProof_Data) updates) => super.copyWith((message) => updates(message as ProtoProposeProof_Data)) as ProtoProposeProof_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoProposeProof_Data create() => ProtoProposeProof_Data._();
@@ -1956,7 +1956,7 @@ class ProtoProposeProof_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoProposeProof_Data> createRepeated() => $pb.PbList<ProtoProposeProof_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoProposeProof_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoProposeProof_Data>(create);
-  static ProtoProposeProof_Data _defaultInstance;
+  static ProtoProposeProof_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get proof => $_getN(0);
@@ -1986,8 +1986,8 @@ class ProtoProposeProof extends $pb.GeneratedMessage {
 
   ProtoProposeProof._() : super();
   factory ProtoProposeProof({
-    ProtoProposeProof_Data data,
-    $core.List<$core.int> signature,
+    ProtoProposeProof_Data? data,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (data != null) {
@@ -2009,7 +2009,7 @@ class ProtoProposeProof extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoProposeProof copyWith(void Function(ProtoProposeProof) updates) => super.copyWith((message) => updates(message as ProtoProposeProof)); // ignore: deprecated_member_use
+  ProtoProposeProof copyWith(void Function(ProtoProposeProof) updates) => super.copyWith((message) => updates(message as ProtoProposeProof)) as ProtoProposeProof; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoProposeProof create() => ProtoProposeProof._();
@@ -2017,7 +2017,7 @@ class ProtoProposeProof extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoProposeProof> createRepeated() => $pb.PbList<ProtoProposeProof>();
   @$core.pragma('dart2js:noInline')
   static ProtoProposeProof getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoProposeProof>(create);
-  static ProtoProposeProof _defaultInstance;
+  static ProtoProposeProof? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoProposeProof_Data get data => $_getN(0);
@@ -2053,12 +2053,12 @@ class ProtoVote_Data extends $pb.GeneratedMessage {
 
   ProtoVote_Data._() : super();
   factory ProtoVote_Data({
-    $fixnum.Int64 round,
-    $core.int step,
-    $core.List<$core.int> parentHash,
-    $core.List<$core.int> votedHash,
-    $core.bool turnOffline,
-    $core.int upgrade,
+    $fixnum.Int64? round,
+    $core.int? step,
+    $core.List<$core.int>? parentHash,
+    $core.List<$core.int>? votedHash,
+    $core.bool? turnOffline,
+    $core.int? upgrade,
   }) {
     final _result = create();
     if (round != null) {
@@ -2092,7 +2092,7 @@ class ProtoVote_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoVote_Data copyWith(void Function(ProtoVote_Data) updates) => super.copyWith((message) => updates(message as ProtoVote_Data)); // ignore: deprecated_member_use
+  ProtoVote_Data copyWith(void Function(ProtoVote_Data) updates) => super.copyWith((message) => updates(message as ProtoVote_Data)) as ProtoVote_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoVote_Data create() => ProtoVote_Data._();
@@ -2100,7 +2100,7 @@ class ProtoVote_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoVote_Data> createRepeated() => $pb.PbList<ProtoVote_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoVote_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoVote_Data>(create);
-  static ProtoVote_Data _defaultInstance;
+  static ProtoVote_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get round => $_getI64(0);
@@ -2166,8 +2166,8 @@ class ProtoVote extends $pb.GeneratedMessage {
 
   ProtoVote._() : super();
   factory ProtoVote({
-    ProtoVote_Data data,
-    $core.List<$core.int> signature,
+    ProtoVote_Data? data,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (data != null) {
@@ -2189,7 +2189,7 @@ class ProtoVote extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoVote copyWith(void Function(ProtoVote) updates) => super.copyWith((message) => updates(message as ProtoVote)); // ignore: deprecated_member_use
+  ProtoVote copyWith(void Function(ProtoVote) updates) => super.copyWith((message) => updates(message as ProtoVote)) as ProtoVote; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoVote create() => ProtoVote._();
@@ -2197,7 +2197,7 @@ class ProtoVote extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoVote> createRepeated() => $pb.PbList<ProtoVote>();
   @$core.pragma('dart2js:noInline')
   static ProtoVote getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoVote>(create);
-  static ProtoVote _defaultInstance;
+  static ProtoVote? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoVote_Data get data => $_getN(0);
@@ -2228,7 +2228,7 @@ class ProtoGetBlockByHashRequest extends $pb.GeneratedMessage {
 
   ProtoGetBlockByHashRequest._() : super();
   factory ProtoGetBlockByHashRequest({
-    $core.List<$core.int> hash,
+    $core.List<$core.int>? hash,
   }) {
     final _result = create();
     if (hash != null) {
@@ -2247,7 +2247,7 @@ class ProtoGetBlockByHashRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoGetBlockByHashRequest copyWith(void Function(ProtoGetBlockByHashRequest) updates) => super.copyWith((message) => updates(message as ProtoGetBlockByHashRequest)); // ignore: deprecated_member_use
+  ProtoGetBlockByHashRequest copyWith(void Function(ProtoGetBlockByHashRequest) updates) => super.copyWith((message) => updates(message as ProtoGetBlockByHashRequest)) as ProtoGetBlockByHashRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoGetBlockByHashRequest create() => ProtoGetBlockByHashRequest._();
@@ -2255,7 +2255,7 @@ class ProtoGetBlockByHashRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoGetBlockByHashRequest> createRepeated() => $pb.PbList<ProtoGetBlockByHashRequest>();
   @$core.pragma('dart2js:noInline')
   static ProtoGetBlockByHashRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoGetBlockByHashRequest>(create);
-  static ProtoGetBlockByHashRequest _defaultInstance;
+  static ProtoGetBlockByHashRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get hash => $_getN(0);
@@ -2277,9 +2277,9 @@ class ProtoGetBlocksRangeRequest extends $pb.GeneratedMessage {
 
   ProtoGetBlocksRangeRequest._() : super();
   factory ProtoGetBlocksRangeRequest({
-    $core.int batchId,
-    $fixnum.Int64 from,
-    $fixnum.Int64 to,
+    $core.int? batchId,
+    $fixnum.Int64? from,
+    $fixnum.Int64? to,
   }) {
     final _result = create();
     if (batchId != null) {
@@ -2304,7 +2304,7 @@ class ProtoGetBlocksRangeRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoGetBlocksRangeRequest copyWith(void Function(ProtoGetBlocksRangeRequest) updates) => super.copyWith((message) => updates(message as ProtoGetBlocksRangeRequest)); // ignore: deprecated_member_use
+  ProtoGetBlocksRangeRequest copyWith(void Function(ProtoGetBlocksRangeRequest) updates) => super.copyWith((message) => updates(message as ProtoGetBlocksRangeRequest)) as ProtoGetBlocksRangeRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoGetBlocksRangeRequest create() => ProtoGetBlocksRangeRequest._();
@@ -2312,7 +2312,7 @@ class ProtoGetBlocksRangeRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoGetBlocksRangeRequest> createRepeated() => $pb.PbList<ProtoGetBlocksRangeRequest>();
   @$core.pragma('dart2js:noInline')
   static ProtoGetBlocksRangeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoGetBlocksRangeRequest>(create);
-  static ProtoGetBlocksRangeRequest _defaultInstance;
+  static ProtoGetBlocksRangeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get batchId => $_getIZ(0);
@@ -2351,8 +2351,8 @@ class ProtoGetForkBlockRangeRequest extends $pb.GeneratedMessage {
 
   ProtoGetForkBlockRangeRequest._() : super();
   factory ProtoGetForkBlockRangeRequest({
-    $core.int batchId,
-    $core.Iterable<$core.List<$core.int>> blocks,
+    $core.int? batchId,
+    $core.Iterable<$core.List<$core.int>>? blocks,
   }) {
     final _result = create();
     if (batchId != null) {
@@ -2374,7 +2374,7 @@ class ProtoGetForkBlockRangeRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoGetForkBlockRangeRequest copyWith(void Function(ProtoGetForkBlockRangeRequest) updates) => super.copyWith((message) => updates(message as ProtoGetForkBlockRangeRequest)); // ignore: deprecated_member_use
+  ProtoGetForkBlockRangeRequest copyWith(void Function(ProtoGetForkBlockRangeRequest) updates) => super.copyWith((message) => updates(message as ProtoGetForkBlockRangeRequest)) as ProtoGetForkBlockRangeRequest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoGetForkBlockRangeRequest create() => ProtoGetForkBlockRangeRequest._();
@@ -2382,7 +2382,7 @@ class ProtoGetForkBlockRangeRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoGetForkBlockRangeRequest> createRepeated() => $pb.PbList<ProtoGetForkBlockRangeRequest>();
   @$core.pragma('dart2js:noInline')
   static ProtoGetForkBlockRangeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoGetForkBlockRangeRequest>(create);
-  static ProtoGetForkBlockRangeRequest _defaultInstance;
+  static ProtoGetForkBlockRangeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get batchId => $_getIZ(0);
@@ -2407,9 +2407,9 @@ class ProtoFlip extends $pb.GeneratedMessage {
 
   ProtoFlip._() : super();
   factory ProtoFlip({
-    ProtoTransaction transaction,
-    $core.List<$core.int> publicPart,
-    $core.List<$core.int> privatePart,
+    ProtoTransaction? transaction,
+    $core.List<$core.int>? publicPart,
+    $core.List<$core.int>? privatePart,
   }) {
     final _result = create();
     if (transaction != null) {
@@ -2434,7 +2434,7 @@ class ProtoFlip extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoFlip copyWith(void Function(ProtoFlip) updates) => super.copyWith((message) => updates(message as ProtoFlip)); // ignore: deprecated_member_use
+  ProtoFlip copyWith(void Function(ProtoFlip) updates) => super.copyWith((message) => updates(message as ProtoFlip)) as ProtoFlip; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoFlip create() => ProtoFlip._();
@@ -2442,7 +2442,7 @@ class ProtoFlip extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoFlip> createRepeated() => $pb.PbList<ProtoFlip>();
   @$core.pragma('dart2js:noInline')
   static ProtoFlip getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoFlip>(create);
-  static ProtoFlip _defaultInstance;
+  static ProtoFlip? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoTransaction get transaction => $_getN(0);
@@ -2483,8 +2483,8 @@ class ProtoFlipKey_Data extends $pb.GeneratedMessage {
 
   ProtoFlipKey_Data._() : super();
   factory ProtoFlipKey_Data({
-    $core.List<$core.int> key,
-    $core.int epoch,
+    $core.List<$core.int>? key,
+    $core.int? epoch,
   }) {
     final _result = create();
     if (key != null) {
@@ -2506,7 +2506,7 @@ class ProtoFlipKey_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoFlipKey_Data copyWith(void Function(ProtoFlipKey_Data) updates) => super.copyWith((message) => updates(message as ProtoFlipKey_Data)); // ignore: deprecated_member_use
+  ProtoFlipKey_Data copyWith(void Function(ProtoFlipKey_Data) updates) => super.copyWith((message) => updates(message as ProtoFlipKey_Data)) as ProtoFlipKey_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoFlipKey_Data create() => ProtoFlipKey_Data._();
@@ -2514,7 +2514,7 @@ class ProtoFlipKey_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoFlipKey_Data> createRepeated() => $pb.PbList<ProtoFlipKey_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoFlipKey_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoFlipKey_Data>(create);
-  static ProtoFlipKey_Data _defaultInstance;
+  static ProtoFlipKey_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get key => $_getN(0);
@@ -2544,8 +2544,8 @@ class ProtoFlipKey extends $pb.GeneratedMessage {
 
   ProtoFlipKey._() : super();
   factory ProtoFlipKey({
-    ProtoFlipKey_Data data,
-    $core.List<$core.int> signature,
+    ProtoFlipKey_Data? data,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (data != null) {
@@ -2567,7 +2567,7 @@ class ProtoFlipKey extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoFlipKey copyWith(void Function(ProtoFlipKey) updates) => super.copyWith((message) => updates(message as ProtoFlipKey)); // ignore: deprecated_member_use
+  ProtoFlipKey copyWith(void Function(ProtoFlipKey) updates) => super.copyWith((message) => updates(message as ProtoFlipKey)) as ProtoFlipKey; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoFlipKey create() => ProtoFlipKey._();
@@ -2575,7 +2575,7 @@ class ProtoFlipKey extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoFlipKey> createRepeated() => $pb.PbList<ProtoFlipKey>();
   @$core.pragma('dart2js:noInline')
   static ProtoFlipKey getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoFlipKey>(create);
-  static ProtoFlipKey _defaultInstance;
+  static ProtoFlipKey? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoFlipKey_Data get data => $_getN(0);
@@ -2608,9 +2608,9 @@ class ProtoManifest extends $pb.GeneratedMessage {
 
   ProtoManifest._() : super();
   factory ProtoManifest({
-    $core.List<$core.int> cid,
-    $fixnum.Int64 height,
-    $core.List<$core.int> root,
+    $core.List<$core.int>? cid,
+    $fixnum.Int64? height,
+    $core.List<$core.int>? root,
   }) {
     final _result = create();
     if (cid != null) {
@@ -2635,7 +2635,7 @@ class ProtoManifest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoManifest copyWith(void Function(ProtoManifest) updates) => super.copyWith((message) => updates(message as ProtoManifest)); // ignore: deprecated_member_use
+  ProtoManifest copyWith(void Function(ProtoManifest) updates) => super.copyWith((message) => updates(message as ProtoManifest)) as ProtoManifest; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoManifest create() => ProtoManifest._();
@@ -2643,7 +2643,7 @@ class ProtoManifest extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoManifest> createRepeated() => $pb.PbList<ProtoManifest>();
   @$core.pragma('dart2js:noInline')
   static ProtoManifest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoManifest>(create);
-  static ProtoManifest _defaultInstance;
+  static ProtoManifest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -2682,8 +2682,8 @@ class ProtoPrivateFlipKeysPackage_Data extends $pb.GeneratedMessage {
 
   ProtoPrivateFlipKeysPackage_Data._() : super();
   factory ProtoPrivateFlipKeysPackage_Data({
-    $core.List<$core.int> package,
-    $core.int epoch,
+    $core.List<$core.int>? package,
+    $core.int? epoch,
   }) {
     final _result = create();
     if (package != null) {
@@ -2705,7 +2705,7 @@ class ProtoPrivateFlipKeysPackage_Data extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPrivateFlipKeysPackage_Data copyWith(void Function(ProtoPrivateFlipKeysPackage_Data) updates) => super.copyWith((message) => updates(message as ProtoPrivateFlipKeysPackage_Data)); // ignore: deprecated_member_use
+  ProtoPrivateFlipKeysPackage_Data copyWith(void Function(ProtoPrivateFlipKeysPackage_Data) updates) => super.copyWith((message) => updates(message as ProtoPrivateFlipKeysPackage_Data)) as ProtoPrivateFlipKeysPackage_Data; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPrivateFlipKeysPackage_Data create() => ProtoPrivateFlipKeysPackage_Data._();
@@ -2713,7 +2713,7 @@ class ProtoPrivateFlipKeysPackage_Data extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPrivateFlipKeysPackage_Data> createRepeated() => $pb.PbList<ProtoPrivateFlipKeysPackage_Data>();
   @$core.pragma('dart2js:noInline')
   static ProtoPrivateFlipKeysPackage_Data getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPrivateFlipKeysPackage_Data>(create);
-  static ProtoPrivateFlipKeysPackage_Data _defaultInstance;
+  static ProtoPrivateFlipKeysPackage_Data? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get package => $_getN(0);
@@ -2743,8 +2743,8 @@ class ProtoPrivateFlipKeysPackage extends $pb.GeneratedMessage {
 
   ProtoPrivateFlipKeysPackage._() : super();
   factory ProtoPrivateFlipKeysPackage({
-    ProtoPrivateFlipKeysPackage_Data data,
-    $core.List<$core.int> signature,
+    ProtoPrivateFlipKeysPackage_Data? data,
+    $core.List<$core.int>? signature,
   }) {
     final _result = create();
     if (data != null) {
@@ -2766,7 +2766,7 @@ class ProtoPrivateFlipKeysPackage extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPrivateFlipKeysPackage copyWith(void Function(ProtoPrivateFlipKeysPackage) updates) => super.copyWith((message) => updates(message as ProtoPrivateFlipKeysPackage)); // ignore: deprecated_member_use
+  ProtoPrivateFlipKeysPackage copyWith(void Function(ProtoPrivateFlipKeysPackage) updates) => super.copyWith((message) => updates(message as ProtoPrivateFlipKeysPackage)) as ProtoPrivateFlipKeysPackage; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPrivateFlipKeysPackage create() => ProtoPrivateFlipKeysPackage._();
@@ -2774,7 +2774,7 @@ class ProtoPrivateFlipKeysPackage extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPrivateFlipKeysPackage> createRepeated() => $pb.PbList<ProtoPrivateFlipKeysPackage>();
   @$core.pragma('dart2js:noInline')
   static ProtoPrivateFlipKeysPackage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPrivateFlipKeysPackage>(create);
-  static ProtoPrivateFlipKeysPackage _defaultInstance;
+  static ProtoPrivateFlipKeysPackage? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoPrivateFlipKeysPackage_Data get data => $_getN(0);
@@ -2806,8 +2806,8 @@ class ProtoPullPushHash extends $pb.GeneratedMessage {
 
   ProtoPullPushHash._() : super();
   factory ProtoPullPushHash({
-    $core.int type,
-    $core.List<$core.int> hash,
+    $core.int? type,
+    $core.List<$core.int>? hash,
   }) {
     final _result = create();
     if (type != null) {
@@ -2829,7 +2829,7 @@ class ProtoPullPushHash extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPullPushHash copyWith(void Function(ProtoPullPushHash) updates) => super.copyWith((message) => updates(message as ProtoPullPushHash)); // ignore: deprecated_member_use
+  ProtoPullPushHash copyWith(void Function(ProtoPullPushHash) updates) => super.copyWith((message) => updates(message as ProtoPullPushHash)) as ProtoPullPushHash; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPullPushHash create() => ProtoPullPushHash._();
@@ -2837,7 +2837,7 @@ class ProtoPullPushHash extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPullPushHash> createRepeated() => $pb.PbList<ProtoPullPushHash>();
   @$core.pragma('dart2js:noInline')
   static ProtoPullPushHash getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPullPushHash>(create);
-  static ProtoPullPushHash _defaultInstance;
+  static ProtoPullPushHash? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get type => $_getIZ(0);
@@ -2869,10 +2869,10 @@ class ProtoSnapshotManifestDb extends $pb.GeneratedMessage {
 
   ProtoSnapshotManifestDb._() : super();
   factory ProtoSnapshotManifestDb({
-    $core.List<$core.int> cid,
-    $fixnum.Int64 height,
-    $core.String fileName,
-    $core.List<$core.int> root,
+    $core.List<$core.int>? cid,
+    $fixnum.Int64? height,
+    $core.String? fileName,
+    $core.List<$core.int>? root,
   }) {
     final _result = create();
     if (cid != null) {
@@ -2900,7 +2900,7 @@ class ProtoSnapshotManifestDb extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoSnapshotManifestDb copyWith(void Function(ProtoSnapshotManifestDb) updates) => super.copyWith((message) => updates(message as ProtoSnapshotManifestDb)); // ignore: deprecated_member_use
+  ProtoSnapshotManifestDb copyWith(void Function(ProtoSnapshotManifestDb) updates) => super.copyWith((message) => updates(message as ProtoSnapshotManifestDb)) as ProtoSnapshotManifestDb; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotManifestDb create() => ProtoSnapshotManifestDb._();
@@ -2908,7 +2908,7 @@ class ProtoSnapshotManifestDb extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoSnapshotManifestDb> createRepeated() => $pb.PbList<ProtoSnapshotManifestDb>();
   @$core.pragma('dart2js:noInline')
   static ProtoSnapshotManifestDb getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoSnapshotManifestDb>(create);
-  static ProtoSnapshotManifestDb _defaultInstance;
+  static ProtoSnapshotManifestDb? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -2956,8 +2956,8 @@ class ProtoShortAnswerDb extends $pb.GeneratedMessage {
 
   ProtoShortAnswerDb._() : super();
   factory ProtoShortAnswerDb({
-    $core.List<$core.int> hash,
-    $fixnum.Int64 timestamp,
+    $core.List<$core.int>? hash,
+    $fixnum.Int64? timestamp,
   }) {
     final _result = create();
     if (hash != null) {
@@ -2979,7 +2979,7 @@ class ProtoShortAnswerDb extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoShortAnswerDb copyWith(void Function(ProtoShortAnswerDb) updates) => super.copyWith((message) => updates(message as ProtoShortAnswerDb)); // ignore: deprecated_member_use
+  ProtoShortAnswerDb copyWith(void Function(ProtoShortAnswerDb) updates) => super.copyWith((message) => updates(message as ProtoShortAnswerDb)) as ProtoShortAnswerDb; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoShortAnswerDb create() => ProtoShortAnswerDb._();
@@ -2987,7 +2987,7 @@ class ProtoShortAnswerDb extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoShortAnswerDb> createRepeated() => $pb.PbList<ProtoShortAnswerDb>();
   @$core.pragma('dart2js:noInline')
   static ProtoShortAnswerDb getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoShortAnswerDb>(create);
-  static ProtoShortAnswerDb _defaultInstance;
+  static ProtoShortAnswerDb? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get hash => $_getN(0);
@@ -3017,8 +3017,8 @@ class ProtoAnswersDb_Answer extends $pb.GeneratedMessage {
 
   ProtoAnswersDb_Answer._() : super();
   factory ProtoAnswersDb_Answer({
-    $core.List<$core.int> address,
-    $core.List<$core.int> answers,
+    $core.List<$core.int>? address,
+    $core.List<$core.int>? answers,
   }) {
     final _result = create();
     if (address != null) {
@@ -3040,7 +3040,7 @@ class ProtoAnswersDb_Answer extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoAnswersDb_Answer copyWith(void Function(ProtoAnswersDb_Answer) updates) => super.copyWith((message) => updates(message as ProtoAnswersDb_Answer)); // ignore: deprecated_member_use
+  ProtoAnswersDb_Answer copyWith(void Function(ProtoAnswersDb_Answer) updates) => super.copyWith((message) => updates(message as ProtoAnswersDb_Answer)) as ProtoAnswersDb_Answer; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoAnswersDb_Answer create() => ProtoAnswersDb_Answer._();
@@ -3048,7 +3048,7 @@ class ProtoAnswersDb_Answer extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoAnswersDb_Answer> createRepeated() => $pb.PbList<ProtoAnswersDb_Answer>();
   @$core.pragma('dart2js:noInline')
   static ProtoAnswersDb_Answer getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoAnswersDb_Answer>(create);
-  static ProtoAnswersDb_Answer _defaultInstance;
+  static ProtoAnswersDb_Answer? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -3077,7 +3077,7 @@ class ProtoAnswersDb extends $pb.GeneratedMessage {
 
   ProtoAnswersDb._() : super();
   factory ProtoAnswersDb({
-    $core.Iterable<ProtoAnswersDb_Answer> answers,
+    $core.Iterable<ProtoAnswersDb_Answer>? answers,
   }) {
     final _result = create();
     if (answers != null) {
@@ -3096,7 +3096,7 @@ class ProtoAnswersDb extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoAnswersDb copyWith(void Function(ProtoAnswersDb) updates) => super.copyWith((message) => updates(message as ProtoAnswersDb)); // ignore: deprecated_member_use
+  ProtoAnswersDb copyWith(void Function(ProtoAnswersDb) updates) => super.copyWith((message) => updates(message as ProtoAnswersDb)) as ProtoAnswersDb; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoAnswersDb create() => ProtoAnswersDb._();
@@ -3104,7 +3104,7 @@ class ProtoAnswersDb extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoAnswersDb> createRepeated() => $pb.PbList<ProtoAnswersDb>();
   @$core.pragma('dart2js:noInline')
   static ProtoAnswersDb getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoAnswersDb>(create);
-  static ProtoAnswersDb _defaultInstance;
+  static ProtoAnswersDb? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoAnswersDb_Answer> get answers => $_getList(0);
@@ -3120,9 +3120,9 @@ class ProtoBurntCoins extends $pb.GeneratedMessage {
 
   ProtoBurntCoins._() : super();
   factory ProtoBurntCoins({
-    $core.List<$core.int> address,
-    $core.String key,
-    $core.List<$core.int> amount,
+    $core.List<$core.int>? address,
+    $core.String? key,
+    $core.List<$core.int>? amount,
   }) {
     final _result = create();
     if (address != null) {
@@ -3147,7 +3147,7 @@ class ProtoBurntCoins extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBurntCoins copyWith(void Function(ProtoBurntCoins) updates) => super.copyWith((message) => updates(message as ProtoBurntCoins)); // ignore: deprecated_member_use
+  ProtoBurntCoins copyWith(void Function(ProtoBurntCoins) updates) => super.copyWith((message) => updates(message as ProtoBurntCoins)) as ProtoBurntCoins; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBurntCoins create() => ProtoBurntCoins._();
@@ -3155,7 +3155,7 @@ class ProtoBurntCoins extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBurntCoins> createRepeated() => $pb.PbList<ProtoBurntCoins>();
   @$core.pragma('dart2js:noInline')
   static ProtoBurntCoins getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBurntCoins>(create);
-  static ProtoBurntCoins _defaultInstance;
+  static ProtoBurntCoins? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -3196,10 +3196,10 @@ class ProtoSavedTransaction extends $pb.GeneratedMessage {
 
   ProtoSavedTransaction._() : super();
   factory ProtoSavedTransaction({
-    ProtoTransaction tx,
-    $core.List<$core.int> feePerGas,
-    $core.List<$core.int> blockHash,
-    $fixnum.Int64 timestamp,
+    ProtoTransaction? tx,
+    $core.List<$core.int>? feePerGas,
+    $core.List<$core.int>? blockHash,
+    $fixnum.Int64? timestamp,
   }) {
     final _result = create();
     if (tx != null) {
@@ -3227,7 +3227,7 @@ class ProtoSavedTransaction extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoSavedTransaction copyWith(void Function(ProtoSavedTransaction) updates) => super.copyWith((message) => updates(message as ProtoSavedTransaction)); // ignore: deprecated_member_use
+  ProtoSavedTransaction copyWith(void Function(ProtoSavedTransaction) updates) => super.copyWith((message) => updates(message as ProtoSavedTransaction)) as ProtoSavedTransaction; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoSavedTransaction create() => ProtoSavedTransaction._();
@@ -3235,7 +3235,7 @@ class ProtoSavedTransaction extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoSavedTransaction> createRepeated() => $pb.PbList<ProtoSavedTransaction>();
   @$core.pragma('dart2js:noInline')
   static ProtoSavedTransaction getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoSavedTransaction>(create);
-  static ProtoSavedTransaction _defaultInstance;
+  static ProtoSavedTransaction? _defaultInstance;
 
   @$pb.TagNumber(1)
   ProtoTransaction get tx => $_getN(0);
@@ -3285,8 +3285,8 @@ class ProtoActivityMonitor_Activity extends $pb.GeneratedMessage {
 
   ProtoActivityMonitor_Activity._() : super();
   factory ProtoActivityMonitor_Activity({
-    $core.List<$core.int> address,
-    $fixnum.Int64 timestamp,
+    $core.List<$core.int>? address,
+    $fixnum.Int64? timestamp,
   }) {
     final _result = create();
     if (address != null) {
@@ -3308,7 +3308,7 @@ class ProtoActivityMonitor_Activity extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoActivityMonitor_Activity copyWith(void Function(ProtoActivityMonitor_Activity) updates) => super.copyWith((message) => updates(message as ProtoActivityMonitor_Activity)); // ignore: deprecated_member_use
+  ProtoActivityMonitor_Activity copyWith(void Function(ProtoActivityMonitor_Activity) updates) => super.copyWith((message) => updates(message as ProtoActivityMonitor_Activity)) as ProtoActivityMonitor_Activity; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoActivityMonitor_Activity create() => ProtoActivityMonitor_Activity._();
@@ -3316,7 +3316,7 @@ class ProtoActivityMonitor_Activity extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoActivityMonitor_Activity> createRepeated() => $pb.PbList<ProtoActivityMonitor_Activity>();
   @$core.pragma('dart2js:noInline')
   static ProtoActivityMonitor_Activity getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoActivityMonitor_Activity>(create);
-  static ProtoActivityMonitor_Activity _defaultInstance;
+  static ProtoActivityMonitor_Activity? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -3346,8 +3346,8 @@ class ProtoActivityMonitor extends $pb.GeneratedMessage {
 
   ProtoActivityMonitor._() : super();
   factory ProtoActivityMonitor({
-    $fixnum.Int64 timestamp,
-    $core.Iterable<ProtoActivityMonitor_Activity> activities,
+    $fixnum.Int64? timestamp,
+    $core.Iterable<ProtoActivityMonitor_Activity>? activities,
   }) {
     final _result = create();
     if (timestamp != null) {
@@ -3369,7 +3369,7 @@ class ProtoActivityMonitor extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoActivityMonitor copyWith(void Function(ProtoActivityMonitor) updates) => super.copyWith((message) => updates(message as ProtoActivityMonitor)); // ignore: deprecated_member_use
+  ProtoActivityMonitor copyWith(void Function(ProtoActivityMonitor) updates) => super.copyWith((message) => updates(message as ProtoActivityMonitor)) as ProtoActivityMonitor; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoActivityMonitor create() => ProtoActivityMonitor._();
@@ -3377,7 +3377,7 @@ class ProtoActivityMonitor extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoActivityMonitor> createRepeated() => $pb.PbList<ProtoActivityMonitor>();
   @$core.pragma('dart2js:noInline')
   static ProtoActivityMonitor getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoActivityMonitor>(create);
-  static ProtoActivityMonitor _defaultInstance;
+  static ProtoActivityMonitor? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get timestamp => $_getI64(0);
@@ -3401,8 +3401,8 @@ class ProtoShortAnswerAttachment extends $pb.GeneratedMessage {
 
   ProtoShortAnswerAttachment._() : super();
   factory ProtoShortAnswerAttachment({
-    $core.List<$core.int> answers,
-    $fixnum.Int64 rnd,
+    $core.List<$core.int>? answers,
+    $fixnum.Int64? rnd,
   }) {
     final _result = create();
     if (answers != null) {
@@ -3424,7 +3424,7 @@ class ProtoShortAnswerAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoShortAnswerAttachment copyWith(void Function(ProtoShortAnswerAttachment) updates) => super.copyWith((message) => updates(message as ProtoShortAnswerAttachment)); // ignore: deprecated_member_use
+  ProtoShortAnswerAttachment copyWith(void Function(ProtoShortAnswerAttachment) updates) => super.copyWith((message) => updates(message as ProtoShortAnswerAttachment)) as ProtoShortAnswerAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoShortAnswerAttachment create() => ProtoShortAnswerAttachment._();
@@ -3432,7 +3432,7 @@ class ProtoShortAnswerAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoShortAnswerAttachment> createRepeated() => $pb.PbList<ProtoShortAnswerAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoShortAnswerAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoShortAnswerAttachment>(create);
-  static ProtoShortAnswerAttachment _defaultInstance;
+  static ProtoShortAnswerAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get answers => $_getN(0);
@@ -3464,10 +3464,10 @@ class ProtoLongAnswerAttachment extends $pb.GeneratedMessage {
 
   ProtoLongAnswerAttachment._() : super();
   factory ProtoLongAnswerAttachment({
-    $core.List<$core.int> answers,
-    $core.List<$core.int> proof,
-    $core.List<$core.int> key,
-    $core.List<$core.int> salt,
+    $core.List<$core.int>? answers,
+    $core.List<$core.int>? proof,
+    $core.List<$core.int>? key,
+    $core.List<$core.int>? salt,
   }) {
     final _result = create();
     if (answers != null) {
@@ -3495,7 +3495,7 @@ class ProtoLongAnswerAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoLongAnswerAttachment copyWith(void Function(ProtoLongAnswerAttachment) updates) => super.copyWith((message) => updates(message as ProtoLongAnswerAttachment)); // ignore: deprecated_member_use
+  ProtoLongAnswerAttachment copyWith(void Function(ProtoLongAnswerAttachment) updates) => super.copyWith((message) => updates(message as ProtoLongAnswerAttachment)) as ProtoLongAnswerAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoLongAnswerAttachment create() => ProtoLongAnswerAttachment._();
@@ -3503,7 +3503,7 @@ class ProtoLongAnswerAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoLongAnswerAttachment> createRepeated() => $pb.PbList<ProtoLongAnswerAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoLongAnswerAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoLongAnswerAttachment>(create);
-  static ProtoLongAnswerAttachment _defaultInstance;
+  static ProtoLongAnswerAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get answers => $_getN(0);
@@ -3551,8 +3551,8 @@ class ProtoFlipSubmitAttachment extends $pb.GeneratedMessage {
 
   ProtoFlipSubmitAttachment._() : super();
   factory ProtoFlipSubmitAttachment({
-    $core.List<$core.int> cid,
-    $core.int pair,
+    $core.List<$core.int>? cid,
+    $core.int? pair,
   }) {
     final _result = create();
     if (cid != null) {
@@ -3574,7 +3574,7 @@ class ProtoFlipSubmitAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoFlipSubmitAttachment copyWith(void Function(ProtoFlipSubmitAttachment) updates) => super.copyWith((message) => updates(message as ProtoFlipSubmitAttachment)); // ignore: deprecated_member_use
+  ProtoFlipSubmitAttachment copyWith(void Function(ProtoFlipSubmitAttachment) updates) => super.copyWith((message) => updates(message as ProtoFlipSubmitAttachment)) as ProtoFlipSubmitAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoFlipSubmitAttachment create() => ProtoFlipSubmitAttachment._();
@@ -3582,7 +3582,7 @@ class ProtoFlipSubmitAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoFlipSubmitAttachment> createRepeated() => $pb.PbList<ProtoFlipSubmitAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoFlipSubmitAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoFlipSubmitAttachment>(create);
-  static ProtoFlipSubmitAttachment _defaultInstance;
+  static ProtoFlipSubmitAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -3611,7 +3611,7 @@ class ProtoOnlineStatusAttachment extends $pb.GeneratedMessage {
 
   ProtoOnlineStatusAttachment._() : super();
   factory ProtoOnlineStatusAttachment({
-    $core.bool online,
+    $core.bool? online,
   }) {
     final _result = create();
     if (online != null) {
@@ -3630,7 +3630,7 @@ class ProtoOnlineStatusAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoOnlineStatusAttachment copyWith(void Function(ProtoOnlineStatusAttachment) updates) => super.copyWith((message) => updates(message as ProtoOnlineStatusAttachment)); // ignore: deprecated_member_use
+  ProtoOnlineStatusAttachment copyWith(void Function(ProtoOnlineStatusAttachment) updates) => super.copyWith((message) => updates(message as ProtoOnlineStatusAttachment)) as ProtoOnlineStatusAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoOnlineStatusAttachment create() => ProtoOnlineStatusAttachment._();
@@ -3638,7 +3638,7 @@ class ProtoOnlineStatusAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoOnlineStatusAttachment> createRepeated() => $pb.PbList<ProtoOnlineStatusAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoOnlineStatusAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoOnlineStatusAttachment>(create);
-  static ProtoOnlineStatusAttachment _defaultInstance;
+  static ProtoOnlineStatusAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get online => $_getBF(0);
@@ -3658,7 +3658,7 @@ class ProtoBurnAttachment extends $pb.GeneratedMessage {
 
   ProtoBurnAttachment._() : super();
   factory ProtoBurnAttachment({
-    $core.String key,
+    $core.String? key,
   }) {
     final _result = create();
     if (key != null) {
@@ -3677,7 +3677,7 @@ class ProtoBurnAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoBurnAttachment copyWith(void Function(ProtoBurnAttachment) updates) => super.copyWith((message) => updates(message as ProtoBurnAttachment)); // ignore: deprecated_member_use
+  ProtoBurnAttachment copyWith(void Function(ProtoBurnAttachment) updates) => super.copyWith((message) => updates(message as ProtoBurnAttachment)) as ProtoBurnAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoBurnAttachment create() => ProtoBurnAttachment._();
@@ -3685,7 +3685,7 @@ class ProtoBurnAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoBurnAttachment> createRepeated() => $pb.PbList<ProtoBurnAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoBurnAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoBurnAttachment>(create);
-  static ProtoBurnAttachment _defaultInstance;
+  static ProtoBurnAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
@@ -3705,7 +3705,7 @@ class ProtoChangeProfileAttachment extends $pb.GeneratedMessage {
 
   ProtoChangeProfileAttachment._() : super();
   factory ProtoChangeProfileAttachment({
-    $core.List<$core.int> hash,
+    $core.List<$core.int>? hash,
   }) {
     final _result = create();
     if (hash != null) {
@@ -3724,7 +3724,7 @@ class ProtoChangeProfileAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoChangeProfileAttachment copyWith(void Function(ProtoChangeProfileAttachment) updates) => super.copyWith((message) => updates(message as ProtoChangeProfileAttachment)); // ignore: deprecated_member_use
+  ProtoChangeProfileAttachment copyWith(void Function(ProtoChangeProfileAttachment) updates) => super.copyWith((message) => updates(message as ProtoChangeProfileAttachment)) as ProtoChangeProfileAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoChangeProfileAttachment create() => ProtoChangeProfileAttachment._();
@@ -3732,7 +3732,7 @@ class ProtoChangeProfileAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoChangeProfileAttachment> createRepeated() => $pb.PbList<ProtoChangeProfileAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoChangeProfileAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoChangeProfileAttachment>(create);
-  static ProtoChangeProfileAttachment _defaultInstance;
+  static ProtoChangeProfileAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get hash => $_getN(0);
@@ -3752,7 +3752,7 @@ class ProtoDeleteFlipAttachment extends $pb.GeneratedMessage {
 
   ProtoDeleteFlipAttachment._() : super();
   factory ProtoDeleteFlipAttachment({
-    $core.List<$core.int> cid,
+    $core.List<$core.int>? cid,
   }) {
     final _result = create();
     if (cid != null) {
@@ -3771,7 +3771,7 @@ class ProtoDeleteFlipAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoDeleteFlipAttachment copyWith(void Function(ProtoDeleteFlipAttachment) updates) => super.copyWith((message) => updates(message as ProtoDeleteFlipAttachment)); // ignore: deprecated_member_use
+  ProtoDeleteFlipAttachment copyWith(void Function(ProtoDeleteFlipAttachment) updates) => super.copyWith((message) => updates(message as ProtoDeleteFlipAttachment)) as ProtoDeleteFlipAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoDeleteFlipAttachment create() => ProtoDeleteFlipAttachment._();
@@ -3779,7 +3779,7 @@ class ProtoDeleteFlipAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoDeleteFlipAttachment> createRepeated() => $pb.PbList<ProtoDeleteFlipAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoDeleteFlipAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoDeleteFlipAttachment>(create);
-  static ProtoDeleteFlipAttachment _defaultInstance;
+  static ProtoDeleteFlipAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -3800,8 +3800,8 @@ class ProtoStateAccount_ProtoContractData extends $pb.GeneratedMessage {
 
   ProtoStateAccount_ProtoContractData._() : super();
   factory ProtoStateAccount_ProtoContractData({
-    $core.List<$core.int> codeHash,
-    $core.List<$core.int> stake,
+    $core.List<$core.int>? codeHash,
+    $core.List<$core.int>? stake,
   }) {
     final _result = create();
     if (codeHash != null) {
@@ -3823,7 +3823,7 @@ class ProtoStateAccount_ProtoContractData extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateAccount_ProtoContractData copyWith(void Function(ProtoStateAccount_ProtoContractData) updates) => super.copyWith((message) => updates(message as ProtoStateAccount_ProtoContractData)); // ignore: deprecated_member_use
+  ProtoStateAccount_ProtoContractData copyWith(void Function(ProtoStateAccount_ProtoContractData) updates) => super.copyWith((message) => updates(message as ProtoStateAccount_ProtoContractData)) as ProtoStateAccount_ProtoContractData; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateAccount_ProtoContractData create() => ProtoStateAccount_ProtoContractData._();
@@ -3831,7 +3831,7 @@ class ProtoStateAccount_ProtoContractData extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateAccount_ProtoContractData> createRepeated() => $pb.PbList<ProtoStateAccount_ProtoContractData>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateAccount_ProtoContractData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateAccount_ProtoContractData>(create);
-  static ProtoStateAccount_ProtoContractData _defaultInstance;
+  static ProtoStateAccount_ProtoContractData? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get codeHash => $_getN(0);
@@ -3863,10 +3863,10 @@ class ProtoStateAccount extends $pb.GeneratedMessage {
 
   ProtoStateAccount._() : super();
   factory ProtoStateAccount({
-    $core.int nonce,
-    $core.int epoch,
-    $core.List<$core.int> balance,
-    ProtoStateAccount_ProtoContractData contractData,
+    $core.int? nonce,
+    $core.int? epoch,
+    $core.List<$core.int>? balance,
+    ProtoStateAccount_ProtoContractData? contractData,
   }) {
     final _result = create();
     if (nonce != null) {
@@ -3894,7 +3894,7 @@ class ProtoStateAccount extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateAccount copyWith(void Function(ProtoStateAccount) updates) => super.copyWith((message) => updates(message as ProtoStateAccount)); // ignore: deprecated_member_use
+  ProtoStateAccount copyWith(void Function(ProtoStateAccount) updates) => super.copyWith((message) => updates(message as ProtoStateAccount)) as ProtoStateAccount; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateAccount create() => ProtoStateAccount._();
@@ -3902,7 +3902,7 @@ class ProtoStateAccount extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateAccount> createRepeated() => $pb.PbList<ProtoStateAccount>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateAccount getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateAccount>(create);
-  static ProtoStateAccount _defaultInstance;
+  static ProtoStateAccount? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get nonce => $_getIZ(0);
@@ -3952,8 +3952,8 @@ class ProtoStateIdentity_Flip extends $pb.GeneratedMessage {
 
   ProtoStateIdentity_Flip._() : super();
   factory ProtoStateIdentity_Flip({
-    $core.List<$core.int> cid,
-    $core.int pair,
+    $core.List<$core.int>? cid,
+    $core.int? pair,
   }) {
     final _result = create();
     if (cid != null) {
@@ -3975,7 +3975,7 @@ class ProtoStateIdentity_Flip extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateIdentity_Flip copyWith(void Function(ProtoStateIdentity_Flip) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity_Flip)); // ignore: deprecated_member_use
+  ProtoStateIdentity_Flip copyWith(void Function(ProtoStateIdentity_Flip) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity_Flip)) as ProtoStateIdentity_Flip; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity_Flip create() => ProtoStateIdentity_Flip._();
@@ -3983,7 +3983,7 @@ class ProtoStateIdentity_Flip extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateIdentity_Flip> createRepeated() => $pb.PbList<ProtoStateIdentity_Flip>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity_Flip getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateIdentity_Flip>(create);
-  static ProtoStateIdentity_Flip _defaultInstance;
+  static ProtoStateIdentity_Flip? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -4013,8 +4013,8 @@ class ProtoStateIdentity_TxAddr extends $pb.GeneratedMessage {
 
   ProtoStateIdentity_TxAddr._() : super();
   factory ProtoStateIdentity_TxAddr({
-    $core.List<$core.int> hash,
-    $core.List<$core.int> address,
+    $core.List<$core.int>? hash,
+    $core.List<$core.int>? address,
   }) {
     final _result = create();
     if (hash != null) {
@@ -4036,7 +4036,7 @@ class ProtoStateIdentity_TxAddr extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateIdentity_TxAddr copyWith(void Function(ProtoStateIdentity_TxAddr) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity_TxAddr)); // ignore: deprecated_member_use
+  ProtoStateIdentity_TxAddr copyWith(void Function(ProtoStateIdentity_TxAddr) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity_TxAddr)) as ProtoStateIdentity_TxAddr; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity_TxAddr create() => ProtoStateIdentity_TxAddr._();
@@ -4044,7 +4044,7 @@ class ProtoStateIdentity_TxAddr extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateIdentity_TxAddr> createRepeated() => $pb.PbList<ProtoStateIdentity_TxAddr>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity_TxAddr getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateIdentity_TxAddr>(create);
-  static ProtoStateIdentity_TxAddr _defaultInstance;
+  static ProtoStateIdentity_TxAddr? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get hash => $_getN(0);
@@ -4090,24 +4090,24 @@ class ProtoStateIdentity extends $pb.GeneratedMessage {
 
   ProtoStateIdentity._() : super();
   factory ProtoStateIdentity({
-    $core.List<$core.int> stake,
-    $core.int invites,
-    $core.int birthday,
-    $core.int state,
-    $core.int qualifiedFlips,
-    $core.int shortFlipPoints,
-    $core.List<$core.int> pubKey,
-    $core.int requiredFlips,
-    $core.Iterable<ProtoStateIdentity_Flip> flips,
-    $core.int generation,
-    $core.List<$core.int> code,
-    $core.Iterable<ProtoStateIdentity_TxAddr> invitees,
-    ProtoStateIdentity_TxAddr inviter,
-    $core.List<$core.int> penalty,
-    $core.int validationBits,
-    $core.int validationStatus,
-    $core.List<$core.int> profileHash,
-    $core.List<$core.int> scores,
+    $core.List<$core.int>? stake,
+    $core.int? invites,
+    $core.int? birthday,
+    $core.int? state,
+    $core.int? qualifiedFlips,
+    $core.int? shortFlipPoints,
+    $core.List<$core.int>? pubKey,
+    $core.int? requiredFlips,
+    $core.Iterable<ProtoStateIdentity_Flip>? flips,
+    $core.int? generation,
+    $core.List<$core.int>? code,
+    $core.Iterable<ProtoStateIdentity_TxAddr>? invitees,
+    ProtoStateIdentity_TxAddr? inviter,
+    $core.List<$core.int>? penalty,
+    $core.int? validationBits,
+    $core.int? validationStatus,
+    $core.List<$core.int>? profileHash,
+    $core.List<$core.int>? scores,
   }) {
     final _result = create();
     if (stake != null) {
@@ -4177,7 +4177,7 @@ class ProtoStateIdentity extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateIdentity copyWith(void Function(ProtoStateIdentity) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity)); // ignore: deprecated_member_use
+  ProtoStateIdentity copyWith(void Function(ProtoStateIdentity) updates) => super.copyWith((message) => updates(message as ProtoStateIdentity)) as ProtoStateIdentity; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity create() => ProtoStateIdentity._();
@@ -4185,7 +4185,7 @@ class ProtoStateIdentity extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateIdentity> createRepeated() => $pb.PbList<ProtoStateIdentity>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentity getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateIdentity>(create);
-  static ProtoStateIdentity _defaultInstance;
+  static ProtoStateIdentity? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get stake => $_getN(0);
@@ -4359,18 +4359,18 @@ class ProtoStateGlobal extends $pb.GeneratedMessage {
 
   ProtoStateGlobal._() : super();
   factory ProtoStateGlobal({
-    $core.int epoch,
-    $fixnum.Int64 nextValidationTime,
-    $core.int validationPeriod,
-    $core.List<$core.int> godAddress,
-    $core.List<$core.int> wordsSeed,
-    $fixnum.Int64 lastSnapshot,
-    $fixnum.Int64 epochBlock,
-    $core.List<$core.int> feePerGas,
-    $fixnum.Int64 vrfProposerThreshold,
-    $core.List<$core.int> emptyBlocksBits,
-    $core.int godAddressInvites,
-    $core.int blocksCntWithoutCeremonialTxs,
+    $core.int? epoch,
+    $fixnum.Int64? nextValidationTime,
+    $core.int? validationPeriod,
+    $core.List<$core.int>? godAddress,
+    $core.List<$core.int>? wordsSeed,
+    $fixnum.Int64? lastSnapshot,
+    $fixnum.Int64? epochBlock,
+    $core.List<$core.int>? feePerGas,
+    $fixnum.Int64? vrfProposerThreshold,
+    $core.List<$core.int>? emptyBlocksBits,
+    $core.int? godAddressInvites,
+    $core.int? blocksCntWithoutCeremonialTxs,
   }) {
     final _result = create();
     if (epoch != null) {
@@ -4422,7 +4422,7 @@ class ProtoStateGlobal extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateGlobal copyWith(void Function(ProtoStateGlobal) updates) => super.copyWith((message) => updates(message as ProtoStateGlobal)); // ignore: deprecated_member_use
+  ProtoStateGlobal copyWith(void Function(ProtoStateGlobal) updates) => super.copyWith((message) => updates(message as ProtoStateGlobal)) as ProtoStateGlobal; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateGlobal create() => ProtoStateGlobal._();
@@ -4430,7 +4430,7 @@ class ProtoStateGlobal extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateGlobal> createRepeated() => $pb.PbList<ProtoStateGlobal>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateGlobal getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateGlobal>(create);
-  static ProtoStateGlobal _defaultInstance;
+  static ProtoStateGlobal? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get epoch => $_getIZ(0);
@@ -4550,8 +4550,8 @@ class ProtoStateApprovedIdentity extends $pb.GeneratedMessage {
 
   ProtoStateApprovedIdentity._() : super();
   factory ProtoStateApprovedIdentity({
-    $core.bool approved,
-    $core.bool online,
+    $core.bool? approved,
+    $core.bool? online,
   }) {
     final _result = create();
     if (approved != null) {
@@ -4573,7 +4573,7 @@ class ProtoStateApprovedIdentity extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateApprovedIdentity copyWith(void Function(ProtoStateApprovedIdentity) updates) => super.copyWith((message) => updates(message as ProtoStateApprovedIdentity)); // ignore: deprecated_member_use
+  ProtoStateApprovedIdentity copyWith(void Function(ProtoStateApprovedIdentity) updates) => super.copyWith((message) => updates(message as ProtoStateApprovedIdentity)) as ProtoStateApprovedIdentity; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateApprovedIdentity create() => ProtoStateApprovedIdentity._();
@@ -4581,7 +4581,7 @@ class ProtoStateApprovedIdentity extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateApprovedIdentity> createRepeated() => $pb.PbList<ProtoStateApprovedIdentity>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateApprovedIdentity getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateApprovedIdentity>(create);
-  static ProtoStateApprovedIdentity _defaultInstance;
+  static ProtoStateApprovedIdentity? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get approved => $_getBF(0);
@@ -4610,7 +4610,7 @@ class ProtoStateIdentityStatusSwitch extends $pb.GeneratedMessage {
 
   ProtoStateIdentityStatusSwitch._() : super();
   factory ProtoStateIdentityStatusSwitch({
-    $core.Iterable<$core.List<$core.int>> addresses,
+    $core.Iterable<$core.List<$core.int>>? addresses,
   }) {
     final _result = create();
     if (addresses != null) {
@@ -4629,7 +4629,7 @@ class ProtoStateIdentityStatusSwitch extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoStateIdentityStatusSwitch copyWith(void Function(ProtoStateIdentityStatusSwitch) updates) => super.copyWith((message) => updates(message as ProtoStateIdentityStatusSwitch)); // ignore: deprecated_member_use
+  ProtoStateIdentityStatusSwitch copyWith(void Function(ProtoStateIdentityStatusSwitch) updates) => super.copyWith((message) => updates(message as ProtoStateIdentityStatusSwitch)) as ProtoStateIdentityStatusSwitch; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentityStatusSwitch create() => ProtoStateIdentityStatusSwitch._();
@@ -4637,7 +4637,7 @@ class ProtoStateIdentityStatusSwitch extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoStateIdentityStatusSwitch> createRepeated() => $pb.PbList<ProtoStateIdentityStatusSwitch>();
   @$core.pragma('dart2js:noInline')
   static ProtoStateIdentityStatusSwitch getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoStateIdentityStatusSwitch>(create);
-  static ProtoStateIdentityStatusSwitch _defaultInstance;
+  static ProtoStateIdentityStatusSwitch? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.List<$core.int>> get addresses => $_getList(0);
@@ -4662,18 +4662,18 @@ class ProtoPredefinedState_Global extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Global._() : super();
   factory ProtoPredefinedState_Global({
-    $core.int epoch,
-    $fixnum.Int64 nextValidationTime,
-    $core.int validationPeriod,
-    $core.List<$core.int> godAddress,
-    $core.List<$core.int> wordsSeed,
-    $fixnum.Int64 lastSnapshot,
-    $fixnum.Int64 epochBlock,
-    $core.List<$core.int> feePerGas,
-    $fixnum.Int64 vrfProposerThreshold,
-    $core.List<$core.int> emptyBlocksBits,
-    $core.int godAddressInvites,
-    $core.int blocksCntWithoutCeremonialTxs,
+    $core.int? epoch,
+    $fixnum.Int64? nextValidationTime,
+    $core.int? validationPeriod,
+    $core.List<$core.int>? godAddress,
+    $core.List<$core.int>? wordsSeed,
+    $fixnum.Int64? lastSnapshot,
+    $fixnum.Int64? epochBlock,
+    $core.List<$core.int>? feePerGas,
+    $fixnum.Int64? vrfProposerThreshold,
+    $core.List<$core.int>? emptyBlocksBits,
+    $core.int? godAddressInvites,
+    $core.int? blocksCntWithoutCeremonialTxs,
   }) {
     final _result = create();
     if (epoch != null) {
@@ -4725,7 +4725,7 @@ class ProtoPredefinedState_Global extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Global copyWith(void Function(ProtoPredefinedState_Global) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Global)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Global copyWith(void Function(ProtoPredefinedState_Global) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Global)) as ProtoPredefinedState_Global; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Global create() => ProtoPredefinedState_Global._();
@@ -4733,7 +4733,7 @@ class ProtoPredefinedState_Global extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Global> createRepeated() => $pb.PbList<ProtoPredefinedState_Global>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Global getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Global>(create);
-  static ProtoPredefinedState_Global _defaultInstance;
+  static ProtoPredefinedState_Global? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get epoch => $_getIZ(0);
@@ -4852,7 +4852,7 @@ class ProtoPredefinedState_StatusSwitch extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_StatusSwitch._() : super();
   factory ProtoPredefinedState_StatusSwitch({
-    $core.Iterable<$core.List<$core.int>> addresses,
+    $core.Iterable<$core.List<$core.int>>? addresses,
   }) {
     final _result = create();
     if (addresses != null) {
@@ -4871,7 +4871,7 @@ class ProtoPredefinedState_StatusSwitch extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_StatusSwitch copyWith(void Function(ProtoPredefinedState_StatusSwitch) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_StatusSwitch)); // ignore: deprecated_member_use
+  ProtoPredefinedState_StatusSwitch copyWith(void Function(ProtoPredefinedState_StatusSwitch) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_StatusSwitch)) as ProtoPredefinedState_StatusSwitch; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_StatusSwitch create() => ProtoPredefinedState_StatusSwitch._();
@@ -4879,7 +4879,7 @@ class ProtoPredefinedState_StatusSwitch extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_StatusSwitch> createRepeated() => $pb.PbList<ProtoPredefinedState_StatusSwitch>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_StatusSwitch getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_StatusSwitch>(create);
-  static ProtoPredefinedState_StatusSwitch _defaultInstance;
+  static ProtoPredefinedState_StatusSwitch? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.List<$core.int>> get addresses => $_getList(0);
@@ -4894,8 +4894,8 @@ class ProtoPredefinedState_Account_ContractData extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Account_ContractData._() : super();
   factory ProtoPredefinedState_Account_ContractData({
-    $core.List<$core.int> codeHash,
-    $core.List<$core.int> stake,
+    $core.List<$core.int>? codeHash,
+    $core.List<$core.int>? stake,
   }) {
     final _result = create();
     if (codeHash != null) {
@@ -4917,7 +4917,7 @@ class ProtoPredefinedState_Account_ContractData extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Account_ContractData copyWith(void Function(ProtoPredefinedState_Account_ContractData) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Account_ContractData)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Account_ContractData copyWith(void Function(ProtoPredefinedState_Account_ContractData) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Account_ContractData)) as ProtoPredefinedState_Account_ContractData; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Account_ContractData create() => ProtoPredefinedState_Account_ContractData._();
@@ -4925,7 +4925,7 @@ class ProtoPredefinedState_Account_ContractData extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Account_ContractData> createRepeated() => $pb.PbList<ProtoPredefinedState_Account_ContractData>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Account_ContractData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Account_ContractData>(create);
-  static ProtoPredefinedState_Account_ContractData _defaultInstance;
+  static ProtoPredefinedState_Account_ContractData? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get codeHash => $_getN(0);
@@ -4958,11 +4958,11 @@ class ProtoPredefinedState_Account extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Account._() : super();
   factory ProtoPredefinedState_Account({
-    $core.List<$core.int> address,
-    $core.int nonce,
-    $core.int epoch,
-    $core.List<$core.int> balance,
-    ProtoPredefinedState_Account_ContractData contractData,
+    $core.List<$core.int>? address,
+    $core.int? nonce,
+    $core.int? epoch,
+    $core.List<$core.int>? balance,
+    ProtoPredefinedState_Account_ContractData? contractData,
   }) {
     final _result = create();
     if (address != null) {
@@ -4993,7 +4993,7 @@ class ProtoPredefinedState_Account extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Account copyWith(void Function(ProtoPredefinedState_Account) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Account)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Account copyWith(void Function(ProtoPredefinedState_Account) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Account)) as ProtoPredefinedState_Account; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Account create() => ProtoPredefinedState_Account._();
@@ -5001,7 +5001,7 @@ class ProtoPredefinedState_Account extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Account> createRepeated() => $pb.PbList<ProtoPredefinedState_Account>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Account getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Account>(create);
-  static ProtoPredefinedState_Account _defaultInstance;
+  static ProtoPredefinedState_Account? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -5060,8 +5060,8 @@ class ProtoPredefinedState_Identity_Flip extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Identity_Flip._() : super();
   factory ProtoPredefinedState_Identity_Flip({
-    $core.List<$core.int> cid,
-    $core.int pair,
+    $core.List<$core.int>? cid,
+    $core.int? pair,
   }) {
     final _result = create();
     if (cid != null) {
@@ -5083,7 +5083,7 @@ class ProtoPredefinedState_Identity_Flip extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Identity_Flip copyWith(void Function(ProtoPredefinedState_Identity_Flip) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity_Flip)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Identity_Flip copyWith(void Function(ProtoPredefinedState_Identity_Flip) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity_Flip)) as ProtoPredefinedState_Identity_Flip; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity_Flip create() => ProtoPredefinedState_Identity_Flip._();
@@ -5091,7 +5091,7 @@ class ProtoPredefinedState_Identity_Flip extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Identity_Flip> createRepeated() => $pb.PbList<ProtoPredefinedState_Identity_Flip>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity_Flip getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Identity_Flip>(create);
-  static ProtoPredefinedState_Identity_Flip _defaultInstance;
+  static ProtoPredefinedState_Identity_Flip? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -5121,8 +5121,8 @@ class ProtoPredefinedState_Identity_TxAddr extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Identity_TxAddr._() : super();
   factory ProtoPredefinedState_Identity_TxAddr({
-    $core.List<$core.int> hash,
-    $core.List<$core.int> address,
+    $core.List<$core.int>? hash,
+    $core.List<$core.int>? address,
   }) {
     final _result = create();
     if (hash != null) {
@@ -5144,7 +5144,7 @@ class ProtoPredefinedState_Identity_TxAddr extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Identity_TxAddr copyWith(void Function(ProtoPredefinedState_Identity_TxAddr) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity_TxAddr)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Identity_TxAddr copyWith(void Function(ProtoPredefinedState_Identity_TxAddr) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity_TxAddr)) as ProtoPredefinedState_Identity_TxAddr; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity_TxAddr create() => ProtoPredefinedState_Identity_TxAddr._();
@@ -5152,7 +5152,7 @@ class ProtoPredefinedState_Identity_TxAddr extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Identity_TxAddr> createRepeated() => $pb.PbList<ProtoPredefinedState_Identity_TxAddr>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity_TxAddr getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Identity_TxAddr>(create);
-  static ProtoPredefinedState_Identity_TxAddr _defaultInstance;
+  static ProtoPredefinedState_Identity_TxAddr? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get hash => $_getN(0);
@@ -5199,25 +5199,25 @@ class ProtoPredefinedState_Identity extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_Identity._() : super();
   factory ProtoPredefinedState_Identity({
-    $core.List<$core.int> address,
-    $core.List<$core.int> stake,
-    $core.int invites,
-    $core.int birthday,
-    $core.int state,
-    $core.int qualifiedFlips,
-    $core.int shortFlipPoints,
-    $core.List<$core.int> pubKey,
-    $core.int requiredFlips,
-    $core.Iterable<ProtoPredefinedState_Identity_Flip> flips,
-    $core.int generation,
-    $core.List<$core.int> code,
-    $core.Iterable<ProtoPredefinedState_Identity_TxAddr> invitees,
-    ProtoPredefinedState_Identity_TxAddr inviter,
-    $core.List<$core.int> penalty,
-    $core.int validationBits,
-    $core.int validationStatus,
-    $core.List<$core.int> profileHash,
-    $core.List<$core.int> scores,
+    $core.List<$core.int>? address,
+    $core.List<$core.int>? stake,
+    $core.int? invites,
+    $core.int? birthday,
+    $core.int? state,
+    $core.int? qualifiedFlips,
+    $core.int? shortFlipPoints,
+    $core.List<$core.int>? pubKey,
+    $core.int? requiredFlips,
+    $core.Iterable<ProtoPredefinedState_Identity_Flip>? flips,
+    $core.int? generation,
+    $core.List<$core.int>? code,
+    $core.Iterable<ProtoPredefinedState_Identity_TxAddr>? invitees,
+    ProtoPredefinedState_Identity_TxAddr? inviter,
+    $core.List<$core.int>? penalty,
+    $core.int? validationBits,
+    $core.int? validationStatus,
+    $core.List<$core.int>? profileHash,
+    $core.List<$core.int>? scores,
   }) {
     final _result = create();
     if (address != null) {
@@ -5290,7 +5290,7 @@ class ProtoPredefinedState_Identity extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_Identity copyWith(void Function(ProtoPredefinedState_Identity) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity)); // ignore: deprecated_member_use
+  ProtoPredefinedState_Identity copyWith(void Function(ProtoPredefinedState_Identity) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_Identity)) as ProtoPredefinedState_Identity; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity create() => ProtoPredefinedState_Identity._();
@@ -5298,7 +5298,7 @@ class ProtoPredefinedState_Identity extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_Identity> createRepeated() => $pb.PbList<ProtoPredefinedState_Identity>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_Identity getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_Identity>(create);
-  static ProtoPredefinedState_Identity _defaultInstance;
+  static ProtoPredefinedState_Identity? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -5472,9 +5472,9 @@ class ProtoPredefinedState_ApprovedIdentity extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_ApprovedIdentity._() : super();
   factory ProtoPredefinedState_ApprovedIdentity({
-    $core.List<$core.int> address,
-    $core.bool approved,
-    $core.bool online,
+    $core.List<$core.int>? address,
+    $core.bool? approved,
+    $core.bool? online,
   }) {
     final _result = create();
     if (address != null) {
@@ -5499,7 +5499,7 @@ class ProtoPredefinedState_ApprovedIdentity extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_ApprovedIdentity copyWith(void Function(ProtoPredefinedState_ApprovedIdentity) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_ApprovedIdentity)); // ignore: deprecated_member_use
+  ProtoPredefinedState_ApprovedIdentity copyWith(void Function(ProtoPredefinedState_ApprovedIdentity) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_ApprovedIdentity)) as ProtoPredefinedState_ApprovedIdentity; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_ApprovedIdentity create() => ProtoPredefinedState_ApprovedIdentity._();
@@ -5507,7 +5507,7 @@ class ProtoPredefinedState_ApprovedIdentity extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_ApprovedIdentity> createRepeated() => $pb.PbList<ProtoPredefinedState_ApprovedIdentity>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_ApprovedIdentity getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_ApprovedIdentity>(create);
-  static ProtoPredefinedState_ApprovedIdentity _defaultInstance;
+  static ProtoPredefinedState_ApprovedIdentity? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get address => $_getN(0);
@@ -5546,8 +5546,8 @@ class ProtoPredefinedState_ContractKeyValue extends $pb.GeneratedMessage {
 
   ProtoPredefinedState_ContractKeyValue._() : super();
   factory ProtoPredefinedState_ContractKeyValue({
-    $core.List<$core.int> key,
-    $core.List<$core.int> value,
+    $core.List<$core.int>? key,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (key != null) {
@@ -5569,7 +5569,7 @@ class ProtoPredefinedState_ContractKeyValue extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState_ContractKeyValue copyWith(void Function(ProtoPredefinedState_ContractKeyValue) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_ContractKeyValue)); // ignore: deprecated_member_use
+  ProtoPredefinedState_ContractKeyValue copyWith(void Function(ProtoPredefinedState_ContractKeyValue) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState_ContractKeyValue)) as ProtoPredefinedState_ContractKeyValue; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_ContractKeyValue create() => ProtoPredefinedState_ContractKeyValue._();
@@ -5577,7 +5577,7 @@ class ProtoPredefinedState_ContractKeyValue extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState_ContractKeyValue> createRepeated() => $pb.PbList<ProtoPredefinedState_ContractKeyValue>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState_ContractKeyValue getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState_ContractKeyValue>(create);
-  static ProtoPredefinedState_ContractKeyValue _defaultInstance;
+  static ProtoPredefinedState_ContractKeyValue? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get key => $_getN(0);
@@ -5613,14 +5613,14 @@ class ProtoPredefinedState extends $pb.GeneratedMessage {
 
   ProtoPredefinedState._() : super();
   factory ProtoPredefinedState({
-    $fixnum.Int64 block,
-    $core.List<$core.int> seed,
-    ProtoPredefinedState_Global global,
-    ProtoPredefinedState_StatusSwitch statusSwitch,
-    $core.Iterable<ProtoPredefinedState_Account> accounts,
-    $core.Iterable<ProtoPredefinedState_Identity> identities,
-    $core.Iterable<ProtoPredefinedState_ApprovedIdentity> approvedIdentities,
-    $core.Iterable<ProtoPredefinedState_ContractKeyValue> contractValues,
+    $fixnum.Int64? block,
+    $core.List<$core.int>? seed,
+    ProtoPredefinedState_Global? global,
+    ProtoPredefinedState_StatusSwitch? statusSwitch,
+    $core.Iterable<ProtoPredefinedState_Account>? accounts,
+    $core.Iterable<ProtoPredefinedState_Identity>? identities,
+    $core.Iterable<ProtoPredefinedState_ApprovedIdentity>? approvedIdentities,
+    $core.Iterable<ProtoPredefinedState_ContractKeyValue>? contractValues,
   }) {
     final _result = create();
     if (block != null) {
@@ -5660,7 +5660,7 @@ class ProtoPredefinedState extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoPredefinedState copyWith(void Function(ProtoPredefinedState) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState)); // ignore: deprecated_member_use
+  ProtoPredefinedState copyWith(void Function(ProtoPredefinedState) updates) => super.copyWith((message) => updates(message as ProtoPredefinedState)) as ProtoPredefinedState; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState create() => ProtoPredefinedState._();
@@ -5668,7 +5668,7 @@ class ProtoPredefinedState extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoPredefinedState> createRepeated() => $pb.PbList<ProtoPredefinedState>();
   @$core.pragma('dart2js:noInline')
   static ProtoPredefinedState getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoPredefinedState>(create);
-  static ProtoPredefinedState _defaultInstance;
+  static ProtoPredefinedState? _defaultInstance;
 
   @$pb.TagNumber(1)
   $fixnum.Int64 get block => $_getI64(0);
@@ -5732,8 +5732,8 @@ class ProtoCallContractAttachment extends $pb.GeneratedMessage {
 
   ProtoCallContractAttachment._() : super();
   factory ProtoCallContractAttachment({
-    $core.String method,
-    $core.Iterable<$core.List<$core.int>> args,
+    $core.String? method,
+    $core.Iterable<$core.List<$core.int>>? args,
   }) {
     final _result = create();
     if (method != null) {
@@ -5755,7 +5755,7 @@ class ProtoCallContractAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoCallContractAttachment copyWith(void Function(ProtoCallContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoCallContractAttachment)); // ignore: deprecated_member_use
+  ProtoCallContractAttachment copyWith(void Function(ProtoCallContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoCallContractAttachment)) as ProtoCallContractAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoCallContractAttachment create() => ProtoCallContractAttachment._();
@@ -5763,7 +5763,7 @@ class ProtoCallContractAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoCallContractAttachment> createRepeated() => $pb.PbList<ProtoCallContractAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoCallContractAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoCallContractAttachment>(create);
-  static ProtoCallContractAttachment _defaultInstance;
+  static ProtoCallContractAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get method => $_getSZ(0);
@@ -5787,8 +5787,8 @@ class ProtoDeployContractAttachment extends $pb.GeneratedMessage {
 
   ProtoDeployContractAttachment._() : super();
   factory ProtoDeployContractAttachment({
-    $core.List<$core.int> codeHash,
-    $core.Iterable<$core.List<$core.int>> args,
+    $core.List<$core.int>? codeHash,
+    $core.Iterable<$core.List<$core.int>>? args,
   }) {
     final _result = create();
     if (codeHash != null) {
@@ -5810,7 +5810,7 @@ class ProtoDeployContractAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoDeployContractAttachment copyWith(void Function(ProtoDeployContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoDeployContractAttachment)); // ignore: deprecated_member_use
+  ProtoDeployContractAttachment copyWith(void Function(ProtoDeployContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoDeployContractAttachment)) as ProtoDeployContractAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoDeployContractAttachment create() => ProtoDeployContractAttachment._();
@@ -5818,7 +5818,7 @@ class ProtoDeployContractAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoDeployContractAttachment> createRepeated() => $pb.PbList<ProtoDeployContractAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoDeployContractAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoDeployContractAttachment>(create);
-  static ProtoDeployContractAttachment _defaultInstance;
+  static ProtoDeployContractAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get codeHash => $_getN(0);
@@ -5841,7 +5841,7 @@ class ProtoTerminateContractAttachment extends $pb.GeneratedMessage {
 
   ProtoTerminateContractAttachment._() : super();
   factory ProtoTerminateContractAttachment({
-    $core.Iterable<$core.List<$core.int>> args,
+    $core.Iterable<$core.List<$core.int>>? args,
   }) {
     final _result = create();
     if (args != null) {
@@ -5860,7 +5860,7 @@ class ProtoTerminateContractAttachment extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTerminateContractAttachment copyWith(void Function(ProtoTerminateContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoTerminateContractAttachment)); // ignore: deprecated_member_use
+  ProtoTerminateContractAttachment copyWith(void Function(ProtoTerminateContractAttachment) updates) => super.copyWith((message) => updates(message as ProtoTerminateContractAttachment)) as ProtoTerminateContractAttachment; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTerminateContractAttachment create() => ProtoTerminateContractAttachment._();
@@ -5868,7 +5868,7 @@ class ProtoTerminateContractAttachment extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTerminateContractAttachment> createRepeated() => $pb.PbList<ProtoTerminateContractAttachment>();
   @$core.pragma('dart2js:noInline')
   static ProtoTerminateContractAttachment getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTerminateContractAttachment>(create);
-  static ProtoTerminateContractAttachment _defaultInstance;
+  static ProtoTerminateContractAttachment? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.List<$core.int>> get args => $_getList(0);
@@ -5890,15 +5890,15 @@ class ProtoTxReceipts_ProtoTxReceipt extends $pb.GeneratedMessage {
 
   ProtoTxReceipts_ProtoTxReceipt._() : super();
   factory ProtoTxReceipts_ProtoTxReceipt({
-    $core.List<$core.int> contract,
-    $core.bool success,
-    $fixnum.Int64 gasUsed,
-    $core.List<$core.int> from,
-    $core.String error,
-    $core.List<$core.int> gasCost,
-    $core.List<$core.int> txHash,
-    $core.Iterable<ProtoTxReceipts_ProtoEvent> events,
-    $core.String method,
+    $core.List<$core.int>? contract,
+    $core.bool? success,
+    $fixnum.Int64? gasUsed,
+    $core.List<$core.int>? from,
+    $core.String? error,
+    $core.List<$core.int>? gasCost,
+    $core.List<$core.int>? txHash,
+    $core.Iterable<ProtoTxReceipts_ProtoEvent>? events,
+    $core.String? method,
   }) {
     final _result = create();
     if (contract != null) {
@@ -5941,7 +5941,7 @@ class ProtoTxReceipts_ProtoTxReceipt extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTxReceipts_ProtoTxReceipt copyWith(void Function(ProtoTxReceipts_ProtoTxReceipt) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts_ProtoTxReceipt)); // ignore: deprecated_member_use
+  ProtoTxReceipts_ProtoTxReceipt copyWith(void Function(ProtoTxReceipts_ProtoTxReceipt) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts_ProtoTxReceipt)) as ProtoTxReceipts_ProtoTxReceipt; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts_ProtoTxReceipt create() => ProtoTxReceipts_ProtoTxReceipt._();
@@ -5949,7 +5949,7 @@ class ProtoTxReceipts_ProtoTxReceipt extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTxReceipts_ProtoTxReceipt> createRepeated() => $pb.PbList<ProtoTxReceipts_ProtoTxReceipt>();
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts_ProtoTxReceipt getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTxReceipts_ProtoTxReceipt>(create);
-  static ProtoTxReceipts_ProtoTxReceipt _defaultInstance;
+  static ProtoTxReceipts_ProtoTxReceipt? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get contract => $_getN(0);
@@ -6036,8 +6036,8 @@ class ProtoTxReceipts_ProtoEvent extends $pb.GeneratedMessage {
 
   ProtoTxReceipts_ProtoEvent._() : super();
   factory ProtoTxReceipts_ProtoEvent({
-    $core.String event,
-    $core.Iterable<$core.List<$core.int>> data,
+    $core.String? event,
+    $core.Iterable<$core.List<$core.int>>? data,
   }) {
     final _result = create();
     if (event != null) {
@@ -6059,7 +6059,7 @@ class ProtoTxReceipts_ProtoEvent extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTxReceipts_ProtoEvent copyWith(void Function(ProtoTxReceipts_ProtoEvent) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts_ProtoEvent)); // ignore: deprecated_member_use
+  ProtoTxReceipts_ProtoEvent copyWith(void Function(ProtoTxReceipts_ProtoEvent) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts_ProtoEvent)) as ProtoTxReceipts_ProtoEvent; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts_ProtoEvent create() => ProtoTxReceipts_ProtoEvent._();
@@ -6067,7 +6067,7 @@ class ProtoTxReceipts_ProtoEvent extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTxReceipts_ProtoEvent> createRepeated() => $pb.PbList<ProtoTxReceipts_ProtoEvent>();
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts_ProtoEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTxReceipts_ProtoEvent>(create);
-  static ProtoTxReceipts_ProtoEvent _defaultInstance;
+  static ProtoTxReceipts_ProtoEvent? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get event => $_getSZ(0);
@@ -6090,7 +6090,7 @@ class ProtoTxReceipts extends $pb.GeneratedMessage {
 
   ProtoTxReceipts._() : super();
   factory ProtoTxReceipts({
-    $core.Iterable<ProtoTxReceipts_ProtoTxReceipt> receipts,
+    $core.Iterable<ProtoTxReceipts_ProtoTxReceipt>? receipts,
   }) {
     final _result = create();
     if (receipts != null) {
@@ -6109,7 +6109,7 @@ class ProtoTxReceipts extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTxReceipts copyWith(void Function(ProtoTxReceipts) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts)); // ignore: deprecated_member_use
+  ProtoTxReceipts copyWith(void Function(ProtoTxReceipts) updates) => super.copyWith((message) => updates(message as ProtoTxReceipts)) as ProtoTxReceipts; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts create() => ProtoTxReceipts._();
@@ -6117,7 +6117,7 @@ class ProtoTxReceipts extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTxReceipts> createRepeated() => $pb.PbList<ProtoTxReceipts>();
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceipts getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTxReceipts>(create);
-  static ProtoTxReceipts _defaultInstance;
+  static ProtoTxReceipts? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoTxReceipts_ProtoTxReceipt> get receipts => $_getList(0);
@@ -6132,8 +6132,8 @@ class ProtoTxReceiptIndex extends $pb.GeneratedMessage {
 
   ProtoTxReceiptIndex._() : super();
   factory ProtoTxReceiptIndex({
-    $core.List<$core.int> cid,
-    $core.int index,
+    $core.List<$core.int>? cid,
+    $core.int? index,
   }) {
     final _result = create();
     if (cid != null) {
@@ -6155,7 +6155,7 @@ class ProtoTxReceiptIndex extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoTxReceiptIndex copyWith(void Function(ProtoTxReceiptIndex) updates) => super.copyWith((message) => updates(message as ProtoTxReceiptIndex)); // ignore: deprecated_member_use
+  ProtoTxReceiptIndex copyWith(void Function(ProtoTxReceiptIndex) updates) => super.copyWith((message) => updates(message as ProtoTxReceiptIndex)) as ProtoTxReceiptIndex; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceiptIndex create() => ProtoTxReceiptIndex._();
@@ -6163,7 +6163,7 @@ class ProtoTxReceiptIndex extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoTxReceiptIndex> createRepeated() => $pb.PbList<ProtoTxReceiptIndex>();
   @$core.pragma('dart2js:noInline')
   static ProtoTxReceiptIndex getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoTxReceiptIndex>(create);
-  static ProtoTxReceiptIndex _defaultInstance;
+  static ProtoTxReceiptIndex? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get cid => $_getN(0);
@@ -6197,12 +6197,12 @@ class ProtoDeferredTxs_ProtoDeferredTx extends $pb.GeneratedMessage {
 
   ProtoDeferredTxs_ProtoDeferredTx._() : super();
   factory ProtoDeferredTxs_ProtoDeferredTx({
-    $core.List<$core.int> from,
-    $core.List<$core.int> to,
-    $core.List<$core.int> amount,
-    $core.List<$core.int> payload,
-    $core.List<$core.int> tips,
-    $fixnum.Int64 block,
+    $core.List<$core.int>? from,
+    $core.List<$core.int>? to,
+    $core.List<$core.int>? amount,
+    $core.List<$core.int>? payload,
+    $core.List<$core.int>? tips,
+    $fixnum.Int64? block,
   }) {
     final _result = create();
     if (from != null) {
@@ -6236,7 +6236,7 @@ class ProtoDeferredTxs_ProtoDeferredTx extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoDeferredTxs_ProtoDeferredTx copyWith(void Function(ProtoDeferredTxs_ProtoDeferredTx) updates) => super.copyWith((message) => updates(message as ProtoDeferredTxs_ProtoDeferredTx)); // ignore: deprecated_member_use
+  ProtoDeferredTxs_ProtoDeferredTx copyWith(void Function(ProtoDeferredTxs_ProtoDeferredTx) updates) => super.copyWith((message) => updates(message as ProtoDeferredTxs_ProtoDeferredTx)) as ProtoDeferredTxs_ProtoDeferredTx; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoDeferredTxs_ProtoDeferredTx create() => ProtoDeferredTxs_ProtoDeferredTx._();
@@ -6244,7 +6244,7 @@ class ProtoDeferredTxs_ProtoDeferredTx extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoDeferredTxs_ProtoDeferredTx> createRepeated() => $pb.PbList<ProtoDeferredTxs_ProtoDeferredTx>();
   @$core.pragma('dart2js:noInline')
   static ProtoDeferredTxs_ProtoDeferredTx getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoDeferredTxs_ProtoDeferredTx>(create);
-  static ProtoDeferredTxs_ProtoDeferredTx _defaultInstance;
+  static ProtoDeferredTxs_ProtoDeferredTx? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get from => $_getN(0);
@@ -6309,7 +6309,7 @@ class ProtoDeferredTxs extends $pb.GeneratedMessage {
 
   ProtoDeferredTxs._() : super();
   factory ProtoDeferredTxs({
-    $core.Iterable<ProtoDeferredTxs_ProtoDeferredTx> txs,
+    $core.Iterable<ProtoDeferredTxs_ProtoDeferredTx>? txs,
   }) {
     final _result = create();
     if (txs != null) {
@@ -6328,7 +6328,7 @@ class ProtoDeferredTxs extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoDeferredTxs copyWith(void Function(ProtoDeferredTxs) updates) => super.copyWith((message) => updates(message as ProtoDeferredTxs)); // ignore: deprecated_member_use
+  ProtoDeferredTxs copyWith(void Function(ProtoDeferredTxs) updates) => super.copyWith((message) => updates(message as ProtoDeferredTxs)) as ProtoDeferredTxs; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoDeferredTxs create() => ProtoDeferredTxs._();
@@ -6336,7 +6336,7 @@ class ProtoDeferredTxs extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoDeferredTxs> createRepeated() => $pb.PbList<ProtoDeferredTxs>();
   @$core.pragma('dart2js:noInline')
   static ProtoDeferredTxs getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoDeferredTxs>(create);
-  static ProtoDeferredTxs _defaultInstance;
+  static ProtoDeferredTxs? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoDeferredTxs_ProtoDeferredTx> get txs => $_getList(0);
@@ -6352,9 +6352,9 @@ class ProtoSavedEvent extends $pb.GeneratedMessage {
 
   ProtoSavedEvent._() : super();
   factory ProtoSavedEvent({
-    $core.List<$core.int> contract,
-    $core.String event,
-    $core.Iterable<$core.List<$core.int>> args,
+    $core.List<$core.int>? contract,
+    $core.String? event,
+    $core.Iterable<$core.List<$core.int>>? args,
   }) {
     final _result = create();
     if (contract != null) {
@@ -6379,7 +6379,7 @@ class ProtoSavedEvent extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoSavedEvent copyWith(void Function(ProtoSavedEvent) updates) => super.copyWith((message) => updates(message as ProtoSavedEvent)); // ignore: deprecated_member_use
+  ProtoSavedEvent copyWith(void Function(ProtoSavedEvent) updates) => super.copyWith((message) => updates(message as ProtoSavedEvent)) as ProtoSavedEvent; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoSavedEvent create() => ProtoSavedEvent._();
@@ -6387,7 +6387,7 @@ class ProtoSavedEvent extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoSavedEvent> createRepeated() => $pb.PbList<ProtoSavedEvent>();
   @$core.pragma('dart2js:noInline')
   static ProtoSavedEvent getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoSavedEvent>(create);
-  static ProtoSavedEvent _defaultInstance;
+  static ProtoSavedEvent? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get contract => $_getN(0);
@@ -6420,8 +6420,8 @@ class ProtoUpgradeVotes_ProtoUpgradeVote extends $pb.GeneratedMessage {
 
   ProtoUpgradeVotes_ProtoUpgradeVote._() : super();
   factory ProtoUpgradeVotes_ProtoUpgradeVote({
-    $core.List<$core.int> voter,
-    $core.int upgrade,
+    $core.List<$core.int>? voter,
+    $core.int? upgrade,
   }) {
     final _result = create();
     if (voter != null) {
@@ -6443,7 +6443,7 @@ class ProtoUpgradeVotes_ProtoUpgradeVote extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoUpgradeVotes_ProtoUpgradeVote copyWith(void Function(ProtoUpgradeVotes_ProtoUpgradeVote) updates) => super.copyWith((message) => updates(message as ProtoUpgradeVotes_ProtoUpgradeVote)); // ignore: deprecated_member_use
+  ProtoUpgradeVotes_ProtoUpgradeVote copyWith(void Function(ProtoUpgradeVotes_ProtoUpgradeVote) updates) => super.copyWith((message) => updates(message as ProtoUpgradeVotes_ProtoUpgradeVote)) as ProtoUpgradeVotes_ProtoUpgradeVote; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoUpgradeVotes_ProtoUpgradeVote create() => ProtoUpgradeVotes_ProtoUpgradeVote._();
@@ -6451,7 +6451,7 @@ class ProtoUpgradeVotes_ProtoUpgradeVote extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoUpgradeVotes_ProtoUpgradeVote> createRepeated() => $pb.PbList<ProtoUpgradeVotes_ProtoUpgradeVote>();
   @$core.pragma('dart2js:noInline')
   static ProtoUpgradeVotes_ProtoUpgradeVote getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoUpgradeVotes_ProtoUpgradeVote>(create);
-  static ProtoUpgradeVotes_ProtoUpgradeVote _defaultInstance;
+  static ProtoUpgradeVotes_ProtoUpgradeVote? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get voter => $_getN(0);
@@ -6480,7 +6480,7 @@ class ProtoUpgradeVotes extends $pb.GeneratedMessage {
 
   ProtoUpgradeVotes._() : super();
   factory ProtoUpgradeVotes({
-    $core.Iterable<ProtoUpgradeVotes_ProtoUpgradeVote> votes,
+    $core.Iterable<ProtoUpgradeVotes_ProtoUpgradeVote>? votes,
   }) {
     final _result = create();
     if (votes != null) {
@@ -6499,7 +6499,7 @@ class ProtoUpgradeVotes extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ProtoUpgradeVotes copyWith(void Function(ProtoUpgradeVotes) updates) => super.copyWith((message) => updates(message as ProtoUpgradeVotes)); // ignore: deprecated_member_use
+  ProtoUpgradeVotes copyWith(void Function(ProtoUpgradeVotes) updates) => super.copyWith((message) => updates(message as ProtoUpgradeVotes)) as ProtoUpgradeVotes; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ProtoUpgradeVotes create() => ProtoUpgradeVotes._();
@@ -6507,7 +6507,7 @@ class ProtoUpgradeVotes extends $pb.GeneratedMessage {
   static $pb.PbList<ProtoUpgradeVotes> createRepeated() => $pb.PbList<ProtoUpgradeVotes>();
   @$core.pragma('dart2js:noInline')
   static ProtoUpgradeVotes getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProtoUpgradeVotes>(create);
-  static ProtoUpgradeVotes _defaultInstance;
+  static ProtoUpgradeVotes? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<ProtoUpgradeVotes_ProtoUpgradeVote> get votes => $_getList(0);

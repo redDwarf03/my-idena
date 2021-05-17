@@ -1339,11 +1339,11 @@ class AppLocalization {
   }
 
   String get timeLockTitle {
-    return Intl.message("Time Lock", desc: '', name: 'timeLockTitle');
+    return Intl.message("Time Lock (beta)", desc: '', name: 'timeLockTitle');
   }
 
   String get multisigTitle {
-    return Intl.message("Multisig M-of-N", desc: '', name: 'multisigTitle');
+    return Intl.message("Multisig M-of-N (beta)", desc: '', name: 'multisigTitle');
   }
 
   String get oracleLockTitle {

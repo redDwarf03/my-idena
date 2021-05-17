@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:hex/hex.dart';
+import 'package:my_idena/model/deployContractAttachment.dart';
 import 'package:my_idena/pubdev/dartssh/client.dart';
 import 'package:decimal/decimal.dart';
 import 'package:event_taxi/event_taxi.dart';
@@ -137,7 +139,7 @@ class SmartContractService {
     if (dnaGetEpochResponse != null && dnaGetEpochResponse.result != null) {
       epoch = intToBuffer(dnaGetEpochResponse.result.epoch);
     }
-    var nonce = 
+    var nonce =
         intToBuffer(await sl.get<AppService>().getLastNonce(address) + 1);
     var res = Uint8List.fromList([
       ...addr,
@@ -220,20 +222,33 @@ class SmartContractService {
           }
         }
       } else {
-        contractDeployRequest = ContractDeployRequest.fromJson(mapParams);
-        body = json.encode(contractDeployRequest.toJson());
-        responseHttp =
-            await http.post(url, body: body, headers: requestHeaders);
-        if (responseHttp.statusCode == 200) {
-          contractDeployResponse =
-              contractDeployResponseFromJson(responseHttp.body);
+        if (await NodeUtil().getNodeType() == SHARED_NODE) {
+          contractDeployRequest = ContractDeployRequest.fromJson(mapParams);
 
-          if (contractDeployResponse.error != null) {
-            EventTaxiImpl.singleton().fire(ContractDeployEvent(
-                response: contractDeployResponse.error.message));
-          } else {
-            EventTaxiImpl.singleton()
-                .fire(ContractDeployEvent(response: "Success"));
+          await sl.get<AppService>().sendTx(
+              nodeAddress,
+              amount.toString(),
+              "",
+              "",
+              HEX.encode(new DeployContractAttachment(
+                      "0x01", contractDeployRequest.params.last.args)
+                  .toBytes()));
+        } else {
+          contractDeployRequest = ContractDeployRequest.fromJson(mapParams);
+          body = json.encode(contractDeployRequest.toJson());
+          responseHttp =
+              await http.post(url, body: body, headers: requestHeaders);
+          if (responseHttp.statusCode == 200) {
+            contractDeployResponse =
+                contractDeployResponseFromJson(responseHttp.body);
+
+            if (contractDeployResponse.error != null) {
+              EventTaxiImpl.singleton().fire(ContractDeployEvent(
+                  response: contractDeployResponse.error.message));
+            } else {
+              EventTaxiImpl.singleton()
+                  .fire(ContractDeployEvent(response: "Success"));
+            }
           }
         }
       }
@@ -840,8 +855,11 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractTerminateResponse> contractTerminateTimeLock(String nodeAddress,
-      String contract, double maxFee, String destinationAddress) async {
+  Future<ContractTerminateResponse> contractTerminateTimeLock(
+      String nodeAddress,
+      String contract,
+      double maxFee,
+      String destinationAddress) async {
     ContractTerminateRequest contractTerminateRequest;
     ContractTerminateResponse contractTerminateResponse;
 
@@ -912,8 +930,11 @@ class SmartContractService {
     return _completer.future;
   }
 
-  Future<ContractTerminateResponse> contractTerminateMultiSig(String nodeAddress,
-      String contract, double maxFee, String destinationAddress) async {
+  Future<ContractTerminateResponse> contractTerminateMultiSig(
+      String nodeAddress,
+      String contract,
+      double maxFee,
+      String destinationAddress) async {
     ContractTerminateRequest contractTerminateRequest;
     ContractTerminateResponse contractTerminateResponse;
 
@@ -1094,7 +1115,7 @@ class SmartContractService {
                 }
               }
 
-              if (contractAddress == null ||
+              if (contractAddress != null &&
                   contractCharged.containsKey(contractAddress.toUpperCase()) ==
                       false) {
                 ApiContractResponse apiContractResponse =
@@ -1397,14 +1418,16 @@ class SmartContractService {
     return smartContractStake;
   }
 
-  Future<ContractIterateMapResponse> getContractIterateMapAmount(String contractAddress, String continuationToken)
-  {
-    return getContractIterateMap(contractAddress, "amount", continuationToken, "hex", "hex", 32);
+  Future<ContractIterateMapResponse> getContractIterateMapAmount(
+      String contractAddress, String continuationToken) {
+    return getContractIterateMap(
+        contractAddress, "amount", continuationToken, "hex", "hex", 32);
   }
 
-  Future<ContractIterateMapResponse> getContractIterateMapAddr(String contractAddress, String continuationToken)
-  {
-    return getContractIterateMap(contractAddress, "addr", continuationToken, "hex", "hex", 32);
+  Future<ContractIterateMapResponse> getContractIterateMapAddr(
+      String contractAddress, String continuationToken) {
+    return getContractIterateMap(
+        contractAddress, "addr", continuationToken, "hex", "hex", 32);
   }
 
   Future<ContractIterateMapResponse> getContractIterateMap(
