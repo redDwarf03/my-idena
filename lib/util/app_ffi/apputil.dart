@@ -29,7 +29,7 @@ class AppUtil {
     String address = "";
     //if (address == "") {
       if (await NodeUtil().getNodeType() == PUBLIC_NODE) {
-        address = PN_ADDRESS;
+        address = await sl.get<SharedPrefsUtil>().getAddress();
       } else if (await NodeUtil().getNodeType() == DEMO_NODE) {
         address = DM_IDENTITY_ADDRESS;
       } else {
