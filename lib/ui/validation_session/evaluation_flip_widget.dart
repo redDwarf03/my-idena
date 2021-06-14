@@ -1,13 +1,19 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/enums/relevance_type.dart' as RelevantType;
+import 'package:idena_lib_dart/factory/validation_service.dart';
+import 'package:idena_lib_dart/model/dictWords.dart';
+import 'package:idena_lib_dart/model/validation_session_infos.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/dictWords.dart';
-import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;
 
 class EvaluationFlip extends StatefulWidget {
   final ValidationSessionInfoFlips validationSessionInfoFlips;
@@ -41,8 +47,7 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
   Future<void> loadValidationSessionEvaluationFlip(bool force) async {
     if (force ||
         (widget.validationSessionInfoFlips == null ||
-            widget.validationSessionInfoFlips.listWords == null
-            )) {
+            widget.validationSessionInfoFlips.listWords == null)) {
       listWords = await sl.get<ValidationService>().getWordsFromHash(
           widget.validationSessionInfoFlips.hash,
           widget.simulationMode,
@@ -146,7 +151,8 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
                                                 .relevanceType =
                                             RelevantType.RELEVANT;
                                       });
-                                      widget.onSelectFlip(widget.validationSessionInfoFlips);
+                                      widget.onSelectFlip(
+                                          widget.validationSessionInfoFlips);
                                     }
                                   },
                                   padding: EdgeInsets.all(5.0),
@@ -194,7 +200,8 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
                                                 .relevanceType =
                                             RelevantType.IRRELEVANT;
                                       });
-                                      widget.onSelectFlip(widget.validationSessionInfoFlips);
+                                      widget.onSelectFlip(
+                                          widget.validationSessionInfoFlips);
                                     }
                                   },
                                   padding: EdgeInsets.all(5.0),

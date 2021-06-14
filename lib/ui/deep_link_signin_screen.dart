@@ -1,18 +1,24 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:idena_lib_dart/deepLinks/deepLinkParamSignin.dart';
+import 'package:idena_lib_dart/deepLinks/idena_url.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/model/deepLinks/deepLinkParamSignin.dart';
-import 'package:my_idena/model/deepLinks/idena_url.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DeepLinkSigninScreen extends StatefulWidget {
   final DeepLinkParamSignin deepLinkParam;

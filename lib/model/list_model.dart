@@ -1,3 +1,4 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 /// Keeps a Dart List in sync with an AnimatedList.
@@ -24,7 +25,7 @@ class ListModel<E> {
     _items.insert(0, item);
     _animatedList!.insertItem(0);
   }
- 
+
   int get length => _items.length;
 
   E operator [](int index) => _items[index];

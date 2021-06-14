@@ -1,13 +1,20 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 
 class CountDown extends StatefulWidget {
   final durationInSeconds;
   final Function(bool) isEndCountDown;
 
-  const CountDown({Key key, this.durationInSeconds, this.isEndCountDown}) : super(key: key);
+  const CountDown({Key key, this.durationInSeconds, this.isEndCountDown})
+      : super(key: key);
 
   @override
   _CountDownState createState() => _CountDownState();
@@ -43,7 +50,9 @@ class _CountDownState extends State<CountDown> {
       strokeWidth: 5.0,
       strokeCap: StrokeCap.butt,
       textStyle: TextStyle(
-          fontSize: 10.0, color: StateContainer.of(context).curTheme.text60, fontWeight: FontWeight.bold),
+          fontSize: 10.0,
+          color: StateContainer.of(context).curTheme.text60,
+          fontWeight: FontWeight.bold),
       isReverse: true,
       isReverseAnimation: true,
       isTimerTextShown: true,

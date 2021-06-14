@@ -1,33 +1,41 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:event_taxi/event_taxi.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
+import 'package:idena_lib_dart/enums/wallet_type.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_sendTransaction_response.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/localization.dart';
+import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/send/send_complete_sheet.dart';
 import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/enums/wallet_type.dart';
+import 'package:my_idena/util/biometrics.dart';
+import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/biometrics.dart';
-import 'package:my_idena/util/hapticutil.dart';
-import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/model/authentication_method.dart';
-import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/ui/widgets/security.dart';
 
 class SendConfirmSheet extends StatefulWidget {
   final String amountRaw;
@@ -385,14 +393,27 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       if (seedOrigin == HD_WALLET) {
         if (seed != null) {
           int index = StateContainer.of(context).selectedAccount.index;
-          privateKey =
-              await AppUtil().seedToPrivateKey(seed, index);
+          privateKey = await AppUtil().seedToPrivateKey(seed, index);
           //print("privateKey : " + privateKey);
         }
       }
       //print("send tx");
-      sl.get<AppService>().sendTx(StateContainer.of(context).wallet.address,
-          widget.amountRaw, destinationAltered, privateKey == null ? seed : privateKey, null);
+      DnaSendTransactionResponse dnaSendTransactionResponse = await sl
+          .get<AppService>()
+          .sendTx(StateContainer.of(context).wallet.address, widget.amountRaw,
+              destinationAltered, privateKey == null ? seed : privateKey, null);
+      if (dnaSendTransactionResponse == null) {
+        EventTaxiImpl.singleton()
+            .fire(TransactionSendEvent(response: "Connection error"));
+      } else {
+        if (dnaSendTransactionResponse.error != null) {
+          EventTaxiImpl.singleton().fire(TransactionSendEvent(
+              response: dnaSendTransactionResponse.error.message));
+        } else {
+          EventTaxiImpl.singleton()
+              .fire(TransactionSendEvent(response: "Success"));
+        }
+      }
     } catch (e) {
       // Send failed
       //print("send failed" + e.toString());

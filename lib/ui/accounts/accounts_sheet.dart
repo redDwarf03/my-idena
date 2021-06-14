@@ -1,24 +1,32 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/localization.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/account.dart';
+import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/styles.dart';
+import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/numberutil.dart';
 
@@ -66,7 +74,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     widget.accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address);
         setState(() {
           account.balance = balanceGetResponse.result.balance;
         });
@@ -126,15 +134,15 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address);
         sl
             .get<DBHelper>()
             .updateAccountBalance(account, balanceGetResponse.result.balance);
         setState(() {
-          account.balance =
-              balanceGetResponse == null || balanceGetResponse.result.balance == null
-                  ? 0
-                  : balanceGetResponse.result.balance;
+          account.balance = balanceGetResponse == null ||
+                  balanceGetResponse.result.balance == null
+              ? 0
+              : balanceGetResponse.result.balance;
         });
       }
     });
@@ -267,44 +275,43 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                               setState(() {
                                 _addingAccount = true;
                               });
-                             
-                                sl
-                                    .get<DBHelper>()
-                                    .addAccount(
-                                        nameBuilder: AppLocalization.of(context)
-                                            .defaultNewAccountName)
-                                    .then((newAccount) {
-                                  _requestBalances(context, [newAccount]);
-                                  StateContainer.of(context)
-                                      .updateRecentlyUsedAccounts();
-                                  widget.accounts.add(newAccount);
-                                  setState(() {
-                                    _addingAccount = false;
-                                    widget.accounts.sort(
-                                        (a, b) => a.index.compareTo(b.index));
-                                    // Scroll if list is full
-                                    if (expandedKey.currentContext != null) {
-                                      RenderBox box = expandedKey.currentContext
-                                          .findRenderObject();
-                                      if (widget.accounts.length * 72.0 >=
-                                          box.size.height) {
-                                        _scrollController.animateTo(
-                                          newAccount.index * 72.0 >
-                                                  _scrollController
-                                                      .position.maxScrollExtent
-                                              ? _scrollController.position
-                                                      .maxScrollExtent +
-                                                  72.0
-                                              : newAccount.index * 72.0,
-                                          curve: Curves.easeOut,
-                                          duration:
-                                              const Duration(milliseconds: 200),
-                                        );
-                                      }
+
+                              sl
+                                  .get<DBHelper>()
+                                  .addAccount(
+                                      nameBuilder: AppLocalization.of(context)
+                                          .defaultNewAccountName)
+                                  .then((newAccount) {
+                                _requestBalances(context, [newAccount]);
+                                StateContainer.of(context)
+                                    .updateRecentlyUsedAccounts();
+                                widget.accounts.add(newAccount);
+                                setState(() {
+                                  _addingAccount = false;
+                                  widget.accounts.sort(
+                                      (a, b) => a.index.compareTo(b.index));
+                                  // Scroll if list is full
+                                  if (expandedKey.currentContext != null) {
+                                    RenderBox box = expandedKey.currentContext
+                                        .findRenderObject();
+                                    if (widget.accounts.length * 72.0 >=
+                                        box.size.height) {
+                                      _scrollController.animateTo(
+                                        newAccount.index * 72.0 >
+                                                _scrollController
+                                                    .position.maxScrollExtent
+                                            ? _scrollController
+                                                    .position.maxScrollExtent +
+                                                72.0
+                                            : newAccount.index * 72.0,
+                                        curve: Curves.easeOut,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                      );
                                     }
-                                  });
+                                  }
                                 });
-                              
+                              });
                             }
                           },
                         ),
@@ -390,7 +397,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                         .curTheme
                                         .text05,
                                     backgroundImage:
-                                      UIUtil.getRobohashURL(account.address),
+                                        UIUtil.getRobohashURL(account.address),
                                     radius: 50.0,
                                   ),
                                 ),
@@ -452,9 +459,11 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                   children: [
                                     // Main balance text
                                     TextSpan(
-                                      text: account.balance == null ? "" : NumberUtil.getRawAsUsableString(
-                                              account.balance) +
-                                          " IDNA",
+                                      text: account.balance == null
+                                          ? ""
+                                          : NumberUtil.getRawAsUsableString(
+                                                  account.balance) +
+                                              " IDNA",
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontFamily: "Roboto",

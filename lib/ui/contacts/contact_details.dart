@@ -1,29 +1,38 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:event_taxi/event_taxi.dart';
 
-import 'package:my_idena/dimens.dart';
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:event_taxi/event_taxi.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/model/response/dna_send_invite_response.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/network/model/response/dna_send_invite_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/model/db/contact.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/db/contact.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
 import 'package:my_idena/util/util_node.dart';
+
+import 'package:idena_lib_dart/enums/identity_status.dart'
+    as IdentityStatus;
 
 // Contact Details Sheet
 class ContactDetailsSheet {
@@ -32,7 +41,8 @@ class ContactDetailsSheet {
   int nbInvites;
   int nodeType;
 
-  ContactDetailsSheet(this.contact, this.documentsDirectory, this.nbInvites, this.nodeType);
+  ContactDetailsSheet(
+      this.contact, this.documentsDirectory, this.nbInvites, this.nodeType);
 
   // State variables
   bool _addressCopied = false;
@@ -318,48 +328,57 @@ class ContactDetailsSheet {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              nbInvites > 0 && nodeType != PUBLIC_NODE && nodeType != SHARED_NODE ?
-                              AppButton.buildAppButton(
-                                  context,
-                                  AppButtonType.PRIMARY_OUTLINE,
-                                  AppLocalization.of(context).sendInvite,
-                                  Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
-                                AppDialogs.showConfirmDialog(
-                                    context,
-                                    AppLocalization.of(context)
-                                        .sendInviteConfirmationHeader,
-                                    AppLocalization.of(context)
-                                        .sendInviteConfirmationInfos,
-                                    CaseChange.toUpperCase(
-                                        AppLocalization.of(context).yesButton,
-                                        context), () async {
-                                  DnaSendInviteResponse dnaSendInviteResponse =
-                                      await sl.get<AppService>().sendInvitation(
-                                          contact.address, "0", 0, 0);
-                                  if (dnaSendInviteResponse == null) {
-                                    UIUtil.showSnackbar(
-                                        AppLocalization.of(context).sendError,
-                                        context);
-                                  } else {
-                                    if (dnaSendInviteResponse.error != null) {
-                                      UIUtil.showSnackbar(
+                              nbInvites > 0 &&
+                                      nodeType != PUBLIC_NODE &&
+                                      nodeType != SHARED_NODE
+                                  ? AppButton.buildAppButton(
+                                      context,
+                                      AppButtonType.PRIMARY_OUTLINE,
+                                      AppLocalization.of(context).sendInvite,
+                                      Dimens.BUTTON_BOTTOM_DIMENS,
+                                      onPressed: () {
+                                      AppDialogs.showConfirmDialog(
+                                          context,
                                           AppLocalization.of(context)
-                                                  .sendError +
-                                              " (" +
-                                              dnaSendInviteResponse
-                                                  .error.message +
-                                              ")",
-                                          context);
-                                    } else {
-                                      UIUtil.showSnackbar(
+                                              .sendInviteConfirmationHeader,
                                           AppLocalization.of(context)
-                                              .sendInviteSuccess,
-                                          context);
-                                    }
-                                  }
-                                  Navigator.pop(context);
-                                });
-                              }) : SizedBox(),
+                                              .sendInviteConfirmationInfos,
+                                          CaseChange.toUpperCase(
+                                              AppLocalization.of(context)
+                                                  .yesButton,
+                                              context), () async {
+                                        DnaSendInviteResponse
+                                            dnaSendInviteResponse = await sl
+                                                .get<AppService>()
+                                                .sendInvitation(
+                                                    contact.address, "0", 0, 0);
+                                        if (dnaSendInviteResponse == null) {
+                                          UIUtil.showSnackbar(
+                                              AppLocalization.of(context)
+                                                  .sendError,
+                                              context);
+                                        } else {
+                                          if (dnaSendInviteResponse.error !=
+                                              null) {
+                                            UIUtil.showSnackbar(
+                                                AppLocalization.of(context)
+                                                        .sendError +
+                                                    " (" +
+                                                    dnaSendInviteResponse
+                                                        .error.message +
+                                                    ")",
+                                                context);
+                                          } else {
+                                            UIUtil.showSnackbar(
+                                                AppLocalization.of(context)
+                                                    .sendInviteSuccess,
+                                                context);
+                                          }
+                                        }
+                                        Navigator.pop(context);
+                                      });
+                                    })
+                                  : SizedBox(),
                               // Close Button
                               AppButton.buildAppButton(
                                   context,

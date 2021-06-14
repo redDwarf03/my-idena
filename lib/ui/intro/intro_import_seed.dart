@@ -1,16 +1,25 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:idena_lib_dart/enums/wallet_type.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/util/keys/mnemonics.dart';
+import 'package:idena_lib_dart/util/keys/seeds.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/formatters.dart';
@@ -19,9 +28,6 @@ import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
-import 'package:my_idena/util/app_ffi/keys/seeds.dart';
-import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class IntroImportSeedPage extends StatefulWidget {
@@ -50,15 +56,15 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
   String seedOrigin = "";
 
   @override
-   void initState() {
+  void initState() {
     super.initState();
-   }
+  }
 
   @override
-   void dispose() {
+  void dispose() {
     super.dispose();
     _advancedSwitchController.dispose();
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +187,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                             autocorrect: false,
                                             prefixButton: TextFieldButton(
                                               icon: AppIcons.scan,
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 if (AppSeeds.isValidSeed(
                                                     _seedInputController
                                                         .text)) {
@@ -189,44 +195,38 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 // Scan QR for seed
                                                 UIUtil.cancelLockEvent();
-                                                BarcodeScanner.scan(
-                                                        StateContainer.of(
-                                                                context)
-                                                            .curTheme
-                                                            .qrScanTheme)
-                                                    .then((result) {
-                                                  if (result != null &&
-                                                      AppSeeds.isValidSeed(
-                                                          result)) {
-                                                    _seedInputController.text =
-                                                        result;
-                                                    setState(() {
-                                                      _seedIsValid = true;
-                                                    });
-                                                  } else if (result != null &&
-                                                      AppMnemomics
-                                                          .validateMnemonic(
-                                                              result.split(
-                                                                  ' '))) {
-                                                    _mnemonicController.text =
-                                                        result;
-                                                    _mnemonicFocusNode
-                                                        .unfocus();
-                                                    _seedInputFocusNode
-                                                        .unfocus();
-                                                    setState(() {
-                                                      _seedMode = false;
-                                                      _mnemonicError = null;
-                                                      _mnemonicIsValid = true;
-                                                    });
-                                                  } else {
-                                                    UIUtil.showSnackbar(
-                                                        AppLocalization.of(
-                                                                context)
-                                                            .qrInvalidSeed,
-                                                        context);
-                                                  }
-                                                });
+                                                var result =
+                                                    await BarcodeScanner.scan();
+
+                                                if (result != null &&
+                                                    AppSeeds.isValidSeed(
+                                                        result.rawContent)) {
+                                                  _seedInputController.text =
+                                                      result.rawContent;
+                                                  setState(() {
+                                                    _seedIsValid = true;
+                                                  });
+                                                } else if (result != null &&
+                                                    AppMnemomics
+                                                        .validateMnemonic(result
+                                                            .rawContent
+                                                            .split(' '))) {
+                                                  _mnemonicController.text =
+                                                      result.rawContent;
+                                                  _mnemonicFocusNode.unfocus();
+                                                  _seedInputFocusNode.unfocus();
+                                                  setState(() {
+                                                    _seedMode = false;
+                                                    _mnemonicError = null;
+                                                    _mnemonicIsValid = true;
+                                                  });
+                                                } else {
+                                                  UIUtil.showSnackbar(
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .qrInvalidSeed,
+                                                      context);
+                                                }
                                               },
                                             ),
                                             fadePrefixOnCondition: true,
@@ -320,7 +320,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                             autocorrect: false,
                                             prefixButton: TextFieldButton(
                                               icon: AppIcons.scan,
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 if (AppMnemomics
                                                     .validateMnemonic(
                                                         _mnemonicController.text
@@ -329,44 +329,38 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 // Scan QR for mnemonic
                                                 UIUtil.cancelLockEvent();
-                                                BarcodeScanner.scan(
-                                                        StateContainer.of(
-                                                                context)
-                                                            .curTheme
-                                                            .qrScanTheme)
-                                                    .then((result) {
-                                                  if (result != null &&
-                                                      AppMnemomics
-                                                          .validateMnemonic(
-                                                              result.split(
-                                                                  ' '))) {
-                                                    _mnemonicController.text =
-                                                        result;
-                                                    setState(() {
-                                                      _mnemonicIsValid = true;
-                                                    });
-                                                  } else if (result != null &&
-                                                      AppSeeds.isValidSeed(
-                                                          result)) {
-                                                    _seedInputController.text =
-                                                        result;
-                                                    _mnemonicFocusNode
-                                                        .unfocus();
-                                                    _seedInputFocusNode
-                                                        .unfocus();
-                                                    setState(() {
-                                                      _seedMode = true;
-                                                      _seedIsValid = true;
-                                                      _showSeedError = false;
-                                                    });
-                                                  } else {
-                                                    UIUtil.showSnackbar(
-                                                        AppLocalization.of(
-                                                                context)
-                                                            .qrMnemonicError,
-                                                        context);
-                                                  }
-                                                });
+                                                var result =
+                                                    await BarcodeScanner.scan();
+
+                                                if (result != null &&
+                                                    AppMnemomics
+                                                        .validateMnemonic(result
+                                                            .rawContent
+                                                            .split(' '))) {
+                                                  _mnemonicController.text =
+                                                      result.rawContent;
+                                                  setState(() {
+                                                    _mnemonicIsValid = true;
+                                                  });
+                                                } else if (result != null &&
+                                                    AppSeeds.isValidSeed(
+                                                        result.rawContent)) {
+                                                  _seedInputController.text =
+                                                      result.rawContent;
+                                                  _mnemonicFocusNode.unfocus();
+                                                  _seedInputFocusNode.unfocus();
+                                                  setState(() {
+                                                    _seedMode = true;
+                                                    _seedIsValid = true;
+                                                    _showSeedError = false;
+                                                  });
+                                                } else {
+                                                  UIUtil.showSnackbar(
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .qrMnemonicError,
+                                                      context);
+                                                }
                                               },
                                             ),
                                             fadePrefixOnCondition: true,
@@ -554,8 +548,8 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                               borderRadius:
                                                   BorderRadius.circular(5),
                                               width: 76,
-                                              controller: _advancedSwitchController,
-                                            
+                                              controller:
+                                                  _advancedSwitchController,
                                             ),
                                           ],
                                         )),
@@ -572,7 +566,6 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                       height: 50,
                       width: 50,
                       child: TextButton(
-                         
                           onPressed: () async {
                             if (_seedMode) {
                               _seedInputFocusNode.unfocus();
@@ -595,7 +588,9 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                         .checkAddressIdena(address) ==
                                     false) {
                                   UIUtil.showSnackbar(
-                                      AppLocalization.of(context).addressUnknown, context);
+                                      AppLocalization.of(context)
+                                          .addressUnknown,
+                                      context);
                                   return;
                                 }
 
@@ -652,7 +647,9 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                         .checkAddressIdena(address) ==
                                     false) {
                                   UIUtil.showSnackbar(
-                                      AppLocalization.of(context).addressUnknown, context);
+                                      AppLocalization.of(context)
+                                          .addressUnknown,
+                                      context);
                                   return;
                                 }
 
@@ -706,7 +703,6 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                               }
                             }
                           },
-                      
                           child: Icon(AppIcons.forward,
                               color:
                                   StateContainer.of(context).curTheme.primary,

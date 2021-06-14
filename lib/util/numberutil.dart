@@ -1,7 +1,11 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:math';
-import 'package:intl/intl.dart';
+
+// Package imports:
 import 'package:decimal/decimal.dart';
+import 'package:intl/intl.dart';
 
 class NumberUtil {
   static const int maxDecimalDigits = 6; // Max digits after decimal
@@ -21,8 +25,10 @@ class NumberUtil {
   /// @param input 1.059
   /// @return double value 1.05
   ///
-  static double truncateDecimal(Decimal input, {int digits = maxDecimalDigits}) {
-    return (input * Decimal.fromInt(pow(10, digits))).truncateToDouble() / pow(10, digits);
+  static double truncateDecimal(Decimal input,
+      {int digits = maxDecimalDigits}) {
+    return (input * Decimal.fromInt(pow(10, digits))).truncateToDouble() /
+        pow(10, digits);
   }
 
   /// Return raw as a normal amount.
@@ -31,7 +37,8 @@ class NumberUtil {
   /// @returns 1
   ///
   static String getRawAsUsableString(String raw) {
-    NumberFormat nf = new NumberFormat.currency(locale:'en_US', decimalDigits: maxDecimalDigits, symbol:'');
+    NumberFormat nf = new NumberFormat.currency(
+        locale: 'en_US', decimalDigits: maxDecimalDigits, symbol: '');
     String asString = nf.format(truncateDecimal(getRawAsUsableDecimal(raw)));
     var split = asString.split(".");
     if (split.length > 1) {
@@ -70,16 +77,19 @@ class NumberUtil {
   /// @param amount 10020243004141
   /// @return 0.0000001%
   static String getPercentOfTotalSupply(BigInt amount) {
-    Decimal totalSupply = Decimal.parse('133248290000000000000000000000000000000');
+    Decimal totalSupply =
+        Decimal.parse('133248290000000000000000000000000000000');
     Decimal amountRaw = Decimal.parse(amount.toString());
-    return ((amountRaw / totalSupply) * Decimal.fromInt(100)).toStringAsFixed(4);
+    return ((amountRaw / totalSupply) * Decimal.fromInt(100))
+        .toStringAsFixed(4);
   }
 
   /// Sanitize a number as something that can actually
   /// be parsed. Expects "." to be decimal separator
   /// @param amount $1,512
   /// @returns 1.512
-  static String sanitizeNumber(String input, {int maxDecimalDigits = maxDecimalDigits}) {
+  static String sanitizeNumber(String input,
+      {int maxDecimalDigits = maxDecimalDigits}) {
     String sanitized = "";
     List<String> splitStr = input.split(".");
     if (splitStr.length > 1) {
@@ -88,7 +98,7 @@ class NumberUtil {
         input = splitStr[0] + "." + splitStr[1];
       }
     }
-    for (int i=0; i< input.length; i++) {
+    for (int i = 0; i < input.length; i++) {
       try {
         if (input[i] == ".") {
           sanitized = sanitized + input[i];
@@ -96,7 +106,7 @@ class NumberUtil {
           int.parse(input[i]);
           sanitized = sanitized + input[i];
         }
-      } catch (e) { }
+      } catch (e) {}
     }
     return sanitized;
   }

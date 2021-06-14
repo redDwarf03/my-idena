@@ -1,11 +1,16 @@
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/styles.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 
 class About extends StatefulWidget {
   final AnimationController aboutController;

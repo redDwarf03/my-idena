@@ -1,7 +1,12 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/ui/util/routes.dart';
 
@@ -165,9 +170,9 @@ class _AppHeightNineModalRoute<T> extends PopupRoute<T> {
         BottomSheet.createAnimationController(navigator.overlay);
     _animationController.duration = Duration(milliseconds: animationDurationMs);
     this.appSheetAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-      reverseCurve: Curves.linear)
+        parent: _animationController,
+        curve: Curves.easeOut,
+        reverseCurve: Curves.linear)
       ..addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
           appSheetAnimation.curve = Curves.linear;
@@ -194,22 +199,22 @@ class _AppHeightNineModalRoute<T> extends PopupRoute<T> {
           child: AnimatedBuilder(
             animation: appSheetAnimation,
             builder: (context, child) => CustomSingleChildLayout(
-                  delegate: _AppHeightNineSheetLayout(appSheetAnimation.value),
-                  child: BottomSheet(
-                    animationController: _animationController,
-                    onClosing: () => Navigator.pop(context),
-                    builder: (context) => Container(
-                          decoration: BoxDecoration(
-                            color: this.color,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(this.radius),
-                              topRight: Radius.circular(this.radius),
-                            ),
-                          ),
-                          child: Builder(builder: this.builder),
-                        ),
+              delegate: _AppHeightNineSheetLayout(appSheetAnimation.value),
+              child: BottomSheet(
+                animationController: _animationController,
+                onClosing: () => Navigator.pop(context),
+                builder: (context) => Container(
+                  decoration: BoxDecoration(
+                    color: this.color,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(this.radius),
+                      topRight: Radius.circular(this.radius),
+                    ),
                   ),
+                  child: Builder(builder: this.builder),
                 ),
+              ),
+            ),
           ),
         ),
       ),
@@ -302,9 +307,9 @@ class _AppHeightEightModalRoute<T> extends PopupRoute<T> {
         BottomSheet.createAnimationController(navigator.overlay);
     _animationController.duration = Duration(milliseconds: animationDurationMs);
     this.appSheetAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-      reverseCurve: Curves.linear)
+        parent: _animationController,
+        curve: Curves.easeOut,
+        reverseCurve: Curves.linear)
       ..addStatusListener((animationStatus) {
         if (animationStatus == AnimationStatus.completed) {
           appSheetAnimation.curve = Curves.linear;
@@ -324,22 +329,22 @@ class _AppHeightEightModalRoute<T> extends PopupRoute<T> {
         child: AnimatedBuilder(
           animation: appSheetAnimation,
           builder: (context, child) => CustomSingleChildLayout(
-                delegate: _AppHeightEightSheetLayout(appSheetAnimation.value),
-                child: BottomSheet(
-                  animationController: _animationController,
-                  onClosing: () => Navigator.pop(context),
-                  builder: (context) => Container(
-                        decoration: BoxDecoration(
-                          color: this.color,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(this.radius),
-                            topRight: Radius.circular(this.radius),
-                          ),
-                        ),
-                        child: Builder(builder: this.builder),
-                      ),
+            delegate: _AppHeightEightSheetLayout(appSheetAnimation.value),
+            child: BottomSheet(
+              animationController: _animationController,
+              onClosing: () => Navigator.pop(context),
+              builder: (context) => Container(
+                decoration: BoxDecoration(
+                  color: this.color,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(this.radius),
+                    topRight: Radius.circular(this.radius),
+                  ),
                 ),
+                child: Builder(builder: this.builder),
               ),
+            ),
+          ),
         ),
       ),
     );

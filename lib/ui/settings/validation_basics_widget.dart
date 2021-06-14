@@ -1,13 +1,19 @@
 // @dart=2.9
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fleva_icons/fleva_icons.dart';
-import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/styles.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 
 class ValidationBasics extends StatefulWidget {
   final AnimationController ValidationBasicsController;
@@ -512,7 +518,6 @@ class _ValidationBasicsState extends State<ValidationBasics> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-
                                                 Expanded(
                                                   child: Text(
                                                       AppLocalization.of(

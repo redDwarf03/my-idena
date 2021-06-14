@@ -1,18 +1,40 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/util/util_identity.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
-import 'package:my_idena/ui/smartContracts/timeLock_list.dart';
+import 'package:package_info/package_info.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/model/authentication_method.dart';
+import 'package:my_idena/model/available_currency.dart';
+import 'package:my_idena/model/available_language.dart';
+import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/device_lock_timeout.dart';
+import 'package:my_idena/model/device_unlock_option.dart';
+import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
@@ -20,40 +42,27 @@ import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
 import 'package:my_idena/ui/settings/backupseed_sheet.dart';
 import 'package:my_idena/ui/settings/chart_sheet.dart';
-import 'package:my_idena/ui/settings/profile_infos_widget.dart';
-import 'package:my_idena/ui/settings/validation_basics_widget.dart';
-import 'package:my_idena/ui/widgets/app_simpledialog.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/hapticutil.dart';
-import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/util_node.dart';
-import 'package:package_info/package_info.dart';
-import 'package:flutter/material.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/model/authentication_method.dart';
-import 'package:my_idena/model/available_currency.dart';
-import 'package:my_idena/model/device_unlock_option.dart';
-import 'package:my_idena/model/device_lock_timeout.dart';
-import 'package:my_idena/model/available_language.dart';
-import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/model/db/appdb.dart';
-import 'package:my_idena/ui/settings/settings_list_item.dart';
 import 'package:my_idena/ui/settings/contacts_widget.dart';
+import 'package:my_idena/ui/settings/profile_infos_widget.dart';
+import 'package:my_idena/ui/settings/settings_list_item.dart';
+import 'package:my_idena/ui/settings/validation_basics_widget.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
+import 'package:my_idena/ui/smartContracts/timeLock_list.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/security.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/util/biometrics.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:fluttericon/rpg_awesome_icons.dart';
-
+import 'package:my_idena/util/hapticutil.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_node.dart';
 import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
+
+import 'package:idena_lib_dart/enums/identity_status.dart'
+    as IdentityStatus;
 
 class SettingsSheet extends StatefulWidget {
   final ReceiveSheet receive;
@@ -664,25 +673,57 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       width: 0),
                                 ),
                                 alignment: AlignmentDirectional(-1, 0),
-                                child: 
-                                  _state == IdentityStatus.Human ? Image.asset('assets/images/human_blank.png', width: 70)
-                                : _state == IdentityStatus.Verified ? Image.asset('assets/images/verified_blank.png', width: 70)
-                                : _state == IdentityStatus.Newbie ? Image.asset('assets/images/newbie_blank.png', width: 70)
-                                : _state == IdentityStatus.Candidate ? Image.asset('assets/images/candidate_blank.png', width: 70)
-                                : _state == IdentityStatus.Suspended ? Image.asset('assets/images/suspended_blank.png', width: 70)
-                                : _state == IdentityStatus.Zombie ? Image.asset('assets/images/zombie_blank.png', width: 70)
-                                : _state == IdentityStatus.Invite ? Image.asset('assets/images/human_blank.png', width: 70)
-                                : _state == IdentityStatus.Terminating ? Image.asset('assets/images/terminated_blank.png', width: 70)
-                                : CircleAvatar(
-                                  backgroundColor: StateContainer.of(context)
-                                      .curTheme
-                                      .text05,
-                                  backgroundImage: UIUtil.getRobohashURL(
-                                      StateContainer.of(context)
-                                          .selectedAccount
-                                          .address),
-                                  radius: 50.0,
-                                ),
+                                child: _state == IdentityStatus.Human
+                                    ? Image.asset(
+                                        'assets/images/human_blank.png',
+                                        width: 70)
+                                    : _state == IdentityStatus.Verified
+                                        ? Image.asset(
+                                            'assets/images/verified_blank.png',
+                                            width: 70)
+                                        : _state == IdentityStatus.Newbie
+                                            ? Image.asset(
+                                                'assets/images/newbie_blank.png',
+                                                width: 70)
+                                            : _state == IdentityStatus.Candidate
+                                                ? Image.asset(
+                                                    'assets/images/candidate_blank.png',
+                                                    width: 70)
+                                                : _state ==
+                                                        IdentityStatus.Suspended
+                                                    ? Image.asset(
+                                                        'assets/images/suspended_blank.png',
+                                                        width: 70)
+                                                    : _state ==
+                                                            IdentityStatus
+                                                                .Zombie
+                                                        ? Image.asset(
+                                                            'assets/images/zombie_blank.png',
+                                                            width: 70)
+                                                        : _state ==
+                                                                IdentityStatus
+                                                                    .Invite
+                                                            ? Image.asset(
+                                                                'assets/images/human_blank.png',
+                                                                width: 70)
+                                                            : _state ==
+                                                                    IdentityStatus
+                                                                        .Terminating
+                                                                ? Image.asset(
+                                                                    'assets/images/terminated_blank.png',
+                                                                    width: 70)
+                                                                : CircleAvatar(
+                                                                    backgroundColor: StateContainer.of(
+                                                                            context)
+                                                                        .curTheme
+                                                                        .text05,
+                                                                    backgroundImage: UIUtil.getRobohashURL(StateContainer.of(
+                                                                            context)
+                                                                        .selectedAccount
+                                                                        .address),
+                                                                    radius:
+                                                                        50.0,
+                                                                  ),
                               ),
                             ),
                             Center(
@@ -1697,12 +1738,11 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).timeLockTitle,
                         "TimeLock smart contract locks coins on the smart contract address until the specified block number appears. Once the block number is mined, the coins can be transferred to the specified address.",
                         Entypo.hourglass, onPressed: () {
-                       Sheets.showAppHeightEightSheet(
+                      Sheets.showAppHeightEightSheet(
                           context: context,
                           widget: TimeLockList(StateContainer.of(context)
                               .selectedAccount
                               .address));
-                   
                     }),
                     Divider(
                       height: 2,
@@ -1718,9 +1758,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                           widget: MultiSigList(StateContainer.of(context)
                               .selectedAccount
                               .address));
-                   
                     }),
-                   
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End

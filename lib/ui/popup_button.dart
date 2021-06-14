@@ -1,9 +1,15 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/model/address.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/model/address.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/util/user_data_util.dart';
 
@@ -29,18 +35,19 @@ class _AppPopupButtonState extends State<AppPopupButton> {
   }
 
   Future<void> scanAndHandlResult() async {
-    dynamic scanResult = await Navigator.pushNamed(context, '/before_scan_screen');
+    dynamic scanResult =
+        await Navigator.pushNamed(context, '/before_scan_screen');
     // Parse scan data and route appropriately
     if (scanResult == null) {
-      UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
+      UIUtil.showSnackbar(
+          AppLocalization.of(context).qrInvalidAddress, context);
     } else if (!QRScanErrs.ERROR_LIST.contains(scanResult)) {
       // Is a URI
       Address address = Address(scanResult);
       if (address.address == null) {
-        UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
-      } else {
-
-      }
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).qrInvalidAddress, context);
+      } else {}
     }
   }
 
@@ -67,7 +74,6 @@ class _AppPopupButtonState extends State<AppPopupButton> {
             ),
           ),
         ),
-       
       ],
     );
   }

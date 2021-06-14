@@ -1,8 +1,14 @@
+// @dart=2.9
+
+// Dart imports:
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/services.dart';
 
-import 'package:vibrate/vibrate.dart';
+// Package imports:
 import 'package:device_info/device_info.dart';
+import 'package:vibration/vibration.dart';
 
 /// Utilities for haptic feedback
 class HapticUtil {
@@ -11,8 +17,8 @@ class HapticUtil {
     if (!Platform.isIOS) {
       return false;
     }
-    IosDeviceInfo deviceInfo = await DeviceInfoPlugin().iosInfo;
-    String deviceIdentifier = deviceInfo.utsname.machine;
+    final IosDeviceInfo deviceInfo = await DeviceInfoPlugin().iosInfo;
+    final String deviceIdentifier = deviceInfo.utsname.machine;
     switch (deviceIdentifier) {
       case 'iPhone5,1': // iPhone 5
       case 'iPhone5,2': // iPhone 5
@@ -34,8 +40,8 @@ class HapticUtil {
   Future<void> error() async {
     if (Platform.isIOS) {
       // If this is simulator or this device doesnt have tapic then we can't use this
-      if (await hasTapicEngine() && await Vibrate.canVibrate) {
-        Vibrate.feedback(FeedbackType.error);
+      if (await hasTapicEngine() && await Vibration.hasVibrator()) {
+        Vibration.vibrate(duration: 200);
       } else {
         HapticFeedback.vibrate();
       }
@@ -48,8 +54,8 @@ class HapticUtil {
   Future<void> success() async {
     if (Platform.isIOS) {
       // If this is simulator or this device doesnt have tapic then we can't use this
-      if (await hasTapicEngine() && await Vibrate.canVibrate) {
-        Vibrate.feedback(FeedbackType.medium);
+      if (await hasTapicEngine() && await Vibration.hasVibrator()) {
+        Vibration.vibrate(duration: 200);
       } else {
         HapticFeedback.mediumImpact();
       }
@@ -62,7 +68,7 @@ class HapticUtil {
   /// iOS-only, since Android already gives us feedback on success
   Future<void> fingerprintSucess() async {
     if (Platform.isIOS) {
-      Future.delayed(Duration(milliseconds: 50), () => success());
+      Future.delayed(const Duration(milliseconds: 50), () => success());
     }
   }
 }

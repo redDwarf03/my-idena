@@ -1,6 +1,12 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 
 class TimeLockCountDown extends StatefulWidget {

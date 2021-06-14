@@ -1,5 +1,9 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/styles.dart';
 
 enum AddressTextType { PRIMARY60, PRIMARY, SUCCESS }
@@ -9,7 +13,8 @@ class OneOrThreeLineAddressText extends StatelessWidget {
   String contactName;
   AddressTextType type;
 
-  OneOrThreeLineAddressText({@required this.address, @required this.type, this.contactName});
+  OneOrThreeLineAddressText(
+      {@required this.address, @required this.type, this.contactName});
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +97,11 @@ class OneOrThreeLineAddressText extends StatelessWidget {
                 ),
               ),
             ],
-          );      
+          );
       }
     }
     // Three line
- String stringPartOne = "";
+    String stringPartOne = "";
     String stringPartTwo = "";
     String stringPartThree = "";
     String stringPartFour = "";
@@ -172,9 +177,8 @@ class OneOrThreeLineAddressText extends StatelessWidget {
                     style: AppStyles.textStyleAddressText60(context),
                   ),
                   TextSpan(
-                    text: stringPartFive,
-                    style: AppStyles.textStyleAddressText60(context)
-                  ),
+                      text: stringPartFive,
+                      style: AppStyles.textStyleAddressText60(context)),
                 ],
               ),
             )

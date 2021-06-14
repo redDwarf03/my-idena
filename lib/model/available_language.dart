@@ -1,8 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/setting_item.dart';
 
-enum AvailableLanguage { DEFAULT, ENGLISH, FRENCH}
+enum AvailableLanguage { DEFAULT, ENGLISH, FRENCH }
 
 /// Represent the available languages our app supports
 class LanguageSetting extends SettingSelectionItem {

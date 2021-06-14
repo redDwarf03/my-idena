@@ -1,17 +1,25 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:my_idena/appstate_container.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/util/keys/seeds.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
@@ -19,7 +27,6 @@ import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/user_data_util.dart';
 import 'package:my_idena/util/util_demo_mode.dart';

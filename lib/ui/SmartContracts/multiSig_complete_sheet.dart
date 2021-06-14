@@ -1,6 +1,12 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:fluttericon/font_awesome5_icons.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
@@ -13,8 +19,7 @@ class MultiSigCompleteSheet extends StatefulWidget {
   final int minVotes;
   final int maxVotes;
 
-  MultiSigCompleteSheet(  
-      {this.amountRaw, this.minVotes, this.maxVotes})
+  MultiSigCompleteSheet({this.amountRaw, this.minVotes, this.maxVotes})
       : super();
 
   _MultiSigCompleteSheetState createState() => _MultiSigCompleteSheetState();
@@ -64,7 +69,7 @@ class _MultiSigCompleteSheetState extends State<MultiSigCompleteSheet> {
                   //
                   Container(
                     alignment: AlignmentDirectional(0, 0),
-                    margin: EdgeInsets.only(bottom: 25),  
+                    margin: EdgeInsets.only(bottom: 25),
                     child: Icon(FontAwesome5.vote_yea,
                         size: 100,
                         color: StateContainer.of(context).curTheme.success),

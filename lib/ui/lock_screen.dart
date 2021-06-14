@@ -1,20 +1,23 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/util/biometrics.dart';
-import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/widgets/security.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/dimens.dart';
 import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
+import 'package:my_idena/ui/widgets/security.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/biometrics.dart';
+import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 
 class AppLockScreen extends StatefulWidget {
   @override
@@ -31,13 +34,14 @@ class _AppLockScreenState extends State<AppLockScreen> {
     if (StateContainer.of(context).wallet != null) {
       // TODO: Voir
     } else {
-      await AppUtil()
-          .loginAccount(context);
+      await AppUtil().loginAccount(context);
     }
     StateContainer.of(context).requestUpdate();
-    PriceConversion conversion = await sl.get<SharedPrefsUtil>().getPriceConversion();
+    PriceConversion conversion =
+        await sl.get<SharedPrefsUtil>().getPriceConversion();
     Navigator.of(context).pushNamedAndRemoveUntil(
-        '/home_transition', (Route<dynamic> route) => false, arguments: conversion);
+        '/home_transition', (Route<dynamic> route) => false,
+        arguments: conversion);
   }
 
   Widget _buildPinScreen(BuildContext context, String expectedPin) {
@@ -124,7 +128,10 @@ class _AppLockScreenState extends State<AppLockScreen> {
   }
 
   Future<void> authenticateWithBiometrics() async {
-    bool authenticated = await sl.get<BiometricUtil>().authenticateWithBiometrics(context, AppLocalization.of(context).unlockBiometrics);
+    bool authenticated = await sl
+        .get<BiometricUtil>()
+        .authenticateWithBiometrics(
+            context, AppLocalization.of(context).unlockBiometrics);
     if (authenticated) {
       _goHome();
     } else {
@@ -179,7 +186,8 @@ class _AppLockScreenState extends State<AppLockScreen> {
     setState(() {
       _lockedOut = false;
     });
-    AuthenticationMethod authMethod = await sl.get<SharedPrefsUtil>().getAuthMethod();
+    AuthenticationMethod authMethod =
+        await sl.get<SharedPrefsUtil>().getAuthMethod();
     bool hasBiometrics = await sl.get<BiometricUtil>().hasBiometrics();
     if (authMethod.method == AuthMethod.BIOMETRICS && hasBiometrics) {
       setState(() {
@@ -243,9 +251,8 @@ class _AppLockScreenState extends State<AppLockScreen> {
                                         .logoutReassurance,
                                     CaseChange.toUpperCase(
                                         AppLocalization.of(context).yes,
-                                        context), () {
-                                 
-                                });
+                                        context),
+                                    () {});
                               });
                             },
                             highlightColor:

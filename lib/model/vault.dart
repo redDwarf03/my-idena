@@ -1,12 +1,16 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/services.dart';
 
+// Package imports:
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:my_idena/util/random_util.dart';
-
+import 'package:idena_lib_dart/util/encrypt.dart';
+import 'package:idena_lib_dart/util/random_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/encrypt.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 // Singleton for keystore access methods in android/iOS

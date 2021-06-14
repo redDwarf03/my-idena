@@ -1,7 +1,12 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 
 class BeforeScanScreen extends StatefulWidget {

@@ -1,15 +1,22 @@
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_getEpoch_response.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/styles.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
+
+import 'package:idena_lib_dart/enums/identity_status.dart'
+    as IdentityStatus;
 
 class ProfileInfos extends StatefulWidget {
   final AnimationController profileInfosController;
@@ -144,7 +151,9 @@ class _ProfileInfosState extends State<ProfileInfos> {
                                                           ? Image.asset(
                                                               'assets/images/zombie_blank.png',
                                                               width: 40)
-                                                          : dnaIdentityResponse.result.state ==
+                                                          : dnaIdentityResponse
+                                                                      .result
+                                                                      .state ==
                                                                   IdentityStatus.Invite
                                                               ? Image.asset('assets/images/human_blank.png', width: 40)
                                                               : dnaIdentityResponse.result.state == IdentityStatus.Terminating

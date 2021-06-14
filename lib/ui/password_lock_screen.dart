@@ -1,19 +1,25 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/dimens.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class AppPasswordLockScreen extends StatefulWidget {
@@ -228,8 +234,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
     if (StateContainer.of(context).wallet != null) {
       // TODO: voir
     } else {
-      await AppUtil()
-          .loginAccount(context);
+      await AppUtil().loginAccount(context);
     }
     StateContainer.of(context).requestUpdate();
     PriceConversion conversion =

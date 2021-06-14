@@ -1,16 +1,24 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:my_idena/localization.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
-import 'package:my_idena/dimens.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/ui/receive/share_card.dart';
-import 'package:my_idena/appstate_container.dart';
+import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+
+// Project imports:
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/ui/receive/share_card.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
 
 class ReceiveSheet extends StatefulWidget {
   final Widget qrWidget;
@@ -174,10 +182,12 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                         margin: EdgeInsetsDirectional.only(
                             top: MediaQuery.of(context).size.width / 110),
                         child: CircleAvatar(
-                          backgroundColor: StateContainer.of(context).curTheme.text05,
-                          backgroundImage: UIUtil.getRobohashURL(StateContainer.of(context)
-                                .selectedAccount
-                                .address),
+                          backgroundColor:
+                              StateContainer.of(context).curTheme.text05,
+                          backgroundImage: UIUtil.getRobohashURL(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address),
                           radius: 50.0,
                         ),
                       ),
@@ -220,7 +230,6 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                     }),
                   ],
                 ),
-            
               ],
             ),
           ],

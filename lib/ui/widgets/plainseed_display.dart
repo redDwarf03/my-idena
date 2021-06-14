@@ -1,14 +1,20 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/styles.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
 
 /// A widget for displaying a mnemonic phrase
 class PlainSeedDisplay extends StatefulWidget {
@@ -109,8 +115,7 @@ class _PlainSeedDisplayState extends State<PlainSeedDisplay> {
                 padding: EdgeInsets.all(0.0),
                 child: OutlineButton(
                   onPressed: () {
-                    Clipboard.setData(new ClipboardData(
-                                            text: widget.seed));
+                    Clipboard.setData(new ClipboardData(text: widget.seed));
                     //UserDataUtil.setSecureClipboardItem(widget.seed);
                     setState(() {
                       _seedCopied = true;
@@ -142,7 +147,9 @@ class _PlainSeedDisplayState extends State<PlainSeedDisplay> {
                           : StateContainer.of(context).curTheme.primary,
                       width: 1.0),
                   child: AutoSizeText(
-                    _seedCopied ? AppLocalization.of(context).copied : AppLocalization.of(context).copy,
+                    _seedCopied
+                        ? AppLocalization.of(context).copied
+                        : AppLocalization.of(context).copy,
                     textAlign: TextAlign.center,
                     style: _seedCopied
                         ? AppStyles.textStyleButtonSuccessSmallOutline(context)

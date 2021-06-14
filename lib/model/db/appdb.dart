@@ -1,9 +1,15 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 import 'dart:io' as io;
+
+// Package imports:
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
+// Project imports:
 import 'package:my_idena/model/db/account.dart';
 import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
@@ -168,8 +174,7 @@ class DBHelper {
     return accounts;
   }
 
-  Future<List<Account>> getRecentlyUsedAccounts(
-      {int limit = 2}) async {
+  Future<List<Account>> getRecentlyUsedAccounts({int limit = 2}) async {
     var dbClient = await db;
     List<Map> list = await dbClient.rawQuery(
         'SELECT * FROM Accounts WHERE selected != 1 ORDER BY last_accessed DESC, acct_index ASC LIMIT ?',

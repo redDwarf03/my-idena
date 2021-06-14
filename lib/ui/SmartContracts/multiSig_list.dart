@@ -1,20 +1,34 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+import 'package:idena_lib_dart/model/request/contract/api_contract_balance_updates_response.dart';
+import 'package:idena_lib_dart/model/request/contract/api_contract_txs_response.dart';
+import 'package:idena_lib_dart/model/response/contract/contract_get_stake_response.dart';
+import 'package:idena_lib_dart/model/response/contract/contract_iterate_map_response.dart';
+import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
+import 'package:idena_lib_dart/model/smartContractMultiSig.dart';
 import 'package:logger/logger.dart';
+import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
+import 'package:timelines/timelines.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/model/smartContractMultiSig.dart';
-import 'package:my_idena/network/model/request/contract/api_contract_balance_updates_response.dart';
-import 'package:my_idena/network/model/request/contract/api_contract_txs_response.dart';
-import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
-import 'package:my_idena/network/model/response/contract/contract_iterate_map_response.dart';
-import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/factory/smart_contract_service.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/smartContracts/multiSig_sheet.dart';
 import 'package:my_idena/ui/smartContracts/multiSig_voters.dart';
@@ -22,16 +36,9 @@ import 'package:my_idena/ui/smartContracts/smart_contract_add_voter_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_push_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_terminate_sheet.dart';
 import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/dimens.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
-import 'package:timelines/timelines.dart';
 
 const kTileHeight = 50.0;
 const completeColor = Color(0xff5e6172);
@@ -83,9 +90,7 @@ class _MultiSigListState extends State<MultiSigList> {
 
         ApiContractBalanceUpdatesResponse apiContractBalanceUpdatesResponse =
             await sl.get<SmartContractService>().getContractBalanceUpdates(
-                null,
-                apiContractTxsResponse.result[i].to,
-                100);
+                null, apiContractTxsResponse.result[i].to, 100);
         if (apiContractBalanceUpdatesResponse != null &&
             apiContractBalanceUpdatesResponse.result != null) {
           smartContractMultiSig.balanceUpdates =
@@ -109,7 +114,8 @@ class _MultiSigListState extends State<MultiSigList> {
             if (smartContractMultiSig.balanceUpdates[j].txReceipt != null &&
                 smartContractMultiSig.balanceUpdates[j].txReceipt.method ==
                     "send" &&
-                    smartContractMultiSig.balanceUpdates[j].txReceipt.success == true) {
+                smartContractMultiSig.balanceUpdates[j].txReceipt.success ==
+                    true) {
               smartContractMultiSig.nbVotesDone++;
             }
           }
@@ -125,8 +131,7 @@ class _MultiSigListState extends State<MultiSigList> {
 
           DnaGetBalanceResponse dnaGetBalanceResponse = await sl
               .get<AppService>()
-              .getBalanceGetResponse(
-                  smartContractMultiSig.contractAddress, false);
+              .getBalanceGetResponse(smartContractMultiSig.contractAddress);
           if (dnaGetBalanceResponse != null &&
               dnaGetBalanceResponse.result != null) {
             smartContractMultiSig.balance =
@@ -1007,8 +1012,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                             contractAddress:
                                                                 smartContractMultiSig
                                                                     .contractAddress,
-                                                            nodeAddress:
-                                                                widget.address));
+                                                            nodeAddress: widget
+                                                                .address));
                                                   },
                                                 ),
                                               )
@@ -1044,8 +1049,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                                 smartContractMultiSig
                                                                     .balance
                                                                     .toString(),
-                                                            nodeAddress:
-                                                                widget.address));
+                                                            nodeAddress: widget
+                                                                .address));
                                                   },
                                                 ),
                                               ),
@@ -1092,8 +1097,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                             address: await getWinner(
                                                                 smartContractMultiSig
                                                                     .contractAddress),
-                                                            nodeAddress:
-                                                                 widget.address));
+                                                            nodeAddress: widget
+                                                                .address));
                                                   },
                                                 ),
                                               )
@@ -1129,9 +1134,8 @@ class _MultiSigListState extends State<MultiSigList> {
                                                             contractAddress:
                                                                 smartContractMultiSig
                                                                     .contractAddress,
-                                                            nodeAddress:
-                                                                widget.address
-                                                                    ));
+                                                            nodeAddress: widget
+                                                                .address));
                                                   },
                                                 ),
                                               ),

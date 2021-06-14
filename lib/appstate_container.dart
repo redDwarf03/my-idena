@@ -1,35 +1,43 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:hex/hex.dart';
-import 'package:logger/logger.dart';
-import 'package:my_idena/model/smartContractMultiSig.dart';
-import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/model/wallet.dart';
-import 'package:event_taxi/event_taxi.dart';
+
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena/network/model/dictWords.dart';
-import 'package:my_idena/network/model/request/contract/api_contract_balance_updates_response.dart';
-import 'package:my_idena/network/model/request/contract/api_contract_response.dart';
-import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
-import 'package:my_idena/network/model/response/contract/contract_get_stake_response.dart';
-import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/factory/smart_contract_service.dart';
-import 'package:my_idena/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena/util/helpers.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
+import 'package:hex/hex.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+import 'package:idena_lib_dart/model/dictWords.dart';
+import 'package:idena_lib_dart/model/request/contract/api_contract_balance_updates_response.dart';
+import 'package:idena_lib_dart/model/request/contract/api_contract_response.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
+import 'package:idena_lib_dart/model/response/contract/contract_get_stake_response.dart';
+import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/model/response/simplePrice/simple_price_response.dart';
+import 'package:idena_lib_dart/model/smartContractMultiSig.dart';
+import 'package:idena_lib_dart/util/encrypt/crypter.dart';
+import 'package:idena_lib_dart/util/helpers.dart';
+import 'package:logger/logger.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:my_idena/themes.dart';
-import 'package:my_idena/service_locator.dart';
+
+// Project imports:
+import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/model/available_language.dart';
-import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/account.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/model/wallet.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/themes.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/bus/events.dart';
-
+import 'package:my_idena/util/sharedprefsutil.dart';
 import 'util/sharedprefsutil.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
@@ -275,7 +283,10 @@ class StateContainerState extends State<StateContainer> {
 
   // Change curency
   void updateCurrency(AvailableCurrency currency) async {
-    await sl.get<AppService>().getSimplePrice(currency.getIso4217Code());
+    SimplePriceResponse simplePriceResponse =
+        await sl.get<AppService>().getSimplePrice(currency.getIso4217Code());
+    // Post to callbacks
+    EventTaxiImpl.singleton().fire(PriceEvent(response: simplePriceResponse));
     setState(() {
       curCurrency = currency;
     });
@@ -322,10 +333,18 @@ class StateContainerState extends State<StateContainer> {
       // Request account history
       int count = 40;
       try {
-        await sl
+        DnaGetBalanceResponse dnaGetBalanceResponse = await sl
             .get<AppService>()
-            .getBalanceGetResponse(wallet.address.toString(), true);
-        await sl.get<AppService>().getSimplePrice(curCurrency.getIso4217Code());
+            .getBalanceGetResponse(wallet.address.toString());
+        EventTaxiImpl.singleton()
+            .fire(SubscribeEvent(response: dnaGetBalanceResponse));
+
+        SimplePriceResponse simplePriceResponse = await sl
+            .get<AppService>()
+            .getSimplePrice(curCurrency.getIso4217Code());
+        // Post to callbacks
+        EventTaxiImpl.singleton()
+            .fire(PriceEvent(response: simplePriceResponse));
 
         BcnTransactionsResponse addressTxsResponse = await sl
             .get<AppService>()
@@ -406,7 +425,7 @@ class StateContainerState extends State<StateContainer> {
                     DnaGetBalanceResponse dnaGetBalanceResponse = await sl
                         .get<AppService>()
                         .getBalanceGetResponse(
-                            smartContractMultiSig.contractAddress, false);
+                            smartContractMultiSig.contractAddress);
                     if (dnaGetBalanceResponse != null &&
                         dnaGetBalanceResponse.result != null) {
                       smartContractMultiSig.balance =

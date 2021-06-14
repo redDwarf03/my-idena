@@ -1,58 +1,65 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
-
-import 'package:flare_flutter/flare.dart';
-import 'package:flare_flutter/base/animation/actor_animation.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_controller.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:flare_flutter/base/animation/actor_animation.dart';
+import 'package:flare_flutter/flare.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
-import 'package:my_idena/model/deepLinks/idena_url.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/themes.dart';
-import 'package:my_idena/ui/send/send_sheet.dart';
-import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
-import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
+import 'package:idena_lib_dart/deepLinks/idena_url.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
+import 'package:idena_lib_dart/util/helpers.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/model/db/appdb.dart';
-import 'package:my_idena/network/model/block_types.dart';
+import 'package:my_idena/model/db/contact.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/themes.dart';
 import 'package:my_idena/ui/contacts/add_contact.dart';
 import 'package:my_idena/ui/popup_button.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
+import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/settings_drawer.dart';
+import 'package:my_idena/ui/smartContracts/smart_contract_vote_sheet.dart';
+import 'package:my_idena/ui/util/block_types.dart';
+import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/validation_session/validation_session_countdown_view.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/list_slidable.dart';
-import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/widgets/reactive_refresh.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/ui/widgets/sync_info_view.dart';
-import 'package:my_idena/util/helpers.dart';
-
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/hapticutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/hapticutil.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/util_node.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:my_idena/bus/events.dart';
+
+import 'package:idena_lib_dart/enums/identity_status.dart'
+    as IdentityStatus;
 
 class AppHomePage extends StatefulWidget {
   PriceConversion priceConversion;

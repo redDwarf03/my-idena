@@ -1,10 +1,16 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/enums/answer_type.dart' as AnswerType;
+import 'package:idena_lib_dart/factory/validation_service.dart';
+import 'package:idena_lib_dart/model/validation_session_infos.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 
 class FlipDetail extends StatefulWidget {
   final ValidationSessionInfoFlips validationSessionInfoFlips;
@@ -13,7 +19,12 @@ class FlipDetail extends StatefulWidget {
   final bool simulationMode;
   final String privateKey;
 
-  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip, this.simulationMode, this.address, this.privateKey});
+  FlipDetail(
+      {this.validationSessionInfoFlips,
+      this.onSelectFlip,
+      this.simulationMode,
+      this.address,
+      this.privateKey});
 
   _FlipDetailState createState() => _FlipDetailState();
 }
@@ -36,8 +47,10 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesLeft.length != 4 ||
             _validationSessionInfoFlips.listImagesRight == null ||
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
-      _validationSessionInfoFlips = await sl.get<ValidationService>()
-          .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode, widget.privateKey);
+      _validationSessionInfoFlips = await sl
+          .get<ValidationService>()
+          .getValidationSessionFlipDetail(_validationSessionInfoFlips,
+              widget.address, widget.simulationMode, widget.privateKey);
       //print("listImagesLeft length : " +
       //    _validationSessionInfoFlips.listImagesLeft.length.toString());
       setState(() {});
@@ -64,8 +77,11 @@ class _FlipDetailState extends State<FlipDetail> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  height:  (((((MediaQuery.of(context).size.width) - 72) ~/ 2) / (4 / 3) * 4) + 100)
-                .toDouble(),
+                  height: (((((MediaQuery.of(context).size.width) - 72) ~/ 2) /
+                              (4 / 3) *
+                              4) +
+                          100)
+                      .toDouble(),
                   margin: EdgeInsetsDirectional.only(start: 2.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

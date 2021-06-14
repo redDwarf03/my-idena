@@ -1,15 +1,22 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/bcn_syncing_response.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/response/bcn_syncing_response.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/util_node.dart';
 
@@ -56,8 +63,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
         }
       }
       _bcnSyncingResponse = await sl.get<AppService>().checkSync();
-      if (_bcnSyncingResponse != null &&
-          _bcnSyncingResponse.result != null) {
+      if (_bcnSyncingResponse != null && _bcnSyncingResponse.result != null) {
         _status = true;
       } else {
         _status = false;
@@ -143,7 +149,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
                 ],
               )
             : SizedBox(),
-             SizedBox(width: 10),
+        SizedBox(width: 10),
         _nodeType == DEMO_NODE
             ? SizedBox()
             : _bcnSyncingResponse != null && _bcnSyncingResponse.result.syncing

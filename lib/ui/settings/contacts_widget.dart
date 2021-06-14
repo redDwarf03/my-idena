@@ -1,29 +1,38 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:event_taxi/event_taxi.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/address.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/util_node.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/dimens.dart';
-import 'package:my_idena/styles.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
 import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/model/address.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/db/contact.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/contacts/add_contact.dart';
 import 'package:my_idena/ui/contacts/contact_details.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
+import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/util_node.dart';
+
+import 'package:idena_lib_dart/enums/identity_status.dart'
+    as IdentityStatus;
 
 class ContactsList extends StatefulWidget {
   final AnimationController contactsController;

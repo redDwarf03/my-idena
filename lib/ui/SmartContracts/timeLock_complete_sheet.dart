@@ -1,9 +1,15 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:intl/intl.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/util/caseconverter.dart';
@@ -14,10 +20,7 @@ class TimeLockCompleteSheet extends StatefulWidget {
   final String localAmount;
   final DateTime dateUnlock;
 
-  TimeLockCompleteSheet(
-      {this.amountRaw,
-      this.localAmount,
-      this.dateUnlock})
+  TimeLockCompleteSheet({this.amountRaw, this.localAmount, this.dateUnlock})
       : super();
 
   _TimeLockCompleteSheetState createState() => _TimeLockCompleteSheetState();
@@ -134,7 +137,8 @@ class _TimeLockCompleteSheetState extends State<TimeLockCompleteSheet> {
                         //
                         Text(
                           CaseChange.toUpperCase(
-                              AppLocalization.of(context).unlockTimeTitle, context),
+                              AppLocalization.of(context).unlockTimeTitle,
+                              context),
                           style: TextStyle(
                             fontSize: 28.0,
                             fontWeight: FontWeight.w700,

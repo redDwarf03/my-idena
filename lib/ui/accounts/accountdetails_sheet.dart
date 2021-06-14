@@ -1,19 +1,27 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/service_locator.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_idena/dimens.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/localization.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/account.dart';
 import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
@@ -188,107 +196,114 @@ class AccountDetailsSheet {
                             ),
                             // Balance Text
                             (account.balance != null || account.selected)
-                                ? Column(children: [
-                                  Container(
-                                    margin: EdgeInsets.only(top: 5.0),
-                                    child: RichText(
-                                      textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        text: '',
-                                        children: [
-                                          TextSpan(
-                                            text: "(Balance : ",
-                                            style: TextStyle(
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary60,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                            ),
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5.0),
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text: "(Balance : ",
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary60,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: NumberUtil
+                                                    .getRawAsUsableString(
+                                                        account.balance == null
+                                                            ? StateContainer.of(
+                                                                    context)
+                                                                .wallet
+                                                                .accountBalance
+                                                                .toString()
+                                                            : account.balance),
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary60,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: " IDNA)",
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary60,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          TextSpan(
-                                            text: 
-                                                NumberUtil.getRawAsUsableString(
-                                                    account.balance == null
-                                                        ? StateContainer.of(
-                                                                context)
-                                                            .wallet
-                                                            .accountBalance
-                                                            .toString()
-                                                        : account.balance),
-                                            style: TextStyle(
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary60,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Roboto',
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: " IDNA)",
-                                            style: TextStyle(
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .primary60,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                   Container(
-                                    margin: EdgeInsets.only(top: 5.0),
-                                    child: RichText(
-                                      textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        text: '',
-                                        children: [
-                                          TextSpan(
-                                            text: "(Stake : ",
-                                            style: TextStyle(
-                                              color: Colors.red.withOpacity(0.6),
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                            ),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 5.0),
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text: "(Stake : ",
+                                                style: TextStyle(
+                                                  color: Colors.red
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: NumberUtil
+                                                    .getRawAsUsableString(
+                                                        account.balance == null
+                                                            ? StateContainer.of(
+                                                                    context)
+                                                                .wallet
+                                                                .accountStake
+                                                                .toString()
+                                                            : account.stake),
+                                                style: TextStyle(
+                                                  color: Colors.red
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: " IDNA)",
+                                                style: TextStyle(
+                                                  color: Colors.red
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'Roboto',
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          TextSpan(
-                                            text: 
-                                                NumberUtil.getRawAsUsableString(
-                                                    account.balance == null
-                                                        ? StateContainer.of(
-                                                                context)
-                                                            .wallet
-                                                            .accountStake
-                                                            .toString()
-                                                        : account.stake),
-                                            style: TextStyle(
-                                              color: Colors.red.withOpacity(0.6),
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Roboto',
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: " IDNA)",
-                                            style: TextStyle(
-                                              color: 
-                                                  Colors.red.withOpacity(0.6),
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w100,
-                                              fontFamily: 'Roboto',
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  ],)
+                                    ],
+                                  )
                                 : SizedBox(),
 
                             // The main container that holds Contact Name and Contact Address

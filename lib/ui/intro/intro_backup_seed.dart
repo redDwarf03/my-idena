@@ -1,22 +1,28 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:hex/hex.dart';
-import 'package:my_idena/appstate_container.dart';
+import 'package:idena_lib_dart/enums/wallet_type.dart';
+import 'package:idena_lib_dart/util/encrypt/crypter.dart';
+import 'package:idena_lib_dart/util/keys/mnemonics.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/widgets/plainseed_display.dart';
-import 'package:my_idena/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/ui/widgets/mnemonic_display.dart';
-import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
-import 'package:my_idena/util/enums/wallet_type.dart';
+import 'package:my_idena/ui/widgets/plainseed_display.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class IntroBackupSeedPage extends StatefulWidget {
@@ -200,8 +206,10 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
                       // Update wallet
                       sl.get<DBHelper>().dropAccounts().then((_) {
                         StateContainer.of(context).getSeed().then((seed) async {
-                          String address = await AppUtil().seedToAddress(_seed,
-                              StateContainer.of(context).selectedAccount.index, HD_WALLET);
+                          String address = await AppUtil().seedToAddress(
+                              _seed,
+                              StateContainer.of(context).selectedAccount.index,
+                              HD_WALLET);
 
                           await sl.get<SharedPrefsUtil>().setAddress(address);
 

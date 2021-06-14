@@ -1,34 +1,39 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/address.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/available_currency.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/model/address.dart';
-import 'package:my_idena/model/db/contact.dart';
 import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/db/contact.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/send/send_confirm_sheet.dart';
+import 'package:my_idena/ui/util/formatters.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
-import 'package:my_idena/ui/util/formatters.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/numberutil.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 import 'package:my_idena/util/user_data_util.dart';
 

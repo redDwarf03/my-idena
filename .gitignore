@@ -68,3 +68,4 @@ ios/Flutter/.last_build_id
 pubspec.lock
 ios/fastlane/report.xml
 ios/Flutter/.last_build_id
+preparePackage.txt

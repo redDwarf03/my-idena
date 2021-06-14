@@ -1,25 +1,36 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:badges/badges.dart';
-import 'package:fleva_icons/fleva_icons.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:badges/badges.dart';
+import 'package:event_taxi/event_taxi.dart';
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:idena_lib_dart/enums/epoch_period.dart' as EpochPeriod;
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_ceremonyIntervals_response.dart';
+import 'package:idena_lib_dart/model/response/dna_getEpoch_response.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/model/response/dna_sendTransaction_response.dart';
+import 'package:idena_lib_dart/util/util_identity.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/response/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/util_node.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
@@ -503,10 +514,24 @@ class _ValidationSessionCountdownTextState
               CaseChange.toUpperCase(
                   AppLocalization.of(context).yesButton, context), () {
             setState(() async {
-              sl.get<AppService>().sendTip(
-                  StateContainer.of(context).selectedAccount.address,
-                  amount.toDouble().toString(),
-                  await StateContainer.of(context).getSeed());
+              DnaSendTransactionResponse dnaSendTransactionResponse = await sl
+                  .get<AppService>()
+                  .sendTip(
+                      StateContainer.of(context).selectedAccount.address,
+                      amount.toDouble().toString(),
+                      await StateContainer.of(context).getSeed());
+              if (dnaSendTransactionResponse == null) {
+                EventTaxiImpl.singleton()
+                    .fire(TransactionSendEvent(response: "Connection error"));
+              } else {
+                if (dnaSendTransactionResponse.error != null) {
+                  EventTaxiImpl.singleton().fire(TransactionSendEvent(
+                      response: dnaSendTransactionResponse.error.message));
+                } else {
+                  EventTaxiImpl.singleton()
+                      .fire(TransactionSendEvent(response: "Success"));
+                }
+              }
               AppDialogs.showConfirmDialog(
                   context,
                   AppLocalization.of(context).validationTipThxHeader,

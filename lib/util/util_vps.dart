@@ -1,18 +1,23 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:my_idena/pubdev/dartssh/client.dart';
-import 'package:my_idena/network/model/request/dna_identity_request.dart';
+// Package imports:
+import 'package:args/args.dart';
+import 'package:idena_lib_dart/model/request/dna_identity_request.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/client.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/http.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/identity.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/pem.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/ssh.dart';
+import 'package:idena_lib_dart/pubdev/dartssh/transport.dart';
+
+// Project imports:
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:args/args.dart';
-import 'package:my_idena/pubdev/dartssh/identity.dart';
-import 'package:my_idena/pubdev/dartssh/pem.dart';
-import 'package:my_idena/pubdev/dartssh/ssh.dart';
-import 'package:my_idena/pubdev/dartssh/transport.dart';
-import 'package:my_idena/pubdev/dartssh/http.dart';
 
 class SSHClientStatus {
   SSHClient sshClient;
@@ -26,14 +31,16 @@ class VpsUtil {
   Channel forwardChannel;
 
   void disconnectVps() {
-    if (sshClientStatus != null && sshClientStatus.sshClient != null &&
+    if (sshClientStatus != null &&
+        sshClientStatus.sshClient != null &&
         sshClientStatus.sshClient.socket != null) {
       sshClientStatus.sshClient.disconnect("Configuration in progress");
     }
   }
 
   Future<SSHClientStatus> connectVps(String tunnel, String keyApp) async {
-    if (sshClientStatus != null && sshClientStatus.sshClient != null &&
+    if (sshClientStatus != null &&
+        sshClientStatus.sshClient != null &&
         sshClientStatus.sshClient.socket != null) {
       return this.sshClientStatus;
     }

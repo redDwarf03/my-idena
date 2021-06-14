@@ -1,32 +1,39 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:flutter/material.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+import 'package:idena_lib_dart/model/response/contract/contract_estimate_deploy_response.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/network/model/response/contract/contract_estimate_deploy_response.dart';
-import 'package:my_idena/factory/smart_contract_service.dart';
-import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/ui/smartContracts/multiSig_complete_sheet.dart';
-import 'package:my_idena/ui/util/routes.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/numberutil.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/biometrics.dart';
-import 'package:my_idena/util/hapticutil.dart';
-import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_complete_sheet.dart';
+import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
+import 'package:my_idena/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena/ui/widgets/security.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
+import 'package:my_idena/util/biometrics.dart';
+import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/hapticutil.dart';
+import 'package:my_idena/util/numberutil.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 
 class MultiSigConfirmSheet extends StatefulWidget {
   final String owner;
