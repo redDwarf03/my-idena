@@ -1,7 +1,13 @@
 // @dart=2.9
-import 'package:flutter/material.dart';
-import 'package:my_idena/appstate_container.dart';
+
+// Dart imports:
 import 'dart:ui' as ui;
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:my_idena/appstate_container.dart';
 
 class AppStyles {
   // Text style for paragraph text.
@@ -210,7 +216,7 @@ class AppStyles {
   }
 
   /* Info home bottom */
- static TextStyle textStyleHomeInfoHeader(BuildContext context) {
+  static TextStyle textStyleHomeInfoHeader(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",
         fontSize: AppFontSizes.small,
@@ -218,7 +224,7 @@ class AppStyles {
         color: StateContainer.of(context).curTheme.overlay);
   }
 
- static TextStyle textStyleHomeInfoWarning(BuildContext context) {
+  static TextStyle textStyleHomeInfoWarning(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",
         fontSize: AppFontSizes.smallest,
@@ -226,8 +232,7 @@ class AppStyles {
         color: StateContainer.of(context).curTheme.overlay);
   }
 
-
- static TextStyle textStyleHomeInfoWarningRed(BuildContext context) {
+  static TextStyle textStyleHomeInfoWarningRed(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",
         fontSize: AppFontSizes.smallest,
@@ -235,7 +240,7 @@ class AppStyles {
         color: Colors.red[700]);
   }
 
- static TextStyle textStyleHomeInfoDetail(BuildContext context) {
+  static TextStyle textStyleHomeInfoDetail(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",
         fontSize: AppFontSizes.small,
@@ -286,7 +291,7 @@ class AppStyles {
   static TextStyle textStyleTransactionUnit(BuildContext context) {
     return TextStyle(
       fontFamily: "Roboto",
-      color: StateContainer.of(context).curTheme.primary, 
+      color: StateContainer.of(context).curTheme.primary,
       fontSize: AppFontSizes.smallest,
       fontWeight: FontWeight.w100,
     );

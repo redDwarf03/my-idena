@@ -1,4 +1,6 @@
 // @dart=2.9
+
+// Project imports:
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
@@ -16,7 +18,6 @@ class NodeUtil {
   Future<int> getNodeType() async {
     return await sl.get<SharedPrefsUtil>().getNodeType();
   }
-
 
   String getLabel(int nodeType) {
     switch (nodeType) {
@@ -51,8 +52,6 @@ class NodeUtil {
         return "Unknown";
     }
   }
-
-
 
   List<NodeType> getNodeTypeList() {
     List<NodeType> nodeTypeList = new List();

@@ -29,25 +29,25 @@ class ShakeCurve extends Curve {
 }
 
 class PinScreen extends StatefulWidget {
-
   final PinOverlayType type;
   final String expectedPin;
   final String description;
   final Color pinScreenBackgroundColor;
 
   PinScreen(this.type,
-      {this.description = "", this.expectedPin = "", this.pinScreenBackgroundColor});
+      {this.description = "",
+      this.expectedPin = "",
+      this.pinScreenBackgroundColor});
 
   @override
-  _PinScreenState createState() =>
-      _PinScreenState();
+  _PinScreenState createState() => _PinScreenState();
 }
 
 class _PinScreenState extends State<PinScreen>
     with SingleTickerProviderStateMixin {
   static const int MAX_ATTEMPTS = 5;
 
-  int _pinLength = 6; 
+  int _pinLength = 6;
   double buttonSize = 100.0;
 
   String pinEnterTitle = "";
@@ -102,8 +102,9 @@ class _PinScreenState extends State<PinScreen>
                   _controller.value = 0;
                 });
                 sl.get<SharedPrefsUtil>().updateLockDate().then((_) {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/lock_screen_transition', (Route<dynamic> route) => false);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/lock_screen_transition',
+                      (Route<dynamic> route) => false);
                 });
               } else {
                 setState(() {
@@ -256,10 +257,8 @@ class _PinScreenState extends State<PinScreen>
   List<Widget> _buildPinDots() {
     List<Widget> ret = List();
     for (int i = 0; i < _pinLength; i++) {
-      ret.add(Icon(
-                _dotStates[i],
-                color: StateContainer.of(context).curTheme.primary,
-                size: 20.0));
+      ret.add(Icon(_dotStates[i],
+          color: StateContainer.of(context).curTheme.primary, size: 20.0));
     }
     return ret;
   }
@@ -288,7 +287,9 @@ class _PinScreenState extends State<PinScreen>
       body: Container(
         constraints: BoxConstraints.expand(),
         child: Material(
-          color: widget.pinScreenBackgroundColor == null ? StateContainer.of(context).curTheme.backgroundDark : widget.pinScreenBackgroundColor,
+          color: widget.pinScreenBackgroundColor == null
+              ? StateContainer.of(context).curTheme.backgroundDark
+              : widget.pinScreenBackgroundColor,
           child: Column(
             children: <Widget>[
               Container(
@@ -301,7 +302,8 @@ class _PinScreenState extends State<PinScreen>
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: AutoSizeText(
                         _header,
-                        style: AppStyles.textStylePinScreenHeaderColored(context),
+                        style:
+                            AppStyles.textStylePinScreenHeaderColored(context),
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         stepGranularity: 0.1,
@@ -329,9 +331,8 @@ class _PinScreenState extends State<PinScreen>
                         top: MediaQuery.of(context).size.height * 0.02,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: _buildPinDots()
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: _buildPinDots()),
                     ),
                   ],
                 ),
@@ -409,8 +410,12 @@ class _PinScreenState extends State<PinScreen>
                                   : buttonSize,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(200),
-                                highlightColor: StateContainer.of(context).curTheme.primary15,
-                                splashColor: StateContainer.of(context).curTheme.primary30,
+                                highlightColor: StateContainer.of(context)
+                                    .curTheme
+                                    .primary15,
+                                splashColor: StateContainer.of(context)
+                                    .curTheme
+                                    .primary30,
                                 onTap: () {},
                                 onTapDown: (details) {
                                   _backSpace();
@@ -418,7 +423,10 @@ class _PinScreenState extends State<PinScreen>
                                 child: Container(
                                   alignment: AlignmentDirectional(0, 0),
                                   child: Icon(Icons.backspace,
-                                      color: StateContainer.of(context).curTheme.primary, size: 20.0),
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .primary,
+                                      size: 20.0),
                                 ),
                               ),
                             ),

@@ -182,10 +182,12 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                         margin: EdgeInsetsDirectional.only(
                             top: MediaQuery.of(context).size.width / 110),
                         child: CircleAvatar(
-                          backgroundColor: StateContainer.of(context).curTheme.text05,
-                          backgroundImage: UIUtil.getRobohashURL(StateContainer.of(context)
-                                .selectedAccount
-                                .address),
+                          backgroundColor:
+                              StateContainer.of(context).curTheme.text05,
+                          backgroundImage: UIUtil.getRobohashURL(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address),
                           radius: 50.0,
                         ),
                       ),
@@ -228,7 +230,6 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                     }),
                   ],
                 ),
-            
               ],
             ),
           ],

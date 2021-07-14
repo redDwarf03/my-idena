@@ -63,7 +63,7 @@ class _ChartsVolumeViewState extends State<ChartsVolumeView> {
                 );
 
                 nbDaysSave = widget.nbDays;
-                
+
                 lineChart = charts.TimeSeriesChart(_seriesLineData,
                     primaryMeasureAxis: new charts.NumericAxisSpec(
                       tickProviderSpec:

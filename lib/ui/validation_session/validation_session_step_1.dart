@@ -305,7 +305,9 @@ class _ValidationSessionStep1PageState
                 children: <Widget>[
                   AppButton.buildAppButton(
                       context,
-                      allSelect ? AppButtonType.PRIMARY : AppButtonType.PRIMARY_OUTLINE,
+                      allSelect
+                          ? AppButtonType.PRIMARY
+                          : AppButtonType.PRIMARY_OUTLINE,
                       AppLocalization.of(context).submitAnswers,
                       Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
                     if (allSelect == false) {

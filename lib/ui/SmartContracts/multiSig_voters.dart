@@ -221,56 +221,66 @@ class _MultiSigVotersState extends State<MultiSigVoters> {
                           context,
                         ),
                       ),
-                      getAmount(contractIterateMapResponseItem.key) != "0.0" ?
-                      Row(children: [
-                        Icon(FontAwesome5.vote_yea,
-                            size: 14,
-                            color: StateContainer.of(context).curTheme.primary),
-                        SizedBox(width: 10),
-                        Text(
-                          contractIterateMapResponseItem.value,
-                          style: AppStyles.textStyleTransactionAddress(
-                            context,
-                          ),
-                        ),
-                      ]) : Row(children: [
-                        Icon(AppIcons.info,
-                            color: StateContainer.of(context).curTheme.primary,
-                            size: 14),
-                        SizedBox(width: 10),
-                        Text(
-                          AppLocalization.of(context)
-                              .notVoteYet
-                              ,
-                          style: TextStyle(
-                            color: StateContainer.of(context).curTheme.primary,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w100,
-                            fontFamily: 'Roboto',
-                          ),
-                        ),
-                      ]),
-                      getAmount(contractIterateMapResponseItem.key) != "0.0" ?
-                      Row(children: [
-                        Icon(AppIcons.export_icon,
-                            color: StateContainer.of(context).curTheme.primary,
-                            size: 14),
-                        SizedBox(width: 10),
-                        Text(
-                          AppLocalization.of(context)
-                              .approvedUnlockContract
-                              .replaceAll(
-                                  "%1",
-                                  getAmount(
-                                      contractIterateMapResponseItem.key)),
-                          style: TextStyle(
-                            color: StateContainer.of(context).curTheme.primary,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w100,
-                            fontFamily: 'Roboto',
-                          ),
-                        ),
-                      ]) : SizedBox(),
+                      getAmount(contractIterateMapResponseItem.key) != "0.0"
+                          ? Row(children: [
+                              Icon(FontAwesome5.vote_yea,
+                                  size: 14,
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary),
+                              SizedBox(width: 10),
+                              Text(
+                                contractIterateMapResponseItem.value,
+                                style: AppStyles.textStyleTransactionAddress(
+                                  context,
+                                ),
+                              ),
+                            ])
+                          : Row(children: [
+                              Icon(AppIcons.info,
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  size: 14),
+                              SizedBox(width: 10),
+                              Text(
+                                AppLocalization.of(context).notVoteYet,
+                                style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w100,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ]),
+                      getAmount(contractIterateMapResponseItem.key) != "0.0"
+                          ? Row(children: [
+                              Icon(AppIcons.export_icon,
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  size: 14),
+                              SizedBox(width: 10),
+                              Text(
+                                AppLocalization.of(context)
+                                    .approvedUnlockContract
+                                    .replaceAll(
+                                        "%1",
+                                        getAmount(contractIterateMapResponseItem
+                                            .key)),
+                                style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w100,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ])
+                          : SizedBox(),
                     ],
                   ),
                 ),

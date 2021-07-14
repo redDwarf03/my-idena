@@ -35,18 +35,19 @@ class _AppPopupButtonState extends State<AppPopupButton> {
   }
 
   Future<void> scanAndHandlResult() async {
-    dynamic scanResult = await Navigator.pushNamed(context, '/before_scan_screen');
+    dynamic scanResult =
+        await Navigator.pushNamed(context, '/before_scan_screen');
     // Parse scan data and route appropriately
     if (scanResult == null) {
-      UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
+      UIUtil.showSnackbar(
+          AppLocalization.of(context).qrInvalidAddress, context);
     } else if (!QRScanErrs.ERROR_LIST.contains(scanResult)) {
       // Is a URI
       Address address = Address(scanResult);
       if (address.address == null) {
-        UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
-      } else {
-
-      }
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).qrInvalidAddress, context);
+      } else {}
     }
   }
 
@@ -73,7 +74,6 @@ class _AppPopupButtonState extends State<AppPopupButton> {
             ),
           ),
         ),
-       
       ],
     );
   }

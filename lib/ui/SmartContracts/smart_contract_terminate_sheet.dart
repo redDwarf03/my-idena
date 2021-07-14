@@ -251,7 +251,6 @@ class _SmartContractTerminateSheetState
                                         ),
                                       ),
                                     ),
-
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 30),
@@ -311,7 +310,6 @@ class _SmartContractTerminateSheetState
                                         ),
                                       ),
                                     ),
-
                                     SizedBox(height: 10),
                                     getEnterAddressContainer(),
                                     Container(

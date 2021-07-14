@@ -234,8 +234,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
     if (StateContainer.of(context).wallet != null) {
       // TODO: voir
     } else {
-      await AppUtil()
-          .loginAccount(context);
+      await AppUtil().loginAccount(context);
     }
     StateContainer.of(context).requestUpdate();
     PriceConversion conversion =

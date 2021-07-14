@@ -19,7 +19,12 @@ class FlipDetail extends StatefulWidget {
   final bool simulationMode;
   final String privateKey;
 
-  FlipDetail({this.validationSessionInfoFlips, this.onSelectFlip, this.simulationMode, this.address, this.privateKey});
+  FlipDetail(
+      {this.validationSessionInfoFlips,
+      this.onSelectFlip,
+      this.simulationMode,
+      this.address,
+      this.privateKey});
 
   _FlipDetailState createState() => _FlipDetailState();
 }
@@ -42,8 +47,10 @@ class _FlipDetailState extends State<FlipDetail> {
             _validationSessionInfoFlips.listImagesLeft.length != 4 ||
             _validationSessionInfoFlips.listImagesRight == null ||
             _validationSessionInfoFlips.listImagesRight.length != 4)) {
-      _validationSessionInfoFlips = await sl.get<ValidationService>()
-          .getValidationSessionFlipDetail(_validationSessionInfoFlips, widget.address, widget.simulationMode, widget.privateKey);
+      _validationSessionInfoFlips = await sl
+          .get<ValidationService>()
+          .getValidationSessionFlipDetail(_validationSessionInfoFlips,
+              widget.address, widget.simulationMode, widget.privateKey);
       //print("listImagesLeft length : " +
       //    _validationSessionInfoFlips.listImagesLeft.length.toString());
       setState(() {});
@@ -70,8 +77,11 @@ class _FlipDetailState extends State<FlipDetail> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  height:  (((((MediaQuery.of(context).size.width) - 72) ~/ 2) / (4 / 3) * 4) + 100)
-                .toDouble(),
+                  height: (((((MediaQuery.of(context).size.width) - 72) ~/ 2) /
+                              (4 / 3) *
+                              4) +
+                          100)
+                      .toDouble(),
                   margin: EdgeInsetsDirectional.only(start: 2.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

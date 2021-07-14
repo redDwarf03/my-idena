@@ -1,10 +1,16 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:my_idena/model/available_language.dart';
 
+// Package imports:
+import 'package:intl/intl.dart';
+
+// Project imports:
+import 'package:my_idena/model/available_language.dart';
 import 'l10n/messages_all.dart';
 
 /// Localization
@@ -236,7 +242,8 @@ class AppLocalization {
   }
 
   String get enterApiUrl {
-    return Intl.message("Enter your node address", desc: '', name: 'enterApiUrl');
+    return Intl.message("Enter your node address",
+        desc: '', name: 'enterApiUrl');
   }
 
   String get enterDemoMode {
@@ -254,7 +261,8 @@ class AppLocalization {
   }
 
   String get enterOperator {
-    return Intl.message("Enter your shared node URL", desc: '', name: 'enterOperator');
+    return Intl.message("Enter your shared node URL",
+        desc: '', name: 'enterOperator');
   }
 
   String get enterEncryptedPk {
@@ -281,7 +289,8 @@ class AppLocalization {
   }
 
   String get enterVpsIp {
-    return Intl.message("Enter the VPS IP Address", desc: '', name: 'enterVpsIp');
+    return Intl.message("Enter the VPS IP Address",
+        desc: '', name: 'enterVpsIp');
   }
 
   String get enterVpsTunnel {
@@ -352,8 +361,10 @@ class AppLocalization {
   }
 
   String get backupSeedConfirm {
-    return Intl.message('Are you sure that you have backed up your wallet seed?',
-        desc: 'intro_new_wallet_backup', name: 'backupSeedConfirm');
+    return Intl.message(
+        'Are you sure that you have backed up your wallet seed?',
+        desc: 'intro_new_wallet_backup',
+        name: 'backupSeedConfirm');
   }
 
   String get seedBackupInfo {
@@ -651,8 +662,7 @@ class AppLocalization {
   }
 
   String get notVoteYet {
-    return Intl.message("No vote yet",
-        desc: '', name: 'notVoteYet');
+    return Intl.message("No vote yet", desc: '', name: 'notVoteYet');
   }
 
   String get nbOfVotesDoneLabel {
@@ -682,8 +692,7 @@ class AppLocalization {
   }
 
   String get listOfVoters {
-    return Intl.message("Voters",
-        desc: '', name: 'listOfVoters');
+    return Intl.message("Voters", desc: '', name: 'listOfVoters');
   }
 
   String get successInfo {
@@ -1343,7 +1352,8 @@ class AppLocalization {
   }
 
   String get multisigTitle {
-    return Intl.message("Multisig M-of-N (beta)", desc: '', name: 'multisigTitle');
+    return Intl.message("Multisig M-of-N (beta)",
+        desc: '', name: 'multisigTitle');
   }
 
   String get oracleLockTitle {
@@ -1370,7 +1380,8 @@ class AppLocalization {
   }
 
   String get winnerVote {
-    return Intl.message("The address with the most votes", desc: '', name: 'winnerVote');
+    return Intl.message("The address with the most votes",
+        desc: '', name: 'winnerVote');
   }
 
   String get smartContractAddress {

@@ -47,8 +47,7 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
   Future<void> loadValidationSessionEvaluationFlip(bool force) async {
     if (force ||
         (widget.validationSessionInfoFlips == null ||
-            widget.validationSessionInfoFlips.listWords == null
-            )) {
+            widget.validationSessionInfoFlips.listWords == null)) {
       listWords = await sl.get<ValidationService>().getWordsFromHash(
           widget.validationSessionInfoFlips.hash,
           widget.simulationMode,
@@ -152,7 +151,8 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
                                                 .relevanceType =
                                             RelevantType.RELEVANT;
                                       });
-                                      widget.onSelectFlip(widget.validationSessionInfoFlips);
+                                      widget.onSelectFlip(
+                                          widget.validationSessionInfoFlips);
                                     }
                                   },
                                   padding: EdgeInsets.all(5.0),
@@ -200,7 +200,8 @@ class _EvaluationFlipState extends State<EvaluationFlip> {
                                                 .relevanceType =
                                             RelevantType.IRRELEVANT;
                                       });
-                                      widget.onSelectFlip(widget.validationSessionInfoFlips);
+                                      widget.onSelectFlip(
+                                          widget.validationSessionInfoFlips);
                                     }
                                   },
                                   padding: EdgeInsets.all(5.0),

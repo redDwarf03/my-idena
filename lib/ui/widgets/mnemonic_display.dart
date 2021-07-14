@@ -1,10 +1,16 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/styles.dart';
@@ -123,8 +129,7 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
             ),
             // Tap to reveal or hide
             widget.obscureSeed
-                ?
-                Container(
+                ? Container(
                     margin: EdgeInsetsDirectional.only(top: 8),
                     child: _seedObscured
                         ? AutoSizeText(
@@ -148,8 +153,8 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
               padding: EdgeInsets.all(0.0),
               child: OutlineButton(
                 onPressed: () {
-                   Clipboard.setData(new ClipboardData(
-                                            text: widget.wordList.join(' ')));
+                  Clipboard.setData(
+                      new ClipboardData(text: widget.wordList.join(' ')));
                   //UserDataUtil.setSecureClipboardItem(widget.wordList.join(' '));
                   setState(() {
                     _seedCopied = true;
@@ -181,7 +186,9 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
                         : StateContainer.of(context).curTheme.primary,
                     width: 1.0),
                 child: AutoSizeText(
-                  _seedCopied ? AppLocalization.of(context).copied : AppLocalization.of(context).copy,
+                  _seedCopied
+                      ? AppLocalization.of(context).copied
+                      : AppLocalization.of(context).copy,
                   textAlign: TextAlign.center,
                   style: _seedCopied
                       ? AppStyles.textStyleButtonSuccessSmallOutline(context)

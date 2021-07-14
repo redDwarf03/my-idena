@@ -249,7 +249,6 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                         ),
                                       ),
                                     ),
-
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 30),
@@ -285,80 +284,86 @@ class _SmartContractPushSheetState extends State<SmartContractPushSheet> {
                                         ),
                                       ),
                                     ),
-                                    widget.address == null 
-                                    ? getEnterAddressContainer() 
-                                    : Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: OneOrThreeLineAddressText(
-                                          address: widget.address,
-                                          type: AddressTextType.PRIMARY60),
-                                    ),
-                                     widget.address == null 
-                                    ? 
-                                    Container(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      margin: EdgeInsets.only(top: 3),
-                                      child: Text(_addressValidationText,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                    ) : SizedBox(),
-                                    widget.address == null 
-                                    ? getEnterAddressContainer() 
-                                    : 
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.105,
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.105),
-                                      alignment: Alignment.topCenter,
-                                      constraints: BoxConstraints(
-                                          maxHeight: 174, minHeight: 0),
-                                      // ********************************************* //
-                                      // ********* The pop-up Contacts List ********* //
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(25),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .backgroundDarkest,
+                                    widget.address == null
+                                        ? getEnterAddressContainer()
+                                        : Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 30),
+                                            child: OneOrThreeLineAddressText(
+                                                address: widget.address,
+                                                type:
+                                                    AddressTextType.PRIMARY60),
                                           ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
+                                    widget.address == null
+                                        ? Container(
+                                            alignment:
+                                                AlignmentDirectional(0, 0),
+                                            margin: EdgeInsets.only(top: 3),
+                                            child: Text(_addressValidationText,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary,
+                                                  fontFamily: 'Roboto',
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          )
+                                        : SizedBox(),
+                                    widget.address == null
+                                        ? getEnterAddressContainer()
+                                        : Container(
+                                            margin: EdgeInsets.only(
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.105,
+                                                right: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.105),
+                                            alignment: Alignment.topCenter,
+                                            constraints: BoxConstraints(
+                                                maxHeight: 174, minHeight: 0),
+                                            // ********************************************* //
+                                            // ********* The pop-up Contacts List ********* //
+                                            child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(25),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25),
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .backgroundDarkest,
+                                                ),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 0),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 0, top: 0),
+                                                    itemCount: _contacts.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return _buildContactItem(
+                                                          _contacts[index]);
+                                                    },
+                                                  ), // ********* The pop-up Contacts List End ********* //
+                                                  // ************************************************** //
+                                                ),
+                                              ),
                                             ),
-                                            margin: EdgeInsets.only(bottom: 0),
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              padding: EdgeInsets.only(
-                                                  bottom: 0, top: 0),
-                                              itemCount: _contacts.length,
-                                              itemBuilder: (context, index) {
-                                                return _buildContactItem(
-                                                    _contacts[index]);
-                                              },
-                                            ), // ********* The pop-up Contacts List End ********* //
-                                            // ************************************************** //
                                           ),
-                                        ),
-                                      ),
-                                    ),
-
                                     SizedBox(height: 10),
                                   ],
                                 ),

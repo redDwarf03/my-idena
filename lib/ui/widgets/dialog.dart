@@ -1,9 +1,15 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flare_flutter/flare_actor.dart';
+
+// Project imports:
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 
 class AppDialogs {
@@ -157,9 +163,7 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
   Widget _getAnimation(BuildContext context) {
     switch (type) {
       case AnimationType.SEND:
-        return Center(
-         
-        );
+        return Center();
       case AnimationType.TRANSFER_SEARCHING_QR:
         return Stack(
           children: <Widget>[

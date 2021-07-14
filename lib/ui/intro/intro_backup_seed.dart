@@ -206,8 +206,10 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
                       // Update wallet
                       sl.get<DBHelper>().dropAccounts().then((_) {
                         StateContainer.of(context).getSeed().then((seed) async {
-                          String address = await AppUtil().seedToAddress(_seed,
-                              StateContainer.of(context).selectedAccount.index, HD_WALLET);
+                          String address = await AppUtil().seedToAddress(
+                              _seed,
+                              StateContainer.of(context).selectedAccount.index,
+                              HD_WALLET);
 
                           await sl.get<SharedPrefsUtil>().setAddress(address);
 

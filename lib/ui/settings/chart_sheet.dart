@@ -1,6 +1,12 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/available_currency.dart';
@@ -83,9 +89,7 @@ class _ChartSheetState extends State<ChartSheet> {
               ],
             ),
             SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               RaisedButton(
                 elevation: 5.0,
                 onPressed: () {
@@ -97,10 +101,14 @@ class _ChartSheetState extends State<ChartSheet> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                color: nbDaysSelected == 1 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                color: nbDaysSelected == 1
+                    ? Colors.white
+                    : StateContainer.of(context).curTheme.icon,
                 child: Text("1d",
                     style: TextStyle(
-                      color: nbDaysSelected == 1 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      color: nbDaysSelected == 1
+                          ? StateContainer.of(context).curTheme.icon
+                          : Colors.white,
                       letterSpacing: 1.5,
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
@@ -118,10 +126,14 @@ class _ChartSheetState extends State<ChartSheet> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                color: nbDaysSelected == 7 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                color: nbDaysSelected == 7
+                    ? Colors.white
+                    : StateContainer.of(context).curTheme.icon,
                 child: Text("7d",
                     style: TextStyle(
-                      color: nbDaysSelected == 7 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      color: nbDaysSelected == 7
+                          ? StateContainer.of(context).curTheme.icon
+                          : Colors.white,
                       letterSpacing: 1.5,
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
@@ -139,10 +151,14 @@ class _ChartSheetState extends State<ChartSheet> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                color: nbDaysSelected == 30 ? Colors.white : StateContainer.of(context).curTheme.icon,
+                color: nbDaysSelected == 30
+                    ? Colors.white
+                    : StateContainer.of(context).curTheme.icon,
                 child: Text("30d",
                     style: TextStyle(
-                      color: nbDaysSelected == 30 ? StateContainer.of(context).curTheme.icon : Colors.white,
+                      color: nbDaysSelected == 30
+                          ? StateContainer.of(context).curTheme.icon
+                          : Colors.white,
                       letterSpacing: 1.5,
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
