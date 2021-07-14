@@ -1097,15 +1097,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  vibrate:
+  vibration:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: dc99bd03f1f3a168aa09d745e652d730eff0e277
-      url: "https://github.com/redDwarf03/flutter_vibrate.git"
-    source: git
-    version: "0.0.5"
+      name: vibration
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.3"
+  vibration_web:
+    dependency: transitive
+    description:
+      name: vibration_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.2"
   vin_decoder:
     dependency: transitive
     description:

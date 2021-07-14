@@ -141,10 +141,7 @@ dependencies:
   pointycastle: ^3.0.1
   
   # Vibrate
-  vibrate:
-    git:
-      url: https://github.com/redDwarf03/flutter_vibrate.git
-      ref: master
+  vibration: ^1.7.3
 
   # Toast
   oktoast: ^3.0.0
