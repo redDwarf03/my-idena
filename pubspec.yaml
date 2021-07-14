@@ -259,7 +259,7 @@ flutter:
     - assets/sharecard_logo.svg
     - assets/pulltosend_animation.flr
     - assets/sheethandle_animation.flr
-    - assets/images/      
+    - assets/images/
     - lib/util/words.json
     - test/examples/
 
