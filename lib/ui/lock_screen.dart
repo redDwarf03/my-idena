@@ -1,20 +1,23 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
-import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/util/biometrics.dart';
-import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/ui/widgets/security.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/dimens.dart';
 import 'package:my_idena/ui/util/routes.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
+import 'package:my_idena/ui/widgets/dialog.dart';
+import 'package:my_idena/ui/widgets/security.dart';
+import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/biometrics.dart';
+import 'package:my_idena/util/caseconverter.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
 
 class AppLockScreen extends StatefulWidget {
   @override

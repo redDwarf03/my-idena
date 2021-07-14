@@ -1,18 +1,41 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:idena_lib_dart/enums/identity_status.dart' as IdentityStatus;
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/util/util_identity.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena/util/enums/identity_status.dart' as IdentityStatus;
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
-import 'package:my_idena/ui/smartContracts/timeLock_list.dart';
+import 'package:package_info/package_info.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/model/authentication_method.dart';
+import 'package:my_idena/model/available_currency.dart';
+import 'package:my_idena/model/available_language.dart';
+import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/model/device_lock_timeout.dart';
+import 'package:my_idena/model/device_unlock_option.dart';
+import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/invite/activate_invite.dart';
 import 'package:my_idena/ui/receive/receive_sheet.dart';
@@ -20,38 +43,22 @@ import 'package:my_idena/ui/send/send_sheet.dart';
 import 'package:my_idena/ui/settings/about_widget.dart';
 import 'package:my_idena/ui/settings/backupseed_sheet.dart';
 import 'package:my_idena/ui/settings/chart_sheet.dart';
-import 'package:my_idena/ui/settings/profile_infos_widget.dart';
-import 'package:my_idena/ui/settings/validation_basics_widget.dart';
-import 'package:my_idena/ui/widgets/app_simpledialog.dart';
-import 'package:my_idena/ui/widgets/sheet_util.dart';
-import 'package:my_idena/util/hapticutil.dart';
-import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/util_node.dart';
-import 'package:package_info/package_info.dart';
-import 'package:flutter/material.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/model/authentication_method.dart';
-import 'package:my_idena/model/available_currency.dart';
-import 'package:my_idena/model/device_unlock_option.dart';
-import 'package:my_idena/model/device_lock_timeout.dart';
-import 'package:my_idena/model/available_language.dart';
-import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/model/db/appdb.dart';
-import 'package:my_idena/ui/settings/settings_list_item.dart';
 import 'package:my_idena/ui/settings/contacts_widget.dart';
+import 'package:my_idena/ui/settings/profile_infos_widget.dart';
+import 'package:my_idena/ui/settings/settings_list_item.dart';
+import 'package:my_idena/ui/settings/validation_basics_widget.dart';
+import 'package:my_idena/ui/smartContracts/multiSig_list.dart';
+import 'package:my_idena/ui/smartContracts/timeLock_list.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/app_simpledialog.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/security.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/ui/widgets/sheet_util.dart';
 import 'package:my_idena/util/biometrics.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:fluttericon/rpg_awesome_icons.dart';
-
+import 'package:my_idena/util/hapticutil.dart';
+import 'package:my_idena/util/sharedprefsutil.dart';
+import 'package:my_idena/util/util_node.dart';
 import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
 
@@ -1095,14 +1102,14 @@ class _SettingsSheetState extends State<SettingsSheet>
                           context: context, widget: widget.receive);
                     }),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance > 0
+                            StateContainer.of(context).wallet.accountBalance > 0 && widget.nodeType != DEMO_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
                     StateContainer.of(context).wallet != null &&
-                            StateContainer.of(context).wallet.accountBalance > 0
+                            StateContainer.of(context).wallet.accountBalance > 0 && widget.nodeType != DEMO_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).send,
@@ -1214,14 +1221,16 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   StateContainer.of(context).curCurrency));
                     }),
                     widget.nodeType != PUBLIC_NODE &&
-                            widget.nodeType != SHARED_NODE
+                            widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE
                         ? Divider(
                             height: 2,
                             color: StateContainer.of(context).curTheme.text15,
                           )
                         : SizedBox(),
                     widget.nodeType != PUBLIC_NODE &&
-                            widget.nodeType != SHARED_NODE
+                            widget.nodeType != SHARED_NODE &&
+                            widget.nodeType != DEMO_NODE
                         ? AppSettings.buildSettingsListItemSingleLine(
                             context,
                             AppLocalization.of(context).inviteHeader,

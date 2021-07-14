@@ -1,10 +1,16 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class AppShareCard extends StatefulWidget {
   final GlobalKey key;

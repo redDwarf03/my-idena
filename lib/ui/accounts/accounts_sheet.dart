@@ -1,26 +1,34 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_idena/bus/events.dart';
-import 'package:my_idena/localization.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_getBalance_response.dart';
+import 'package:idena_lib_dart/util/util_number.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/bus/events.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/network/model/response/dna_getBalance_response.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/account.dart';
+import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/styles.dart';
+import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/numberutil.dart';
 
 class AppAccountsSheet {
   List<Account> accounts;
@@ -66,7 +74,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     widget.accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address);
         setState(() {
           account.balance = balanceGetResponse.result.balance;
         });
@@ -126,7 +134,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     accounts.forEach((account) async {
       if (account.address != null) {
         DnaGetBalanceResponse balanceGetResponse =
-            await sl.get<AppService>().getBalanceGetResponse(account.address, false);
+            await sl.get<AppService>().getBalanceGetResponse(account.address);
         sl
             .get<DBHelper>()
             .updateAccountBalance(account, balanceGetResponse.result.balance);

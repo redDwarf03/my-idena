@@ -1,19 +1,27 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:idena_lib_dart/util/keys/mnemonics.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/localization.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/styles.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/mnemonic_display.dart';
 import 'package:my_idena/ui/widgets/plainseed_display.dart';
 import 'package:my_idena/ui/widgets/sheets.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/styles.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
 
 class AppSeedBackupSheet {
   String _seed;

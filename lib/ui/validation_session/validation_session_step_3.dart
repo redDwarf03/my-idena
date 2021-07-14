@@ -1,14 +1,23 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:idena_lib_dart/enums/answer_type.dart' as AnswerType;
+import 'package:idena_lib_dart/enums/epoch_period.dart' as EpochPeriod;
+import 'package:idena_lib_dart/enums/relevance_type.dart' as RelevantType;
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/factory/validation_service.dart';
+import 'package:idena_lib_dart/model/response/dna_ceremonyIntervals_response.dart';
+import 'package:idena_lib_dart/model/response/dna_getEpoch_response.dart';
+import 'package:idena_lib_dart/model/validation_session_infos.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/response/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
-import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/factory/app_service.dart';
-import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
@@ -20,9 +29,6 @@ import 'package:my_idena/ui/widgets/count_down.dart';
 import 'package:my_idena/ui/widgets/demo_mode_clip_widget.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
-import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
-import 'package:my_idena/util/enums/relevance_type.dart' as RelevantType;
 
 class ValidationSessionStep3Page extends StatefulWidget {
   final ValidationSessionInfo paramValidationSessionInfo;
@@ -71,9 +77,9 @@ class _ValidationSessionStep3PageState
 
   Future<void> loadDurationSession() async {
     DnaCeremonyIntervalsResponse dnaCeremonyIntervalsResponse =
-        await AppService().getDnaCeremonyIntervals();
+        await sl.get<AppService>().getDnaCeremonyIntervals();
     DnaGetEpochResponse dnaGetEpochResponse =
-        await AppService().getDnaGetEpoch();
+        await sl.get<AppService>().getDnaGetEpoch();
 
     int _durationCalculation = 0;
     if (widget.simulationMode) {

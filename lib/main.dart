@@ -1,50 +1,52 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:idena_lib_dart/model/dictWords.dart';
 import 'package:logger/logger.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:root_checker/root_checker.dart';
+
+// Project imports:
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/available_language.dart';
-import 'package:my_idena/network/model/dictWords.dart';
+import 'package:my_idena/model/vault.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/themes.dart';
 import 'package:my_idena/ui/before_scan_screen.dart';
-import 'package:my_idena/ui/createFlips/creation_flips_step_1.dart';
-import 'package:my_idena/ui/createFlips/creation_flips_step_2.dart';
-import 'package:my_idena/ui/createFlips/creation_flips_step_3.dart';
-import 'package:my_idena/ui/createFlips/creation_flips_step_4.dart';
 import 'package:my_idena/ui/deep_link_signin_screen.dart';
+import 'package:my_idena/ui/home_page.dart';
+import 'package:my_idena/ui/intro/intro_backup_confirm.dart';
 import 'package:my_idena/ui/intro/intro_backup_seed.dart';
 import 'package:my_idena/ui/intro/intro_import_seed.dart';
-import 'package:my_idena/ui/settings/configure_access_node.dart';
+import 'package:my_idena/ui/intro/intro_welcome.dart';
+import 'package:my_idena/ui/lock_screen.dart';
 import 'package:my_idena/ui/password_lock_screen.dart';
+import 'package:my_idena/ui/settings/configure_access_node.dart';
+import 'package:my_idena/ui/util/routes.dart';
 import 'package:my_idena/ui/validation_session/validation_session_step_1.dart';
 import 'package:my_idena/ui/validation_session/validation_session_step_2.dart';
 import 'package:my_idena/ui/validation_session/validation_session_step_3.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
-import 'package:my_idena/util/caseconverter.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/ui/home_page.dart';
-import 'package:my_idena/ui/lock_screen.dart';
-import 'package:my_idena/ui/intro/intro_welcome.dart';
-import 'package:my_idena/ui/intro/intro_backup_confirm.dart';
-import 'package:my_idena/ui/util/routes.dart';
-import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
+import 'package:my_idena/util/caseconverter.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:root_checker/root_checker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Setup Service Provide
-  setupServiceLocator();
+  
   // Setup logger, only show warning and higher in release mode.
   if (kReleaseMode) {
     Logger.level = Level.warning;
@@ -280,47 +282,6 @@ class _AppState extends State<App> {
                   simulationMode: map['simulationMode'],
                   paramValidationSessionInfo: map['validationSessionInfo'],
                   privateKey: map['privateKey'],
-                ),
-                settings: settings,
-              );
-            case '/creation_flips_step_1':
-              return NoTransitionRoute(
-                builder: (_) => CreationFlipsStep1Page(
-                    flipKeyWordPairs: settings.arguments),
-                settings: settings,
-              );
-            case '/creation_flips_step_2':
-              var map = Map<String, dynamic>.from(settings.arguments);
-              return NoTransitionRoute(
-                builder: (_) => CreationFlipsStep2Page(
-                  word1: map['word1'],
-                  word2: map['word2'],
-                ),
-                settings: settings,
-              );
-            case '/creation_flips_step_3':
-              var map = Map<String, dynamic>.from(settings.arguments);
-              return NoTransitionRoute(
-                builder: (_) => CreationFlipsStep3Page(
-                  imgToDisplay_1: map['imgToDisplay_1'],
-                  imgToDisplay_2: map['imgToDisplay_2'],
-                  imgToDisplay_3: map['imgToDisplay_3'],
-                  imgToDisplay_4: map['imgToDisplay_4'],
-                ),
-                settings: settings,
-              );
-            case '/creation_flips_step_4':
-              var map = Map<String, dynamic>.from(settings.arguments);
-              return NoTransitionRoute(
-                builder: (_) => CreationFlipsStep4Page(
-                  imgToDisplay_1: map['imgToDisplay_1'],
-                  imgToDisplay_2: map['imgToDisplay_2'],
-                  imgToDisplay_3: map['imgToDisplay_3'],
-                  imgToDisplay_4: map['imgToDisplay_4'],
-                  imgToDisplayMixed_1: map['imgToDisplayMixed_1'],
-                  imgToDisplayMixed_2: map['imgToDisplayMixed_2'],
-                  imgToDisplayMixed_3: map['imgToDisplayMixed_3'],
-                  imgToDisplayMixed_4: map['imgToDisplayMixed_4'],
                 ),
                 settings: settings,
               );

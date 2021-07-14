@@ -1,7 +1,10 @@
-import 'package:intl/intl.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena/util/numberutil.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/util/util_number.dart';
+import 'package:intl/intl.dart';
 
 /// Input formatter for Crpto/Fiat amounts
 class CurrencyFormatter extends TextInputFormatter {

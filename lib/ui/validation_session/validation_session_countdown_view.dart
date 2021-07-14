@@ -1,25 +1,33 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:badges/badges.dart';
-import 'package:fleva_icons/fleva_icons.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:badges/badges.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:idena_lib_dart/enums/epoch_period.dart' as EpochPeriod;
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/model/response/dna_ceremonyIntervals_response.dart';
+import 'package:idena_lib_dart/model/response/dna_getEpoch_response.dart';
+import 'package:idena_lib_dart/model/response/dna_identity_response.dart';
+import 'package:idena_lib_dart/util/util_identity.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/response/dna_ceremonyIntervals_response.dart';
-import 'package:my_idena/network/model/response/dna_getEpoch_response.dart';
-import 'package:my_idena/network/model/response/dna_identity_response.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/util_identity.dart';
-import 'package:my_idena/util/enums/epoch_period.dart' as EpochPeriod;
 import 'package:my_idena/util/util_node.dart';
 
 class ValidationSessionCountdownText extends StatefulWidget {
@@ -488,7 +496,7 @@ class _ValidationSessionCountdownTextState
       badgeColor: Colors.green[300],
       child: IconButton(
         icon: Icon(
-          FlevaIcons.gift,
+          FontAwesome5.gift,
           color: Colors.white,
           size: 30,
         ),

@@ -1,19 +1,28 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/service_locator.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_idena/dimens.dart';
+import 'package:idena_lib_dart/util/util_number.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/localization.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/bus/events.dart';
+import 'package:my_idena/dimens.dart';
+import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/db/account.dart';
 import 'package:my_idena/model/db/appdb.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
@@ -21,7 +30,6 @@ import 'package:my_idena/ui/widgets/dialog.dart';
 import 'package:my_idena/ui/widgets/sheets.dart';
 import 'package:my_idena/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/numberutil.dart';
 
 // Account Details Sheet
 class AccountDetailsSheet {

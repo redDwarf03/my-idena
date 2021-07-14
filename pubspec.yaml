@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.20+5020
+version: 2.0.23+5023
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -28,7 +28,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
 
   provider: ^5.0.0
 
@@ -40,20 +40,12 @@ dependencies:
   
   url_launcher: ^6.0.2
   
-  fleva_icons: 
-    git:
-      url: https://github.com/redDwarf03/fleva_icons.git
-      ref: master
-  
   connectivity: ^3.0.3
 
-  tweetnacl:
-    git:
-      url: https://github.com/redDwarf03/tweetnacl-dart.git
-      ref: master
-
   rxdart: ^0.26.0
-    
+
+  idena_lib_dart: ^0.0.3
+  
   image: ^3.0.2
 
   charts_flutter: ^0.10.0
@@ -64,24 +56,14 @@ dependencies:
 
   flutter_countdown_timer: ^4.0.2
 
-  multi_image_picker: ^4.8.00
-
   flutter_datetime_picker:
     git:
       url: https://github.com/figengungor/flutter_datetime_picker.git
       ref: null_safety_feature
 
-  timelines: 
-    git:
-      url: https://github.com/redDwarf03/timelines.git
-      ref: main
+  timelines: ^0.1.0
   
   sha3: ^0.2.0
-
-  web3dart:
-    git:
-      url: https://github.com/redDwarf03/web3dart.git
-      ref: master
 
   # Securley store data in a keystore
   flutter_secure_storage: ^4.1.0
@@ -134,8 +116,6 @@ dependencies:
   badges: ^2.0.0-nullsafety.1
   
   ffi: ^1.0.0
-
-  flutter_launcher_icons: ^0.9.0
 
   # QR Codes
   qr_flutter: ^4.0.0 
@@ -206,18 +186,6 @@ dependencies:
 
   fluttericon: ^2.0.0
 
-  protobuf: ^2.0.0
-
-  asn1lib: ^0.9.0-nullsafety.0
-
-  # Implementation of Bitcoin BIP39: Mnemonic code for generating deterministic keys
-  bip32: 
-    git: 
-      url: https://github.com/redDwarf03/bip32-dart.git
-      ref: master
-
-  bip39: ^1.0.6
-
   flutter_advanced_switch: ^2.0.2
 
   scrolling_page_indicator:
@@ -226,8 +194,11 @@ dependencies:
      ref: master
   
 dev_dependencies:
-  build_runner: ^1.12.2
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.0.5
   json_serializable: ^4.0.3
+  import_sorter: ^4.6.0
 
 flutter_icons:
   image_path: "assets/images/icon.png" 

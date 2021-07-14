@@ -1,12 +1,17 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
-import 'package:my_idena/model/transaction.dart';
 
 class IntroWelcomePage extends StatefulWidget {
   @override

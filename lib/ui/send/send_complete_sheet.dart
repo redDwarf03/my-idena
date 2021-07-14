@@ -1,13 +1,19 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/util/util_number.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
+import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/numberutil.dart';
 
 class SendCompleteSheet extends StatefulWidget {
   final String amountRaw;

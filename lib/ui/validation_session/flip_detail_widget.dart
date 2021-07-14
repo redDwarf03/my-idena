@@ -1,10 +1,16 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:idena_lib_dart/enums/answer_type.dart' as AnswerType;
+import 'package:idena_lib_dart/factory/validation_service.dart';
+import 'package:idena_lib_dart/model/validation_session_infos.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/network/model/validation_session_infos.dart';
-import 'package:my_idena/factory/validation_service.dart';
 import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/util/enums/answer_type.dart' as AnswerType;
 
 class FlipDetail extends StatefulWidget {
   final ValidationSessionInfoFlips validationSessionInfoFlips;

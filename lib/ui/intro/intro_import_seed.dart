@@ -1,16 +1,25 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:idena_lib_dart/enums/wallet_type.dart';
+import 'package:idena_lib_dart/factory/app_service.dart';
+import 'package:idena_lib_dart/util/keys/mnemonics.dart';
+import 'package:idena_lib_dart/util/keys/seeds.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/model/db/appdb.dart';
 import 'package:my_idena/model/vault.dart';
-import 'package:my_idena/factory/app_service.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/formatters.dart';
@@ -19,9 +28,6 @@ import 'package:my_idena/ui/widgets/app_text_field.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena/util/app_ffi/apputil.dart';
-import 'package:my_idena/util/app_ffi/keys/mnemonics.dart';
-import 'package:my_idena/util/app_ffi/keys/seeds.dart';
-import 'package:my_idena/util/enums/wallet_type.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
 
 class IntroImportSeedPage extends StatefulWidget {

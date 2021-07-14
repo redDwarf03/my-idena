@@ -1,19 +1,26 @@
 // @dart=2.9
+
+// Dart imports:
 import 'dart:async';
 import 'dart:io';
-import 'package:barcode_scan/barcode_scan.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
-import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/localization.dart';
-import 'package:my_idena/model/address.dart';
-import 'package:my_idena/service_locator.dart';
-import 'package:my_idena/ui/util/ui_util.dart';
-import 'package:my_idena/util/app_ffi/keys/seeds.dart';
 
+// Package imports:
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:idena_lib_dart/model/address.dart';
+import 'package:idena_lib_dart/util/keys/seeds.dart';
+import 'package:logger/logger.dart';
 import 'package:quiver/strings.dart';
 import 'package:validators2/validators.dart';
+
+// Project imports:
+import 'package:my_idena/appstate_container.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/ui/util/ui_util.dart';
 
 enum DataType { RAW, URL, ADDRESS, SEED }
 

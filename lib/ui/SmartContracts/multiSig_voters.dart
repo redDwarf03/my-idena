@@ -1,18 +1,24 @@
 // @dart=2.9
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:idena_lib_dart/factory/smart_contract_service.dart';
+import 'package:idena_lib_dart/model/response/contract/contract_iterate_map_response.dart';
+import 'package:idena_lib_dart/util/crypto/utils_crypto.dart';
 import 'package:logger/logger.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/factory/smart_contract_service.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/network/model/response/contract/contract_iterate_map_response.dart';
 import 'package:my_idena/service_locator.dart';
 import 'package:my_idena/styles.dart';
 import 'package:my_idena/util/caseconverter.dart';
-import 'package:my_idena/util/crypto/utils_crypto.dart';
 
 class MultiSigVoters extends StatefulWidget {
   final String contractAddress;

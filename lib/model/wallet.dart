@@ -1,9 +1,13 @@
 // @dart=2.9
+
+// Package imports:
 import 'package:decimal/decimal.dart';
+import 'package:idena_lib_dart/model/response/bcn_transactions_response.dart';
+import 'package:idena_lib_dart/util/util_number.dart';
 import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:my_idena/model/available_currency.dart';
-import 'package:my_idena/network/model/response/bcn_transactions_response.dart';
-import 'package:my_idena/util/numberutil.dart';
 
 /// Main wallet object that's passed around the app via state
 class AppWallet {

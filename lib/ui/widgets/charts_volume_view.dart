@@ -1,11 +1,17 @@
 // @dart=2.9
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+
+// Package imports:
 import 'package:charts_common/common.dart' as charts_common;
-import 'package:my_idena/factory/api/api_coins_service.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:idena_lib_dart/factory/api/api_coins_service.dart';
+import 'package:idena_lib_dart/model/response/coins_price_response.dart';
+
+// Project imports:
 import 'package:my_idena/localization.dart';
 import 'package:my_idena/model/available_currency.dart';
-import 'package:my_idena/network/model/response/coins_price_response.dart';
 import 'package:my_idena/service_locator.dart';
 
 class ChartsVolumeView extends StatefulWidget {

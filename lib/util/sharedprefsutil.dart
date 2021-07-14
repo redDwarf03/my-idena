@@ -1,13 +1,20 @@
 // @dart=2.9
-import 'dart:ui';
+
+// Dart imports:
 import 'dart:async';
+import 'dart:ui';
+
+// Package imports:
 import 'package:intl/intl.dart';
-import 'package:my_idena/util/util_node.dart';
+import 'package:my_idena/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:my_idena/model/authentication_method.dart';
 import 'package:my_idena/model/available_currency.dart';
 import 'package:my_idena/model/available_language.dart';
 import 'package:my_idena/model/device_lock_timeout.dart';
+import 'package:my_idena/util/util_node.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }

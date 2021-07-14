@@ -1,10 +1,16 @@
 // @dart=2.9
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:my_idena/appstate_container.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_idena/app_icons.dart';
-import 'package:my_idena/styles.dart';
+import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/model/setting_item.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/ui_util.dart';
 
 class AppSettings {

@@ -1,13 +1,20 @@
-import 'dart:io';
+// Dart imports:
 import 'dart:async';
-import 'package:event_taxi/event_taxi.dart';
-import 'package:oktoast/oktoast.dart';
+import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:oktoast/oktoast.dart';
+
+// Project imports:
 import 'package:my_idena/appstate_container.dart';
-import 'package:my_idena/styles.dart';
-import 'package:my_idena/localization.dart';
 import 'package:my_idena/bus/events.dart';
+import 'package:my_idena/localization.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/util/exceptions.dart';
 
 enum ThreeLineAddressTextType { PRIMARY60, PRIMARY, SUCCESS, SUCCESS_FULL }

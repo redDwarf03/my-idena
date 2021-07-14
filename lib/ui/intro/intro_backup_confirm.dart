@@ -1,15 +1,20 @@
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
+import 'package:my_idena/app_icons.dart';
 import 'package:my_idena/appstate_container.dart';
 import 'package:my_idena/dimens.dart';
-import 'package:my_idena/styles.dart';
 import 'package:my_idena/localization.dart';
-import 'package:my_idena/app_icons.dart';
+import 'package:my_idena/model/vault.dart';
 import 'package:my_idena/service_locator.dart';
+import 'package:my_idena/styles.dart';
 import 'package:my_idena/ui/widgets/buttons.dart';
 import 'package:my_idena/ui/widgets/security.dart';
 import 'package:my_idena/util/sharedprefsutil.dart';
-import 'package:my_idena/model/vault.dart';
 
 class IntroBackupConfirm extends StatefulWidget {
   @override
